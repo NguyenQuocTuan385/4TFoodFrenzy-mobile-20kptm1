@@ -18,10 +18,10 @@
             android:name=".LoginRegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".ShowRecipeDetailsActivity"
+            android:name=".WriteCommentActivity"
             android:exported="false" />
         <activity
-            android:name=".WriteCommentActivity"
+            android:name=".SearchScreen"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
