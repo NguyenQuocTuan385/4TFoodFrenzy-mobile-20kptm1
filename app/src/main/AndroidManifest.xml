@@ -15,7 +15,6 @@
             android:name=".SortRecipeActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginRegisterActivity"
             android:name=".NewPasswordActivity"
             android:exported="false" />
         <activity
