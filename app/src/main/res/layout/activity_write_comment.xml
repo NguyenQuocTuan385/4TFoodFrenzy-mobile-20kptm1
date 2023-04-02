@@ -6,11 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".WriteCommentActivity">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_shadow"
+        android:elevation="3dp"
+        android:outlineProvider="paddedBounds"
+        android:paddingStart="-100dp"
+        android:paddingEnd="-100dp"
+        android:layout_marginTop="-5dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -51,11 +57,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        android:textColor="#000000"
         android:text="Chia sẻ suy nghĩ của bạn về món ăn này"
+        android:textAlignment="center"
+        android:textColor="#000000"
         android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
@@ -102,11 +108,11 @@
 
 
             <ImageView
-                android:backgroundTint="#FDBF38"
                 android:id="@+id/imageView"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:backgroundTint="#FDBF38"
                 tools:srcCompat="@drawable/image_icon" />
 
             <TextView
