@@ -28,8 +28,8 @@ class SearchScreen : AppCompatActivity() {
     private fun generateCompanyData(): ArrayList<SearchRecipe> {
         var result = ArrayList<SearchRecipe>()
         var company: SearchRecipe = SearchRecipe()
-        company.titleRecipe = "Pasta"
-        company.recipeImage = R.drawable.pasta
+        company.titleRecipe = "Đồ uống"
+        company.recipeImage = R.drawable.drink
         result.add(company)
 
         company = SearchRecipe()
@@ -54,8 +54,8 @@ class SearchScreen : AppCompatActivity() {
         result.add(company)
 
         company = SearchRecipe()
-        company.titleRecipe = "Bữa sáng"
-        company.recipeImage = R.drawable.breakfast
+        company.titleRecipe = "Món chính"
+        company.recipeImage = R.drawable.mainfood
         result.add(company)
         return result
     }
