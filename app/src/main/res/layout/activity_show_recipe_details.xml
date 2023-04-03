@@ -44,7 +44,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:contentDescription="like icon"
-                tools:srcCompat="@tools:sample/avatars" />
+                android:src="@drawable/thumb_up_icon" />
 
 
             <TextView
@@ -52,6 +52,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="4dp"
+                android:paddingEnd="0dp"
+
                 android:text="100%"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
@@ -123,6 +125,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Công thức của"
+
+                                android:layout_marginLeft="4dp"
                                 app:layout_constraintStart_toEndOf="@+id/authorAvatarCardViewContainer"
                                 app:layout_constraintTop_toTopOf="@+id/authorAvatarCardViewContainer" />
 
@@ -132,7 +136,7 @@
                                 android:layout_height="wrap_content"
                                 android:ellipsize="end"
                                 android:lines="1"
-                                android:text="Trương Gia Tiến testtttttttttttttttttttttt"
+                                android:text="Trương Gia Tiến testtttttttttttttttttttttttttttttttttttttttttt"
                                 android:textColor="@color/black"
                                 android:textSize="20sp"
                                 android:textStyle="bold"
@@ -205,6 +209,312 @@
                 android:layout_marginTop="0dp"
                 android:orientation="horizontal" />
 
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                app:cardUseCompatPadding="true"
+                app:cardElevation="3dp"
+                app:cardCornerRadius="3dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/black"
+
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="5dp"
+                    >
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:text="Loại món"
+                            android:textAlignment="center"
+                            />
+
+                        <TextView
+                            android:id="@+id/foodCategoryTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:text="Món chính"
+                            android:textAlignment="center"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+
+                        >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:text="Chế độ"
+                            android:textAlignment="center"
+                            />
+
+                        <TextView
+                            android:id="@+id/foodDietTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Không Gluten"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+
+                        >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:text="Nguyên liệu chính"
+                            android:textAlignment="center"
+                            />
+
+                        <TextView
+                            android:id="@+id/foodMainIngredientTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Thịt bò, Rau củ"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nguyên liệu / Thành phần"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:layout_marginTop="12dp"
+                android:paddingLeft="5dp"
+                />
+
+            <TextView
+                android:id="@+id/ingredientDetailsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="1. Xốt me 100g\n2. Hành tây, cà chua, xà lách Lolo xanh 180g\n3. Tỏi tép lột sẵn 10g\n4. Bắp bò cắt mỏng 200g"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hướng dẫn chế biến"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:layout_marginTop="12dp"
+                android:paddingLeft="5dp"
+
+                />
+
+            <TextView
+                android:id="@+id/stepsInstructionTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="Bước 1: Bắp bò rửa sơ để ráo. Hành tây, xà lách, cà chua rửa sạch, để ráo nước.
+                \n\nBước 2: Cho 1 muỗng canh dầu ăn vào làm nóng, chỉnh lửa vừa, phi thơm hành tỏi và cho bò vào xào trong 2 phút cho săn . Cho gói sốt me vào đảo đều trong 3 phút. Nêm nếm lại cho vừa ăn. Thêm hành tây vào xào sơ khoảng 1 phút rồi tắt bếp.
+                \n\nBước 3: Xếp rau, cà chua thái lát ra đĩa, cho bò lên trên. Rắc thêm mè để thêm phần hấp dẫn. Thưởng thức cùng bánh mì ngay khi còn nóng. Ngon hơn khi dùng với cơm nóng hoặc bánh mì."
+                android:layout_marginTop="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mô tả chi tiết"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:layout_marginTop="12dp"
+                android:paddingLeft="5dp"
+
+                />
+
+            <TextView
+                android:id="@+id/descriptionTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:ellipsize="end"
+                android:lines="5"
+                android:text="Bắp bò sốt me - một trong những món ăn cực phẩm dành cho bữa tiệc sum họp, liên hoan cùng gia đình, bạn bè. Phần bắp bò sốt me đạt “chuẩn 5 sao” phải có vị chua thanh hòa trộn với các loại rau nấm, thơm bơ và vẫn giữ được độ giòn, ngọt tự nhiên. Lát thịt bò vừa chín tới, vẫn giữ dược độ mềm dai, ăn kèm với bánh mì thì cứ phải gọi là ngon số dzách!
+Nhưng bạn biết đấy, món ăn có ngon hay không phụ thuộc rất lớn vào công thức nấu và khâu chọn lựa nguyên liệu. Nếu bạn không đủ thời gian để tự mình tìm những nguyên liệu tươi ngon nhất thì cứ giao trọng trách này cho Cooky Market, chỉ cần có gói nguyên liệu và công thức từ Cooky, bạn sẽ làm được món Bắp bò sốt me với hương vị tuyệt vời khiến bất cứ ai một lần thưởng thức cũng phải trầm trồ và ngây ngất!"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_border_second_color"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:textColor="@color/secondary_light_orange"
+                android:text="Xem thêm"
+                android:id="@+id/moreDetailsButton"
+                />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bình luận"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="30sp"
+                    android:layout_marginTop="12dp"
+                    android:paddingLeft="5dp"
+
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(3)"
+                    android:textColor="@color/black"
+                    android:textSize="30sp"
+                    android:layout_marginTop="12dp"
+                    android:paddingLeft="5dp"
+                    android:id="@+id/totalCommentTextView"
+                    />
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                >
+
+                <TextView
+                    android:id="@+id/bestCommentTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bình luận hay nhất"
+                    app:layout_constraintStart_toEndOf="@+id/bestCommentAvatarCardView"
+                    app:layout_constraintTop_toTopOf="@+id/bestCommentAvatarCardView"
+                    android:layout_marginLeft="4dp"
+                    />
+
+                <TextView
+                    android:id="@+id/bestCommentFullname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="Trương Gia Tiến testtttttttttttttttttttttttttttttttttttttttttt"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/bestCommentTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/bestCommentTextView" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/bestCommentAvatarCardView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:cardCornerRadius="40dp"
+                    android:layout_marginBottom="5dp"
+                    app:layout_constraintBottom_toTopOf="@+id/bestCommentCommentTextView"
+                    app:layout_constraintStart_toStartOf="@+id/bestCommentCommentTextView">
+
+                    <ImageView
+                        android:id="@+id/bestCommentAvatarImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/avt" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/bestCommentCommentTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:ellipsize="end"
+
+                    android:lines="2"
+                    android:minWidth="50dp"
+                    android:text="Món rất ngon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Xem thêm bình luận"
+                    android:textColor="@color/secondary_light_orange"
+                    />
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/right_arrow_secondary_icon"/>
+            </LinearLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_border_second_color"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:textColor="@color/secondary_light_orange"
+                android:text="Viết bình luận"
+                android:id="@+id/writeCommentButton"
+                />
         </LinearLayout>
 
     </ScrollView>
