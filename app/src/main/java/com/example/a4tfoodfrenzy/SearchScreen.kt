@@ -4,59 +4,58 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.GridView
 import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class SearchScreen : AppCompatActivity() {
-    var adapter: SearchRecipeGridAdapter? = null
+    var adapterTypeRecipeRV: RecipeListAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_screen)
 
-        val grid = findViewById<GridView>(R.id.typeRecipeGV)
-        var companyList = generateCompanyData() //implemened below
-        adapter = SearchRecipeGridAdapter(this, companyList)
-        grid.adapter = adapter
-        grid.setOnItemClickListener { adapterView, view, i, l ->
-            Toast.makeText(
-                this, " Selected Company is " + companyList.get(i).titleRecipe,
+        val typeRecipeRV = findViewById<RecyclerView>(R.id.typeRecipeRV)
+        var typeRecipeList = generateTypeRecipeData() //implemened below
+        adapterTypeRecipeRV = RecipeListAdapter(typeRecipeList, false, false, true)
+        typeRecipeRV!!.layoutManager = GridLayoutManager(this, 3)
 
-                Toast.LENGTH_SHORT
-            ).show()
+        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
+        typeRecipeRV!!.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
 
-        }
+        typeRecipeRV!!.adapter = adapterTypeRecipeRV
     }
 
-    private fun generateCompanyData(): ArrayList<SearchRecipe> {
-        var result = ArrayList<SearchRecipe>()
-        var company: SearchRecipe = SearchRecipe()
-        company.titleRecipe = "Pasta"
-        company.recipeImage = R.drawable.pasta
-        result.add(company)
+    private fun generateTypeRecipeData(): ArrayList<RecipeRender> {
+        var result = ArrayList<RecipeRender>()
+        var recipe: RecipeRender = RecipeRender()
+        recipe.titleRecipe = "Đồ uống"
+        recipe.recipeImage = R.drawable.drink
+        result.add(recipe)
 
-        company = SearchRecipe()
-        company.titleRecipe = "Món gà"
-        company.recipeImage = R.drawable.chicken
-        result.add(company)
+        recipe = RecipeRender()
+        recipe.titleRecipe = "Món gà"
+        recipe.recipeImage = R.drawable.chicken
+        result.add(recipe)
 
+        recipe = RecipeRender()
+        recipe.titleRecipe = "Nấu nhanh"
+        recipe.recipeImage = R.drawable.time
+        result.add(recipe)
 
-        company = SearchRecipe()
-        company.titleRecipe = "Nấu nhanh"
-        company.recipeImage = R.drawable.time
-        result.add(company)
+        recipe = RecipeRender()
+        recipe.titleRecipe = "Đồ ăn vặt"
+        recipe.recipeImage = R.drawable.fastfood
+        result.add(recipe)
 
-        company = SearchRecipe()
-        company.titleRecipe = "Đồ ăn vặt"
-        company.recipeImage = R.drawable.fastfood
-        result.add(company)
+        recipe = RecipeRender()
+        recipe.titleRecipe = "Đồ chay"
+        recipe.recipeImage = R.drawable.diet
+        result.add(recipe)
 
-        company = SearchRecipe()
-        company.titleRecipe = "Đồ chay"
-        company.recipeImage = R.drawable.diet
-        result.add(company)
+        recipe = RecipeRender()
+        recipe.titleRecipe = "Món chính"
+        recipe.recipeImage = R.drawable.mainfood
+        result.add(recipe)
 
-        company = SearchRecipe()
-        company.titleRecipe = "Bữa sáng"
-        company.recipeImage = R.drawable.breakfast
-        result.add(company)
         return result
     }
 }
