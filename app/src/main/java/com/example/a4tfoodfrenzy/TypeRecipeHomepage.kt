@@ -8,11 +8,7 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 
-class SearchRecipe {
-    var titleRecipe : String? = null
-    var recipeImage : Int? = null
-}
-class SearchRecipeGridAdapter (private var context: Context, private var items:
+class TypeRecipeHomepage (private var context: Context, private var items:
 ArrayList<SearchRecipe>) : BaseAdapter() {
     private class ViewHolder(row: View?) {
         var titleRecipeTV: TextView? = null
@@ -23,12 +19,13 @@ ArrayList<SearchRecipe>) : BaseAdapter() {
             recipeIV = row?.findViewById<ImageView>(R.id.recipeIV)
         }
     }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view: View
         val viewHolder: ViewHolder
         if (convertView == null) {
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)
-            view = (inflater as LayoutInflater).inflate(R.layout.search_recipe_view, null)
+            view = (inflater as LayoutInflater).inflate(R.layout.homepage_type_recipe_item, null)
             viewHolder = ViewHolder(view)
             view.tag = viewHolder
         } else {
@@ -40,14 +37,16 @@ ArrayList<SearchRecipe>) : BaseAdapter() {
         viewHolder.recipeIV?.setImageResource(searchRecipe.recipeImage!!)
         return view as View
     }
+
     override fun getItem(i: Int): SearchRecipe {
         return items[i]
     }
+
     override fun getItemId(p0: Int): Long {
         return p0.toLong()
     }
+
     override fun getCount(): Int {
         return items.size
     }
 }
-
