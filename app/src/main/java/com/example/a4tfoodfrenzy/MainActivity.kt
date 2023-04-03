@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     var adapterTypeRecipeRV: RecipeListAdapter? = null
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         recipeTodayEatRV!!.layoutManager = GridLayoutManager(this, 3)
 
         val recipeMostLikesRV = findViewById<RecyclerView>(R.id.recipeMostLikesRV)
-        var recipeMostLikes = generateRecipeTodayEatData() //implemened below
+        var recipeMostLikes = generateRecipeMostLikesData() //implemened below
         adapterRecipeMostLikesRV = RecipeListAdapter(recipeMostLikes, true, false, false)
         recipeMostLikesRV!!.adapter = adapterRecipeMostLikesRV
         recipeMostLikesRV!!.layoutManager = GridLayoutManager(this, 3)
