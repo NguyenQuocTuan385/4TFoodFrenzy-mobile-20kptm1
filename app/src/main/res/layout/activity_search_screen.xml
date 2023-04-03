@@ -78,15 +78,13 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <GridView
-            android:id="@+id/typeRecipeGV"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/typeRecipeRV"
             android:layout_width="395dp"
-            android:layout_height="375dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:horizontalSpacing="10dp"
-            android:numColumns="3"
             android:verticalSpacing="10dp"
-            android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
@@ -102,7 +100,7 @@
             android:textStyle="bold"
             android:textSize="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/typeRecipeGV" />
+            app:layout_constraintTop_toBottomOf="@+id/typeRecipeRV" />
 
         <TextView
             android:id="@+id/textView10"
