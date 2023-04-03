@@ -1,5 +1,6 @@
 package com.example.a4tfoodfrenzy
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.GridView
@@ -34,6 +35,33 @@ class MainActivity : AppCompatActivity() {
         adapterRecipeMostLikesRV = RecipeListAdapter(recipeMostLikes, true, false, false)
         recipeMostLikesRV!!.adapter = adapterRecipeMostLikesRV
         recipeMostLikesRV!!.layoutManager = GridLayoutManager(this, 3)
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
+        val menu = bottomNavigationView.menu
+
+        menu.findItem(R.id.home).isChecked = true
+
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    true
+                }
+                R.id.search -> {
+                    val intent = Intent(this, SearchScreen::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.addRecipe -> {
+                    val intent = Intent(this, RecipeManagementActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.profile -> {
+                    true
+                }
+                else -> false
+            }
+        }
 
     }
     private fun generateTypeRecipeData(): ArrayList<RecipeRender> {

@@ -1,10 +1,12 @@
 package com.example.a4tfoodfrenzy
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class RecipeManagementActivity: AppCompatActivity() {
     private lateinit var list:ArrayList<RecipeFood>
@@ -38,5 +40,33 @@ class RecipeManagementActivity: AppCompatActivity() {
         listAdapter= DraftRecipeAdapter(this,list)
         recyclerView.adapter=listAdapter
         recyclerView.layoutManager = GridLayoutManager(this,2, GridLayoutManager.VERTICAL,false)
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
+        val menu = bottomNavigationView.menu
+
+        menu.findItem(R.id.addRecipe).isChecked = true
+
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.search -> {
+                    val intent = Intent(this, SearchScreen::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.addRecipe -> {
+
+                    true
+                }
+                R.id.profile -> {
+                    true
+                }
+                else -> false
+            }
+        }
     }
 }

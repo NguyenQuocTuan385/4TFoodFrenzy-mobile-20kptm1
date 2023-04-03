@@ -18,6 +18,9 @@
             android:name=".AfterSearchActivity"
             android:exported="false" />
         <activity
+            android:name=".RecipeManagementActivity"
+            android:exported="false" />
+        <activity
             android:name=".SortRecipeActivity"
             android:exported="false" />
         <activity
@@ -40,6 +43,9 @@
             android:exported="false" />
         <activity
             android:name=".WriteCommentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SearchScreen"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
