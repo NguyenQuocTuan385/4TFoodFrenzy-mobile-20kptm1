@@ -15,6 +15,9 @@
         android:theme="@style/Theme.4TFoodFrenzy"
         tools:targetApi="31">
         <activity
+            android:name=".ShowRecipeDetailsDescriptionActivity"
+            android:exported="false" />
+        <activity
             android:name=".AfterSearchActivity"
             android:exported="false" />
         <activity
@@ -40,7 +43,8 @@
             android:exported="false" />
         <activity
             android:name=".ShowRecipeDetailsActivity"
-            android:exported="false" />
+            android:exported="false">
+        </activity>
         <activity
             android:name=".WriteCommentActivity"
             android:exported="false" />
@@ -50,6 +54,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
