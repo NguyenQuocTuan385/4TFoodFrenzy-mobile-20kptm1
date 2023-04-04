@@ -15,7 +15,7 @@ class RecipeManagementActivity: AppCompatActivity() {
     private lateinit var draftText:TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.recipe_management)
+        setContentView(R.layout.activity_recipe_management)
         recyclerView=findViewById(R.id.recyclerView)
         draftText=findViewById(R.id.draftText)
         list=ArrayList<RecipeFood>()

@@ -3,4 +3,8 @@
     <style name="RoundedSquare">
         <item name="cornerSize">15%</item>
     </style>
+    <style name="MyToolbarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="android:textColorPrimary">@color/SecondaryColor</item>
+    </style>
+
 </resources>
