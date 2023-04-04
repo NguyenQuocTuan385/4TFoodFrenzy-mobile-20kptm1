@@ -1,13 +1,22 @@
 package com.example.a4tfoodfrenzy
 
+import android.content.Context
+import android.graphics.Typeface
+import android.hardware.display.DisplayManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -51,8 +60,16 @@ class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
             )
         )
 
+        stepList.add(
+            CookingStep(
+                        "3. Thưởng thức cùng bánh mì ngay khi còn nóng. Ngon hơn khi dùng với cơm nóng hoặc",
+                        "2. Xà lách, cà chua, mè",
+                R.drawable.veg_icon
+            )
+        )
 
-        var adapter = StepsAdapter(stepList)
+
+        var adapter = StepsAdapter(stepList, this)
         rv.adapter = adapter
 
         rv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -92,15 +109,21 @@ class CookingStep(private val steps: String, private val ingredients: String) {
     }
 }
 
-class StepsAdapter(private val stepsList: ArrayList<CookingStep>) :
+class StepsAdapter(
+    private val stepsList: ArrayList<CookingStep>,
+    private val mainContext: Context
+) :
     RecyclerView.Adapter<StepsAdapter.ViewHolder>() {
     var currentStep = 0
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val stepIMG = listItemView.findViewById<ImageView>(R.id.stepImageView)
         val stepInstruction = listItemView.findViewById<TextView>(R.id.textInstructionTextView)
-        val pageTextView = listItemView.findViewById<TextView>(R.id.stepPageTextView)
+
+        //        val pageTextView = listItemView.findViewById<TextView>(R.id.stepPageTextView)
         val ingredientTextView = listItemView.findViewById<TextView>(R.id.ingredientStepTextView)
+
+        val progressRV = listItemView.findViewById<RecyclerView>(R.id.stepProgressRecyclerView)
 
         init {
 
@@ -118,6 +141,7 @@ class StepsAdapter(private val stepsList: ArrayList<CookingStep>) :
         return stepsList.size
     }
 
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val step = stepsList[position]
 
@@ -126,7 +150,54 @@ class StepsAdapter(private val stepsList: ArrayList<CookingStep>) :
         holder.ingredientTextView.text = step.getIngredient()
 
         val page = "${position + 1}/${stepsList.size}"
+        val progressList = arrayListOf<String>()
 
-        holder.pageTextView.text = page
+        for (i in 1..stepsList.size)
+            progressList.add(i.toString())
+
+        // to get width
+        val wm : WindowManager = mainContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+        val adapter = StepProgressAdapter(progressList, position,  wm.defaultDisplay.width)
+        holder.progressRV.adapter = adapter
+
+        holder.progressRV.layoutManager =
+            LinearLayoutManager(mainContext, LinearLayoutManager.HORIZONTAL, false)
+//        holder.pageTextView.text = page
+    }
+}
+
+class StepProgressAdapter(
+    private val progressList: ArrayList<String>,
+    private val currenstPos: Int,
+    private val parentRvWidth : Int,
+) : RecyclerView.Adapter<StepProgressAdapter.ViewHolder>() {
+    inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
+        val progressTV = listItemView.findViewById<TextView>(R.id.progressTextView)
+
+        init {
+
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val context = parent.context
+        val inflater = LayoutInflater.from(context)
+
+        return ViewHolder(inflater.inflate(R.layout.step_progress_item, parent, false))
+    }
+
+    override fun getItemCount(): Int {
+        return progressList.size
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (currenstPos == position) {
+            holder.progressTV.setBackgroundResource(R.color.SecondaryColor)
+            holder.progressTV.typeface = Typeface.DEFAULT_BOLD
+        }
+
+        holder.progressTV.text = progressList[position]
+        holder.progressTV.width = parentRvWidth / progressList.size
     }
 }
