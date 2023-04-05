@@ -20,7 +20,7 @@
         >
 
         <ImageView
-            android:id="@id/foodImageView"
+            android:id="@+id/foodImageView"
             android:scaleType="fitXY"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
