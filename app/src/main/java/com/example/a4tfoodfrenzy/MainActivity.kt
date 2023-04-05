@@ -57,6 +57,8 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.profile -> {
+                    val intent = Intent(this, TrangCaNhan::class.java)
+                    startActivity(intent)
                     true
                 }
                 else -> false
