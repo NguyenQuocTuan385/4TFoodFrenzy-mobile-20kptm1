@@ -22,7 +22,7 @@ class MonAnDaLuuAdapter(context: Context, students: ArrayList<MonAn>) :  ArrayAd
         )
         val monAn = getItem(position)
 
-        val image = view.findViewById<ImageView>(R.id.imageView6)
+        val image = view.findViewById<ImageView>(R.id.anh_mon_an)
         image.setImageResource(R.drawable.bo_nuong)
 
         return view
