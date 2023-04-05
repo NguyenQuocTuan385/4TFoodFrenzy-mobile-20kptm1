@@ -58,11 +58,12 @@
                 android:id="@+id/anh_mon_an"
                 android:layout_width="200dp"
                 android:layout_height="140dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView"
-                tools:srcCompat="@tools:sample/avatars" />
+                tools:srcCompat="@drawable/bo_nuong" />
 
             <TextView
                 android:id="@+id/ten_mon_an"

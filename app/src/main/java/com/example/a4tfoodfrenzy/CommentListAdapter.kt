@@ -7,14 +7,13 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
 
 
-class BinhLuanAdapter(context: Context, dsBinhLuan: ArrayList<BinhLuan>):
-    ArrayAdapter<BinhLuan>(context, 0, dsBinhLuan)  {
+class CommentListAdapter(context: Context, dsBinhLuan: ArrayList<Comment>):
+    ArrayAdapter<Comment>(context, 0, dsBinhLuan)  {
 override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: LayoutInflater.from(context).inflate(
-            R.layout.binh_luan,
+            R.layout.comment,
             parent,
             false
         )
@@ -35,6 +34,9 @@ override fun getView(position: Int, convertView: View?, parent: ViewGroup): View
         if (pathImg != "") {
             val id = context.resources.getIdentifier(pathImg, "drawable", context.packageName)
             img.setImageResource(id)
+        }
+        else{
+            img.visibility = View.GONE
         }
 
         val content = view.findViewById<TextView>(R.id.ten_mon_an)

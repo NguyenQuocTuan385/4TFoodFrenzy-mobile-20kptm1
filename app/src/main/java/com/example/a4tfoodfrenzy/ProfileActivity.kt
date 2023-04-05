@@ -7,10 +7,10 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 
-class TrangCaNhan : AppCompatActivity() {
+class ProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.thong_tin_tai_khoan)
+        setContentView(R.layout.activity_profile)
         val adapter = TabAdapter(supportFragmentManager)
         adapter.addFragment(TabFragment1(), "Món đã lưu")
         adapter.addFragment(TabFragment2(), "Món của tôi")
@@ -40,8 +40,6 @@ class TrangCaNhan : AppCompatActivity() {
                     true
                 }
                 R.id.profile -> {
-//                    val intent = Intent(this, TrangCaNhan::class.java)
-//                    startActivity(intent)
                     true
                 }
                 else -> false

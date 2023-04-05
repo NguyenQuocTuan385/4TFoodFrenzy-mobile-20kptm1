@@ -16,12 +16,11 @@ class MonAn {
 class MonAnDaLuuAdapter(context: Context, students: ArrayList<MonAn>) :  ArrayAdapter<MonAn>(context, 0, students)  {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: LayoutInflater.from(context).inflate(
-            R.layout.item_mon_an_da_luu,
+            R.layout.saved_item,
             parent,
             false
         )
         val monAn = getItem(position)
-
         val image = view.findViewById<ImageView>(R.id.anh_mon_an)
         image.setImageResource(R.drawable.bo_nuong)
 

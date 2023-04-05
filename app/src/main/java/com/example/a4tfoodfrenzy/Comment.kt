@@ -1,10 +1,8 @@
 package com.example.a4tfoodfrenzy
 
-import android.os.Parcel
 import android.os.Parcelable
-import android.widget.ImageView
 
-class BinhLuan() : Parcelable {
+class Comment() : Parcelable {
     var name: String = ""
     var avt: String = ""
     var image: String = ""
@@ -43,17 +41,15 @@ class BinhLuan() : Parcelable {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<BinhLuan> {
-        override fun createFromParcel(parcel: android.os.Parcel): BinhLuan {
-            return BinhLuan(parcel)
+    companion object CREATOR : Parcelable.Creator<Comment> {
+        override fun createFromParcel(parcel: android.os.Parcel): Comment {
+            return Comment(parcel)
         }
 
-        override fun newArray(size: Int): Array<BinhLuan?> {
+        override fun newArray(size: Int): Array<Comment?> {
             return arrayOfNulls(size)
         }
     }
-
-
 
 }
 
