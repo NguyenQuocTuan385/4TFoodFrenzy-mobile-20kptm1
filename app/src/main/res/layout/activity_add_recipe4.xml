@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddRecipeActivity3">
+    tools:context=".AddRecipeActivity4">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline9"
@@ -82,7 +82,7 @@
         android:id="@+id/view5"
         android:layout_width="0dp"
         android:layout_height="5dp"
-        android:background="#E6E6E6"
+        android:background="@color/SecondaryColor"
         app:layout_constraintEnd_toStartOf="@+id/guideline9"
         app:layout_constraintStart_toEndOf="@+id/guideline8"
         android:layout_marginEnd="2dp"
@@ -112,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
-            android:text="Một công thức không thể thiếu nguyên liệu! Có những gì trong món ăn của bạn?"
+            android:text="Nghe thật hấp dẫn! Bây giờ đây là thời gian để thêm từng bước..."
             android:textColor="@color/black"></TextView>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -120,8 +120,11 @@
         android:id="@+id/scrollView3"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat"
-        tools:layout_editor_absoluteX="-16dp">
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/linearLayoutCompat1"
@@ -134,13 +137,13 @@
             tools:layout_editor_absoluteX="16dp">
 
             <TextView
-                android:id="@+id/addIngredientsText"
+                android:id="@+id/addStepText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="5dp"
-                android:text="THÊM NGUYÊN LIỆU"
+                android:text="THÊM BƯỚC"
                 android:textColor="@color/black"
                 android:textSize="18dp"
                 android:textStyle="bold"
@@ -148,12 +151,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/listIgredient"
+                android:id="@+id/listStep"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/list_ingredient"
                 android:layout_marginHorizontal="20dp"
-                />
+                tools:listitem="@layout/list_step" />
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="match_parent"
@@ -172,21 +174,34 @@
 
     </ScrollView>
 
-    <Button
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/second_color_button"
-        android:text="Tiếp tục"
-        android:textColor="@color/white"
-        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_outline"
+        android:paddingTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
 
-    </Button>
+
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/second_color_button"
+            android:text="Tiếp tục"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+        </Button>
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="10dp"
+    >
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_density_medium_24"
+        android:layout_gravity="center"
+        >
+    </ImageView>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageStep"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/monan"
+        android:layout_marginLeft="20dp"
+        >
+
+    </androidx.appcompat.widget.AppCompatImageView>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/stepNumberText"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="Bước 1"
+
+            android:textColor="@color/black"
+            android:textSize="18dp"></TextView>
+
+        <TextView
+            android:id="@+id/desStep"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Lọc bớt mỡ và rửa sạch miếng thịt lợn sữa"
+            android:textColor="@color/black"
+            android:textSize="16dp"></TextView>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <ImageView
+        android:id="@+id/optionMenuStep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/baseline_more_vert_24" />
+
+</LinearLayout>
