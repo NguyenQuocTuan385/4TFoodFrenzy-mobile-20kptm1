@@ -52,11 +52,14 @@
             android:name=".SearchScreen"
             android:exported="false" />
         <activity
+            android:name=".DanhSachBinhLuan"
+            android:exported="false" />
+        <activity
             android:name=".ChinhSuaHoSo"
             android:exported="false" />
         <activity
             android:name=".TrangCaNhan"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
