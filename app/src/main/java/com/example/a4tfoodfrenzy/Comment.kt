@@ -3,38 +3,38 @@ package com.example.a4tfoodfrenzy
 import android.os.Parcelable
 
 class Comment() : Parcelable {
-    var name: String = ""
-    var avt: String = ""
-    var image: String = ""
+    var username: String = ""
+    var foodname: String = ""
+    var avt: Int = 0
+    var image: Int = 0
     var content: String = ""
     var time: String = ""
-    var like: String = ""
 
-    constructor(name: String, avt: String, image: String, content: String, time: String, like: String) : this() {
-        this.name = name
+    constructor(username: String, foodname: String,avt: Int, image: Int, content: String, time: String) : this() {
+        this.username = username
+        this.foodname = foodname
         this.avt = avt
         this.image = image
         this.content = content
         this.time = time
-        this.like = like
     }
 
     constructor(parcel: android.os.Parcel) : this() {
-        name = parcel.readString() ?: ""
-        avt = parcel.readString() ?: ""
-        image = parcel.readString() ?: ""
+        username = parcel.readString() ?: ""
+        foodname = parcel.readString() ?: ""
+        avt = parcel.readInt() ?: 0
+        image = parcel.readInt() ?: 0
         content = parcel.readString() ?: ""
         time = parcel.readString() ?: ""
-        like = parcel.readString() ?: ""
     }
 
     override fun writeToParcel(parcel: android.os.Parcel, flags: Int) {
-        parcel.writeString(name)
-        parcel.writeString(avt)
-        parcel.writeString(image)
+        parcel.writeString(username)
+        parcel.writeString(foodname)
+        parcel.writeInt(avt)
+        parcel.writeInt(image)
         parcel.writeString(content)
         parcel.writeString(time)
-        parcel.writeString(like)
     }
 
     override fun describeContents(): Int {

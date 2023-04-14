@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -16,13 +16,13 @@
         android:theme="@style/Theme.4TFoodFrenzy"
         tools:targetApi="31">
         <activity
+            android:name=".Admin_Comment_Management"
+            android:exported="false" />
+        <activity
             android:name=".ShowRecipeDetailsDescriptionActivity"
             android:exported="false" />
         <activity
             android:name=".AfterSearchActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RecipeManagementActivity"
             android:exported="false" />
         <activity
             android:name=".SortRecipeActivity"
@@ -44,8 +44,7 @@
             android:exported="false" />
         <activity
             android:name=".ShowRecipeDetailsActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".WriteCommentActivity"
             android:exported="false" />
@@ -73,7 +72,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
