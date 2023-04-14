@@ -56,10 +56,11 @@
 
             <ImageView
                 android:id="@+id/anh_mon_an"
-                android:layout_width="300dp"
+                android:layout_width="250dp"
                 android:layout_height="150dp"
                 android:layout_marginStart="100dp"
                 android:layout_marginTop="15dp"
+                android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView12"
                 tools:srcCompat="@drawable/bosotme" />

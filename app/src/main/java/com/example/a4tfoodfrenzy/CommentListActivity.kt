@@ -5,13 +5,13 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 
 
-class CommentManagementActivity : AppCompatActivity() {
+class CommentListActivity : AppCompatActivity() {
     private lateinit var dsBinhLuan: ArrayList<Comment>
     private lateinit var listView: ListView
     private lateinit var adapter: CommentListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_comment_management)
+        setContentView(R.layout.activity_comment_list)
 
         listView = findViewById(R.id.listView)
         dsBinhLuan = ArrayList<Comment>()

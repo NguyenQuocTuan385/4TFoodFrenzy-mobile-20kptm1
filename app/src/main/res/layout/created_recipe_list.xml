@@ -54,7 +54,8 @@
             android:hint="Tìm kiếm 6 món ăn"
             android:padding="8dp"
             android:textColor="@android:color/black"
-            android:textColorHint="@android:color/black" />
+            android:textColorHint="@android:color/black"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <ImageView
             android:layout_width="30dp"

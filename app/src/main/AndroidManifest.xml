@@ -53,14 +53,23 @@
             android:name=".SearchScreen"
             android:exported="false" />
         <activity
-            android:name=".CommentManagementActivity"
+            android:name=".CommentListActivity"
             android:exported="false" />
         <activity
             android:name=".EditProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".LoginAdminActivity"
             android:exported="false" />
+        <activity
+            android:name=".AccountDetailsManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CommentDetailsManagementActivity"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
