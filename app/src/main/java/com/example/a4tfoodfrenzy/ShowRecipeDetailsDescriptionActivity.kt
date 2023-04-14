@@ -2,33 +2,27 @@ package com.example.a4tfoodfrenzy
 
 import android.content.Context
 import android.graphics.Typeface
-import android.hardware.display.DisplayManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.DisplayMetrics
-import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SnapHelper
 
 class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_recipe_details_description)
 
-        var rv = findViewById<RecyclerView>(R.id.stepsRecyclerView)
-        var stepList = arrayListOf<CookingStep>()
+        val rv = findViewById<RecyclerView>(R.id.stepsRecyclerView)
+        val stepList = arrayListOf<CookingStep>()
 
         stepList.add(
             CookingStep(
@@ -69,7 +63,7 @@ class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
         )
 
 
-        var adapter = StepsAdapter(stepList, this)
+        val adapter = StepsAdapter(stepList, this)
         rv.adapter = adapter
 
         rv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -114,20 +108,16 @@ class StepsAdapter(
     private val mainContext: Context
 ) :
     RecyclerView.Adapter<StepsAdapter.ViewHolder>() {
-    var currentStep = 0
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
-        val stepIMG = listItemView.findViewById<ImageView>(R.id.stepImageView)
-        val stepInstruction = listItemView.findViewById<TextView>(R.id.textInstructionTextView)
+        val stepIMG : ImageView = listItemView.findViewById(R.id.stepImageView)
+        val stepInstruction : TextView = listItemView.findViewById(R.id.textInstructionTextView)
+        val toolbar : androidx.appcompat.widget.Toolbar = listItemView.findViewById(R.id.stepItemToolbar)
 
-        //        val pageTextView = listItemView.findViewById<TextView>(R.id.stepPageTextView)
-        val ingredientTextView = listItemView.findViewById<TextView>(R.id.ingredientStepTextView)
+        val ingredientTextView : TextView = listItemView.findViewById(R.id.ingredientStepTextView)
 
-        val progressRV = listItemView.findViewById<RecyclerView>(R.id.stepProgressRecyclerView)
+        val progressRV : RecyclerView = listItemView.findViewById(R.id.stepProgressRecyclerView)
 
-        init {
-
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -148,6 +138,7 @@ class StepsAdapter(
         holder.stepIMG.setImageResource(step.getStepImageResource())
         holder.stepInstruction.text = step.getStep()
         holder.ingredientTextView.text = step.getIngredient()
+        holder.toolbar.title = "Bước ${position + 1}"
 
         val page = "${position + 1}/${stepsList.size}"
         val progressList = arrayListOf<String>()
@@ -173,11 +164,7 @@ class StepProgressAdapter(
     private val parentRvWidth : Int,
 ) : RecyclerView.Adapter<StepProgressAdapter.ViewHolder>() {
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
-        val progressTV = listItemView.findViewById<TextView>(R.id.progressTextView)
-
-        init {
-
-        }
+        val progressTV : TextView = listItemView.findViewById(R.id.progressTextView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
