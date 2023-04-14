@@ -66,7 +66,7 @@ class ProfileActivity : AppCompatActivity() {
                     true
                 }
                 R.id.addRecipe -> {
-                    val intent = Intent(this, RecipeManagementActivity::class.java)
+                    val intent = Intent(this, AddRecipeActivity1::class.java)
                     startActivity(intent)
                     true
                 }
