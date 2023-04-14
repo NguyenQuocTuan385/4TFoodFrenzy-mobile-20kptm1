@@ -9,10 +9,10 @@ import android.widget.ImageView
 import android.widget.TextView
 
 
-class MonAnDaTaoAdapter(context: Context, students: ArrayList<MonAn>) :  ArrayAdapter<MonAn>(context, 0, students)  {
+class CreatedRecipe(context: Context, students: ArrayList<MonAn>) :  ArrayAdapter<MonAn>(context, 0, students)  {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: LayoutInflater.from(context).inflate(
-            R.layout.item_mon_an_da_tao,
+            R.layout.created_item,
             parent,
             false
         )

@@ -1,10 +1,12 @@
 package com.example.a4tfoodfrenzy
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class AfterSearchActivity : AppCompatActivity() {
     var adapterRecipeAfterSearchRV: RecipeListAdapter? = null
@@ -18,6 +20,36 @@ class AfterSearchActivity : AppCompatActivity() {
         recipeAfterSearchRV!!.adapter = adapterRecipeAfterSearchRV
         recipeAfterSearchRV!!.layoutManager = GridLayoutManager(this, 3)
 
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
+        val menu = bottomNavigationView.menu
+
+        menu.findItem(R.id.search).isChecked = true
+
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.search -> {
+                    val intent = Intent(this, SearchScreen::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.addRecipe -> {
+                    val intent = Intent(this, AddRecipeActivity1::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.profile -> {
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun generateRecipeTodayEatData(): ArrayList<RecipeRender> {

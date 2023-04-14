@@ -5,11 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".AfterSearchActivity">
+    tools:context=".Admin_Comment_Management">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="70dp"
         android:background="@drawable/toolbar_border"
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
@@ -30,7 +31,6 @@
             app:layout_constraintStart_toStartOf="@+id/toolbar"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
-            android:padding="5dp"
             android:showDividers="middle"
             android:divider="@drawable/divider_linear_layout_height"
             android:orientation="vertical">
@@ -39,79 +39,66 @@
                 android:id="@+id/linearLayout1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
-
                 <ImageView
-                    android:id="@+id/imgBack"
-                    android:layout_width="10dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.2"
-                    android:src="@drawable/back" />
-
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/baseline_menu_24"
+                    />
                 <TextView
                     android:id="@+id/TimKiemTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tìm kiếm"
-                    android:layout_weight="0.8"
+                    android:text="Quản lý danh sách bình luận"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    android:textSize="23dp" />
-            </LinearLayout>
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:showDividers="middle"
-            android:divider="@drawable/divider_linear_layout_width"
-            android:padding="5dp"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:id="@+id/linearLayout2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.9"
-                android:background="@drawable/rounded_border_gray"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
+                    android:layout_weight="1"
+                    android:textSize="22dp" />
                 <ImageView
-                    android:layout_width="5dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.1"
-                    android:padding="6dp"
-                    android:src="@drawable/search_icon" />
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.6"
-                    android:background="@null"
-                    android:hint="Gà"
-                    android:padding="8dp" />
-
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/admin_dashboard"
+                    />
             </LinearLayout>
-            <ImageView
-                android:id="@+id/imgFilter"
-                android:layout_width="35dp"
-                android:layout_weight="0.3"
-                android:layout_height="wrap_content"
-                android:src="@drawable/filter" />
-        </LinearLayout>
+
         </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:text="dd/mm/yyyy"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <Button
+        android:id="@+id/btnDatePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="Chọn ngày"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDate" />
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/botNavbar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/btnDatePicker">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
@@ -119,8 +106,8 @@
             android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recipeAfterSearchRV"
-                android:layout_width="393dp"
+                android:id="@+id/cmtRV"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -137,21 +124,8 @@
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recipeAfterSearchRV" />
-
+                app:layout_constraintTop_toBottomOf="@+id/cmtRV" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/botNavbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:itemIconTint="@drawable/bnv_tab_item_foreground"
-        app:itemTextColor="@drawable/bnv_tab_item_foreground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_navbar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

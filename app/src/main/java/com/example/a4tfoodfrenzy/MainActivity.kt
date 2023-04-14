@@ -3,8 +3,6 @@ package com.example.a4tfoodfrenzy
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.GridView
-import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -52,12 +50,12 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.addRecipe -> {
-                    val intent = Intent(this, RecipeManagementActivity::class.java)
+                    val intent = Intent(this, AddRecipeActivity1::class.java)
                     startActivity(intent)
                     true
                 }
                 R.id.profile -> {
-                    val intent = Intent(this, TrangCaNhan::class.java)
+                    val intent = Intent(this, ProfileActivity::class.java)
                     startActivity(intent)
                     true
                 }

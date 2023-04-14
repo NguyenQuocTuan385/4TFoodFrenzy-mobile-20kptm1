@@ -8,7 +8,6 @@ import android.widget.GridView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.recyclerview.widget.RecyclerView
 
 class TabAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     private val mFragmentList = ArrayList<Fragment>()
@@ -35,7 +34,7 @@ class TabAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME
 
 class TabFragment1 : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.ho_so_ds_mon_da_luu, container, false)
+        val view = inflater.inflate(R.layout.saved_recipe_list, container, false)
 
         val gridView = view.findViewById<GridView>(R.id.gridView1)
         val monAn = ArrayList<MonAn>()
@@ -56,7 +55,7 @@ class TabFragment1 : Fragment() {
 
 class TabFragment2 : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.ho_so_ds_mon_da_tao, container, false)
+        val view = inflater.inflate(R.layout.created_recipe_list, container, false)
         val gridView1 = view.findViewById<GridView>(R.id.gridView2)
         val monAn = ArrayList<MonAn>()
 
@@ -67,7 +66,7 @@ class TabFragment2 : Fragment() {
             monAn.add(monAn1)
         }
 
-        val adapter = MonAnDaTaoAdapter(requireContext(), monAn)
+        val adapter = CreatedRecipe(requireContext(), monAn)
         gridView1.adapter = adapter
 
         return view
