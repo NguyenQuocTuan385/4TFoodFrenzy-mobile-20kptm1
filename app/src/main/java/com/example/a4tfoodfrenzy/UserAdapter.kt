@@ -7,23 +7,21 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.widget.ImageViewCompat
-import kotlinx.coroutines.NonDisposableHandle.parent
 
-
-class DraftRecipeAdapter(context: Context,list:ArrayList<RecipeFood>)
-    : RecyclerView.Adapter<DraftRecipeAdapter.ViewHolder>() {
+data class User(val name:String, val image:Int)
+class UserAdapter(context: Context,list:ArrayList<User>)
+    : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
     private var listItem=list
     private val context=context
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
-        val name:TextView=listItemView.findViewById(R.id.name)
-        val image:ImageView=listItemView.findViewById(R.id.image1)
+        val name:TextView=listItemView.findViewById(R.id.userName)
+        val image:ImageView=listItemView.findViewById(R.id.userAvt)
 
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DraftRecipeAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserAdapter.ViewHolder {
        val context=parent.context
         val inflater = LayoutInflater.from(context)
-        val contactView = inflater.inflate(R.layout.activity_list_recipe, parent, false)
+        val contactView = inflater.inflate(R.layout.list_user, parent, false)
         return ViewHolder(contactView)
     }
 
@@ -31,7 +29,7 @@ class DraftRecipeAdapter(context: Context,list:ArrayList<RecipeFood>)
         return listItem.size
     }
 
-    override fun onBindViewHolder(holder: DraftRecipeAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: UserAdapter.ViewHolder, position: Int) {
         val item=listItem[position]
         holder.name.text=item.name
         holder.image.setImageResource(item.image)
