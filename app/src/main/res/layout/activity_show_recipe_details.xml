@@ -37,10 +37,11 @@
             app:layout_constraintStart_toStartOf="@+id/toolbar">
 
             <ImageButton
-                android:id="@+id/backButton"
+                android:id="@+id/toolbarBackButton"
                 android:layout_width="20dp"
                 android:layout_height="30dp"
-                android:layout_marginRight="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginStart="0dp"
                 android:backgroundTint="@color/secondary_light_orange"
                 android:contentDescription="This is back button"
                 android:src="@drawable/baseline_arrow_back_24"
@@ -51,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:text="Chi tiết món ăn"
                 android:textColor="@color/white"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -61,7 +62,6 @@
         android:id="@+id/headerLinearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-5dp"
         android:elevation="2dp"
         android:orientation="vertical"
         android:outlineProvider="paddedBounds"
@@ -291,7 +291,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="20dp"
-                            android:text="Loại món"
+                            android:text="@string/food_category"
                             android:textAlignment="center" />
 
                         <TextView
@@ -400,42 +400,29 @@
                 \n\nBước 3: Xếp rau, cà chua thái lát ra đĩa, cho bò lên trên. Rắc thêm mè để thêm phần hấp dẫn. Thưởng thức cùng bánh mì ngay khi còn nóng. Ngon hơn khi dùng với cơm nóng hoặc bánh mì."
                 android:textColor="@color/black" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:paddingLeft="5dp"
-                android:text="Mô tả chi tiết"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                android:textStyle="bold"
-
-                />
-
-            <TextView
-                android:id="@+id/descriptionTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:ellipsize="end"
-                android:lines="5"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:text="Bắp bò sốt me - một trong những món ăn cực phẩm dành cho bữa tiệc sum họp, liên hoan cùng gia đình, bạn bè. Phần bắp bò sốt me đạt “chuẩn 5 sao” phải có vị chua thanh hòa trộn với các loại rau nấm, thơm bơ và vẫn giữ được độ giòn, ngọt tự nhiên. Lát thịt bò vừa chín tới, vẫn giữ dược độ mềm dai, ăn kèm với bánh mì thì cứ phải gọi là ngon số dzách!
-Nhưng bạn biết đấy, món ăn có ngon hay không phụ thuộc rất lớn vào công thức nấu và khâu chọn lựa nguyên liệu. Nếu bạn không đủ thời gian để tự mình tìm những nguyên liệu tươi ngon nhất thì cứ giao trọng trách này cho Cooky Market, chỉ cần có gói nguyên liệu và công thức từ Cooky, bạn sẽ làm được món Bắp bò sốt me với hương vị tuyệt vời khiến bất cứ ai một lần thưởng thức cũng phải trầm trồ và ngây ngất!"
-                android:textColor="@color/black" />
-
-            <Button
-                android:id="@+id/moreDetailsButton"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="5dp"
-                android:background="@drawable/rounded_border_second_color"
-                android:text="Xem thêm"
-                android:textColor="@color/secondary_light_orange" />
+                app:strokeColor="@color/SecondaryColor"
+                app:strokeWidth="2dp"
+                app:cardElevation="0dp"
+                app:cardUseCompatPadding="true"
+                app:cardCornerRadius="5dp"
+                >
 
+
+                <Button
+                    android:elevation="0dp"
+                    android:id="@+id/moreDetailsButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    style="?android:attr/borderlessButtonStyle"
+
+                    app:backgroundTint="@color/white"
+                    android:text="Xem chi tiết các bước"
+                    android:textColor="@color/SecondaryColor"
+                   />
+            </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -529,8 +516,10 @@ Nhưng bạn biết đấy, món ăn có ngon hay không phụ thuộc rất l�
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:orientation="horizontal">
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="0dp"
+                android:orientation="horizontal"
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -540,22 +529,33 @@ Nhưng bạn biết đấy, món ăn có ngon hay không phụ thuộc rất l�
 
                 <ImageView
                     android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_height="18dp"
                     android:src="@drawable/right_arrow_secondary_icon" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/writeCommentButton"
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="5dp"
-                android:background="@drawable/rounded_border_second_color"
-                android:text="Viết bình luận"
-                android:textColor="@color/secondary_light_orange"
-                android:layout_marginBottom="5dp"
-                />
+                app:strokeColor="@color/SecondaryColor"
+                app:strokeWidth="2dp"
+                app:cardElevation="0dp"
+                app:cardUseCompatPadding="true"
+                app:cardCornerRadius="5dp"
+                >
+
+                <Button
+                    android:id="@+id/writeCommentButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:text="Viết bình luận"
+                    android:textColor="@color/secondary_light_orange"
+                    app:backgroundTint="@color/white"
+                    style="?android:attr/borderlessButtonStyle"
+                    />
+
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
     </ScrollView>

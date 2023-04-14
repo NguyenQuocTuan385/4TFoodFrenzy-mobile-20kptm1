@@ -5,15 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/stepItemToolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:tint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/baseline_arrow_back_24"
+        app:title="Bước 1">
+
+    </androidx.appcompat.widget.Toolbar>
+
     <ImageView
         android:id="@+id/stepImageView"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="280dp"
         android:scaleType="centerCrop"
         android:src="@drawable/avt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/stepItemToolbar" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/ingredientCardView"
@@ -81,13 +94,17 @@
 
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:text="1. Bắp bò rửa sơ để ráo\n2. Hành tây, xà lách, cà chua rửa sạch rồi để ráo nước"
         android:textColor="@color/black"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/stepProgressRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ingredientCardView" />
+        app:layout_constraintTop_toBottomOf="@+id/ingredientCardView"
+
+        />
 
 
     <!--    <com.google.android.material.card.MaterialCardView-->
@@ -124,6 +141,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
 
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

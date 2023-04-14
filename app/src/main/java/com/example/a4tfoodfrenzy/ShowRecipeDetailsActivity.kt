@@ -15,7 +15,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_recipe_details)
 
-        var rv = findViewById<RecyclerView>(R.id.foodImageRecyclerView)
+        val rv = findViewById<RecyclerView>(R.id.foodImageRecyclerView)
         val mainIMG : ImageView = findViewById(R.id.mainFoodImageView)
 
         val imgList = arrayListOf<FoodImage>()
