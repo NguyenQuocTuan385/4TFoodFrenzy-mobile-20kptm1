@@ -16,6 +16,9 @@
         android:theme="@style/Theme.4TFoodFrenzy"
         tools:targetApi="31">
         <activity
+            android:name=".AddNewRecipe"
+            android:exported="false" />
+        <activity
             android:name=".AdminAccountManagement"
             android:exported="false" />
         <activity
@@ -47,6 +50,27 @@
             android:exported="false" />
         <activity
             android:name=".ShowRecipeDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddRecipeActivity1"
+            android:exported="false" />
+        <activity
+            android:name=".AddRecipeActivity2"
+            android:exported="false" />
+        <activity
+            android:name=".AddRecipeActivity3"
+            android:exported="false" />
+        <activity
+            android:name=".AddRecipeActivity4"
+            android:exported="false" />
+        <activity
+            android:name=".AddRecipeActivity5"
+            android:exported="false" />
+        <activity
+            android:name=".AddStepActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddIngredient"
             android:exported="false" />
         <activity
             android:name=".WriteCommentActivity"

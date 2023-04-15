@@ -41,7 +41,7 @@ class SearchScreen : AppCompatActivity() {
                     true
                 }
                 R.id.addRecipe -> {
-                    val intent = Intent(this, AddRecipeActivity1::class.java)
+                    val intent = Intent(this, AddNewRecipe::class.java)
                     startActivity(intent)
                     true
                 }
