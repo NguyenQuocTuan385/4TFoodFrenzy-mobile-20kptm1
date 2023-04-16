@@ -14,7 +14,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tab_layout">
+        app:layout_constraintTop_toBottomOf="@id/tab_layout"
+        tools:ignore="NotSibling,SpeakableTextPresentCheck">
 
     </androidx.viewpager.widget.ViewPager>
 
@@ -35,11 +36,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:background="@color/white"
-            app:tabSelectedTextColor="?attr/actionMenuTextColor"
-            app:tabTextColor="@android:color/holo_orange_dark" />
+            app:tabSelectedTextColor="@color/SecondaryColor"
+            app:tabTextColor="@color/black"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageView"
+            android:id="@+id/creatorImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginStart="10dp"
@@ -47,22 +49,14 @@
             android:src="@drawable/avt" />
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/nameTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="110dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="30dp"
             android:text="Đặng Ngọc Tiến"
             android:textSize="16sp"
             android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="110dp"
-            android:layout_marginTop="50dp"
-            android:text=" @dntienes" />
 
         <ImageView
             android:id="@+id/option_profile"
