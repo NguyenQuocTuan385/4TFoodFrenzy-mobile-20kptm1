@@ -7,32 +7,25 @@
     tools:context=".AddRecipeActivity2">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.8" />
-
-    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.6" />
+        app:layout_constraintGuide_percent="0.75" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.4" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.25" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarAddRecipe"
@@ -44,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/close"
         app:navigationIcon="@drawable/baseline_arrow_back_24"
-        app:title="Tạo công thức">
+        app:title="Mô tả chi tiết ">
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -83,18 +76,7 @@
         android:layout_width="0dp"
         android:layout_height="5dp"
         android:background="#E6E6E6"
-        app:layout_constraintEnd_toStartOf="@+id/guideline9"
         app:layout_constraintStart_toEndOf="@+id/guideline8"
-        android:layout_marginEnd="2dp"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarAddRecipe" />
-
-    <View
-        android:id="@+id/view6"
-        android:layout_width="0dp"
-        android:layout_height="5dp"
-        android:background="#E6E6E6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guideline9"
         app:layout_constraintTop_toBottomOf="@+id/toolbarAddRecipe" />
 
 
@@ -119,8 +101,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat"
         app:layout_constraintVertical_bias="1.0"
         tools:layout_editor_absoluteX="-16dp">
@@ -174,38 +155,139 @@
             </TextView>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginHorizontal="20dp"
-                app:hintEnabled="false"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                >
+                android:layout_marginTop="10dp"
+                app:hintEnabled="false">
+
                 <AutoCompleteTextView
                     android:id="@+id/dropdown_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_outline"
-                    android:text="Dưới 15 phút"
-                    android:inputType="none">
-                </AutoCompleteTextView>
+                    android:inputType="none"
+                    android:text="Dưới 15 phút"></AutoCompleteTextView>
+
+                <TextView
+                    android:id="@+id/typeFoodText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="LOẠI MÓN ĂN"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:hintEnabled="false">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/dropdown_typeFood"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_outline"
+                        android:inputType="none"
+                        android:text="Khai vị"></AutoCompleteTextView>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/dietText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="CHẾ ĐỘ ĂN"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/SecondaryColor"
+                    android:text="Không đường"
+                    android:textSize="18dp"></CheckBox>
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/SecondaryColor"
+                    android:text="Không Gluten"
+                    android:textSize="18dp"></CheckBox>
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/SecondaryColor"
+                    android:text="Không thịt"
+                    android:textSize="18dp"></CheckBox>
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/SecondaryColor"
+                    android:text="Món thuần chay"
+                    android:textSize="18dp"></CheckBox>
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/SecondaryColor"
+                    android:text="Không cồn"
+                    android:textSize="18dp"></CheckBox>
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/SecondaryColor"
+                    android:text="Món chay"
+                    android:textSize="18dp"></CheckBox>
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/continueBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/second_color_button"
-                android:text="Tiếp tục"
-                android:textColor="@color/white"
-                android:textStyle="bold">
-
-            </Button>
         </androidx.appcompat.widget.LinearLayoutCompat>
-
     </ScrollView>
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_outline"
+        android:paddingTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/continueBtn"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/second_color_button"
+            android:text="Tiếp tục"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+        </Button>
+    </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

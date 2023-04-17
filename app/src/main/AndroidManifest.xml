@@ -64,9 +64,6 @@
             android:name=".AddRecipeActivity4"
             android:exported="false" />
         <activity
-            android:name=".AddRecipeActivity5"
-            android:exported="false" />
-        <activity
             android:name=".AddStepActivity"
             android:exported="false" />
         <activity

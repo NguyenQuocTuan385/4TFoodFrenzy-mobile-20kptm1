@@ -64,8 +64,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
     private fun setupContinueButton() {
         continueBtn= findViewById<Button>(R.id.continueBtn)
         continueBtn.setOnClickListener {
-            val intent = Intent(this, AddRecipeActivity5::class.java)
-            startActivity(intent)
+
         }
     }
 
