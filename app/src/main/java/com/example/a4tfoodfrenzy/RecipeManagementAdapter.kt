@@ -33,13 +33,13 @@ class RecipeManagementAdapter(private var recipeList : ArrayList<FoodRecipe>) : 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentRecipe = recipeList[position]
-        val uploadDateString = "${currentRecipe.getUploadDate().date}/${currentRecipe.getUploadDate().month}/${currentRecipe.getUploadDate().year}"
+        val uploadDateString = "${currentRecipe.uploadDate?.date}/${currentRecipe.uploadDate?.month}/${currentRecipe.uploadDate?.year}"
 
-        holder.recipeIMG.setImageResource(currentRecipe.getRecipeIMG())
-        holder.recipeName.text = currentRecipe.getRecipeName()
-        holder.numOfLike.text = currentRecipe.getLikes().toString()
-        holder.authorAvatarIMG.setImageResource(currentRecipe.getAuthorAvatar())
-        holder.authorName.text = currentRecipe.getAuthorName()
+        holder.recipeIMG.setImageResource(currentRecipe.recipeMainImage)
+        holder.recipeName.text = currentRecipe.recipeName
+        holder.numOfLike.text = currentRecipe.numOfLikes.toString()
+        currentRecipe.authorAvatar?.let { holder.authorAvatarIMG.setImageResource(it) }
+        holder.authorName.text = currentRecipe.authorName
         holder.uploadDate.text = uploadDateString
     }
 }

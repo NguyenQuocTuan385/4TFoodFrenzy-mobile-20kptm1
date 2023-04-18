@@ -31,7 +31,7 @@ class ProfileActivity : AppCompatActivity() {
                         true
                     }
                     "Đăng xuất" -> {
-                        val intent = Intent(this, LoginActivity::class.java)
+                        val intent = Intent(this, LoginRegisterActivity::class.java)
                         startActivity(intent)
                         true
                     }
@@ -42,9 +42,9 @@ class ProfileActivity : AppCompatActivity() {
         }
 
 
-        val adapter = TabAdapter(supportFragmentManager)
-        adapter.addFragment(TabFragment1(), "Món đã lưu")
-        adapter.addFragment(TabFragment2(), "Món của tôi")
+        val adapter = TabProfileAdapter(supportFragmentManager)
+        adapter.addFragment(TabFoodRecipeSaved(), "Món đã lưu")
+        adapter.addFragment(TabMyFoodRecipe(), "Món của tôi")
         val view_pager = findViewById<ViewPager>(R.id.view_pager)
         view_pager.adapter = adapter
         val tabs = findViewById<TabLayout>(R.id.tab_layout)

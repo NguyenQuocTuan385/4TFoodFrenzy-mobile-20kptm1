@@ -4,12 +4,11 @@ import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.widget.DatePicker
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.a4tfoodfrenzy.model.Comment
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
 
 class Admin_Comment_Management : AppCompatActivity() {
@@ -38,6 +37,7 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "Đặng Ngọc Tiến",
                 "Bún bò huế",
                 R.drawable.avt,
+                true,
                 R.drawable.bokho,
                 "Rất ngon và đơn giản",
                 "3 ngày trước"
@@ -48,6 +48,7 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "Đặng Ngọc Tiến",
                 "Bún bò huế",
                 R.drawable.avt,
+                true,
                 0,
                 "Đẹp quá",
                 "3 ngày trước"
@@ -58,6 +59,7 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "Trương Gia Tiến",
                 "Bún bò huế",
                 R.drawable.avt,
+                true,
                 R.drawable.comrangduabo,
                 "Ngon như Hiền Phương ??",
                 "1 giờ trước"
@@ -68,8 +70,9 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "Nguyễn Văn Việt",
                 "Bún bò huế",
                 R.drawable.avt,
+                true,
                 R.drawable.thitxiennuong,
-                "Ngon như Trần Nhi nhà em vậydâdadadasdsadasdasdasdsadasdadasdsdadsad",
+                "Ngon như Bao Tran nhà em vậydâdadadasdsadasdasdasdsadasdadasdsdadsad",
                 "7 ngày trước"
             )
         )
@@ -78,8 +81,9 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "Nguyễn Văn Việt",
                 "Bún bò huế",
                 R.drawable.avt,
+                true,
                 R.drawable.thitxiennuong,
-                "Ngon như Trần Nhi nhà em vậydâdadadasdsadasdasdasdsadasdadasdsdadsad",
+                "Ngon như Hong Suong nhà em vậydâdadadasdsadasdasdasdsadasdadasdsdadsad",
                 "7 ngày trước"
             )
         )
@@ -88,8 +92,9 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "Nguyễn Văn Việt",
                 "Bún bò huế",
                 R.drawable.avt,
+                true,
                 R.drawable.thitxiennuong,
-                "Ngon như Trần Nhi nhà em vậydâdadadasdsadasdasdasdsadasdadasdsdadsad",
+                "Ngon như Dieu Trang nhà em vậydâdadadasdsadasdasdasdsadasdadasdsdadsad",
                 "7 ngày trước"
             )
         )

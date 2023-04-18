@@ -1,7 +1,6 @@
 package com.example.a4tfoodfrenzy
 
 import android.content.Context
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,7 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.a4tfoodfrenzy.model.Ingredient
 
 class ListIngredientAdapter(context: Context, list:ArrayList<Ingredient>)
     : RecyclerView.Adapter<ListIngredientAdapter.ViewHolder>() {
@@ -47,7 +47,7 @@ class ListIngredientAdapter(context: Context, list:ArrayList<Ingredient>)
     override fun onBindViewHolder(holder: ListIngredientAdapter.ViewHolder, position: Int) {
         val item=listItem[position]
         holder.name.text=item.nameIngredient
-        holder.amount.text="${item.amount} g"
+        holder.amount.text="${item.quantity} g"
     }
 
 }

@@ -1,13 +1,12 @@
 package com.example.a4tfoodfrenzy
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.a4tfoodfrenzy.model.Comment
 
 class CommentListAdapter(
     private var commentArray: ArrayList<Comment>, private var isCmtListUserView: Boolean,
@@ -81,13 +80,13 @@ class CommentListAdapter(
         val nameTV = holder.nameTV
         nameTV.text = cmtRender.username
         val foodTV = holder.foodTV
-        foodTV.text = cmtRender.foodname
+        foodTV.text = cmtRender.nameRecipe
         val cmtDescripTV = holder.cmtDescripTV
-        cmtDescripTV.text = cmtRender.content
+        cmtDescripTV.text = cmtRender.description
         val timeTV = holder.timeTV
-        timeTV.text = cmtRender.time
+        timeTV.text = cmtRender.date
         val avatarIV = holder.avatarIV
-        cmtRender.avt?.let { avatarIV.setImageResource(it) }
+        cmtRender.avatarUser?.let { avatarIV.setImageResource(it) }
         val foodIV = holder.foodIV
         if (cmtRender.image == 0) {
             foodIV.visibility = View.GONE

@@ -21,14 +21,63 @@ class FoodRecipe(private var _id : Int,
         _authorAvatar = avatar
     }
 
-    fun getId() : Int{return _id}
-    fun getRecipeName() : String {return _recipeName}
-    fun getRecipeIMG() : Int { return  _recipeMainImage}
-    fun getRation() : Int { return _ration}
-    fun getCookTime() : Int {return _cookTime}
-    fun getCategoryId() : Int{return _categoryId}
-    fun getAuthorName() : String{return _authorName!!}
-    fun getAuthorAvatar() : Int{return _authorAvatar!!}
-    fun getLikes() : Int {return _numOfLikes!!}
-    fun getUploadDate() : Date{return _uploadDate!!}
+    var id: Int
+        get() = _id
+        set(value) {
+            _id = value
+        }
+
+    var recipeName: String
+        get() = _recipeName
+        set(value) {
+            _recipeName = value
+        }
+
+    var recipeMainImage: Int
+        get() = _recipeMainImage
+        set(value) {
+            _recipeMainImage = value
+        }
+
+    var ration: Int
+        get() = _ration
+        set(value) {
+            _ration = value
+        }
+
+    var cookTime: Int
+        get() = _cookTime
+        set(value) {
+            _cookTime = value
+        }
+
+    var categoryId: Int
+        get() = _categoryId
+        set(value) {
+            _categoryId = value
+        }
+
+    var authorName: String?
+        get() = _authorName
+        set(value) {
+            _authorName = value
+        }
+
+    var authorAvatar: Int?
+        get() = _authorAvatar
+        set(value) {
+            _authorAvatar = value
+        }
+
+    var numOfLikes: Int?
+        get() = _numOfLikes
+        set(value) {
+            _numOfLikes = value
+        }
+
+    var uploadDate: Date?
+        get() = _uploadDate
+        set(value) {
+            _uploadDate = value
+        }
 }

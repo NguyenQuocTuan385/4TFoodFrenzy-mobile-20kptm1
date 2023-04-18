@@ -56,6 +56,7 @@
             android:layout_marginTop="30dp"
             android:text="Đặng Ngọc Tiến"
             android:textSize="16sp"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
         <ImageView

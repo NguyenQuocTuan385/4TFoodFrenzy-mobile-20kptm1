@@ -14,7 +14,7 @@ import com.example.a4tfoodfrenzy.model.FoodRecipe
 import java.util.*
 import kotlin.collections.ArrayList
 
-class TabAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class TabProfileAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     private val mFragmentList = ArrayList<Fragment>()
     private val mTitleList = ArrayList<String>()
 
@@ -37,7 +37,7 @@ class TabAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME
 }
 
 
-class TabFragment1 : Fragment() {
+class TabFoodRecipeSaved : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.saved_recipe_in_profile, container, false)
         val recyclerView1 = view.findViewById<RecyclerView>(R.id.gridView1)
@@ -45,7 +45,7 @@ class TabFragment1 : Fragment() {
         val monAn = generateRecipeSaved()
         val adapter = RecipeListInProfileAdapter1(monAn, true, false)
         val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
-        recyclerView1!!.addItemDecoration(GridSpacingItemDecorationInProfile1(spacingInPixels))
+        recyclerView1!!.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
         recyclerView1!!.adapter = adapter
         recyclerView1!!.layoutManager = GridLayoutManager(inflater.context, 2)
         recyclerView1.adapter = adapter
@@ -63,7 +63,7 @@ class TabFragment1 : Fragment() {
     }
 }
 
-class TabFragment2 : Fragment() {
+class TabMyFoodRecipe : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.created_recipe_in_profile, container, false)
         val recyclerView1 = view.findViewById<RecyclerView>(R.id.created_recipe_RV)
@@ -71,7 +71,7 @@ class TabFragment2 : Fragment() {
 
         val adapter = RecipeListInProfileAdapter1(monAn, false, true)
         val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
-        recyclerView1!!.addItemDecoration(GridSpacingItemDecorationInProfile1(spacingInPixels))
+        recyclerView1!!.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
         recyclerView1!!.adapter = adapter
         recyclerView1!!.layoutManager = GridLayoutManager(inflater.context, 2)
         recyclerView1.adapter = adapter

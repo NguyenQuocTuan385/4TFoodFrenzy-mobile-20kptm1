@@ -4,10 +4,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.a4tfoodfrenzy.model.Ingredient
 
 class AddRecipeActivity3 : AppCompatActivity() {
     private lateinit var toolbarAddRecipe: Toolbar
@@ -31,10 +31,10 @@ class AddRecipeActivity3 : AppCompatActivity() {
     }
     private fun createIngredientList(): ArrayList<Ingredient> {
         val list = ArrayList<Ingredient>()
-        list.add(Ingredient(250, "Hải sản"))
-        list.add(Ingredient(100, "Thịt bò"))
-        list.add(Ingredient(10, "Muối"))
-        list.add(Ingredient(8, "Đường"))
+        list.add(Ingredient(1,250, "Hải sản","g"))
+        list.add(Ingredient(2,100, "Thịt bò","kg"))
+        list.add(Ingredient(3,10, "Muối","g"))
+        list.add(Ingredient(4,8, "Đường","g"))
         return list
     }
 
