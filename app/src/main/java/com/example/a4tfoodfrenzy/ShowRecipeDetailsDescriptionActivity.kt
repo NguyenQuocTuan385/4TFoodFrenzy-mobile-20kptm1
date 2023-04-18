@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.a4tfoodfrenzy.model.CookingStep
 
 class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,39 +27,31 @@ class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
         val stepList = arrayListOf<CookingStep>()
 
         stepList.add(
-            CookingStep(
+            CookingStep(1,1,
                 "1. Bắp bò rửa sơ để ráo\n" +
                         "2. Hành tây, xà lách, cà chua rửa sạch rồi để ráo nước",
-                "1. Bắp bò\n" +
-                        "2.Hành tây, xà lách, cà chua",
                 R.drawable.avt
             )
         )
         stepList.add(
-            CookingStep(
+            CookingStep(2,2,
                 "1. Cho 1 muỗng canh dầu ăn vào làm nóng, chỉnh lửa vừa, phi thơm hành tỏi và cho bò vào xào trong 2 phút cho săn\n2. " +
                         "Cho gói sốt me vào đảo đều trong 3 phút. Nêm nếm lại cho vừa ăn\n3. Thêm hành tây vào xào sơ khoảng 1 phút rồi tắt bếp.",
-                "1. Bắp bò\n" +
-                        "2. Tỏi, dầu ăn, hành tây\n" +
-                        "3. Xốt me",
                 R.drawable.no_alcohol_icon
             )
         )
         stepList.add(
-            CookingStep(
+            CookingStep(3,3,
                 "1. Xếp rau, cà chua thái lát ra đĩa, cho bò lên trên. \n" +
                         "2. Rắc thêm mè để thêm phần hấp dẫn.\n" +
                         "3. Thưởng thức cùng bánh mì ngay khi còn nóng. Ngon hơn khi dùng với cơm nóng hoặc",
-                "1. Bắp bò đã xào\n" +
-                        "2. Xà lách, cà chua, mè",
                 R.drawable.veg_icon
             )
         )
 
         stepList.add(
-            CookingStep(
-                        "3. Thưởng thức cùng bánh mì ngay khi còn nóng. Ngon hơn khi dùng với cơm nóng hoặc",
-                        "2. Xà lách, cà chua, mè",
+            CookingStep(4,4,
+                "3. Thưởng thức cùng bánh mì ngay khi còn nóng. Ngon hơn khi dùng với cơm nóng hoặc",
                 R.drawable.veg_icon
             )
         )
@@ -72,35 +65,6 @@ class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(rv)
 
-    }
-}
-
-class CookingStep(private val steps: String, private val ingredients: String) {
-    private var imageResource = -1
-    private var imageURL = ""
-
-    constructor(step: String, ingredients: String, resource: Int) : this(step, ingredients) {
-        this.imageResource = resource
-    }
-
-    constructor(step: String, ingredients: String, url: String) : this(step, ingredients) {
-        this.imageURL = url
-    }
-
-    fun getStepImageResource(): Int {
-        return imageResource
-    }
-
-    fun getStepImageURL(): String {
-        return imageURL
-    }
-
-    fun getStep(): String {
-        return steps
-    }
-
-    fun getIngredient(): String {
-        return ingredients
     }
 }
 
@@ -136,9 +100,8 @@ class StepsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val step = stepsList[position]
 
-        holder.stepIMG.setImageResource(step.getStepImageResource())
-        holder.stepInstruction.text = step.getStep()
-        holder.ingredientTextView.text = step.getIngredient()
+        holder.stepIMG.setImageResource(step.imageResource)
+        holder.stepInstruction.text = step.description
         holder.toolbar.title = "Bước ${position + 1}"
 
         val page = "${position + 1}/${stepsList.size}"
