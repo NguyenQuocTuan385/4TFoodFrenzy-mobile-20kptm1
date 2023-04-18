@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.a4tfoodfrenzy.model.FoodRecipe
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class AfterSearchActivity : AppCompatActivity() {
@@ -16,7 +17,7 @@ class AfterSearchActivity : AppCompatActivity() {
 
         val recipeAfterSearchRV = findViewById<RecyclerView>(R.id.recipeAfterSearchRV)
         var recipeAfterSearch = generateRecipeTodayEatData() //implemened below
-        adapterRecipeAfterSearchRV = RecipeListAdapter(recipeAfterSearch, true, false, false)
+        adapterRecipeAfterSearchRV = RecipeListAdapter(recipeAfterSearch)
         recipeAfterSearchRV!!.adapter = adapterRecipeAfterSearchRV
         recipeAfterSearchRV!!.layoutManager = GridLayoutManager(this, 3)
 
@@ -52,55 +53,27 @@ class AfterSearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun generateRecipeTodayEatData(): ArrayList<RecipeRender> {
-        var result = ArrayList<RecipeRender>()
+    private fun generateRecipeTodayEatData(): ArrayList<FoodRecipe> {
+        var result = ArrayList<FoodRecipe>()
 
-        var typeRecipe: RecipeRender = RecipeRender()
-        typeRecipe.titleRecipe = "Canh khổ qua nhồi thịt"
-        typeRecipe.recipeImage = R.drawable.khoquanhoithit
-        result.add(typeRecipe)
+        var foodRecipe: FoodRecipe = FoodRecipe(1,"Canh khổ qua nhồi thịt",R.drawable.khoquanhoithit,2,15,4)
+        result.add(foodRecipe)
 
-        typeRecipe = RecipeRender()
-        typeRecipe.titleRecipe = "Canh chua cá lóc"
-        typeRecipe.recipeImage = R.drawable.canhcaloc
-        result.add(typeRecipe)
+        foodRecipe = FoodRecipe(1,"Canh chua cá lóc",R.drawable.canhcaloc,2,15,4)
+        result.add(foodRecipe)
 
 
-        typeRecipe = RecipeRender()
-        typeRecipe.titleRecipe = "Bò sốt me"
-        typeRecipe.recipeImage = R.drawable.bosotme
-        result.add(typeRecipe)
+        foodRecipe = FoodRecipe(1,"Bò sốt me",R.drawable.bosotme,2,15,4)
+        result.add(foodRecipe)
 
-        typeRecipe = RecipeRender()
-        typeRecipe.titleRecipe = "Bò kho"
-        typeRecipe.recipeImage = R.drawable.bokho
-        result.add(typeRecipe)
+        foodRecipe = FoodRecipe(1,"Bò kho",R.drawable.bokho,2,15,4)
+        result.add(foodRecipe)
 
-        typeRecipe = RecipeRender()
-        typeRecipe.titleRecipe = "Bún bò huế"
-        typeRecipe.recipeImage = R.drawable.bunbohue
-        result.add(typeRecipe)
+        foodRecipe = FoodRecipe(1,"Bún bò huế",R.drawable.bunbohue,2,15,4)
+        result.add(foodRecipe)
 
-        typeRecipe = RecipeRender()
-        typeRecipe.titleRecipe = "Bưởi trộn khô gà"
-        typeRecipe.recipeImage = R.drawable.buoitronkhoga
-        result.add(typeRecipe)
-
-        typeRecipe = RecipeRender()
-        typeRecipe.titleRecipe = "Cơm rang dưa bò"
-        typeRecipe.recipeImage = R.drawable.comrangduabo
-        result.add(typeRecipe)
-
-        typeRecipe = RecipeRender()
-        typeRecipe.titleRecipe = "Mì trứng xào bò"
-        typeRecipe.recipeImage = R.drawable.mitrungxaobo
-        result.add(typeRecipe)
-
-
-        typeRecipe = RecipeRender()
-        typeRecipe.titleRecipe = "Mì quảng gà"
-        typeRecipe.recipeImage = R.drawable.miquangga
-        result.add(typeRecipe)
+        foodRecipe = FoodRecipe(1,"Bưởi trộn khô gà",R.drawable.buoitronkhoga,2,15,4)
+        result.add(foodRecipe)
 
         return result
     }

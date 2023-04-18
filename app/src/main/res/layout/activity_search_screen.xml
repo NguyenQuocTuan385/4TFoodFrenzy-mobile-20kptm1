@@ -93,7 +93,7 @@
             android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/typeRecipeRV"
+                android:id="@+id/cateRecipeRV"
                 android:layout_width="395dp"
                 android:layout_height="wrap_content"
                 android:horizontalSpacing="10dp"
@@ -113,7 +113,7 @@
                 android:textSize="20dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/typeRecipeRV" />
+                app:layout_constraintTop_toBottomOf="@+id/cateRecipeRV" />
 
             <TextView
                 android:id="@+id/textView10"
