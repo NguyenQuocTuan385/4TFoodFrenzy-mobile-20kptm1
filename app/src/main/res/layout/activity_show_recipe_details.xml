@@ -9,7 +9,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:background="@drawable/toolbar_border"
         android:contentInsetStart="0dp"
         android:contentInsetEnd="0dp"
@@ -38,9 +38,9 @@
 
             <ImageView
                 android:id="@+id/toolbarBackButton"
-                android:layout_width="20dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="2dp"
+                android:layout_width="25dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginStart="0dp"
                 android:backgroundTint="@color/secondary_light_orange"
                 android:contentDescription="This is back button"
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:text="Chi tiết món ăn"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="25sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -412,16 +412,17 @@
 
 
                 <Button
-                    android:elevation="0dp"
                     android:id="@+id/moreDetailsButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    style="?android:attr/borderlessButtonStyle"
+                    android:background="@color/SecondaryColor"
 
-                    app:backgroundTint="@color/white"
+
+                    android:elevation="0dp"
                     android:text="Xem chi tiết các bước"
-                    android:textColor="@color/SecondaryColor"
-                   />
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    tools:ignore="TextContrastCheck" />
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
@@ -546,13 +547,15 @@
 
                 <Button
                     android:id="@+id/writeCommentButton"
-                    style="?android:attr/borderlessButtonStyle"
                     android:layout_width="match_parent"
 
                     android:layout_height="match_parent"
+                    android:background="@color/SecondaryColor"
+
                     android:text="Viết bình luận"
-                    android:textColor="@color/secondary_light_orange"
-                    app:backgroundTint="@color/white" />
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

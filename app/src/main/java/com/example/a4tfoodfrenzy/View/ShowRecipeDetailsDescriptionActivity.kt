@@ -60,7 +60,7 @@ class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
         )
 
 
-        val adapter = StepsAdapter(stepList, this)
+        val adapter = StepsAdapter(stepList, this, rv)
         rv.adapter = adapter
 
         rv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -74,7 +74,8 @@ class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
 
 class StepsAdapter(
     private val stepsList: ArrayList<CookingStep>,
-    private val mainContext: Context
+    private val mainContext: Context,
+    private val mainRV : RecyclerView,
 ) :
     RecyclerView.Adapter<StepsAdapter.ViewHolder>() {
 
@@ -82,11 +83,11 @@ class StepsAdapter(
         val stepIMG : ImageView = listItemView.findViewById(R.id.stepImageView)
         val stepInstruction : TextView = listItemView.findViewById(R.id.textInstructionTextView)
         val toolbar : androidx.appcompat.widget.Toolbar = listItemView.findViewById(R.id.stepItemToolbar)
-
+        private val closeActivityButton : TextView = listItemView.findViewById(R.id.closeStepItemTextView)
         val progressRV : RecyclerView = listItemView.findViewById(R.id.stepProgressRecyclerView)
 
         init {
-            toolbar.setNavigationOnClickListener {
+            closeActivityButton.setOnClickListener {
                 val intent = Intent(mainContext, ShowRecipeDetailsActivity::class.java)
                 mainContext.startActivity(intent)
             }
@@ -112,27 +113,28 @@ class StepsAdapter(
         holder.stepInstruction.text = step.description
         holder.toolbar.title = "Bước ${position + 1}"
 
-        val page = "${position + 1}/${stepsList.size}"
         val progressList = arrayListOf<String>()
 
         for (i in 1..stepsList.size)
             progressList.add(i.toString())
 
-        // to get width
+        // get width
         val wm : WindowManager = mainContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
-        val adapter = StepProgressAdapter(progressList, position,  wm.defaultDisplay.width)
+        val adapter = StepProgressAdapter(progressList, position,  wm.defaultDisplay.width, this.mainRV)
         holder.progressRV.adapter = adapter
 
         holder.progressRV.layoutManager =
             LinearLayoutManager(mainContext, LinearLayoutManager.HORIZONTAL, false)
+
     }
 }
 
 class StepProgressAdapter(
     private val progressList: ArrayList<String>,
-    private val currenstPos: Int,
+    private val currentPos: Int, // this is current position of carousel
     private val parentRvWidth : Int,
+    private val mainRV : RecyclerView
 ) : RecyclerView.Adapter<StepProgressAdapter.ViewHolder>() {
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val progressTV : TextView = listItemView.findViewById(R.id.progressTextView)
@@ -150,12 +152,16 @@ class StepProgressAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (currenstPos == position) {
+        if (currentPos == position) {
             holder.progressTV.setBackgroundResource(R.color.SecondaryColor)
             holder.progressTV.typeface = Typeface.DEFAULT_BOLD
         }
 
         holder.progressTV.text = progressList[position]
         holder.progressTV.width = parentRvWidth / progressList.size
+
+        holder.itemView.setOnClickListener{
+            mainRV.scrollToPosition(position)
+        }
     }
 }

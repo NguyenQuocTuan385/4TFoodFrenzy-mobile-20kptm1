@@ -14,9 +14,20 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/baseline_arrow_back_24"
         app:title="Bước 1">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đóng"
+            android:id="@+id/closeStepItemTextView"
+            android:textAlignment="textEnd"
+            android:layout_gravity="end"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/SecondaryColor"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            />
     </androidx.appcompat.widget.Toolbar>
 
     <ImageView
@@ -59,33 +70,6 @@
         app:layout_constraintTop_toBottomOf="@+id/ingredientCardView"
 
         />
-
-
-    <!--    <com.google.android.material.card.MaterialCardView-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:backgroundTint="@color/SecondaryColor"-->
-    <!--        app:cardCornerRadius="20dp"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-
-    <!--        app:layout_constraintStart_toStartOf="parent">-->
-
-    <!--        <TextView-->
-    <!--            android:id="@+id/stepPageTextView"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginBottom="5dp"-->
-    <!--            android:paddingStart="10dp"-->
-    <!--            android:paddingEnd="10dp"-->
-    <!--            android:text="4/5"-->
-    <!--            android:textColor="@color/white"-->
-    <!--            android:textSize="25sp"-->
-
-    <!--            android:textStyle="bold" />-->
-    <!--        -->
-    <!--        -->
-    <!--    </com.google.android.material.card.MaterialCardView>-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/stepProgressRecyclerView"
