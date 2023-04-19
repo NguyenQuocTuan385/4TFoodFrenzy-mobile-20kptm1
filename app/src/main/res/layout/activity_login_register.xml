@@ -23,9 +23,10 @@
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginBottom="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnGoogle"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/logo" />
 
@@ -38,11 +39,13 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
         android:background="@drawable/button_outline"
-        android:drawableStart="@drawable/google"
+        android:drawableLeft="@drawable/google"
         android:drawablePadding="30dp"
         android:paddingHorizontal="20dp"
         android:paddingEnd="80dp"
         android:text="Đăng nhập bằng Google"
+        android:textColor="@color/black"
+        app:backgroundTint="@null"
         android:textAllCaps="false"
         android:textSize="16dp"
         app:layout_constraintBottom_toTopOf="@+id/TextChoice"
@@ -99,10 +102,11 @@
         android:clickable="true"
         android:contentDescription="dangnhapfacebook"
         android:scaleType="center"
-        app:layout_constraintBottom_toTopOf="@+id/loginMail"
+        app:layout_constraintBottom_toTopOf="@+id/registerMail"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:maxImageSize="45dp"
-        app:srcCompat="@drawable/facebook" />
+        app:tint="@null"
+        android:src="@drawable/facebook" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnMail"
@@ -112,21 +116,21 @@
         android:layout_marginBottom="50dp"
         android:backgroundTint="@color/white"
         android:clickable="true"
-        android:contentDescription="dangkyemail"
-        app:borderWidth="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/loginMail"
+        android:contentDescription="dangnhapemail"
+        app:layout_constraintBottom_toTopOf="@+id/registerMail"
         app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:borderWidth="0dp"
         app:srcCompat="@drawable/mail" />
 
     <TextView
-        android:id="@+id/loginMail"
+        android:id="@+id/registerMail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
         android:gravity="center"
-        android:text="Đăng nhập bằng email"
+        android:text="Đăng ký bằng email"
         android:textColor="@color/black"
         android:textSize="16dp"
         app:layout_constraintBottom_toTopOf="@+id/information"
@@ -158,7 +162,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.022446688" />
+        app:layout_constraintGuide_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/closeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_close_24" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
