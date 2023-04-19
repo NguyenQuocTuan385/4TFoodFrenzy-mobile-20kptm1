@@ -1,11 +1,13 @@
 package com.example.a4tfoodfrenzy
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
@@ -17,6 +19,8 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         val rv = findViewById<RecyclerView>(R.id.foodImageRecyclerView)
         val mainIMG : ImageView = findViewById(R.id.mainFoodImageView)
+        val showStepDetailsButton : Button = findViewById(R.id.moreDetailsButton)
+        val writeCommentButton : Button = findViewById(R.id.writeCommentButton)
 
         val imgList = arrayListOf<FoodImage>()
         imgList.add(FoodImage(R.drawable.avt))
@@ -35,6 +39,17 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         mainIMG.setImageResource(imgList[0].getImgResource())
         adapter.onImageClick = {imgID ->
             mainIMG.setImageResource(imgID)
+        }
+
+        showStepDetailsButton.setOnClickListener{
+            val myIntent = Intent(this, ShowRecipeDetailsDescriptionActivity::class.java)
+
+            startActivity(myIntent)
+        }
+
+        writeCommentButton.setOnClickListener{
+            val myIntent = Intent(this, WriteCommentActivity::class.java)
+            startActivity(myIntent)
         }
     }
 }

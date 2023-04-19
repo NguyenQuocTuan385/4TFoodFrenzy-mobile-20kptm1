@@ -36,7 +36,7 @@
             app:layout_constraintEnd_toEndOf="@+id/toolbar"
             app:layout_constraintStart_toStartOf="@+id/toolbar">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/toolbarBackButton"
                 android:layout_width="20dp"
                 android:layout_height="30dp"
@@ -44,7 +44,7 @@
                 android:layout_marginStart="0dp"
                 android:backgroundTint="@color/secondary_light_orange"
                 android:contentDescription="This is back button"
-                android:src="@drawable/baseline_arrow_back_24"
+                android:src="@drawable/back"
                 tools:ignore="TouchTargetSizeCheck" />
             <TextView
                 android:id="@+id/TimKiemTV"
@@ -546,14 +546,13 @@
 
                 <Button
                     android:id="@+id/writeCommentButton"
+                    style="?android:attr/borderlessButtonStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
 
+                    android:layout_height="match_parent"
                     android:text="Viết bình luận"
                     android:textColor="@color/secondary_light_orange"
-                    app:backgroundTint="@color/white"
-                    style="?android:attr/borderlessButtonStyle"
-                    />
+                    app:backgroundTint="@color/white" />
 
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

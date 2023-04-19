@@ -54,15 +54,7 @@ class SortRecipeActivity : AppCompatActivity() {
             dietTypeNameList.add(recipeDietTemp.dietName)
         }
 
-        val ingredientNameList = arrayListOf(
-            "Rau củ",
-            "Thịt heo",
-            "Thịt bò",
-            "Thịt gà",
-            "Tinh bột",
-            "Hải sản",
-            "Trái cây"
-        )
+
 
         val normalImageList = arrayListOf(
             R.drawable.thumb_up_icon,
@@ -91,7 +83,6 @@ class SortRecipeActivity : AppCompatActivity() {
         val normType = arrayListOf<SortType>()
         val categoryType = arrayListOf<SortType>()
         val dietType = arrayListOf<SortType>()
-        val ingredientType = arrayListOf<SortType>()
 
         for (i in 0 until normalNameTypeList.size)
             normType.add(SortType(normalNameTypeList[i], normalImageList[i]))
@@ -99,20 +90,16 @@ class SortRecipeActivity : AppCompatActivity() {
             categoryType.add(SortType(categoryNameTypeList[i], categoryImageList[i]))
         for (i in 0 until dietTypeNameList.size)
             dietType.add(SortType(dietTypeNameList[i], dietImageList[i]))
-        for (type in ingredientNameList)
-            ingredientType.add(SortType(type))
 
         val normalSortList = SortList(normType, 0, "Lọc")
         val categorySortList = SortList(categoryType, 1, "Loại")
         val dietSortList = SortList(dietType, 1, "Chế độ ăn")
-        val ingredientSortList = SortList(ingredientType, 2, "Nguyên liệu chính")
 
         val sortLists = arrayListOf<SortList>()
 
         sortLists.add(normalSortList)
         sortLists.add(categorySortList)
         sortLists.add(dietSortList)
-        sortLists.add(ingredientSortList)
 
         sortRecyclerView.adapter = ExpandRecyclerViewAdapter(sortLists, this)
         sortRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -147,16 +134,7 @@ class NormSortAdapter(private val sortTypeList: List<SortType>, private val curr
 
         if (viewType == 1111)
             return ViewHolder(inflater.inflate(R.layout.normal_sort_item, parent, false))
-        else if (viewType == 2222)
-            return ViewHolder(inflater.inflate(R.layout.square_sort_item, parent, false))
-        else
-            return ViewHolderCheckbox(
-                inflater.inflate(
-                    R.layout.ingredient_sort_item,
-                    parent,
-                    false
-                )
-            )
+        return ViewHolder(inflater.inflate(R.layout.square_sort_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -185,9 +163,7 @@ class NormSortAdapter(private val sortTypeList: List<SortType>, private val curr
     override fun getItemViewType(position: Int): Int {
         if (currentViewType == 0)
             return 1111
-        else if (currentViewType == 1)
-            return 2222
-        return 3333
+        return 2222
     }
 }
 

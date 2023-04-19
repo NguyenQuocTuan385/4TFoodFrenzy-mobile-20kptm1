@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.a4tfoodfrenzy.R.id
@@ -20,10 +21,13 @@ class WriteCommentActivity : AppCompatActivity() {
     var removeImageConstraintLayout : ConstraintLayout? = null
     var removeImgButton : LinearLayout? = null
 
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_write_comment)
+
+        val cancelButton : TextView = findViewById(R.id.cancelTextViewBtn)
 
         imgView = findViewById(R.id.commentFoodImageView)
         removeImageConstraintLayout = findViewById(R.id.removeCommentImageConstraintLayout)
@@ -42,6 +46,12 @@ class WriteCommentActivity : AppCompatActivity() {
             // hide remove image section
             removeImageConstraintLayout?.visibility = View.INVISIBLE
             imgView?.scaleType = ImageView.ScaleType.FIT_CENTER
+        }
+
+        // cancel writing comment -> return to recipe details
+        cancelButton.setOnClickListener{
+            val intent = Intent()
+            startActivity(intent)
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -1,6 +1,8 @@
 package com.example.a4tfoodfrenzy
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -19,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.model.CookingStep
 
 class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_recipe_details_description)
@@ -65,6 +68,7 @@ class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(rv)
 
+
     }
 }
 
@@ -79,10 +83,14 @@ class StepsAdapter(
         val stepInstruction : TextView = listItemView.findViewById(R.id.textInstructionTextView)
         val toolbar : androidx.appcompat.widget.Toolbar = listItemView.findViewById(R.id.stepItemToolbar)
 
-        val ingredientTextView : TextView = listItemView.findViewById(R.id.ingredientStepTextView)
-
         val progressRV : RecyclerView = listItemView.findViewById(R.id.stepProgressRecyclerView)
 
+        init {
+            toolbar.setNavigationOnClickListener {
+                val intent = Intent(mainContext, ShowRecipeDetailsActivity::class.java)
+                mainContext.startActivity(intent)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -118,7 +126,6 @@ class StepsAdapter(
 
         holder.progressRV.layoutManager =
             LinearLayoutManager(mainContext, LinearLayoutManager.HORIZONTAL, false)
-//        holder.pageTextView.text = page
     }
 }
 
