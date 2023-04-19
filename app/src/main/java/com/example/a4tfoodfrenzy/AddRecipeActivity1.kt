@@ -5,9 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 
 class AddRecipeActivity1 : AppCompatActivity() {
-    private lateinit var toolbarAddRecipe: Toolbar
+    private lateinit var toolbarAddRecipe: MaterialToolbar
     private lateinit var continueBtn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {

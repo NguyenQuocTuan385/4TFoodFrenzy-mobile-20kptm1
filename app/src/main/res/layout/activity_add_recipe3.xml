@@ -27,7 +27,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.25" />
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarAddRecipe"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -36,10 +36,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/close"
+        android:theme="@style/MyToolbar"
         app:navigationIcon="@drawable/baseline_arrow_back_24"
         app:title="Thêm nguyên liệu">
 
-    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <View
         android:id="@+id/view"
@@ -143,13 +144,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:backgroundTint="@color/white"
                 android:padding="15dp"
                 android:text="Thêm Nguyên liệu"
-                android:textColor="@color/SecondaryColor"
+                android:textColor="@color/white"
                 app:cornerRadius="30dp"
-                app:strokeColor="@color/SecondaryColor"
-                app:strokeWidth="1dp"></com.google.android.material.button.MaterialButton>
+                ></com.google.android.material.button.MaterialButton>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 

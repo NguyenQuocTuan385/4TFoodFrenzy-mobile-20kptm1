@@ -8,9 +8,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.model.RecipeIngredient
+import com.google.android.material.appbar.MaterialToolbar
 
 class AddRecipeActivity3 : AppCompatActivity() {
-    private lateinit var toolbarAddRecipe: Toolbar
+    private lateinit var toolbarAddRecipe: MaterialToolbar
     private lateinit var continueBtn: Button
     private lateinit var addIngredient: Button
 

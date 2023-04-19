@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".AddIngredient">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarAddIngredient"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -15,10 +15,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/save"
+        android:theme="@style/MyToolbar"
         app:navigationIcon="@drawable/baseline_close_24"
         app:title="Thêm nguyên liệu">
 
-    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.MaterialToolbar>
 
 
     <ScrollView

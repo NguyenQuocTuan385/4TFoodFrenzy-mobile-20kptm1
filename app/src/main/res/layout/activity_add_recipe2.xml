@@ -27,7 +27,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.25" />
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarAddRecipe"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -36,10 +36,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/close"
+        android:theme="@style/MyToolbar"
         app:navigationIcon="@drawable/baseline_arrow_back_24"
         app:title="Mô tả chi tiết ">
 
-    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <View
         android:id="@+id/view"
@@ -169,13 +170,16 @@
                     android:background="@drawable/button_outline"
                     android:inputType="none"
                     android:text="Dưới 15 phút"></AutoCompleteTextView>
+            </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
+
+            <TextView
                     android:id="@+id/typeFoodText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
+                    android:layout_marginHorizontal="20dp"
                     android:text="LOẠI MÓN ĂN"
                     android:textColor="@color/black"
                     android:textSize="18dp"
@@ -188,6 +192,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:layout_marginHorizontal="20dp"
                     app:hintEnabled="false">
 
                     <AutoCompleteTextView
@@ -207,55 +212,23 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
                     android:text="CHẾ ĐỘ ĂN"
+                    android:layout_marginHorizontal="20dp"
                     android:textColor="@color/black"
                     android:textSize="18dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat" />
 
-                <CheckBox
-                    android:layout_width="wrap_content"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list_checkbox"
+                    android:nestedScrollingEnabled="false"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@color/SecondaryColor"
-                    android:text="Không đường"
-                    android:textSize="18dp"></CheckBox>
+                    tools:listitem="@layout/list_checkbox">
 
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="@color/SecondaryColor"
-                    android:text="Không Gluten"
-                    android:textSize="18dp"></CheckBox>
+                </androidx.recyclerview.widget.RecyclerView>
 
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="@color/SecondaryColor"
-                    android:text="Không thịt"
-                    android:textSize="18dp"></CheckBox>
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="@color/SecondaryColor"
-                    android:text="Món thuần chay"
-                    android:textSize="18dp"></CheckBox>
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="@color/SecondaryColor"
-                    android:text="Không cồn"
-                    android:textSize="18dp"></CheckBox>
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="@color/SecondaryColor"
-                    android:text="Món chay"
-                    android:textSize="18dp"></CheckBox>
-
-            </com.google.android.material.textfield.TextInputLayout>
         </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>
     <FrameLayout

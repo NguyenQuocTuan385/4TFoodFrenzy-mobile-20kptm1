@@ -3,9 +3,10 @@ package com.example.a4tfoodfrenzy
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 
 class AddStepActivity : AppCompatActivity() {
-    private lateinit var toolbarAddStep: Toolbar
+    private lateinit var toolbarAddStep: MaterialToolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

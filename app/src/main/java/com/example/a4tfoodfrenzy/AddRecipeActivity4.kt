@@ -7,10 +7,11 @@ import android.widget.Button
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.MaterialToolbar
 
 class AddRecipeActivity4 : AppCompatActivity() {
     private lateinit var continueBtn: Button
-    private lateinit var toolbarAddRecipe: Toolbar
+    private lateinit var toolbarAddRecipe: MaterialToolbar
     private lateinit var addStepBtn:Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +40,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
     }
     private fun initToolbar()
     {
-        toolbarAddRecipe = findViewById<Toolbar>(R.id.toolbarAddRecipe)
+        toolbarAddRecipe = findViewById<MaterialToolbar>(R.id.toolbarAddRecipe)
 
     }
 

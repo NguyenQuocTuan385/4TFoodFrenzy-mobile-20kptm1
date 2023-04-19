@@ -6,20 +6,27 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.model.RecipeCategory
+import com.example.a4tfoodfrenzy.model.RecipeDiet
+import com.google.android.material.appbar.MaterialToolbar
 
 class AddRecipeActivity2 : AppCompatActivity() {
     private lateinit var timedropdown:AutoCompleteTextView
     private lateinit var cateFoodDropdown:AutoCompleteTextView
+    private lateinit var list_checkbox:RecyclerView
     private lateinit var continueBtn: Button
-    private lateinit var toolbarAddRecipe: Toolbar
+    private lateinit var toolbarAddRecipe: MaterialToolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_recipe2)
         initToolbar()
         setcateFoodDropdown()
         setupTimeDropdown()
+        setDietCheckbox()
         setBackToolbar()
         setupContinueButton()
         setCloseToolbar()
@@ -52,6 +59,21 @@ class AddRecipeActivity2 : AppCompatActivity() {
         timedropdown = findViewById(R.id.dropdown_time)
         val adapter = ArrayAdapter(this, R.layout.list_item_dropdown, items)
         timedropdown.setAdapter(adapter)
+    }
+    private fun setDietCheckbox()
+    {
+        var recipeDietList : ArrayList<RecipeDiet> = ArrayList()
+        recipeDietList.add(RecipeDiet(1,"Không đường", ArrayList()))
+        recipeDietList.add(RecipeDiet(1,"Không Gluten",ArrayList()))
+        recipeDietList.add(RecipeDiet(1,"Không thịt",ArrayList()))
+        recipeDietList.add(RecipeDiet(1,"Món thuần chay",ArrayList()))
+        recipeDietList.add(RecipeDiet(1,"Không cồn",ArrayList()))
+        recipeDietList.add(RecipeDiet(1,"Món chay",ArrayList()))
+
+
+        list_checkbox = findViewById(R.id.list_checkbox)
+        list_checkbox.adapter=CheckboxAdapter(this,recipeDietList)
+        list_checkbox.layoutManager=LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
     }
 
     private fun setBackToolbar() {
