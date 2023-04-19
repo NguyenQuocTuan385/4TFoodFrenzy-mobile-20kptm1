@@ -2,6 +2,7 @@ package com.example.a4tfoodfrenzy.View
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -55,7 +56,14 @@ class SortRecipeActivity : AppCompatActivity() {
             dietTypeNameList.add(recipeDietTemp.dietName)
         }
 
-
+        findViewById<ImageView>(R.id.toolbarBackButton).setOnClickListener {
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            startActivity(intent)
+        }
+        findViewById<TextView>(R.id.applySortTextView).setOnClickListener {
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            startActivity(intent)
+        }
 
         val normalImageList = arrayListOf(
             R.drawable.thumb_up_icon,
