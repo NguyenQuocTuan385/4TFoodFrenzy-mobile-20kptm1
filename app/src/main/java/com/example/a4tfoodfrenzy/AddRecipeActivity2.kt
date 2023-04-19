@@ -24,7 +24,7 @@ class AddRecipeActivity2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_recipe2)
         initToolbar()
-        setcateFoodDropdown()
+        setCateFoodDropdown()
         setupTimeDropdown()
         setDietCheckbox()
         setBackToolbar()
@@ -36,7 +36,7 @@ class AddRecipeActivity2 : AppCompatActivity() {
     {
         toolbarAddRecipe = findViewById(R.id.toolbarAddRecipe)
     }
-    private fun setcateFoodDropdown() {
+    private fun setCateFoodDropdown() {
         var recipeCateList : ArrayList<RecipeCategory> = ArrayList()
         recipeCateList.add(RecipeCategory(1,"Khai vị", ArrayList()))
         recipeCateList.add(RecipeCategory(2,"Món chính",ArrayList()))
