@@ -34,6 +34,10 @@ class AfterSearchActivity : AppCompatActivity() {
         adapterRecipeAfterSearchRV = RecipeListAdapter(recipeAfterSearch)
         recipeAfterSearchRV!!.adapter = adapterRecipeAfterSearchRV
         recipeAfterSearchRV!!.layoutManager = GridLayoutManager(this, 3)
+        adapterRecipeAfterSearchRV!!.onItemClick = { foodRecipe, i ->
+            val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
+            startActivity(intent)
+        }
 
         val menu = bottomNavigationView.menu
 
@@ -52,7 +56,7 @@ class AfterSearchActivity : AppCompatActivity() {
                     true
                 }
                 R.id.addRecipe -> {
-                    val intent = Intent(this, AddRecipeActivity1::class.java)
+                    val intent = Intent(this, AddNewRecipe::class.java)
                     startActivity(intent)
                     true
                 }

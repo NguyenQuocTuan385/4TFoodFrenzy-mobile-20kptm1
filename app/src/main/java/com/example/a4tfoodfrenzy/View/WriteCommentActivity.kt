@@ -50,7 +50,7 @@ class WriteCommentActivity : AppCompatActivity() {
 
         // cancel writing comment -> return to recipe details
         cancelButton.setOnClickListener{
-            val intent = Intent()
+            val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
             startActivity(intent)
         }
     }

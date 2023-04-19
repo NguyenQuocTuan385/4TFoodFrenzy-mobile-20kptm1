@@ -33,14 +33,14 @@ class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
             CookingStep(1,
                 "1. Bắp bò rửa sơ để ráo\n" +
                         "2. Hành tây, xà lách, cà chua rửa sạch rồi để ráo nước",
-                R.drawable.avt
+                R.drawable.bosotme2
             )
         )
         stepList.add(
             CookingStep(2,
                 "1. Cho 1 muỗng canh dầu ăn vào làm nóng, chỉnh lửa vừa, phi thơm hành tỏi và cho bò vào xào trong 2 phút cho săn\n2. " +
                         "Cho gói sốt me vào đảo đều trong 3 phút. Nêm nếm lại cho vừa ăn\n3. Thêm hành tây vào xào sơ khoảng 1 phút rồi tắt bếp.",
-                R.drawable.no_alcohol_icon
+                R.drawable.bosotme5
             )
         )
         stepList.add(
@@ -48,14 +48,14 @@ class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
                 "1. Xếp rau, cà chua thái lát ra đĩa, cho bò lên trên. \n" +
                         "2. Rắc thêm mè để thêm phần hấp dẫn.\n" +
                         "3. Thưởng thức cùng bánh mì ngay khi còn nóng. Ngon hơn khi dùng với cơm nóng hoặc",
-                R.drawable.veg_icon
+                R.drawable.bosotme3
             )
         )
 
         stepList.add(
             CookingStep(4,
                 "3. Thưởng thức cùng bánh mì ngay khi còn nóng. Ngon hơn khi dùng với cơm nóng hoặc",
-                R.drawable.veg_icon
+                R.drawable.bosotme4
             )
         )
 

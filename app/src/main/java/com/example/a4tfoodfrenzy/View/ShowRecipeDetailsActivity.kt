@@ -22,13 +22,11 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         val writeCommentButton : Button = findViewById(R.id.writeCommentButton)
 
         val imgList = arrayListOf<FoodImage>()
-        imgList.add(FoodImage(R.drawable.avt))
-        imgList.add(FoodImage(R.drawable.no_alcohol_icon))
-        imgList.add(FoodImage(R.drawable.logo_fb))
-        imgList.add(FoodImage(R.drawable.appetizer_icon))
-        imgList.add(FoodImage(R.drawable.no_gluten_icon))
-        imgList.add(FoodImage(R.drawable.no_sugar_icon))
-        imgList.add(FoodImage(R.drawable.no_meat_icon))
+        imgList.add(FoodImage(R.drawable.bosotmemainimage))
+        imgList.add(FoodImage(R.drawable.bosotme2))
+        imgList.add(FoodImage(R.drawable.bosotme3))
+        imgList.add(FoodImage(R.drawable.bosotme4))
+        imgList.add(FoodImage(R.drawable.bosotme5))
 
         val adapter = FoodImageAdapter(imgList)
         rv.adapter = adapter

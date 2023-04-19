@@ -36,12 +36,20 @@ class MainActivity : AppCompatActivity() {
         adapterRecipeTodayEatRV = RecipeListAdapter(recipeTodayEat)
         recipeTodayEatRV!!.adapter = adapterRecipeTodayEatRV
         recipeTodayEatRV!!.layoutManager = GridLayoutManager(this, 3)
+        adapterRecipeTodayEatRV!!.onItemClick = { foodRecipe, i ->
+            val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
+            startActivity(intent)
+        }
 
         val recipeMostLikesRV = findViewById<RecyclerView>(R.id.recipeMostLikesRV)
         var recipeMostLikes = generateRecipeMostLikesData() //implemened below
         adapterRecipeMostLikesRV = RecipeListAdapter(recipeMostLikes)
         recipeMostLikesRV!!.adapter = adapterRecipeMostLikesRV
         recipeMostLikesRV!!.layoutManager = GridLayoutManager(this, 3)
+        adapterRecipeMostLikesRV!!.onItemClick = { foodRecipe, i ->
+            val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
+            startActivity(intent)
+        }
 
         findViewById<LinearLayout>(R.id.searchLL).setOnClickListener {
             val intent = Intent(this, SearchScreen::class.java)
