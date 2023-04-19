@@ -16,6 +16,8 @@ class LoginRegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_register)
 
+        val fbButton : FloatingActionButton = findViewById(R.id.btnFacebook)
+
         //init
         loginMail=findViewById(R.id.btnMail)
         closeBtn=findViewById(R.id.closeBtn)
@@ -25,7 +27,12 @@ class LoginRegisterActivity : AppCompatActivity() {
         registerByMail()
         setCloseBtn()
 
+        fbButton.setOnClickListener {
+            val intent = Intent(this, FacebookAuthenticateActivity::class.java)
 
+            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+            startActivity(intent)
+        }
 
     }
     private fun setMailBtn()
