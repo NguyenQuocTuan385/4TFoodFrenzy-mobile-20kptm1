@@ -3,9 +3,8 @@ package com.example.a4tfoodfrenzy.Model
 import java.util.Date
 
 class User(
-    private var _id: Int, private var _username: String, private var _password: String,
-    private var _fullname: String, private var _birthday: Date,
-    private var _email: String, private var _bio: String,
+    private var _id: Int, private var _email: String, private var _password: String,
+    private var _fullname: String, private var _birthday: Date, private var _bio: String,
     private var _avatar: Int, private var _recipeCmts: ArrayList<Int>,
     private var _myFoodRecipes: ArrayList<Int>,
     private var _foodRecipeSaved: ArrayList<Int>
@@ -14,12 +13,6 @@ class User(
         get() = _id
         set(value) {
             _id = value
-        }
-
-    var username: String
-        get() = _username
-        set(value) {
-            _username = value
         }
 
     var password: String
