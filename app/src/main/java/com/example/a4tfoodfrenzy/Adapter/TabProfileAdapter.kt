@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -61,6 +62,7 @@ class TabFoodRecipeSaved : Fragment() {
             val monAn1 = FoodRecipe(1, "Thịt ba chỉ nướng mật ong", R.drawable.thitbachimatong, 2, "15 phút",
                 Date(2022, 2,2), true,
                 ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
+            monAn1.authorName = "Đặng Ngọc Tiến"
             result.add(monAn1)
         }
         return result

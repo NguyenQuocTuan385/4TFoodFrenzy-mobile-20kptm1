@@ -1,13 +1,16 @@
 package com.example.a4tfoodfrenzy.Adapter
 
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.R
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class RecipeListInProfileAdapter(
@@ -60,6 +63,43 @@ class RecipeListInProfileAdapter(
             R.layout.created_item
         }
         val recipeProfileView = inflater.inflate(layoutResult, parent, false)
+        val option_saved_recipe = recipeProfileView.findViewById<ImageView>(R.id.option_saved_recipe)
+        val option_created_recipe = recipeProfileView.findViewById<ImageView>(R.id.option_created_recipe)
+
+        val list_option = listOf<String>("Xóa", "Xem chi tiết")
+        val list_option_created = listOf<String>("Xóa", "Cập nhật", "Chia sẻ")
+
+        if (viewType == RECIPE_SAVED_VIEW) {
+            option_saved_recipe.setOnClickListener {
+                val popupMenu = PopupMenu(context, option_saved_recipe)
+                for (i in list_option.indices) {
+                    popupMenu.menu.add(Menu.NONE, i, i, list_option[i])
+                }
+                popupMenu.setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                       // todo
+                    }
+                    true
+                }
+                popupMenu.show()
+            }
+        }
+        else {
+            option_created_recipe.setOnClickListener {
+                val popupMenu = PopupMenu(context, option_created_recipe)
+                for (i in list_option_created.indices) {
+                    popupMenu.menu.add(Menu.NONE, i, i, list_option_created[i])
+                }
+                popupMenu.setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        // todo
+                    }
+                    true
+                }
+                popupMenu.show()
+            }
+        }
+
         // Return a new holder instance
         return ViewHolder(recipeProfileView)
     }

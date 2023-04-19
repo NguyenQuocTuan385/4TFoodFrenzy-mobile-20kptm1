@@ -35,7 +35,7 @@ class ProfileActivity : AppCompatActivity() {
                         true
                     }
                     "Đăng xuất" -> {
-                        val intent = Intent(this, LoginRegisterActivity::class.java)
+                        val intent = Intent(this, LogoutActivity::class.java)
                         startActivity(intent)
                         true
                     }

@@ -92,9 +92,12 @@
             android:exported="false" />
         <activity
             android:name=".View.CommentDetailsManagementActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".View.AdminRecipeManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".View.LogoutActivity"
             android:exported="false" />
         <activity
             android:name=".View.LoginRegisterActivity"
