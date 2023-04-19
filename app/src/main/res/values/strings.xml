@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">4TFoodFrenzy</string>
     <string name="food_category">Loại món</string>
+
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+
+    <string name="facebook_application_id">929883395097747</string>
+    <string name="fb_login_protocol_scheme">fb929883395097747</string>
+    <string name="facebook_client_token">b5309d2598bf178c7772e51e422ff056</string>
+
+
 </resources>

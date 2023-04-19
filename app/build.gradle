@@ -54,4 +54,12 @@ dependencies {
     implementation "androidx.media3:media3-ui:1.0.0"
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
+    implementation 'com.facebook.android:facebook-login:latest.release'
+    implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
+
+    implementation 'com.google.android.gms:play-services-auth:20.5.0'
+
 }
