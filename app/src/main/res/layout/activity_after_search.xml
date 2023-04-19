@@ -39,13 +39,14 @@
                 android:id="@+id/linearLayout1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.1"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/imgBack"
                     android:layout_width="10dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.2"
+                    android:layout_weight="0.1"
                     android:src="@drawable/back" />
 
                 <TextView
@@ -65,6 +66,7 @@
             android:showDividers="middle"
             android:divider="@drawable/divider_linear_layout_width"
             android:padding="5dp"
+            android:layout_weight="0.8"
             android:orientation="horizontal">
             <LinearLayout
                 android:id="@+id/linearLayout2"
@@ -76,10 +78,10 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="5dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
                     android:layout_weight="0.1"
-                    android:padding="6dp"
+                    android:padding="8dp"
                     android:src="@drawable/search_icon" />
 
                 <EditText
@@ -88,13 +90,14 @@
                     android:layout_weight="0.6"
                     android:background="@null"
                     android:hint="Gà"
+                    android:textSize="18dp"
                     android:padding="8dp" />
 
             </LinearLayout>
             <ImageView
                 android:id="@+id/imgFilter"
                 android:layout_width="35dp"
-                android:layout_weight="0.3"
+                android:layout_weight="0.2"
                 android:layout_height="wrap_content"
                 android:src="@drawable/filter" />
         </LinearLayout>
@@ -120,24 +123,11 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recipeAfterSearchRV"
-                android:layout_width="393dp"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/btnViewMore"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:text="Xem thêm"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recipeAfterSearchRV" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

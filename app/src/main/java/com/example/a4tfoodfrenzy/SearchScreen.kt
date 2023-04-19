@@ -3,6 +3,8 @@ package com.example.a4tfoodfrenzy
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.GridView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,6 +19,8 @@ class SearchScreen : AppCompatActivity() {
         setContentView(R.layout.activity_search_screen)
 
         val cateRecipeRV = findViewById<RecyclerView>(R.id.cateRecipeRV)
+        var searchET = findViewById<EditText>(R.id.searchET)
+
         var cateRecipeList = generateCateRecipeData() //implemened below
         adapterTypeRecipeRV = RecipeCateListAdapter(cateRecipeList, false, true)
         cateRecipeRV!!.layoutManager = GridLayoutManager(this, 3)
@@ -25,6 +29,14 @@ class SearchScreen : AppCompatActivity() {
         cateRecipeRV!!.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
 
         cateRecipeRV!!.adapter = adapterTypeRecipeRV
+
+        searchET.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                val intent = Intent(this, AfterSearchActivity::class.java)
+                startActivity(intent)
+            }
+            true
+        }
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
         val menu = bottomNavigationView.menu
@@ -71,7 +83,7 @@ class SearchScreen : AppCompatActivity() {
         cateRecipe = RecipeCategorySuggest("Đồ ăn vặt",R.drawable.fastfood)
         result.add(cateRecipe)
 
-        cateRecipe = RecipeCategorySuggest("Đồ chay",R.drawable.diet)
+        cateRecipe = RecipeCategorySuggest("Ăn chay",R.drawable.diet)
         result.add(cateRecipe)
 
         cateRecipe = RecipeCategorySuggest("Món chính",R.drawable.mainfood)

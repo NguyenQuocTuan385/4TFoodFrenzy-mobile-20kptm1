@@ -3,6 +3,8 @@ package com.example.a4tfoodfrenzy
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.ActionMenuItemView
@@ -14,14 +16,14 @@ class EditProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
 
-        val btnUpdate = findViewById<ActionMenuItemView>(R.id.action_update)
-           btnUpdate.setOnClickListener {
+        val updateBtn = findViewById<Button>(R.id.updateBtn)
+        updateBtn.setOnClickListener {
                 val intent = Intent(this, ProfileActivity::class.java)
                 startActivity(intent)
             }
 
-        val BackBtn = findViewById<Toolbar>(R.id.toolbar2)
-        BackBtn.setNavigationOnClickListener {
+        val backBtn = findViewById<ImageView>(R.id.backBtn)
+        backBtn.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
         }

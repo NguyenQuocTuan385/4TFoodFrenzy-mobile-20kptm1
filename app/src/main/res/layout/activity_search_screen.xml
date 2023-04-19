@@ -66,11 +66,15 @@
                     android:src="@drawable/search_icon" />
 
                 <EditText
+                    android:id="@+id/searchET"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.6"
+                    android:layout_weight="0.9"
                     android:background="@null"
                     android:hint="Công thức món ăn"
+                    android:textSize="18dp"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
                     android:padding="8dp" />
 
             </LinearLayout>
@@ -128,28 +132,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnLess45MCook" />
 
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="15dp"
-                android:text="Nguyên liệu món ăn"
-                android:textColor="@color/black"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnMainFood" />
-
             <Button
-                android:id="@+id/btnLess5Ingre"
+                android:id="@+id/btnMore1HCook"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/second_color_button"
                 android:padding="10dp"
-                android:text="5 nguyên liệu hoặc ít hơn"
+                android:text="Trên 1 giờ"
                 android:textColor="@color/white"
                 android:textSize="16dp"
                 android:textStyle="bold"
@@ -168,7 +159,7 @@
                 android:textColor="@color/white"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/btnLess5Ingre"
+                app:layout_constraintStart_toEndOf="@+id/btnMore1HCook"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
             <Button
@@ -176,15 +167,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/second_color_button"
                 android:padding="5dp"
                 android:text="Dưới 45 phút"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="15dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnLess5Ingre" />
+                app:layout_constraintTop_toBottomOf="@+id/btnMore1HCook" />
 
             <Button
                 android:id="@+id/btnDrink"
@@ -196,22 +187,22 @@
                 android:padding="10dp"
                 android:text="Đồ uống"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="15dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/btnFastFood"
                 app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
             <Button
-                android:id="@+id/btnBreakFast"
+                android:id="@+id/btnDessert"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/second_color_button"
                 android:padding="10dp"
-                android:text="Điểm tâm"
+                android:text="Món tráng miệng"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="15dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/btnDrink"
                 app:layout_constraintTop_toBottomOf="@+id/textView10" />
@@ -256,100 +247,11 @@
                 android:padding="10dp"
                 android:text="Đồ ăn vặt"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="15dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
-            <Button
-                android:id="@+id/btnFruit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/second_color_button"
-                android:padding="10dp"
-                android:text="Trái cây"
-                android:textColor="@color/white"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-            <Button
-                android:id="@+id/btnVegetable"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/second_color_button"
-                android:padding="10dp"
-                android:text="Rau củ"
-                android:textColor="@color/white"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/btnFruit"
-                app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-            <Button
-                android:id="@+id/btnPigIngre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/second_color_button"
-                android:padding="5dp"
-                android:text="Thịt heo"
-                android:textColor="@color/white"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnFruit" />
-
-            <Button
-                android:id="@+id/btnBeefIngre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/second_color_button"
-                android:padding="10dp"
-                android:text="Thịt bò"
-                android:textColor="@color/white"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/btnPigIngre"
-                app:layout_constraintTop_toBottomOf="@+id/btnFruit" />
-
-            <Button
-                android:id="@+id/btnChickenIngre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/second_color_button"
-                android:padding="10dp"
-                android:text="Thịt gà"
-                android:textColor="@color/white"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/btnVegetable"
-                app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-            <Button
-                android:id="@+id/btnSeaFoodIngre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/second_color_button"
-                android:padding="10dp"
-                android:text="Hải sản"
-                android:textColor="@color/white"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/btnBeefIngre"
-                app:layout_constraintTop_toBottomOf="@+id/btnFruit" />
 
             <Button
                 android:id="@+id/btnLess30MCook"
@@ -361,10 +263,10 @@
                 android:padding="5dp"
                 android:text="Dưới 30 phút"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="15dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/btnLess45MCook"
-                app:layout_constraintTop_toBottomOf="@+id/btnLess5Ingre" />
+                app:layout_constraintTop_toBottomOf="@+id/btnMore1HCook" />
 
             <Button
                 android:id="@+id/btnLess15MCook"
@@ -376,10 +278,10 @@
                 android:padding="5dp"
                 android:text="Dưới 15 phút"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="15dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/btnLess30MCook"
-                app:layout_constraintTop_toBottomOf="@+id/btnLess5Ingre" />
+                app:layout_constraintTop_toBottomOf="@+id/btnMore1HCook" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

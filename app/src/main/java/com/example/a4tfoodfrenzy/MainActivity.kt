@@ -3,6 +3,7 @@ package com.example.a4tfoodfrenzy
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +39,11 @@ class MainActivity : AppCompatActivity() {
         adapterRecipeMostLikesRV = RecipeListAdapter(recipeMostLikes)
         recipeMostLikesRV!!.adapter = adapterRecipeMostLikesRV
         recipeMostLikesRV!!.layoutManager = GridLayoutManager(this, 3)
+
+        findViewById<LinearLayout>(R.id.searchLL).setOnClickListener {
+            val intent = Intent(this, SearchScreen::class.java)
+            startActivity(intent)
+        }
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
         val menu = bottomNavigationView.menu

@@ -18,12 +18,21 @@ class AfterSearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_after_search)
 
         val recipeAfterSearchRV = findViewById<RecyclerView>(R.id.recipeAfterSearchRV)
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
+        findViewById<ImageView>(R.id.imgBack).setOnClickListener {
+            val intent = Intent(this, SearchScreen::class.java)
+            startActivity(intent)
+        }
+        findViewById<ImageView>(R.id.imgFilter).setOnClickListener {
+            val intent = Intent(this, SortRecipeActivity::class.java)
+            startActivity(intent)
+        }
+
         var recipeAfterSearch = generateRecipeTodayEatData() //implemened below
         adapterRecipeAfterSearchRV = RecipeListAdapter(recipeAfterSearch)
         recipeAfterSearchRV!!.adapter = adapterRecipeAfterSearchRV
         recipeAfterSearchRV!!.layoutManager = GridLayoutManager(this, 3)
 
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
         val menu = bottomNavigationView.menu
 
         menu.findItem(R.id.search).isChecked = true
