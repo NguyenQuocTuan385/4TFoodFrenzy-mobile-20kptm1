@@ -55,12 +55,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat" />
 
             <ImageView
+                android:id="@+id/imageRecipe"
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/monan"></ImageView>
+                android:src="@drawable/upload"></ImageView>
 
             <TextView
                 android:id="@+id/descriptionRecipeText"
