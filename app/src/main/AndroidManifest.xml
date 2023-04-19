@@ -16,91 +16,91 @@
         android:theme="@style/Theme.4TFoodFrenzy"
         tools:targetApi="31">
         <activity
-            android:name=".AddNewRecipe"
+            android:name=".View.AddNewRecipe"
             android:exported="false" />
         <activity
-            android:name=".AdminAccountManagement"
+            android:name=".View.AdminAccountManagement"
             android:exported="false" />
         <activity
-            android:name=".Admin_Comment_Management"
+            android:name=".View.Admin_Comment_Management"
             android:exported="false" />
         <activity
-            android:name=".ShowRecipeDetailsDescriptionActivity"
+            android:name=".View.ShowRecipeDetailsDescriptionActivity"
             android:exported="false" />
         <activity
-            android:name=".AfterSearchActivity"
+            android:name=".View.AfterSearchActivity"
             android:exported="false" />
         <activity
-            android:name=".SortRecipeActivity"
+            android:name=".View.SortRecipeActivity"
             android:exported="false" />
         <activity
-            android:name=".NewPasswordActivity"
+            android:name=".View.NewPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".VerificationCodeActivity"
+            android:name=".View.VerificationCodeActivity"
             android:exported="false" />
         <activity
-            android:name=".ForgotPasswordActivity"
+            android:name=".View.ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".View.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".View.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ShowRecipeDetailsActivity"
+            android:name=".View.ShowRecipeDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".AddRecipeActivity1"
+            android:name=".View.AddRecipeActivity1"
             android:exported="false" />
         <activity
-            android:name=".AddRecipeActivity2"
+            android:name=".View.AddRecipeActivity2"
             android:exported="false" />
         <activity
-            android:name=".AddRecipeActivity3"
+            android:name=".View.AddRecipeActivity3"
             android:exported="false" />
         <activity
-            android:name=".AddRecipeActivity4"
+            android:name=".View.AddRecipeActivity4"
             android:exported="false" />
         <activity
-            android:name=".AddStepActivity"
+            android:name=".View.AddStepActivity"
             android:exported="false" />
         <activity
-            android:name=".AddIngredient"
+            android:name=".View.AddIngredient"
             android:exported="false" />
         <activity
-            android:name=".WriteCommentActivity"
+            android:name=".View.WriteCommentActivity"
             android:exported="false" />
         <activity
-            android:name=".SearchScreen"
+            android:name=".View.SearchScreen"
             android:exported="false" />
         <activity
-            android:name=".CommentListActivity"
+            android:name=".View.CommentListActivity"
             android:exported="false" />
         <activity
-            android:name=".EditProfileActivity"
+            android:name=".View.EditProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfileActivity"
+            android:name=".View.ProfileActivity"
             android:exported="true" />
         <activity
-            android:name=".LoginAdminActivity"
+            android:name=".View.LoginAdminActivity"
             android:exported="false" />
         <activity
-            android:name=".AccountDetailsManagementActivity"
+            android:name=".View.AccountDetailsManagementActivity"
             android:exported="false" />
         <activity
-            android:name=".CommentDetailsManagementActivity"
+            android:name=".View.CommentDetailsManagementActivity"
             android:exported="true" />
         <activity
-            android:name=".AdminRecipeManagementActivity"
+            android:name=".View.AdminRecipeManagementActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginRegisterActivity"
+            android:name=".View.LoginRegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".View.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
