@@ -27,10 +27,14 @@ class AdminRecipeManagementActivity : AppCompatActivity() {
         var adapter : RecipeManagementAdapter? = null
         val optionList = arrayListOf("Mới nhất", "Phổ biến", "Nhiều lượt thích nhất")
 
-        recipeList.add(FoodRecipe(1, "Bò xốt me", R.drawable.bo_nuong, 2, 15, 1, "Đặng Ngọc Tiến", R.drawable.avt, 100, Date(2022, 2,2)))
-        recipeList.add(FoodRecipe(1, "Bò xốt me", R.drawable.bo_nuong, 2, 15, 1, "Đặng Ngọc Tiến", R.drawable.avt, 100, Date(2022, 2,2)))
-        recipeList.add(FoodRecipe(1, "Bò xốt me", R.drawable.bo_nuong, 2, 15, 1, "Đặng Ngọc Tiến", R.drawable.avt, 100, Date(2022, 2,2)))
-        recipeList.add(FoodRecipe(1, "Bò xốt me", R.drawable.bo_nuong, 2, 15, 1, "Đặng Ngọc Tiến", R.drawable.avt, 100, Date(2022, 2,2)))
+        recipeList.add(FoodRecipe(1, "Bò xốt me", R.drawable.bo_nuong, 2, "15 phút",Date(2022, 2,2), true,
+            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), "Đặng Ngọc Tiến", R.drawable.avt, 100))
+        recipeList.add(FoodRecipe(1, "Bò xốt me", R.drawable.bo_nuong, 2, "15 phút",Date(2022, 2,2), true,
+            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), "Đặng Ngọc Tiến", R.drawable.avt, 100))
+        recipeList.add(FoodRecipe(1, "Bò xốt me", R.drawable.bo_nuong, 2, "15 phút",Date(2022, 2,2), true,
+            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), "Đặng Ngọc Tiến", R.drawable.avt, 100))
+        recipeList.add(FoodRecipe(1, "Bò xốt me", R.drawable.bo_nuong, 2, "15 phút",Date(2022, 2,2), true,
+            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), "Đặng Ngọc Tiến", R.drawable.avt, 100))
 
         // assign recipe recycler view adapter
         adapter = RecipeManagementAdapter(recipeList)

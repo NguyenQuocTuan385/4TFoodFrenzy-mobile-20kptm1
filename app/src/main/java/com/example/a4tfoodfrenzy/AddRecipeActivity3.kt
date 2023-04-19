@@ -7,7 +7,7 @@ import android.widget.Button
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.a4tfoodfrenzy.model.Ingredient
+import com.example.a4tfoodfrenzy.model.RecipeIngredient
 
 class AddRecipeActivity3 : AppCompatActivity() {
     private lateinit var toolbarAddRecipe: Toolbar
@@ -29,12 +29,12 @@ class AddRecipeActivity3 : AppCompatActivity() {
     {
         toolbarAddRecipe = findViewById(R.id.toolbarAddRecipe)
     }
-    private fun createIngredientList(): ArrayList<Ingredient> {
-        val list = ArrayList<Ingredient>()
-        list.add(Ingredient(1,250, "Hải sản","g"))
-        list.add(Ingredient(2,100, "Thịt bò","kg"))
-        list.add(Ingredient(3,10, "Muối","g"))
-        list.add(Ingredient(4,8, "Đường","g"))
+    private fun createIngredientList(): ArrayList<RecipeIngredient> {
+        val list = ArrayList<RecipeIngredient>()
+        list.add(RecipeIngredient(1,250, "Hải sản","g"))
+        list.add(RecipeIngredient(2,100, "Thịt bò","kg"))
+        list.add(RecipeIngredient(3,10, "Muối","g"))
+        list.add(RecipeIngredient(4,8, "Đường","g"))
         return list
     }
 

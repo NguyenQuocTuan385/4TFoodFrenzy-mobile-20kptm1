@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.model.FoodRecipe
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.*
+import kotlin.collections.ArrayList
 
 class AfterSearchActivity : AppCompatActivity() {
     var adapterRecipeAfterSearchRV: RecipeListAdapter? = null
@@ -56,23 +58,35 @@ class AfterSearchActivity : AppCompatActivity() {
     private fun generateRecipeTodayEatData(): ArrayList<FoodRecipe> {
         var result = ArrayList<FoodRecipe>()
 
-        var foodRecipe: FoodRecipe = FoodRecipe(1,"Canh khổ qua nhồi thịt",R.drawable.khoquanhoithit,2,15,4)
+        var foodRecipe: FoodRecipe = FoodRecipe(1, "Canh khổ qua nhồi thịt", R.drawable.khoquanhoithit, 2, "15 phút",
+            Date(2022, 2,2), true,
+            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
 
-        foodRecipe = FoodRecipe(1,"Canh chua cá lóc",R.drawable.canhcaloc,2,15,4)
+        foodRecipe = FoodRecipe(1, "Canh chua cá lóc", R.drawable.canhcaloc, 2, "15 phút",
+            Date(2022, 2,2), true,
+            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
 
 
-        foodRecipe = FoodRecipe(1,"Bò sốt me",R.drawable.bosotme,2,15,4)
+        foodRecipe = FoodRecipe(1, "Bò sốt me", R.drawable.bosotme, 2, "15 phút",
+            Date(2022, 2,2), true,
+            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
 
-        foodRecipe = FoodRecipe(1,"Bò kho",R.drawable.bokho,2,15,4)
+        foodRecipe = FoodRecipe(1, "Bò kho", R.drawable.bokho, 2, "15 phút",
+            Date(2022, 2,2), true,
+            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
 
-        foodRecipe = FoodRecipe(1,"Bún bò huế",R.drawable.bunbohue,2,15,4)
+        foodRecipe = FoodRecipe(1, "Bún bò huế",R.drawable.bunbohue, 2, "15 phút",
+            Date(2022, 2,2), true,
+            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
 
-        foodRecipe = FoodRecipe(1,"Bưởi trộn khô gà",R.drawable.buoitronkhoga,2,15,4)
+        foodRecipe = FoodRecipe(1, "Bưởi trộn khô gà",R.drawable.buoitronkhoga, 2, "15 phút",
+            Date(2022, 2,2), true,
+            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
 
         return result

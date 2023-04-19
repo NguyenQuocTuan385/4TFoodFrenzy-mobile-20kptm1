@@ -8,9 +8,9 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.a4tfoodfrenzy.model.Ingredient
+import com.example.a4tfoodfrenzy.model.RecipeIngredient
 
-class ListIngredientAdapter(context: Context, list:ArrayList<Ingredient>)
+class ListIngredientAdapter(context: Context, list:ArrayList<RecipeIngredient>)
     : RecyclerView.Adapter<ListIngredientAdapter.ViewHolder>() {
     private var listItem=list
     private val context=context
@@ -46,8 +46,8 @@ class ListIngredientAdapter(context: Context, list:ArrayList<Ingredient>)
 
     override fun onBindViewHolder(holder: ListIngredientAdapter.ViewHolder, position: Int) {
         val item=listItem[position]
-        holder.name.text=item.nameIngredient
-        holder.amount.text="${item.quantity} g"
+        holder.name.text=item.ingreName
+        holder.amount.text="${item.ingreQuantity} g"
     }
 
 }

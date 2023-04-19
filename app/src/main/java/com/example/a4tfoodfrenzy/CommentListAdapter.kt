@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.a4tfoodfrenzy.model.Comment
+import com.example.a4tfoodfrenzy.model.RecipeComment
 
 class CommentListAdapter(
-    private var commentArray: ArrayList<Comment>, private var isCmtListUserView: Boolean,
+    private var recipeCommentArray: ArrayList<RecipeComment>, private var isCmtListUserView: Boolean,
     private var isCmtListAdminView: Boolean
 ) : RecyclerView.Adapter<CommentListAdapter.ViewHolder>() {
     companion object {
@@ -17,7 +17,7 @@ class CommentListAdapter(
         private const val CMT_LIST_ADMIN_VIEW = 2
     }
 
-    var onItemClick: ((Comment, Int) -> Unit)? = null
+    var onItemClick: ((RecipeComment, Int) -> Unit)? = null
     fun setCmtListUserView(isCmtListUserView: Boolean) {
         this.isCmtListUserView = isCmtListUserView
         notifyDataSetChanged()
@@ -37,7 +37,7 @@ class CommentListAdapter(
         init {
             listItemView.setOnClickListener {
                 onItemClick?.invoke(
-                    commentArray.get(adapterPosition), adapterPosition
+                    recipeCommentArray.get(adapterPosition), adapterPosition
                 )
             }
         }
@@ -70,12 +70,12 @@ class CommentListAdapter(
     }
 
     override fun getItemCount(): Int {
-        return commentArray.size
+        return recipeCommentArray.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // Get the data model based on position
-        val cmtRender: Comment = commentArray.get(position)
+        val cmtRender: RecipeComment = recipeCommentArray.get(position)
         // Set item views based on your views and data model
         val nameTV = holder.nameTV
         nameTV.text = cmtRender.username

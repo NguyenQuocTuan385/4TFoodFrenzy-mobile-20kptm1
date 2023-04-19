@@ -7,7 +7,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.a4tfoodfrenzy.model.Comment
+import com.example.a4tfoodfrenzy.model.RecipeComment
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -30,10 +30,10 @@ class Admin_Comment_Management : AppCompatActivity() {
         tvDatePicker.setText(sdf.format(myCalendar.time))
 
         val commentRV = findViewById<RecyclerView>(R.id.cmtRV)
-        var commentList = ArrayList<Comment>()
+        var recipeCommentList = ArrayList<RecipeComment>()
 
-        commentList.add(
-            Comment(
+        recipeCommentList.add(
+            RecipeComment(
                 "Đặng Ngọc Tiến",
                 "Bún bò huế",
                 R.drawable.avt,
@@ -43,8 +43,8 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "3 ngày trước"
             )
         )
-        commentList.add(
-            Comment(
+        recipeCommentList.add(
+            RecipeComment(
                 "Đặng Ngọc Tiến",
                 "Bún bò huế",
                 R.drawable.avt,
@@ -54,8 +54,8 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "3 ngày trước"
             )
         )
-        commentList.add(
-            Comment(
+        recipeCommentList.add(
+            RecipeComment(
                 "Trương Gia Tiến",
                 "Bún bò huế",
                 R.drawable.avt,
@@ -65,8 +65,8 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "1 giờ trước"
             )
         )
-        commentList.add(
-            Comment(
+        recipeCommentList.add(
+            RecipeComment(
                 "Nguyễn Văn Việt",
                 "Bún bò huế",
                 R.drawable.avt,
@@ -76,8 +76,8 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "7 ngày trước"
             )
         )
-        commentList.add(
-            Comment(
+        recipeCommentList.add(
+            RecipeComment(
                 "Nguyễn Văn Việt",
                 "Bún bò huế",
                 R.drawable.avt,
@@ -87,8 +87,8 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "7 ngày trước"
             )
         )
-        commentList.add(
-            Comment(
+        recipeCommentList.add(
+            RecipeComment(
                 "Nguyễn Văn Việt",
                 "Bún bò huế",
                 R.drawable.avt,
@@ -98,7 +98,7 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "7 ngày trước"
             )
         )
-        adapterCmtRV = CommentListAdapter(commentList, false, true)
+        adapterCmtRV = CommentListAdapter(recipeCommentList, false, true)
         commentRV.adapter = adapterCmtRV
         commentRV.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 

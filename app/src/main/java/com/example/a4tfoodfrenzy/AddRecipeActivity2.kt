@@ -7,17 +7,18 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import androidx.appcompat.widget.Toolbar
+import com.example.a4tfoodfrenzy.model.RecipeCategory
 
 class AddRecipeActivity2 : AppCompatActivity() {
-    private lateinit var Timedropdown:AutoCompleteTextView
-    private lateinit var TypeFooddropdown:AutoCompleteTextView
+    private lateinit var timedropdown:AutoCompleteTextView
+    private lateinit var cateFoodDropdown:AutoCompleteTextView
     private lateinit var continueBtn: Button
     private lateinit var toolbarAddRecipe: Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_recipe2)
         initToolbar()
-        setTypeFoodDropdown()
+        setcateFoodDropdown()
         setupTimeDropdown()
         setBackToolbar()
         setupContinueButton()
@@ -28,17 +29,29 @@ class AddRecipeActivity2 : AppCompatActivity() {
     {
         toolbarAddRecipe = findViewById(R.id.toolbarAddRecipe)
     }
-    private fun setTypeFoodDropdown() {
-        val items = listOf("Khai vị", "Món chính", "Ăn vặt", "Nấu nhanh", "Ăn chay", "Món tráng miệng", "Thức uống")
+    private fun setcateFoodDropdown() {
+        var recipeCateList : ArrayList<RecipeCategory> = ArrayList()
+        recipeCateList.add(RecipeCategory(1,"Khai vị", ArrayList()))
+        recipeCateList.add(RecipeCategory(2,"Món chính",ArrayList()))
+        recipeCateList.add(RecipeCategory(3,"Ăn vặt",ArrayList()))
+        recipeCateList.add(RecipeCategory(4,"Nấu nhanh",ArrayList()))
+        recipeCateList.add(RecipeCategory(5,"Ăn chay",ArrayList()))
+        recipeCateList.add(RecipeCategory(6,"Món tráng miệng",ArrayList()))
+        recipeCateList.add(RecipeCategory(7,"Thức uống",ArrayList()))
+
+        var items : ArrayList<String> = ArrayList()
+        for (recipeCateTemp:RecipeCategory in recipeCateList) {
+            items.add(recipeCateTemp.recipeCateName)
+        }
         val adapter = ArrayAdapter(this, R.layout.list_item_dropdown, items)
-        TypeFooddropdown = findViewById(R.id.dropdown_typeFood)
-        TypeFooddropdown.setAdapter(adapter)
+        cateFoodDropdown = findViewById(R.id.dropdown_typeFood)
+        cateFoodDropdown.setAdapter(adapter)
     }
     private fun setupTimeDropdown() {
         val items = listOf("Dưới 15 phút", "Dưới 30 phút", "Dưới 45 phút", "Dưới 1 tiếng", "Trên 1 tiếng")
-        Timedropdown = findViewById(R.id.dropdown_time)
+        timedropdown = findViewById(R.id.dropdown_time)
         val adapter = ArrayAdapter(this, R.layout.list_item_dropdown, items)
-        Timedropdown.setAdapter(adapter)
+        timedropdown.setAdapter(adapter)
     }
 
     private fun setBackToolbar() {

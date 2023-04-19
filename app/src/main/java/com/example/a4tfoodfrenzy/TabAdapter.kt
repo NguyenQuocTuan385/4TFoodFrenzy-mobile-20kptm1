@@ -56,7 +56,9 @@ class TabFoodRecipeSaved : Fragment() {
     private fun generateRecipeSaved(): ArrayList<FoodRecipe> {
         var result = ArrayList<FoodRecipe>()
         for (i in 0..10) {
-            val monAn1 = FoodRecipe(1, "Món ăn $i", R.drawable.bo_nuong,0,0,0,"Ngọc Tiến", R.drawable.avt,69, Date(2022, 2,2))
+            val monAn1 = FoodRecipe(1, "Thịt ba chỉ nướng mật ong", R.drawable.thitbachimatong, 2, "15 phút",
+                Date(2022, 2,2), true,
+                ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
             result.add(monAn1)
         }
         return result
@@ -81,7 +83,9 @@ class TabMyFoodRecipe : Fragment() {
 
     private fun generateRecipeSaved(): ArrayList<FoodRecipe> {
         var result = ArrayList<FoodRecipe>()
-            val monAn1 = FoodRecipe(1, "Món ăn", R.drawable.bo_nuong,0,0,0,"Ngọc Tiến", R.drawable.avt,69, Date(2022, 2,2))
+            val monAn1 = FoodRecipe(1, "Mực nướng Malaysia", R.drawable.mucnuongmalaysia, 2, "15 phút",
+                Date(2022, 2,2), true,
+                ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
             result.add(monAn1)
         return result
     }

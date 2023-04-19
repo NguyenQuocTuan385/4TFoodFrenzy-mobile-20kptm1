@@ -11,6 +11,8 @@ import android.widget.*
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.a4tfoodfrenzy.model.RecipeCategory
+import com.example.a4tfoodfrenzy.model.RecipeDiet
 
 class SortRecipeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,22 +28,32 @@ class SortRecipeActivity : AppCompatActivity() {
             "Thời gian nấu",
             "Ngày đăng"
         )
-        val categoryNameTypeList = arrayListOf(
-            "Khai vị",
-            "Món chính",
-            "Tráng miệng",
-            "Ăn vặt",
-            "Điểm tâm",
-            "Thức uống"
-        )
-        val dietTypeNameList = arrayListOf(
-            "Không thịt",
-            "Không gluten",
-            "Không đường",
-            "Món chay",
-            "Món thuần chay",
-            "Thức uống"
-        )
+        var recipeCateList : ArrayList<RecipeCategory> = ArrayList()
+        recipeCateList.add(RecipeCategory(1,"Khai vị", ArrayList()))
+        recipeCateList.add(RecipeCategory(2,"Món chính",ArrayList()))
+        recipeCateList.add(RecipeCategory(3,"Tráng miệng",ArrayList()))
+        recipeCateList.add(RecipeCategory(4,"Ăn vặt",ArrayList()))
+        recipeCateList.add(RecipeCategory(5,"Điểm tâm",ArrayList()))
+        recipeCateList.add(RecipeCategory(7,"Thức uống",ArrayList()))
+
+        var categoryNameTypeList : ArrayList<String> = ArrayList()
+        for (recipeCateTemp in recipeCateList) {
+            categoryNameTypeList.add(recipeCateTemp.recipeCateName)
+        }
+
+        var recipeDietList : ArrayList<RecipeDiet> = ArrayList()
+        recipeDietList.add(RecipeDiet(1,"Không thịt", ArrayList()))
+        recipeDietList.add(RecipeDiet(2,"Không gluten",ArrayList()))
+        recipeDietList.add(RecipeDiet(3,"Không đường",ArrayList()))
+        recipeDietList.add(RecipeDiet(4,"Món chay",ArrayList()))
+        recipeDietList.add(RecipeDiet(5,"Món thuần chay",ArrayList()))
+        recipeDietList.add(RecipeDiet(7,"Thức uống",ArrayList()))
+
+        var dietTypeNameList : ArrayList<String> = ArrayList()
+        for (recipeDietTemp in recipeDietList) {
+            dietTypeNameList.add(recipeDietTemp.dietName)
+        }
+
         val ingredientNameList = arrayListOf(
             "Rau củ",
             "Thịt heo",

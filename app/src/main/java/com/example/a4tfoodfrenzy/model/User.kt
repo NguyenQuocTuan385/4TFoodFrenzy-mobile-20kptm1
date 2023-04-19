@@ -6,7 +6,9 @@ class User(
     private var _id: Int, private var _username: String, private var _password: String,
     private var _fullname: String, private var _birthday: Date,
     private var _email: String, private var _bio: String,
-    private val _avatar: Int
+    private var _avatar: Int, private var _recipeCmts: ArrayList<Int>,
+    private var _myFoodRecipes: ArrayList<Int>,
+    private var _foodRecipeSaved: ArrayList<Int>
 ) {
     var id: Int
         get() = _id
@@ -50,7 +52,27 @@ class User(
             _bio = value
         }
 
-    val avatar: Int
+    var avatar: Int
         get() = _avatar
+        set(value) {
+            _avatar = value
+        }
 
+    var myFoodRecipes: ArrayList<Int>
+        get() = _myFoodRecipes
+        set(value) {
+            _myFoodRecipes = value
+        }
+
+    var foodRecipeSaved: ArrayList<Int>
+        get() = _foodRecipeSaved
+        set(value) {
+            _foodRecipeSaved = value
+        }
+
+    var recipeCmts: ArrayList<Int>
+        get() = _recipeCmts
+        set(value) {
+            _recipeCmts = value
+        }
 }
