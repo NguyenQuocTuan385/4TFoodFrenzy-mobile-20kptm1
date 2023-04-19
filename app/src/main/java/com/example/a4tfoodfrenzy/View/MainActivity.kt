@@ -3,6 +3,8 @@ package com.example.a4tfoodfrenzy.View
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +15,8 @@ import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.RecipeCategorySuggest
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -20,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     var adapterCateRecipeRV: RecipeCateListAdapter? = null
     var adapterRecipeTodayEatRV: RecipeListAdapter? = null
     var adapterRecipeMostLikesRV: RecipeListAdapter? = null
+    val db = Firebase.firestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,6 +35,10 @@ class MainActivity : AppCompatActivity() {
         adapterCateRecipeRV = RecipeCateListAdapter(cateRecipeList, true, false)
         cateRecipeRV!!.adapter = adapterCateRecipeRV
         cateRecipeRV!!.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        adapterCateRecipeRV!!.onItemClick = { foodRecipe, i ->
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            startActivity(intent)
+        }
 
         val recipeTodayEatRV = findViewById<RecyclerView>(R.id.recipeTodayEatRV)
         var recipeTodayEat = generateRecipeTodayEatData() //implemened below
@@ -53,6 +62,14 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<LinearLayout>(R.id.searchLL).setOnClickListener {
             val intent = Intent(this, SearchScreen::class.java)
+            startActivity(intent)
+        }
+        findViewById<Button>(R.id.btnViewMoreTodayEat).setOnClickListener {
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            startActivity(intent)
+        }
+        findViewById<Button>(R.id.btnViewMoreMostLikes).setOnClickListener {
+            val intent = Intent(this, AfterSearchActivity::class.java)
             startActivity(intent)
         }
 
@@ -84,6 +101,24 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+// Create a new user with a first, middle, and last name
+        val user = hashMapOf(
+            "first" to "Alan",
+            "middle" to "Mathison",
+            "last" to "Turing",
+            "born" to 1912
+        )
+
+// Add a new document with a generated ID
+        db.collection("users")
+            .add(user)
+            .addOnSuccessListener { documentReference ->
+                Log.d("TAG", "DocumentSnapshot added with ID: ${documentReference.id}")
+            }
+            .addOnFailureListener { e ->
+                Log.w("TAG", "Error adding document", e)
+            }
 
     }
     private fun generateCateRecipeData(): ArrayList<RecipeCategorySuggest> {

@@ -11,7 +11,7 @@ class FoodRecipe(
     private var _date: Date,
     private var _isPublic: Boolean,
     private var _recipeDiets: ArrayList<Int>,
-    private var _recipeSteps: ArrayList<CookingStep>,
+    private var _recipeSteps: ArrayList<RecipeCookStep>,
     private var _recipeIngres: ArrayList<RecipeIngredient>,
     private var _recipeCmts: ArrayList<Int>,
     private var _userSavedRecipes: ArrayList<Int>
@@ -31,7 +31,7 @@ class FoodRecipe(
         date: Date,
         isPublic: Boolean,
         _recipeDiets: ArrayList<Int>,
-        _recipeSteps: ArrayList<CookingStep>,
+        _recipeSteps: ArrayList<RecipeCookStep>,
         _recipeIngres: ArrayList<RecipeIngredient>,
         _recipeCmts: ArrayList<Int>,
         _userSavedRecipes: ArrayList<Int>,
@@ -99,7 +99,7 @@ class FoodRecipe(
             _isPublic = value
         }
 
-    var recipeSteps: ArrayList<CookingStep>
+    var recipeSteps: ArrayList<RecipeCookStep>
         get() = _recipeSteps
         set(value) {
             _recipeSteps = value

@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
 import android.widget.EditText
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +39,51 @@ class SearchScreen : AppCompatActivity() {
             }
             true
         }
+        adapterTypeRecipeRV!!.onItemClick = { foodRecipe, i ->
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            startActivity(intent)
+        }
+        findViewById<Button>(R.id.btnMore1HCook).setOnClickListener {
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            startActivity(intent)
+        }
+        findViewById<Button>(R.id.btnLess1HCook).setOnClickListener {
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            startActivity(intent)
+        }
+        findViewById<Button>(R.id.btnLess45MCook).setOnClickListener {
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            startActivity(intent)
+        }
+        findViewById<Button>(R.id.btnLess30MCook).setOnClickListener {
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            startActivity(intent)
+        }
+        findViewById<Button>(R.id.btnLess15MCook).setOnClickListener {
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            startActivity(intent)
+        }
+        findViewById<Button>(R.id.btnFastFood).setOnClickListener {
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            startActivity(intent)
+        }
+        findViewById<Button>(R.id.btnDrink).setOnClickListener {
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            startActivity(intent)
+        }
+        findViewById<Button>(R.id.btnDessert).setOnClickListener {
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            startActivity(intent)
+        }
+        findViewById<Button>(R.id.btnMainFood).setOnClickListener {
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            startActivity(intent)
+        }
+        findViewById<Button>(R.id.btnAppetizer).setOnClickListener {
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            startActivity(intent)
+        }
+
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
         val menu = bottomNavigationView.menu

@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.a4tfoodfrenzy.Model.CookingStep
+import com.example.a4tfoodfrenzy.Model.RecipeCookStep
 import com.example.a4tfoodfrenzy.R
 
 class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
@@ -27,24 +27,24 @@ class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
         setContentView(R.layout.activity_show_recipe_details_description)
 
         val rv = findViewById<RecyclerView>(R.id.stepsRecyclerView)
-        val stepList = arrayListOf<CookingStep>()
+        val stepList = arrayListOf<RecipeCookStep>()
 
         stepList.add(
-            CookingStep(1,
+            RecipeCookStep(
                 "1. Bắp bò rửa sơ để ráo\n" +
                         "2. Hành tây, xà lách, cà chua rửa sạch rồi để ráo nước",
                 R.drawable.bosotme2
             )
         )
         stepList.add(
-            CookingStep(2,
+            RecipeCookStep(
                 "1. Cho 1 muỗng canh dầu ăn vào làm nóng, chỉnh lửa vừa, phi thơm hành tỏi và cho bò vào xào trong 2 phút cho săn\n2. " +
                         "Cho gói sốt me vào đảo đều trong 3 phút. Nêm nếm lại cho vừa ăn\n3. Thêm hành tây vào xào sơ khoảng 1 phút rồi tắt bếp.",
                 R.drawable.bosotme5
             )
         )
         stepList.add(
-            CookingStep(3,
+            RecipeCookStep(
                 "1. Xếp rau, cà chua thái lát ra đĩa, cho bò lên trên. \n" +
                         "2. Rắc thêm mè để thêm phần hấp dẫn.\n" +
                         "3. Thưởng thức cùng bánh mì ngay khi còn nóng. Ngon hơn khi dùng với cơm nóng hoặc",
@@ -53,7 +53,7 @@ class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
         )
 
         stepList.add(
-            CookingStep(4,
+            RecipeCookStep(
                 "3. Thưởng thức cùng bánh mì ngay khi còn nóng. Ngon hơn khi dùng với cơm nóng hoặc",
                 R.drawable.bosotme4
             )
@@ -73,7 +73,7 @@ class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
 }
 
 class StepsAdapter(
-    private val stepsList: ArrayList<CookingStep>,
+    private val stepsList: ArrayList<RecipeCookStep>,
     private val mainContext: Context,
     private val mainRV : RecyclerView,
 ) :

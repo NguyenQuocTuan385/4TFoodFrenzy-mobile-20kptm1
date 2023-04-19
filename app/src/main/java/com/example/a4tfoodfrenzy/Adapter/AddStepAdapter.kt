@@ -8,10 +8,10 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.a4tfoodfrenzy.Model.CookingStep
+import com.example.a4tfoodfrenzy.Model.RecipeCookStep
 import com.example.a4tfoodfrenzy.R
 
-class AddStepAdapter(context: Context, list:ArrayList<CookingStep>)
+class AddStepAdapter(context: Context, list:ArrayList<RecipeCookStep>)
     : RecyclerView.Adapter<AddStepAdapter.ViewHolder>() {
     private var listItem=list
     private val context=context

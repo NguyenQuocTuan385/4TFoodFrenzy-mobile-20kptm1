@@ -1,17 +1,10 @@
 package com.example.a4tfoodfrenzy.Model
 
-class CookingStep(
-    private var _id: Int,
+class RecipeCookStep(
     private var _description: String
 ) {
     private var _imageResource: Int = -1
     private var _imageURL: String = ""
-
-    var id: Int
-        get() = _id
-        set(value) {
-            _id = value
-        }
 
     var description: String
         get() = _description
@@ -31,7 +24,7 @@ class CookingStep(
             _imageResource = value
         }
 
-    constructor(_id: Int, _description: String, _imageResource:Int):this(_id, _description)
+    constructor(_description: String, _imageResource:Int):this(_description)
     {
         this._imageResource = _imageResource
     }
