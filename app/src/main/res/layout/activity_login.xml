@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarLogin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:tint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/baseline_arrow_back_24"
+        app:title="Đăng nhập">
+
+    </androidx.appcompat.widget.Toolbar>
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
@@ -23,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarLogin"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/lg" />
 
@@ -48,36 +62,37 @@
             android:paddingHorizontal="30dp">
 
 
-            <EditText
-                android:id="@+id/editTextTextEmailAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Email"
-                android:padding="10dp"
-                android:background="@drawable/border_input"
-                android:drawableStart="@drawable/baseline_mail_outline_24"
-                android:drawablePadding="10dp"
-                android:inputType="textEmailAddress" />
-            <!--            <EditText-->
-            <!--                android:id="@+id/editTextTextPassword"-->
-            <!--                android:layout_marginTop="20dp"-->
-            <!--                android:background="@drawable/border_input"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:ems="10"-->
-            <!--                android:padding="10dp"-->
-            <!--                android:drawableStart="@drawable/baseline_lock_24"-->
-            <!--                android:drawablePadding="10dp"-->
-            <!--                android:hint="Mật khẩu"-->
-            <!--                android:inputType="textPassword" />-->
+
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emailInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintEnabled="false"
+                app:boxBackgroundMode="none"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_input"
+                    android:drawableStart="@drawable/baseline_mail_outline_24"
+                    android:drawablePadding="10dp"
+                    android:ems="10"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:padding="10dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:passwordToggleEnabled="true"
                 android:layout_marginTop="20dp"
                 app:hintEnabled="false"
+                app:boxBackgroundMode="none"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -102,12 +117,12 @@
         app:layout_constraintGuide_percent="0.62" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/loginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:backgroundTint="#FDBF38"
-        android:paddingHorizontal="30dp"
+        android:paddingHorizontal="50dp"
         android:paddingVertical="8dp"
         android:background="@drawable/border_input"
         android:text="Đăng nhập"
@@ -115,7 +130,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/forgotPasswordText" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"
@@ -133,20 +148,22 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="15dp"
         android:background="@drawable/button_outline"
-        android:drawableStart="@drawable/google"
+        android:drawableLeft="@drawable/google"
         android:drawablePadding="30dp"
         android:paddingHorizontal="20dp"
         android:paddingEnd="80dp"
         android:text="Đăng nhập bằng Google"
         android:textAllCaps="false"
         android:textSize="16dp"
+        android:textColor="@color/black"
+        app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btnFacebook"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginHorizontal="20dp"
@@ -154,20 +171,22 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="15dp"
         android:background="@drawable/button_outline"
-        android:drawableStart="@drawable/logo_fb"
+        android:drawableLeft="@drawable/logo_fb"
         android:drawablePadding="30dp"
         android:paddingHorizontal="20dp"
         android:paddingEnd="80dp"
         android:text="Đăng nhập bằng Facebook"
         android:textAllCaps="false"
         android:textSize="16dp"
+        android:textColor="@color/black"
+        app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnGoogle" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/forgotPasswordText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
