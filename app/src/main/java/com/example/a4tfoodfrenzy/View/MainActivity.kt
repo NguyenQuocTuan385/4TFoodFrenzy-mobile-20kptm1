@@ -219,7 +219,6 @@ class MainActivity : AppCompatActivity() {
         val user1 = User(
             1,
             "dntienes@gmail.com",
-            "123456",
             "Đặng Ngọc Tiến",
             Date(2001, 10, 1),
             "Xin chào, tôi là một đầu bếp trực tuyến đam mê nấu ăn và chia sẻ kiến thức về ẩm thực. Tôi rất vui khi được giới thiệu với các bạn qua đoạn tiểu sử này.",
@@ -233,7 +232,6 @@ class MainActivity : AppCompatActivity() {
         val user2 = User(
             2,
             "nqtuan@gmail.com",
-            "123456",
             "Nguyễn Quốc Tuấn",
             Date(2002, 2, 2),
             "Tôi đã có hơn 5 năm kinh nghiệm làm việc trong lĩnh vực ẩm thực và tôi luôn cố gắng nâng cao kỹ năng và khả năng của mình bằng cách học hỏi từ các chuyên gia và thực hành nhiều hơn.",
@@ -247,7 +245,6 @@ class MainActivity : AppCompatActivity() {
         val user3 = User(
             3,
             "tgtien@gmail.com",
-            "123456",
             "Trương Gia Tiến",
             Date(2002, 2, 2),
             "Tôi đã có cơ hội làm việc tại nhiều nhà hàng và khách sạn nổi tiếng ở nhiều quốc gia khác nhau, từ đó tôi đã học được rất nhiều kiến thức và kinh nghiệm về ẩm thực.",
@@ -261,7 +258,6 @@ class MainActivity : AppCompatActivity() {
         val user4 = User(
             4,
             "dcthong@gmail.com",
-            "123456",
             "Dương Chí Thông",
             Date(2002, 2, 2),
             "Tôi đã có cơ hội làm việc tại nhiều nhà hàng và khách sạn nổi tiếng ở nhiều quốc gia khác nhau, từ đó tôi đã học được rất nhiều kiến thức và kinh nghiệm về ẩm thực.",
@@ -275,7 +271,6 @@ class MainActivity : AppCompatActivity() {
         val user5 = User(
             5,
             "hienphuong@gmail.com",
-            "123456",
             "Hiền Phương",
             Date(2008, 2, 2),
             "Với tinh thần cầu tiến và đam mê nấu ăn, tôi đã trở thành một đầu bếp trực tuyến chuyên nghiệp. Tôi thường xuyên tạo ra các món ăn ngon và độc đáo và chia sẻ với mọi người qua kênh YouTube của mình.",
@@ -289,7 +284,6 @@ class MainActivity : AppCompatActivity() {
         val user6 = User(
             6,
             "nvviet@gmail.com",
-            "123456",
             "Nguyễn Văn Việt",
             Date(2002, 2, 2),
             "Sau khi thực hiện một số dự án nấu ăn trực tuyến, tôi nhận thấy rằng đây là một cách tuyệt vời để kết nối với mọi người và chia sẻ sở thích của mình với những người có cùng sở thích.",
@@ -303,7 +297,6 @@ class MainActivity : AppCompatActivity() {
         val user7 = User(
             7,
             "bhvu@gmail.com",
-            "123456",
             "Bùi Hoàng Vũ",
             Date(2002, 2, 2),
             "Tôi yêu thích việc sáng tạo các món ăn mới và khám phá văn hóa ẩm thực của các nước khác nhau. Tôi tin rằng món ăn không chỉ là thứ để ăn uống, mà nó còn là một phần không thể thiếu trong cuộc sống của mỗi người.",
@@ -317,7 +310,6 @@ class MainActivity : AppCompatActivity() {
         val user8 = User(
             8,
             "ttnnhi@gmail.com",
-            "123456",
             "Trần Thị Ngọc Nhi",
             Date(2002, 2, 2),
             "Tôi rất háo hức khi được hỗ trợ và giúp đỡ những người mới bắt đầu trong lĩnh vực nấu ăn. Tôi sẽ chia sẻ những kiến thức và kinh nghiệm của mình để giúp mọi người trở thành những đầu bếp tài ba.",
@@ -331,7 +323,6 @@ class MainActivity : AppCompatActivity() {
         val user9 = User(
             9,
             "npvinh@gmail.com",
-            "123456",
             "Nguyễn Phú Vinh",
             Date(2002, 2, 2),
             "Không chỉ là một đầu bếp trực tuyến, tôi còn là một người đam mê giảng dạy nấu ăn. Tôi tin rằng mỗi người đều có thể học và phát triển kỹ năng nấu ăn của mình, và tôi luôn sẵn sàng chia sẻ kiến thức và kinh nghiệm của mình để giúp mọi người.",
@@ -345,7 +336,6 @@ class MainActivity : AppCompatActivity() {
         val user10 = User(
             10,
             "ngocthu@gmail.com",
-            "123456",
             "Ngọc Thư",
             Date(2002, 2, 2),
             "Tôi đã có cơ hội làm việc tại nhiều nhà hàng và khách sạn nổi tiếng ở nhiều quốc gia khác nhau, từ đó tôi đã học được rất nhiều kiến thức và kinh nghiệm về ẩm thực.",

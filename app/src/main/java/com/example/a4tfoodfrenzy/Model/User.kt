@@ -5,7 +5,6 @@ import java.util.Date
 class User(
     private var _id: Int,
     private var _email: String,
-    private var _password: String,
     private var _fullname: String,
     private var _birthday: Date?,
     private var _bio: String,
@@ -14,7 +13,7 @@ class User(
     private var _myFoodRecipes: ArrayList<Int>,
     private var _foodRecipeSaved: ArrayList<Int>
 ) {
-    constructor() : this(0, "", "", "", null, "", 0, ArrayList(), ArrayList(), ArrayList())
+    constructor() : this(0, "", "", null, "", 0, ArrayList(), ArrayList(), ArrayList())
 
     var id: Int
         get() = _id
@@ -22,11 +21,6 @@ class User(
             _id = value
         }
 
-    var password: String
-        get() = _password
-        set(value) {
-            _password = value
-        }
 
     var fullname: String
         get() = _fullname
