@@ -79,11 +79,9 @@ class RegisterActivity : AppCompatActivity() {
             .set(profile)
             .addOnSuccessListener {
                 Log.d("hihi", "DocumentSnapshot successfully written!")
-                showSuccessMessage()
             }
             .addOnFailureListener { e ->
                 Log.w("hihi", "Error writing document", e)
-                showErrorMessage()
             }
     }
 
