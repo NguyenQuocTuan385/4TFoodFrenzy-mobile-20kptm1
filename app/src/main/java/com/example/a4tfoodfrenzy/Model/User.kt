@@ -4,7 +4,7 @@ import java.util.Date
 
 class User(
     private var _id: Int, private var _email: String, private var _password: String,
-    private var _fullname: String, private var _birthday: Date, private var _bio: String,
+    private var _fullname: String, private var _birthday: Date?, private var _bio: String,
     private var _avatar: Int, private var _recipeCmts: ArrayList<Int>,
     private var _myFoodRecipes: ArrayList<Int>,
     private var _foodRecipeSaved: ArrayList<Int>
@@ -27,7 +27,7 @@ class User(
             _fullname = value
         }
 
-    var birthday: Date
+    var birthday: Date?
         get() = _birthday
         set(value) {
             _birthday = value
