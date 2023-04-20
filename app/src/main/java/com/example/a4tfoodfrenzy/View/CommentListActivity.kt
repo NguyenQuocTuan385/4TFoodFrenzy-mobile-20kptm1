@@ -1,6 +1,8 @@
 package com.example.a4tfoodfrenzy.View
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -25,6 +27,10 @@ class CommentListActivity : AppCompatActivity() {
         }
 
         val cmtRV = findViewById<RecyclerView>(R.id.cmtRV)
+        findViewById<Button>(R.id.btnAddComment).setOnClickListener {
+            val intent = Intent(this, WriteCommentActivity::class.java)
+            startActivity(intent)
+        }
         var cmtList = ArrayList<RecipeComment>()
 
         cmtList.add(RecipeComment("Đặng Ngọc Tiến", "",
