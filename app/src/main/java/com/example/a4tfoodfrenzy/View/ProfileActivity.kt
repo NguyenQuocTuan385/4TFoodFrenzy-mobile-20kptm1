@@ -16,15 +16,22 @@ import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
 
 class ProfileActivity : AppCompatActivity() {
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+        auth=FirebaseAuth.getInstance()
+        db=Firebase.firestore
 
         // tạo dữ liệu mẫu
 //        createDataUsers()
@@ -63,8 +70,10 @@ class ProfileActivity : AppCompatActivity() {
                         true
                     }
                     "Đăng xuất" -> {
-                        val intent = Intent(this, LogoutActivity::class.java)
+                        auth.signOut()
+                        val intent= Intent(this,MainActivity::class.java)
                         startActivity(intent)
+                        finish()
                         true
                     }
                     else -> false
@@ -108,5 +117,35 @@ class ProfileActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+    override fun onResume()
+    {
+        super.onResume()
+        val user=auth.currentUser
+        if(user==null)
+        {
+            val intent= Intent(this,LogoutActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        else
+        {
+            db.collection("users")
+                .document(user.uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    val user = document.toObject(User::class.java)
+                    val name = findViewById<TextView>(R.id.name_profile)
+                    name.text = user?.fullname
+                    val avatar = findViewById<ImageView>(R.id.creatorImage)
+                    avatar.setImageResource(user?.avatar!!)
+
+                }
+                .addOnFailureListener { exception ->
+                    Log.w("hihi", "Error getting documents: ", exception)
+                }
+
+        }
+
     }
 }
