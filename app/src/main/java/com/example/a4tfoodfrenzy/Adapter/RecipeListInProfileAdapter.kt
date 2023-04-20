@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.PopupMenu
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.R
+import com.example.a4tfoodfrenzy.View.AddStepActivity
 import com.example.a4tfoodfrenzy.View.ShowRecipeDetailsActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -107,7 +109,7 @@ class RecipeListInProfileAdapter(
                         }
                         1 -> {
                             // chuyển đến trang cập nhật
-                            val intent = Intent(context, ShowRecipeDetailsActivity::class.java)
+                            val intent = Intent(context, AddStepActivity::class.java)
 //                            intent.putExtra("recipeID", recipeRenderArray.get(adapterPosition).recipeID)
                             context.startActivity(intent)
                         }
