@@ -1,7 +1,9 @@
 package com.example.a4tfoodfrenzy.View
 
 import android.os.Bundle
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.CommentListAdapter
@@ -14,6 +16,11 @@ class CommentListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_comment_list)
+
+        val backBtn = findViewById<Toolbar>(R.id.toolbar2)
+        backBtn.setNavigationOnClickListener {
+            finish()
+        }
 
         val cmtRV = findViewById<RecyclerView>(R.id.cmtRV)
         var cmtList = ArrayList<RecipeComment>()

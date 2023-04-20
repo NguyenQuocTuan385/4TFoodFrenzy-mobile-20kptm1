@@ -1,5 +1,6 @@
 package com.example.a4tfoodfrenzy.Adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.R
+import com.example.a4tfoodfrenzy.View.ShowRecipeDetailsActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -77,7 +79,15 @@ class RecipeListInProfileAdapter(
                 }
                 popupMenu.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
-                       // todo
+                        0 -> {
+//                            recipeRenderArray.removeAt()
+                        }
+                        1 -> {
+                            // chuyển đến trang xem chi tiết
+                            val intent = Intent(context, ShowRecipeDetailsActivity::class.java)
+//                            intent.putExtra("recipeID", recipeRenderArray.get(adapterPosition).recipeID)
+                            context.startActivity(intent)
+                        }
                     }
                     true
                 }
@@ -92,7 +102,18 @@ class RecipeListInProfileAdapter(
                 }
                 popupMenu.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
-                        // todo
+                        0 -> {
+//                            recipeRenderArray.removeAt()
+                        }
+                        1 -> {
+                            // chuyển đến trang cập nhật
+                            val intent = Intent(context, ShowRecipeDetailsActivity::class.java)
+//                            intent.putExtra("recipeID", recipeRenderArray.get(adapterPosition).recipeID)
+                            context.startActivity(intent)
+                        }
+                        2 -> {
+                            // chia sẻ
+                        }
                     }
                     true
                 }

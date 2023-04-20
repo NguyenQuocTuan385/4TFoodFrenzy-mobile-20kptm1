@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -46,6 +48,12 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         writeCommentButton.setOnClickListener{
             val myIntent = Intent(this, WriteCommentActivity::class.java)
+            startActivity(myIntent)
+        }
+
+        val toListComment = findViewById<LinearLayout>(R.id.list_commentLinearLayout)
+        toListComment.setOnClickListener{
+            val myIntent = Intent(this, CommentListActivity::class.java)
             startActivity(myIntent)
         }
     }
