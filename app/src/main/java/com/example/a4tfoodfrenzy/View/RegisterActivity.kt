@@ -1,5 +1,6 @@
 package com.example.a4tfoodfrenzy.View
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -78,6 +79,8 @@ class RegisterActivity : AppCompatActivity() {
         db.collection("users").document(userId)
             .set(profile)
             .addOnSuccessListener {
+                val intent= Intent(this,LoginActivity::class.java)
+                startActivity(intent)
                 Log.d("hihi", "DocumentSnapshot successfully written!")
             }
             .addOnFailureListener { e ->

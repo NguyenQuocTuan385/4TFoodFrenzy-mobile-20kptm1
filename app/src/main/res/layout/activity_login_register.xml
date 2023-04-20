@@ -41,8 +41,6 @@
         android:background="@drawable/button_outline"
         android:drawableLeft="@drawable/google"
         android:drawablePadding="30dp"
-        android:paddingHorizontal="20dp"
-        android:paddingEnd="80dp"
         android:text="Đăng nhập bằng Google"
         android:textColor="@color/black"
         app:backgroundTint="@null"
