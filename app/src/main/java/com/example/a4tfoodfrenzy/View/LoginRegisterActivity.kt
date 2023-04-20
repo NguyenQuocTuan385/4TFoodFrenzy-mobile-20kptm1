@@ -3,8 +3,10 @@ package com.example.a4tfoodfrenzy.View
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -17,6 +19,7 @@ class LoginRegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login_register)
 
         val fbButton : FloatingActionButton = findViewById(R.id.btnFacebook)
+        val googleButton : Button = findViewById(R.id.btnGoogle)
 
         //init
         loginMail=findViewById(R.id.btnMail)
@@ -34,6 +37,11 @@ class LoginRegisterActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        googleButton.setOnClickListener {
+            val intent = Intent(this, GoogleAuthenticateActivity::class.java)
+
+            startActivity(intent)
+        }
     }
     private fun setMailBtn()
     {

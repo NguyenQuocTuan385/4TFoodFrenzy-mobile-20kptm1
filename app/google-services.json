@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "881926674266-emvt057il1rb1n3oeu5galcpintc57s2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.a4tfoodfrenzy",
+            "certificate_hash": "5df14519577cb2ea5669440cf059db43f5099595"
+          }
+        },
+        {
           "client_id": "881926674266-bv2im23p9mua6vmd3smrt3col1fr2g68.apps.googleusercontent.com",
           "client_type": 3
         }

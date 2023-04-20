@@ -65,8 +65,9 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     val user = auth.currentUser
-                    Toast.makeText(baseContext, "Authentication success.",
+                    Toast.makeText(baseContext, "Authentication success. ${user?.displayName}",
                         Toast.LENGTH_SHORT).show()
+
 //                    updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
@@ -76,4 +77,6 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                 }
             }
     }
+
+    private fun isSignUp(){}
 }
