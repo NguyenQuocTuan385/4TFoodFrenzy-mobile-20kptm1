@@ -83,7 +83,7 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
                                                 val userFullName =
                                                     firebaseAuth.currentUser?.displayName
                                                 val profile = User(
-                                                    1125, userEmail!!, "123456",
+                                                    1125, userEmail!!,
                                                     userFullName!!,
                                                     null,
                                                     "",

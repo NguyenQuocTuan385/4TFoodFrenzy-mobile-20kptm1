@@ -86,7 +86,6 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                                 val profile = User(
                                     1125,
                                     userEmail!!,
-                                    "123456",
                                     userFullName!!,
                                     null,
                                     "",
