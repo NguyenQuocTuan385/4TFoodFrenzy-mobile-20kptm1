@@ -40,12 +40,13 @@
                 android:id="@+id/toolbarBackButton"
                 android:layout_width="25dp"
                 android:layout_height="35dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginStart="0dp"
+                android:layout_marginEnd="10dp"
                 android:backgroundTint="@color/secondary_light_orange"
                 android:contentDescription="This is back button"
                 android:src="@drawable/back"
                 tools:ignore="TouchTargetSizeCheck" />
+
             <TextView
                 android:id="@+id/TimKiemTV"
                 android:layout_width="wrap_content"
@@ -71,17 +72,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-        <TextView
-            android:id="@+id/foodNameTitleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="5dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Bắp Bò Xốt Me"
-            android:textColor="@color/black"
-            android:textSize="25sp"
-            android:textStyle="bold" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/foodNameTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="Bắp Bò Xốt Me"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+
+                android:src="@drawable/unsave_recipe_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="20dp"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -156,6 +176,7 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:backgroundTint="@color/TertiaryColor"
                         app:cardCornerRadius="5dp"
                         app:cardUseCompatPadding="true"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -163,9 +184,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:strokeColor="@color/black"
-                        app:strokeWidth="1dp"
-                        android:backgroundTint="@color/TertiaryColor"
-                        >
+                        app:strokeWidth="1dp">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -274,9 +293,9 @@
                 >
 
                 <LinearLayout
-                    android:background="@color/TertiaryColor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/TertiaryColor"
                     android:orientation="horizontal"
                     android:paddingTop="5dp"
                     android:paddingBottom="10dp">
@@ -403,12 +422,11 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:strokeColor="@color/SecondaryColor"
-                app:strokeWidth="2dp"
+                app:cardCornerRadius="5dp"
                 app:cardElevation="0dp"
                 app:cardUseCompatPadding="true"
-                app:cardCornerRadius="5dp"
-                >
+                app:strokeColor="@color/SecondaryColor"
+                app:strokeWidth="2dp">
 
 
                 <Button
@@ -520,8 +538,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="0dp"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -539,12 +556,11 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:strokeColor="@color/SecondaryColor"
-                app:strokeWidth="2dp"
+                app:cardCornerRadius="5dp"
                 app:cardElevation="0dp"
                 app:cardUseCompatPadding="true"
-                app:cardCornerRadius="5dp"
-                >
+                app:strokeColor="@color/SecondaryColor"
+                app:strokeWidth="2dp">
 
                 <Button
                     android:id="@+id/writeCommentButton"

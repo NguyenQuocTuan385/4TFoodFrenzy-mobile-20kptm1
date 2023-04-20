@@ -18,11 +18,6 @@ import com.google.firebase.auth.GoogleAuthProvider
 
 
 class GoogleAuthenticateActivity : AppCompatActivity() {
-//    lateinit var gso : GoogleSignInOptions
-//    lateinit var client : GoogleSignInClient
-//    private var GG_SIGN_IN = 101
-//    lateinit var auth : FirebaseAuth
-
     lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var firebaseAuth: FirebaseAuth
 
@@ -51,7 +46,7 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
             val signInAccountTask: Task<GoogleSignInAccount> =
                 GoogleSignIn.getSignedInAccountFromIntent(data)
 
-            var acc : GoogleSignInAccount = signInAccountTask.result
+            val acc : GoogleSignInAccount = signInAccountTask.result
 
             Toast.makeText(this,acc.displayName, Toast.LENGTH_LONG).show()
 
@@ -76,10 +71,17 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
 
                                     // Display Toast
                                     Toast.makeText(this, "Firebase authentication successful", Toast.LENGTH_SHORT).show()
+                                    val toHomeIntent = Intent(this, MainActivity::class.java)
+                                    startActivity(toHomeIntent)
+                                    this@GoogleAuthenticateActivity.finish()
                                 } else {
                                     // When task is unsuccessful display Toast
                                     Toast.makeText(this, "Authentication Failed : ${task.exception?.message}" , Toast.LENGTH_SHORT).show()
 
+                                    // failed --> back to sign in
+                                    val toLoginPage = Intent(this, LoginRegisterActivity::class.java)
+                                    startActivity(toLoginPage)
+                                    this@GoogleAuthenticateActivity.finish()
                                 }
                             }
                     }

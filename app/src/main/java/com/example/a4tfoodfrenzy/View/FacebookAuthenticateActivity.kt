@@ -67,12 +67,19 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                     val user = auth.currentUser
                     Toast.makeText(baseContext, "Authentication success. ${user?.displayName}",
                         Toast.LENGTH_SHORT).show()
-
+                    val toHomeIntent = Intent(this, MainActivity::class.java)
+                    startActivity(toHomeIntent)
+                    this@FacebookAuthenticateActivity.finish()
 //                    updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
                     Toast.makeText(baseContext, "Authentication failed.",
                         Toast.LENGTH_SHORT).show()
+
+                    // failed --> back to sign in
+                    val toLoginPage = Intent(this, LoginRegisterActivity::class.java)
+                    startActivity(toLoginPage)
+                    this@FacebookAuthenticateActivity.finish()
 //                    updateUI(null)
                 }
             }
