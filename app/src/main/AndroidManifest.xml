@@ -109,13 +109,13 @@
             android:name=".View.AdminRecipeManagementActivity"
             android:exported="false" />
         <activity
-            android:name=".View.MainActivity"
+            android:name=".View.LoginRegisterActivity"
             android:exported="false" />
         <activity
             android:name=".View.LogoutActivity"
             android:exported="false" />
         <activity
-            android:name=".View.LoginRegisterActivity"
+            android:name=".View.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
