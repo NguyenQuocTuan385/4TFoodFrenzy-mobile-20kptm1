@@ -43,7 +43,7 @@ class Admin_Comment_Management : AppCompatActivity() {
                 true,
                 R.drawable.bokho,
                 "Rất ngon và đơn giản",
-                "3 ngày trước"
+                Date()
             )
         )
         recipeCommentList.add(
@@ -54,7 +54,7 @@ class Admin_Comment_Management : AppCompatActivity() {
                 true,
                 0,
                 "Đẹp quá",
-                "3 ngày trước"
+                Date()
             )
         )
         recipeCommentList.add(
@@ -65,7 +65,7 @@ class Admin_Comment_Management : AppCompatActivity() {
                 true,
                 R.drawable.comrangduabo,
                 "Ngon như Hiền Phương ??",
-                "1 giờ trước"
+                Date()
             )
         )
         recipeCommentList.add(
@@ -76,7 +76,7 @@ class Admin_Comment_Management : AppCompatActivity() {
                 true,
                 R.drawable.thitxiennuong,
                 "Ngon như Bao Tran nhà em vậydâdadadasdsadasdasdasdsadasdadasdsdadsad",
-                "7 ngày trước"
+                Date()
             )
         )
         recipeCommentList.add(
@@ -87,7 +87,7 @@ class Admin_Comment_Management : AppCompatActivity() {
                 true,
                 R.drawable.thitxiennuong,
                 "Ngon như Hong Suong nhà em vậydâdadadasdsadasdasdasdsadasdadasdsdadsad",
-                "7 ngày trước"
+                Date()
             )
         )
         recipeCommentList.add(
@@ -98,7 +98,7 @@ class Admin_Comment_Management : AppCompatActivity() {
                 true,
                 R.drawable.thitxiennuong,
                 "Ngon như Dieu Trang nhà em vậydâdadadasdsadasdasdasdsadasdadasdsdadsad",
-                "7 ngày trước"
+                Date()
             )
         )
         adapterCmtRV = CommentListAdapter(recipeCommentList, false, true)

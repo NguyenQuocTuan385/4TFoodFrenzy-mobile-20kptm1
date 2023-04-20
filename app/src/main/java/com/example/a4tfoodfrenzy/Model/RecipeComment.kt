@@ -3,11 +3,12 @@ package com.example.a4tfoodfrenzy.Model
 import android.os.Build
 import android.os.Parcelable
 import androidx.annotation.RequiresApi
+import java.util.Date
 
 class RecipeComment(private var _isLike: Boolean,
                     private var _image: Int,
                     private var _description: String,
-                    private var _date: String) : Parcelable
+                    private var _date: Date) : Parcelable
 {
     private var _username: String = ""
     private var _nameRecipe: String = ""
@@ -20,7 +21,7 @@ class RecipeComment(private var _isLike: Boolean,
         _isLike: Boolean,
         _image: Int,
         _description: String,
-        _date: String
+        _date: Date
     ) : this(_isLike, _image, _description, _date) {
     this._username = _username
     this._nameRecipe = _nameRecipe
@@ -67,7 +68,7 @@ class RecipeComment(private var _isLike: Boolean,
         _description = value
     }
 
-    var date: String
+    var date: Date
     get() = _date
     set(value) {
         _date = value
@@ -78,7 +79,7 @@ class RecipeComment(private var _isLike: Boolean,
         parcel.readByte() != 0.toByte(),
         parcel.readInt(),
         parcel.readString() ?: "",
-        parcel.readString() ?: ""
+        Date(parcel.readLong())
     ) {
         _username = parcel.readString() ?: ""
         _nameRecipe = parcel.readString() ?: ""
@@ -93,7 +94,7 @@ class RecipeComment(private var _isLike: Boolean,
         parcel.writeInt(_image)
         parcel.writeBoolean(_isLike)
         parcel.writeString(_description)
-        parcel.writeString(_date)
+        parcel.writeLong(_date.time)
     }
 
     override fun describeContents(): Int {

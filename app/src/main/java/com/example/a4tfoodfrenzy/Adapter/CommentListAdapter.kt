@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Model.RecipeComment
 import com.example.a4tfoodfrenzy.R
+import java.text.SimpleDateFormat
 
 class CommentListAdapter(
     private var recipeCommentArray: ArrayList<RecipeComment>, private var isCmtListUserView: Boolean,
@@ -85,7 +86,8 @@ class CommentListAdapter(
         val cmtDescripTV = holder.cmtDescripTV
         cmtDescripTV.text = cmtRender.description
         val timeTV = holder.timeTV
-        timeTV.text = cmtRender.date
+        val formatter = SimpleDateFormat("dd-MM-yyyy")
+        timeTV.text = formatter.format(cmtRender.date)
         val avatarIV = holder.avatarIV
         cmtRender.avatarUser?.let { avatarIV.setImageResource(it) }
         val foodIV = holder.foodIV

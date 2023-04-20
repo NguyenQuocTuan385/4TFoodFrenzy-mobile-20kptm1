@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.a4tfoodfrenzy.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class LogoutActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,6 +15,35 @@ class LogoutActivity: AppCompatActivity() {
         btnLogout.setOnClickListener {
             val intent = Intent(this, LoginRegisterActivity::class.java)
             startActivity(intent)
+        }
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
+        val menu = bottomNavigationView.menu
+
+        menu.findItem(R.id.profile).isChecked = true
+
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.search -> {
+                    val intent = Intent(this, SearchScreen::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.addRecipe -> {
+                    val intent = Intent(this, AddNewRecipe::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.profile -> {
+                    true
+                }
+                else -> false
+            }
         }
     }
 }

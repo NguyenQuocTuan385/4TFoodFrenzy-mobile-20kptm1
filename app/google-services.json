@@ -14,11 +14,35 @@
       },
       "oauth_client": [
         {
+          "client_id": "881926674266-5u1qf41htlmporio7gvo1ugaog7c56du.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.a4tfoodfrenzy",
+            "certificate_hash": "f64675d12c99095a774c3914a78c767687052000"
+          }
+        },
+        {
           "client_id": "881926674266-emvt057il1rb1n3oeu5galcpintc57s2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.a4tfoodfrenzy",
             "certificate_hash": "5df14519577cb2ea5669440cf059db43f5099595"
+          }
+        },
+        {
+          "client_id": "881926674266-f79k8t72ks2b84mgcjvql6nhkagnm17g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.a4tfoodfrenzy",
+            "certificate_hash": "7bccc486f878fd896cd4271a220011035a689556"
+          }
+        },
+        {
+          "client_id": "881926674266-tkhmaaigrt05eq03i71p4elfrk5n0c56.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.a4tfoodfrenzy",
+            "certificate_hash": "e503094ccbfd767531a5cdd9b071287f60728796"
           }
         },
         {

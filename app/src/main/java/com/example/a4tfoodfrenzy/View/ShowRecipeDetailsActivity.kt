@@ -22,6 +22,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         val mainIMG : ImageView = findViewById(R.id.mainFoodImageView)
         val showStepDetailsButton : Button = findViewById(R.id.moreDetailsButton)
         val writeCommentButton : Button = findViewById(R.id.writeCommentButton)
+        val toolbarBackButton = findViewById<ImageView>(R.id.toolbarBackButton)
 
         val imgList = arrayListOf<FoodImage>()
         imgList.add(FoodImage(R.drawable.bosotmemainimage))
@@ -48,6 +49,10 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         writeCommentButton.setOnClickListener{
             val myIntent = Intent(this, WriteCommentActivity::class.java)
+            startActivity(myIntent)
+        }
+        toolbarBackButton.setOnClickListener {
+            val myIntent = Intent(this, AfterSearchActivity::class.java)
             startActivity(myIntent)
         }
 

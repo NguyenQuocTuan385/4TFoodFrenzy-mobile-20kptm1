@@ -29,23 +29,23 @@ class ProfileActivity : AppCompatActivity() {
         // tạo dữ liệu mẫu
 //        createDataUsers()
 
-        // lấy dữ liệu từ firebase
-        val db = Firebase.firestore
-        val user = db.collection("users").document("ngoctien")
-        user.get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    val user = document.toObject(User::class.java)
-                    val name = findViewById<TextView>(R.id.name_profile)
-                    name.text = user?.fullname
-                    val avatar = findViewById<ImageView>(R.id.creatorImage)
-                    avatar.setImageResource(user?.avatar!!)
-                    Log.d("TAG", "DocumentSnapshot data: ${document.data}")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d("TAG", "get failed with ", exception)
-            }
+//        // lấy dữ liệu từ firebase
+//        val db = Firebase.firestore
+//        val user = db.collection("users").document("ngoctien")
+//        user.get()
+//            .addOnSuccessListener { document ->
+//                if (document != null) {
+//                    val user = document.toObject(User::class.java)
+//                    val name = findViewById<TextView>(R.id.name_profile)
+//                    name.text = user?.fullname
+//                    val avatar = findViewById<ImageView>(R.id.creatorImage)
+//                    avatar.setImageResource(user?.avatar!!)
+//                    Log.d("TAG", "DocumentSnapshot data: ${document.data}")
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.d("TAG", "get failed with ", exception)
+//            }
 
 
         val option_adapter = findViewById<ImageView>(R.id.option_profile)
