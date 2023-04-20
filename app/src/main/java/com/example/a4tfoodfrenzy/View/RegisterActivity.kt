@@ -63,7 +63,7 @@ class RegisterActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    val profile = User(1, email, password, name, null, "", R.drawable.defaultavt, arrayListOf(), arrayListOf(), arrayListOf())
+                    val profile = User(1, email, name, null, "", R.drawable.defaultavt, arrayListOf(), arrayListOf(), arrayListOf())
                     if (user != null) {
                         writeUserProfileToFirestore(user.uid, profile)
                     }

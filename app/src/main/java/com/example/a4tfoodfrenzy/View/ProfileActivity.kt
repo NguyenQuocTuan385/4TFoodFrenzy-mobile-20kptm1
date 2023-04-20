@@ -139,6 +139,9 @@ class ProfileActivity : AppCompatActivity() {
                     name.text = user?.fullname
                     val avatar = findViewById<ImageView>(R.id.creatorImage)
                     avatar.setImageResource(user?.avatar!!)
+                    val email = findViewById<TextView>(R.id.email_profile)
+                    email.text = user?.email
+                    Log.d("TAG", "DocumentSnapshot data: ${document.data}")
 
                 }
                 .addOnFailureListener { exception ->
