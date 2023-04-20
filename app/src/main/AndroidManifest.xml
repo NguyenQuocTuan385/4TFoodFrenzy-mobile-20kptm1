@@ -15,6 +15,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.4TFoodFrenzy"
         tools:targetApi="31">
+
+        <activity
+            android:name=".View.FacebookAuthenticateActivity"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_application_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="@string/facebook_client_token" />
+
         <activity
             android:name=".View.AddNewRecipe"
             android:exported="false" />
@@ -97,13 +109,13 @@
             android:name=".View.AdminRecipeManagementActivity"
             android:exported="false" />
         <activity
-            android:name=".View.LoginRegisterActivity"
+            android:name=".View.MainActivity"
             android:exported="false" />
         <activity
             android:name=".View.LogoutActivity"
             android:exported="false" />
         <activity
-            android:name=".View.MainActivity"
+            android:name=".View.LoginRegisterActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
