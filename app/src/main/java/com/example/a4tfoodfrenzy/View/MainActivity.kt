@@ -17,6 +17,7 @@ import com.example.a4tfoodfrenzy.Adapter.RecipeListAdapter
 import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -112,6 +113,31 @@ class MainActivity : AppCompatActivity() {
 //        generateDatabaseRecipeDiets()
 //        generateDatabaseRecipeFood()
 //        generateDatabaseUsers()
+    }
+    fun findSlotIdEmptyInCollection(collectionName: String, callback: (Long) -> Unit) {
+        val collection = db.collection(collectionName)
+        var idSlot: Long = 1
+        collection.orderBy("id", Query.Direction.ASCENDING)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val id = document.getLong("id")
+
+                    if (id != null) {
+                        if (idSlot != id) {
+                            break
+                        }
+                        else {
+                            idSlot++
+                        }
+                    }
+                }
+                callback(idSlot)
+            }
+            .addOnFailureListener { exception ->
+                Log.d("TAG", "Error getting documents: ", exception)
+                callback(-1)
+            }
     }
     fun generateCateRecipeData(): ArrayList<RecipeCategorySuggest> {
         var result = ArrayList<RecipeCategorySuggest>()
@@ -256,9 +282,9 @@ class MainActivity : AppCompatActivity() {
             Date(2001, 10, 1),
             "Xin chào, tôi là một đầu bếp trực tuyến đam mê nấu ăn và chia sẻ kiến thức về ẩm thực. Tôi rất vui khi được giới thiệu với các bạn qua đoạn tiểu sử này.",
             "users/defaultavt.png",
-            arrayListOf(11,12,13,14,15),
-            arrayListOf(1, 2, 3),
-            arrayListOf(11, 12, 13)
+            arrayListOf(1,2),
+            arrayListOf(1, 2),
+            arrayListOf(1,2,3)
         );
         users.add(user1)
 
@@ -269,9 +295,9 @@ class MainActivity : AppCompatActivity() {
             Date(2002, 2, 2),
             "Tôi đã có hơn 5 năm kinh nghiệm làm việc trong lĩnh vực ẩm thực và tôi luôn cố gắng nâng cao kỹ năng và khả năng của mình bằng cách học hỏi từ các chuyên gia và thực hành nhiều hơn.",
             "users/avt.png",
-            arrayListOf(14,15,16),
-            arrayListOf(4,5,6),
-            arrayListOf(14,15,16)
+            arrayListOf(3,4),
+            arrayListOf(),
+            arrayListOf(1,2,3)
         )
         users.add(user2)
 
@@ -282,9 +308,9 @@ class MainActivity : AppCompatActivity() {
             Date(2002, 2, 2),
             "Tôi đã có cơ hội làm việc tại nhiều nhà hàng và khách sạn nổi tiếng ở nhiều quốc gia khác nhau, từ đó tôi đã học được rất nhiều kiến thức và kinh nghiệm về ẩm thực.",
             "users/avt.png",
-            arrayListOf(17,18,19),
-            arrayListOf(7,8,9),
-            arrayListOf(17,18,19)
+            arrayListOf(5,6),
+            arrayListOf(3,4),
+            arrayListOf(5)
         )
         users.add(user3)
 
@@ -295,9 +321,9 @@ class MainActivity : AppCompatActivity() {
             Date(2002, 2, 2),
             "Tôi đã có cơ hội làm việc tại nhiều nhà hàng và khách sạn nổi tiếng ở nhiều quốc gia khác nhau, từ đó tôi đã học được rất nhiều kiến thức và kinh nghiệm về ẩm thực.",
             "users/defaultavt.png",
-            arrayListOf(20,21,22),
-            arrayListOf(10,11, 12),
-            arrayListOf(20,21,22)
+            arrayListOf(),
+            arrayListOf(),
+            arrayListOf(5,6,7)
         )
         users.add(user4)
 
@@ -308,9 +334,9 @@ class MainActivity : AppCompatActivity() {
             Date(2008, 2, 2),
             "Với tinh thần cầu tiến và đam mê nấu ăn, tôi đã trở thành một đầu bếp trực tuyến chuyên nghiệp. Tôi thường xuyên tạo ra các món ăn ngon và độc đáo và chia sẻ với mọi người qua kênh YouTube của mình.",
             "users/defaultavt.png",
-            arrayListOf(23,24,25),
-            arrayListOf(13,14,15),
-            arrayListOf(23,24,25)
+            arrayListOf(7,8),
+            arrayListOf(),
+            arrayListOf(1,3,4)
         )
         users.add(user5)
 
@@ -321,9 +347,9 @@ class MainActivity : AppCompatActivity() {
             Date(2002, 2, 2),
             "Sau khi thực hiện một số dự án nấu ăn trực tuyến, tôi nhận thấy rằng đây là một cách tuyệt vời để kết nối với mọi người và chia sẻ sở thích của mình với những người có cùng sở thích.",
             "users/defaultavt.png",
-            arrayListOf(26,27,28),
-            arrayListOf(16,17,18),
-            arrayListOf(26,27,28)
+            arrayListOf(),
+            arrayListOf(5,6),
+            arrayListOf(3,5,8)
         )
         users.add(user6)
 
@@ -334,9 +360,9 @@ class MainActivity : AppCompatActivity() {
             Date(2002, 2, 2),
             "Tôi yêu thích việc sáng tạo các món ăn mới và khám phá văn hóa ẩm thực của các nước khác nhau. Tôi tin rằng món ăn không chỉ là thứ để ăn uống, mà nó còn là một phần không thể thiếu trong cuộc sống của mỗi người.",
             "users/defaultavt.png",
-            arrayListOf(29,30,1),
-            arrayListOf(19,20,21),
-            arrayListOf(29,30,1)
+            arrayListOf(9,10),
+            arrayListOf(7),
+            arrayListOf()
         )
         users.add(user7)
 
@@ -347,9 +373,9 @@ class MainActivity : AppCompatActivity() {
             Date(2002, 2, 2),
             "Tôi rất háo hức khi được hỗ trợ và giúp đỡ những người mới bắt đầu trong lĩnh vực nấu ăn. Tôi sẽ chia sẻ những kiến thức và kinh nghiệm của mình để giúp mọi người trở thành những đầu bếp tài ba.",
             "users/defaultavt.png",
-            arrayListOf(2,3,4),
-            arrayListOf(29,30,22),
-            arrayListOf(2,3,4)
+            arrayListOf(11,12),
+            arrayListOf(8),
+            arrayListOf()
         )
         users.add(user8)
 
@@ -360,9 +386,9 @@ class MainActivity : AppCompatActivity() {
             Date(2002, 2, 2),
             "Không chỉ là một đầu bếp trực tuyến, tôi còn là một người đam mê giảng dạy nấu ăn. Tôi tin rằng mỗi người đều có thể học và phát triển kỹ năng nấu ăn của mình, và tôi luôn sẵn sàng chia sẻ kiến thức và kinh nghiệm của mình để giúp mọi người.",
             "users/defaultavt.png",
-            arrayListOf(5,6,7),
-            arrayListOf(23,24,25),
-            arrayListOf(5, 6,7)
+            arrayListOf(13),
+            arrayListOf(),
+            arrayListOf()
         )
         users.add(user9)
 
@@ -373,9 +399,9 @@ class MainActivity : AppCompatActivity() {
             Date(2002, 2, 2),
             "Tôi đã có cơ hội làm việc tại nhiều nhà hàng và khách sạn nổi tiếng ở nhiều quốc gia khác nhau, từ đó tôi đã học được rất nhiều kiến thức và kinh nghiệm về ẩm thực.",
             "users/defaultavt.png",
-            arrayListOf(1, 2, 3, 4, 5),
-            arrayListOf(26,27,28),
-            arrayListOf(1, 2, 3, 4, 5)
+            arrayListOf(14,15),
+            arrayListOf(9, 10),
+            arrayListOf(1, 2, 3)
         )
         users.add(user10)
 
@@ -527,7 +553,35 @@ class MainActivity : AppCompatActivity() {
         listIngredient.add(RecipeIngredient(300,"Cá ngừ sạch","g"))
 
         var listStep=ArrayList<RecipeCookStep>()
-        uploadImageToCloudStorage("foodrecipe1_1","foods")
+//        uploadImageToCloudStorage("foodrecipe1_1","foods")
+//        uploadImageToCloudStorage("foodrecipe1_2","foods")
+//        uploadImageToCloudStorage("foodrecipe1_3","foods")
+//        uploadImageToCloudStorage("foodrecipe2_1","foods")
+//        uploadImageToCloudStorage("foodrecipe2_2","foods")
+//        uploadImageToCloudStorage("foodrecipe2_3","foods")
+//        uploadImageToCloudStorage("foodrecipe3_1","foods")
+//        uploadImageToCloudStorage("foodrecipe3_2","foods")
+//        uploadImageToCloudStorage("foodrecipe3_3","foods")
+//        uploadImageToCloudStorage("foodrecipe4_1","foods")
+//        uploadImageToCloudStorage("foodrecipe4_2","foods")
+//        uploadImageToCloudStorage("foodrecipe4_3","foods")
+//        uploadImageToCloudStorage("foodrecipe4_4","foods")
+//        uploadImageToCloudStorage("foodrecipe5_1","foods")
+//        uploadImageToCloudStorage("foodrecipe5_2","foods")
+//        uploadImageToCloudStorage("foodrecipe5_3","foods")
+//        uploadImageToCloudStorage("foodrecipe5_4","foods")
+//        uploadImageToCloudStorage("foodrecipe6_1","foods")
+//        uploadImageToCloudStorage("foodrecipe6_2","foods")
+//        uploadImageToCloudStorage("foodrecipe6_3","foods")
+//        uploadImageToCloudStorage("foodrecipe7_1","foods")
+//        uploadImageToCloudStorage("foodrecipe7_2","foods")
+//        uploadImageToCloudStorage("foodrecipe7_3","foods")
+//        uploadImageToCloudStorage("foodrecipe8_1","foods")
+//        uploadImageToCloudStorage("foodrecipe8_2","foods")
+//        uploadImageToCloudStorage("foodrecipe8_3","foods")
+//        uploadImageToCloudStorage("foodrecipe9_1","foods")
+//        uploadImageToCloudStorage("foodrecipe9_2","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Sơ chế, rửa sạch nguyên vật liệu, để ráo nước hoàn toàn, tiến hành cắt thái\n" +
@@ -535,7 +589,7 @@ class MainActivity : AppCompatActivity() {
                 "foods/foodrecipe1_1"
             )
         )
-        uploadImageToCloudStorage("foodrecipe1_2","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Đặt chảo lên bếp mở lửa vừa cho 100gr dầu ăn vào làm nóng, sau đó cho cá ngừ vào chiên vàng đều 2 mặt, vớt ra thấm ráo dầu.\n" +
@@ -543,7 +597,7 @@ class MainActivity : AppCompatActivity() {
                 "foods/foodrecipe1_2"
             )
         )
-        uploadImageToCloudStorage("foodrecipe1_3","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Cho món ăn ra dĩa và thưởng thúc cùng với cơm trắng",
@@ -553,8 +607,8 @@ class MainActivity : AppCompatActivity() {
 
         var mon_an_1=FoodRecipe(1,"Cá ngừ chiên sốt gà","foods/foodrecipe1_3",2,"Dưới 30 phút",Date(),true,
             arrayListOf(2),listStep,listIngredient,
-            arrayListOf(2,5,8,4),
-            arrayListOf(6,12,5,1,9),"Hiền Phương",R.drawable.defaultavt,15)
+            arrayListOf(1,2),
+            arrayListOf(1,2,5,10),"Hiền Phương",R.drawable.defaultavt,15)
 
         result.add(mon_an_1)
 
@@ -565,21 +619,21 @@ class MainActivity : AppCompatActivity() {
         listIngredient.add(RecipeIngredient(200,"Cá Hú Tươi Làm Sạch Cắt Khúc","g"))
 
         listStep=ArrayList<RecipeCookStep>()
-        uploadImageToCloudStorage("foodrecipe2_1","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Rửa sạch các nguyên liệu đã sơ chế để ráo nước. Ướp cá và thịt ba rọi với sốt gia vị trong vòng 10 phút.",
                 "foods/foodrecipe2_1"
             )
         )
-        uploadImageToCloudStorage("foodrecipe2_2","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Cho 1 muỗng canh dầu ăn vào nồi làm nóng. Băm nhuyễn hành tím, tỏi cho vào phi thơm. Cho hỗn hợp cá, thịt ba rọi đã ướp vào đảo nhẹ tay 2 - 3 phút cho thịt và cá hơi săn lại. Thêm 100ml nước lọc vào, kho lửa liu riu 15 phút đến khi nước hơi sệt sệt lại. Nêm nếm lần cuối cho vừa ăn rồi tắt bếp.",
                 "foods/foodrecipe2_2"
             )
         )
-        uploadImageToCloudStorage("foodrecipe2_3","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Cho cá hú kho thịt ba rọi ra đĩa, rắc ít hành lá cắt nhuyễn.",
@@ -598,8 +652,8 @@ class MainActivity : AppCompatActivity() {
             arrayListOf(2),
             listStep,
             listIngredient,
-            arrayListOf(1,3,9,4),
-            arrayListOf(8,15,12,9,2,7),
+            arrayListOf(),
+            arrayListOf(1,2,10),
             "Đặng Ngọc Tiến",
             R.drawable.avt,
             10
@@ -612,7 +666,7 @@ class MainActivity : AppCompatActivity() {
         listIngredient.add(RecipeIngredient(150,"Xốt Cà Chua","g"))
 
         listStep=ArrayList<RecipeCookStep>()
-        uploadImageToCloudStorage("foodrecipe3_1","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Sơ chế, rửa sạch nguyên vật liệu, để ráo nước hoàn toàn, tiến hành cắt thái\n" +
@@ -620,14 +674,14 @@ class MainActivity : AppCompatActivity() {
                 "foods/foodrecipe3_1"
             )
         )
-        uploadImageToCloudStorage("foodrecipe3_2","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Chuẩn bị chảo mở lửa vừa cho 50gr nước cùng với xốt cà chua, mọc viên vào đảo đều khoảng 5 phút, nêm nếm cho vừa ăn thì tắt bếp.",
                 "foods/foodrecipe3_2"
             )
         )
-        uploadImageToCloudStorage("foodrecipe3_3","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Cho món ăn ra dĩa và thưởng thúc cùng với cơm trắng.",
@@ -637,8 +691,8 @@ class MainActivity : AppCompatActivity() {
 
         var mon_an_3=FoodRecipe(3,"Mọc Viên Xốt Cà","foods/foodrecipe3_3",2,"Dưới 30 phút",Date(),true,
             arrayListOf(2),listStep,listIngredient,
-            arrayListOf(1,3,9,4),
-            arrayListOf(8,15,12,9,2,7),"Đặng Ngọc Tiến",R.drawable.avt,8)
+            arrayListOf(),
+            arrayListOf(1,2,5,6,10),"Đặng Ngọc Tiến",R.drawable.avt,8)
         result.add(mon_an_3)
 
         listIngredient = ArrayList<RecipeIngredient>()
@@ -647,28 +701,27 @@ class MainActivity : AppCompatActivity() {
         listIngredient.add(RecipeIngredient(100, "Thịt Heo Xay", "g"))
 
         listStep = ArrayList<RecipeCookStep>()
-        uploadImageToCloudStorage("foodrecipe4_1","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Rửa sạch các nguyên liệu đã sơ chế, để ráo nước. Rau om, ngò gai cắt nhỏ. Khoai mỡ bào nhuyễn.",
                 "foods/foodrecipe4_1"
             )
         )
-        uploadImageToCloudStorage("foodrecipe4_2","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Đặt nồi lên bếp, cho 2 muỗng canh dầu ăn vào rồi cho thịt heo xay vào xào săn lại. Sau đó, rót 750ml nước lọc vào nồi đun sôi lên.",
                 "foods/foodrecipe4_2"
             )
         )
-        uploadImageToCloudStorage("foodrecipe4_3","foods")
         listStep.add(
             RecipeCookStep(
                 "Tiếp đến, cho khoai mỡ vào nấu 15 phút. Từ từ cho gói gia vị hoàn chỉnh món canh rau củ vào khuấy đều. Khi khoai đã nhừ, dùng muỗng canh tán thêm cho nhuyễn. Cho ngò gai, rau om lên mặt, nêm nếm lại cho vừa ăn rồi tắt bếp.",
                 "foods/foodrecipe4_3"
             )
         )
-        uploadImageToCloudStorage("foodrecipe4_4","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Bày món ăn ra tô, rắc một ít tiêu xay lên mặt và thưởng thức. Món canh ngon hơn khi ăn nóng cùng cơm trắng.",
@@ -687,8 +740,8 @@ class MainActivity : AppCompatActivity() {
             arrayListOf(1),
             listStep,
             listIngredient,
-            arrayListOf(1, 5, 10,11,2),
-            arrayListOf(15, 2, 11, 9, 5,7),
+            arrayListOf(3,4),
+            arrayListOf(5),
             "Nguyễn Văn Việt",
             R.drawable.defaultavt,
             21
@@ -701,7 +754,7 @@ class MainActivity : AppCompatActivity() {
         listIngredient.add(RecipeIngredient(160,"Bộ Xốt Nấm Đông Cô","g"))
 
         listStep=ArrayList<RecipeCookStep>()
-        uploadImageToCloudStorage("foodrecipe5_1","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Sơ chế, rửa sạch nguyên vật liệu, để ráo nước hoàn toàn, tiến hành cắt thái\n" +
@@ -711,21 +764,21 @@ class MainActivity : AppCompatActivity() {
                 "foods/foodrecipe5_1"
             )
         )
-        uploadImageToCloudStorage("foodrecipe5_2","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Bắt nồi lên bếp cho 500ml nước lọc vào đun sôi sau đó cho nguyên miếng đậu hủ vào luộc 5 phút rồi vớt ra cho ráo nước, cắt thành miếng vừa ăn rồi xếp ra đĩa.",
                 "foods/foodrecipe5_2"
             )
         )
-        uploadImageToCloudStorage("foodrecipe5_3","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Bắt chảo lên bếp cho 20gr canh dầu ăn vào làm nóng, sau đó cho hành boa rô, hành tây vào phi thơm, tiếp tục cho thêm 150ml nước lọc và gói 2 sốt xào chay vào nấu khoảng 5 phút để xốt sệt lại, nêm nếm lại cho vừa ăn rồi tắt bếp.",
                 "foods/foodrecipe5_3"
             )
         )
-        uploadImageToCloudStorage("foodrecipe5_4","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Rưới xốt nấm vừa nấu xong lên đĩa đậu hủ rắc thêm hành lá, ớt cắt nhỏ lên và thưởng thức. Ăn kèm với cơm trắng",
@@ -735,8 +788,8 @@ class MainActivity : AppCompatActivity() {
 
         var mon_an_5=FoodRecipe(5,"Đậu Hũ Xốt Nấm Đông Cô Chay","foods/foodrecipe5_4",2,"Dưới 30 phút",Date(),true,
             arrayListOf(1),listStep,listIngredient,
-            arrayListOf(1,7,6,9,15,8,3),
-            arrayListOf(19,15,4,1,8,11,5,9),"Bùi Hoàng Vũ",R.drawable.defaultavt,100)
+            arrayListOf(5,6,7),
+            arrayListOf(3,4,6),"Bùi Hoàng Vũ",R.drawable.defaultavt,100)
         result.add(mon_an_5)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -745,7 +798,7 @@ class MainActivity : AppCompatActivity() {
         listIngredient.add(RecipeIngredient(200,"Cá Lóc Tươi Làm Sạch (Cắt Khúc)","g"))
 
         listStep=ArrayList<RecipeCookStep>()
-        uploadImageToCloudStorage("foodrecipe6_1","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Sơ chế, rửa sạch nguyên vật liệu, để ráo nước hoàn toàn, tiến hành cắt thái\n" +
@@ -754,7 +807,7 @@ class MainActivity : AppCompatActivity() {
                 "foods/foodrecipe6_1"
             )
         )
-        uploadImageToCloudStorage("foodrecipe6_2","foods")
+
         listStep.add(
             RecipeCookStep(
                 "- Chuẩn bị chảo cho cá đã ướp và 200ml nước vào kho với lửa nhỏ, khoảng 15 phút\n" +
@@ -762,7 +815,7 @@ class MainActivity : AppCompatActivity() {
                 "foods/foodrecipe6_2"
             )
         )
-        uploadImageToCloudStorage("foodrecipe6_3","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Ăn kèm với cơm trắng",
@@ -781,8 +834,8 @@ class MainActivity : AppCompatActivity() {
             arrayListOf(2),
             listStep,
             listIngredient,
-            arrayListOf(2,5,8,4,3,1,11,15,18),
-            arrayListOf(6,12,5,1,9,15,3,11,19,20),
+            arrayListOf(8,9,10),
+            arrayListOf(4),
             "Dương Chí Thông",
             R.drawable.defaultavt,
             20
@@ -795,7 +848,7 @@ class MainActivity : AppCompatActivity() {
         listIngredient.add(RecipeIngredient(37,"Bộ Kho Tiêu (Tiêu Xanh, Hành Lá, Ớt Chỉ Thiên Đỏ, Tiêu Đen Xay)","g"))
 
         listStep=ArrayList<RecipeCookStep>()
-        uploadImageToCloudStorage("foodrecipe7_1","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Sơ chế, rửa sạch nguyên vật liệu, để ráo nước hoàn toàn, tiến hành cắt thái\n" +
@@ -805,7 +858,7 @@ class MainActivity : AppCompatActivity() {
                 "foods/foodrecipe7_1"
             )
         )
-        uploadImageToCloudStorage("foodrecipe7_2","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Chuẩn bị chảo cho sườn cốt lết đã ướp, tiêu xanh và 200ml nước vào kho với lửa nhỏ, khoảng 15 phút\n" +
@@ -813,7 +866,7 @@ class MainActivity : AppCompatActivity() {
                 "foods/foodrecipe7_2"
             )
         )
-        uploadImageToCloudStorage("foodrecipe7_3","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Ăn kèm với cơm trắng",
@@ -823,8 +876,8 @@ class MainActivity : AppCompatActivity() {
 
         var mon_an_7=FoodRecipe(7,"Sườn Cốt Lết Heo Kho Tiêu","foods/foodrecipe7_3",2,"Dưới 30 phút",Date(),true,
             arrayListOf(2),listStep,listIngredient,
-            arrayListOf(1,4,5,8,18,14),
-            arrayListOf(2,12,3,5),"Trần Thị Ngọc Nhi",R.drawable.defaultavt,10)
+            arrayListOf(),
+            arrayListOf(4),"Trần Thị Ngọc Nhi",R.drawable.defaultavt,10)
         result.add(mon_an_7)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -834,7 +887,7 @@ class MainActivity : AppCompatActivity() {
         listIngredient.add(RecipeIngredient(1,"(Lựa chọn) Dừa Xiêm Bến Tre","trái"))
 
         listStep=ArrayList<RecipeCookStep>()
-        uploadImageToCloudStorage("foodrecipe8_1","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Sơ chế, rửa sạch nguyên vật liệu, để ráo nước hoàn toàn, tiến hành cắt thái\n" +
@@ -843,7 +896,6 @@ class MainActivity : AppCompatActivity() {
                 "foods/foodrecipe8_1"
             )
         )
-        uploadImageToCloudStorage("foodrecipe8_2","foods")
         listStep.add(
             RecipeCookStep(
                 "Chuẩn bị chảo cho thịt vịt đã ướp, gừng và 200ml nước vào kho với lửa vừa, khoảng 20 phút.\n" +
@@ -851,7 +903,7 @@ class MainActivity : AppCompatActivity() {
                 "foods/foodrecipe8_2"
             )
         )
-        uploadImageToCloudStorage("foodrecipe8_3","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Ăn kèm với cơm trắng",
@@ -861,8 +913,8 @@ class MainActivity : AppCompatActivity() {
 
         var mon_an_8=FoodRecipe(8,"Vịt Kho Gừng","foods/foodrecipe8_3",2,"Dưới 30 phút",Date(),true,
             arrayListOf(2),listStep,listIngredient,
-            arrayListOf(3,5,7,10,11,15,19),
-            arrayListOf(6,12,5,1,9,10,18),"Ngọc Thư",R.drawable.defaultavt,5)
+            arrayListOf(11,12,13),
+            arrayListOf(6),"Ngọc Thư",R.drawable.defaultavt,5)
         result.add(mon_an_8)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -872,14 +924,14 @@ class MainActivity : AppCompatActivity() {
         listIngredient.add(RecipeIngredient(5,"Bột bắp","g"))
 
         listStep=ArrayList<RecipeCookStep>()
-        uploadImageToCloudStorage("foodrecipe9_1","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Thịt bò ướp 1g dầu hào, tỏi băm, 5g bột bắp. Phi tỏi thơm xào chín\n",
                 "foods/foodrecipe9_1"
             )
         )
-        uploadImageToCloudStorage("foodrecipe9_2","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Bông cải hấp chín, xào sơ hoặc chứ thế thêm vào đĩa với bò xào, rắc xíu rong biển.\n",
@@ -889,8 +941,8 @@ class MainActivity : AppCompatActivity() {
 
         var mon_an_9=FoodRecipe(9,"Cơm Bò Xào Bông Cải\n","foods/foodrecipe9_2",2,"Dưới 30 phút",Date(),true,
             arrayListOf(2),listStep,listIngredient,
-            arrayListOf(3,5,7,10,11,15,19),
-            arrayListOf(6,12,5,1,9,10,18),"Ngọc Thư",R.drawable.defaultavt,5)
+            arrayListOf(),
+            arrayListOf(14,15),"Ngọc Thư",R.drawable.defaultavt,5)
         result.add(mon_an_9)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -936,8 +988,8 @@ class MainActivity : AppCompatActivity() {
 
         var mon_an_10=FoodRecipe(10,"Canh Bò Nấu Dưa Cải Chua","foods/foodrecipe10_4",4,"Dưới 1 tiếng",Date(),true,
             arrayListOf(1,4),listStep,listIngredient,
-            arrayListOf(1,5,8,7),
-            arrayListOf(2,10,5,1,9),"Đặng Ngọc Tiến",R.drawable.avt,10)
+            arrayListOf(),
+            arrayListOf(),"Đặng Ngọc Tiến",R.drawable.avt,10)
         result.add(mon_an_10)
 
         for(recipefood in result) {

@@ -3,7 +3,7 @@ package com.example.a4tfoodfrenzy.Model
 import java.util.Date
 
 class FoodRecipe(
-    private var _id: Int,
+    private var _id: Long,
     private var _recipeName: String,
     private var _recipeMainImage: String?,
     private var _ration: Int,
@@ -23,7 +23,7 @@ class FoodRecipe(
 
     // constructor if there is author, likes, date
     constructor(
-        id: Int,
+        id: Long,
         recipeName: String,
         recipeImage: String?,
         ration: Int,
@@ -58,7 +58,7 @@ class FoodRecipe(
         _authorAvatar = avatar
     }
 
-    var id: Int
+    var id: Long
         get() = _id
         set(value) {
             _id = value

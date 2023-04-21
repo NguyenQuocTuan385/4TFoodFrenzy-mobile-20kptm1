@@ -83,35 +83,38 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                             if (it.isEmpty) {
                                 // get user name from google's database
                                 val userFullName = user?.displayName
-                                val profile = User(
-                                    1125,
-                                    userEmail!!,
-                                    userFullName!!,
-                                    null,
-                                    "",
-                                    "defaultavt",
-                                    arrayListOf(),
-                                    arrayListOf(),
-                                    arrayListOf()
-                                )
+                                val mainActivity = MainActivity()
+                                mainActivity.findSlotIdEmptyInCollection("users") {idSlot ->
+                                    val profile = User(
+                                        idSlot,
+                                        userEmail!!,
+                                        userFullName!!,
+                                        null,
+                                        "",
+                                        "users/defaultavt.png",
+                                        arrayListOf(),
+                                        arrayListOf(),
+                                        arrayListOf()
+                                    )
 
-                                // add new user to db
-                                db.collection("users").document(user.uid)
-                                    .set(profile)
-                                    .addOnSuccessListener {
-                                        Toast.makeText(
-                                            this,
-                                            "Đăng ký bằng Facebook thành công",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                    .addOnFailureListener {
-                                        Toast.makeText(
-                                            this,
-                                            "Đăng ký bằng Facebook không thành công",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
+                                    // add new user to db
+                                    db.collection("users").document(user.uid)
+                                        .set(profile)
+                                        .addOnSuccessListener {
+                                            Toast.makeText(
+                                                this,
+                                                "Đăng ký bằng Facebook thành công",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                        .addOnFailureListener {
+                                            Toast.makeText(
+                                                this,
+                                                "Đăng ký bằng Facebook không thành công",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                }
                             }
                             // user exist in DB --> do nothing
                         }

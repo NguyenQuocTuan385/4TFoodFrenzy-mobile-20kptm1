@@ -2,7 +2,6 @@ package com.example.a4tfoodfrenzy.View
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.a4tfoodfrenzy.Model.User
@@ -82,35 +81,38 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
                                                 // get user name from google's database
                                                 val userFullName =
                                                     firebaseAuth.currentUser?.displayName
-                                                val profile = User(
-                                                    1125, userEmail!!,
-                                                    userFullName!!,
-                                                    null,
-                                                    "",
-                                                    "defaultavt",
-                                                    arrayListOf(),
-                                                    arrayListOf(),
-                                                    arrayListOf()
-                                                )
+                                                val mainActivity = MainActivity()
+                                                mainActivity.findSlotIdEmptyInCollection("users") {idSlot ->
+                                                    val profile = User(
+                                                        idSlot, userEmail!!,
+                                                        userFullName!!,
+                                                        null,
+                                                        "",
+                                                        "users/defaultavt.png",
+                                                        arrayListOf(),
+                                                        arrayListOf(),
+                                                        arrayListOf()
+                                                    )
 
-                                                // add new user to db
-                                                db.collection("users")
-                                                    .document(firebaseAuth.currentUser!!.uid)
-                                                    .set(profile)
-                                                    .addOnSuccessListener {
-                                                        Toast.makeText(
-                                                            this,
-                                                            "Đăng ký bằng Google thành công",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                    }
-                                                    .addOnFailureListener {
-                                                        Toast.makeText(
-                                                            this,
-                                                            "Đăng ký bằng Google không thành công",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                    }
+                                                    // add new user to db
+                                                    db.collection("users")
+                                                        .document(firebaseAuth.currentUser!!.uid)
+                                                        .set(profile)
+                                                        .addOnSuccessListener {
+                                                            Toast.makeText(
+                                                                this,
+                                                                "Đăng ký bằng Google thành công",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                        }
+                                                        .addOnFailureListener {
+                                                            Toast.makeText(
+                                                                this,
+                                                                "Đăng ký bằng Google không thành công",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                        }
+                                                }
                                             }
                                             // user exist in DB --> do nothing
                                         }

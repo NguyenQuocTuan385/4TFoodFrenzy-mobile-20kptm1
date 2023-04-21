@@ -3,7 +3,7 @@ package com.example.a4tfoodfrenzy.Model
 import java.util.Date
 
 class User(
-    private var _id: Int,
+    private var _id: Long,
     private var _email: String,
     private var _fullname: String,
     private var _birthday: Date?,
@@ -15,7 +15,7 @@ class User(
 ) {
     constructor() : this(0, "", "", null, "", "", ArrayList(), ArrayList(), ArrayList())
 
-    var id: Int
+    var id: Long
         get() = _id
         set(value) {
             _id = value

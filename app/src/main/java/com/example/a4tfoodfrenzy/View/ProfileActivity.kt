@@ -21,12 +21,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import java.util.*
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
-
+    val storageRef = FirebaseStorage.getInstance()
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -131,25 +132,36 @@ class ProfileActivity : AppCompatActivity() {
         }
         else
         {
-//            db.collection("users")
-//                .document(user.uid)
-//                .get()
-//                .addOnSuccessListener { document ->
-//                    val user = document.toObject(User::class.java)
-//                    val name = findViewById<TextView>(R.id.name_profile)
-//                    name.text = user?.fullname
-//                    val avatar = findViewById<ImageView>(R.id.creatorImage)
+            db.collection("users")
+                .document(user.uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    val user = document.toObject(User::class.java)
+                    val name = findViewById<TextView>(R.id.name_profile)
+                    name.text = user?.fullname
+
+                    val avatar = findViewById<ImageView>(R.id.creatorImage)
+                    val imageRef = user?.avatar?.let { storageRef.getReference(it) }
+                    if (imageRef != null) {
+                        imageRef.getBytes(Long.MAX_VALUE).addOnSuccessListener { bytes ->
+                            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                            avatar.setImageBitmap(bitmap)
+                        }.addOnFailureListener { exception ->
+                            // Xử lý ngoại lệ nếu có lỗi xảy ra
+                        }
+                    }
 //                    val resourceId = resources.getIdentifier(user?.avatar!!, "drawable", packageName)
 //                    val bitmap = BitmapFactory.decodeResource(resources, resourceId)
 //                    avatar.setImageBitmap(bitmap)
-//                    val email = findViewById<TextView>(R.id.email_profile)
-//                    email.text = user?.email
-//                    Log.d("TAG", "DocumentSnapshot data: ${document.data}")
-//
-//                }
-//                .addOnFailureListener { exception ->
-//                    Log.w("hihi", "Error getting documents: ", exception)
-//                }
+
+                    val email = findViewById<TextView>(R.id.email_profile)
+                    email.text = user?.email
+                    Log.d("TAG", "DocumentSnapshot data: ${document.data}")
+
+                }
+                .addOnFailureListener { exception ->
+                    Log.w("hihi", "Error getting documents: ", exception)
+                }
 
         }
 

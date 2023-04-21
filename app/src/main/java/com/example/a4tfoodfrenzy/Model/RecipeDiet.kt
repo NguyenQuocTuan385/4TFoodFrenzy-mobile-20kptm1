@@ -1,13 +1,13 @@
 package com.example.a4tfoodfrenzy.Model
 
 class RecipeDiet (
-    private var _id: Int,
+    private var _id: Long,
     private var _dietName: String,
     private var _foodRecipes: ArrayList<Int>
 ) {
 
     // Getter and Setter for _id
-    var id: Int
+    var id: Long
         get() = _id
         set(value) { _id = value }
 
