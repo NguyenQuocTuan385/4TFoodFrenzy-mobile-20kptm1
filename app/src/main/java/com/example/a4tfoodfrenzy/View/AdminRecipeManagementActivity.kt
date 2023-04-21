@@ -28,24 +28,24 @@ class AdminRecipeManagementActivity : AppCompatActivity() {
         val optionList = arrayListOf("Mới nhất", "Phổ biến", "Nhiều lượt thích nhất")
 
         recipeList.add(FoodRecipe(1, "Bò xốt me",
-            R.drawable.bo_nuong, 2, "15 phút",Date(2022, 2,2), true,
+            "bo_nuong", 2, "15 phút",Date(2022, 2,2), true,
              ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), "Đặng Ngọc Tiến",
             R.drawable.avt, 100))
         recipeList.add(FoodRecipe(1, "Bò xốt me",
-            R.drawable.bo_nuong, 2, "15 phút",Date(2022, 2,2), true,
+            "bo_nuong", 2, "15 phút",Date(2022, 2,2), true,
              ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), "Đặng Ngọc Tiến",
             R.drawable.avt, 100))
         recipeList.add(FoodRecipe(1, "Bò xốt me",
-            R.drawable.bo_nuong, 2, "15 phút",Date(2022, 2,2), true,
+            "bo_nuong", 2, "15 phút",Date(2022, 2,2), true,
             ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), "Đặng Ngọc Tiến",
             R.drawable.avt, 100))
         recipeList.add(FoodRecipe(1, "Bò xốt me",
-            R.drawable.bo_nuong, 2, "15 phút",Date(2022, 2,2), true,
+            "bo_nuong", 2, "15 phút",Date(2022, 2,2), true,
             ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), "Đặng Ngọc Tiến",
             R.drawable.avt, 100))
 
         // assign recipe recycler view adapter
-        adapter = RecipeManagementAdapter(recipeList)
+        adapter = RecipeManagementAdapter(this,recipeList)
         recipeManagementRecyclerView.adapter = adapter
         recipeManagementRecyclerView.layoutManager = GridLayoutManager(this, 2)
 

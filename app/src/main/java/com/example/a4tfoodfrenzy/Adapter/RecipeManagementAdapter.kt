@@ -1,5 +1,7 @@
 package com.example.a4tfoodfrenzy.Adapter
 
+import android.content.Context
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +12,7 @@ import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.R
 import de.hdodenhof.circleimageview.CircleImageView
 
-class RecipeManagementAdapter(private var recipeList : ArrayList<FoodRecipe>) : RecyclerView.Adapter<RecipeManagementAdapter.ViewHolder>(){
+class RecipeManagementAdapter(private var context:Context,private var recipeList : ArrayList<FoodRecipe>) : RecyclerView.Adapter<RecipeManagementAdapter.ViewHolder>(){
     inner class ViewHolder(listItemView : View) : RecyclerView.ViewHolder(listItemView){
         val recipeIMG : ImageView = listItemView.findViewById(R.id.recipeManagementImageView)
         val recipeName : TextView = listItemView.findViewById(R.id.recipeNameManagementTextView)
@@ -35,7 +37,11 @@ class RecipeManagementAdapter(private var recipeList : ArrayList<FoodRecipe>) : 
         val currentRecipe = recipeList[position]
         val uploadDateString = "${currentRecipe.uploadDate?.date}/${currentRecipe.uploadDate?.month}/${currentRecipe.uploadDate?.year}"
 
-        holder.recipeIMG.setImageResource(currentRecipe.recipeMainImage)
+        val resources = context.getResources()
+        val resourceId = resources.getIdentifier(currentRecipe.recipeMainImage, "drawable", context.packageName)
+        val bitmap = BitmapFactory.decodeResource(resources, resourceId)
+        holder.recipeIMG.setImageBitmap(bitmap)
+
         holder.recipeName.text = currentRecipe.recipeName
         holder.numOfLike.text = currentRecipe.numOfLikes.toString()
         currentRecipe.authorAvatar?.let { holder.authorAvatarIMG.setImageResource(it) }

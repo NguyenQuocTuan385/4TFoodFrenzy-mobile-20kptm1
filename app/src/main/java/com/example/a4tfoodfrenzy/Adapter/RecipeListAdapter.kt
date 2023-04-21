@@ -1,5 +1,7 @@
 package com.example.a4tfoodfrenzy.Adapter
 
+import android.content.Context
+import android.graphics.BitmapFactory
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import android.graphics.Rect
 import android.view.LayoutInflater
@@ -10,7 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.R
 
-class RecipeListAdapter(
+class RecipeListAdapter(private var context:Context,
     private var recipeRenderArray: ArrayList<FoodRecipe>) : RecyclerView.Adapter<RecipeListAdapter.ViewHolder>() {
 
     var onItemClick: ((FoodRecipe, Int) -> Unit)? = null
@@ -52,6 +54,9 @@ class RecipeListAdapter(
         val titleRecipeTV = holder.titleRecipeTV
         titleRecipeTV.text = foodRecipe.recipeName
         val recipeImg = holder.recipeIV
-        recipeImg.setImageResource(foodRecipe.recipeMainImage)
+        val resources = context.getResources()
+        val resourceId = resources.getIdentifier(foodRecipe.recipeMainImage, "drawable", context.packageName)
+        val bitmap = BitmapFactory.decodeResource(resources, resourceId)
+        recipeImg.setImageBitmap(bitmap)
     }
 }

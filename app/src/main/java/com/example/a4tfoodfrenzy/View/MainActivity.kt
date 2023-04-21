@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         val recipeTodayEatRV = findViewById<RecyclerView>(R.id.recipeTodayEatRV)
         var recipeTodayEat = generateRecipeTodayEatData() //implemened below
-        adapterRecipeTodayEatRV = RecipeListAdapter(recipeTodayEat)
+        adapterRecipeTodayEatRV = RecipeListAdapter(this, recipeTodayEat)
         recipeTodayEatRV!!.adapter = adapterRecipeTodayEatRV
         recipeTodayEatRV!!.layoutManager = GridLayoutManager(this, 3)
         adapterRecipeTodayEatRV!!.onItemClick = { foodRecipe, i ->
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         val recipeMostLikesRV = findViewById<RecyclerView>(R.id.recipeMostLikesRV)
         var recipeMostLikes = generateRecipeMostLikesData() //implemened below
-        adapterRecipeMostLikesRV = RecipeListAdapter(recipeMostLikes)
+        adapterRecipeMostLikesRV = RecipeListAdapter(this, recipeMostLikes)
         recipeMostLikesRV!!.adapter = adapterRecipeMostLikesRV
         recipeMostLikesRV!!.layoutManager = GridLayoutManager(this, 3)
         adapterRecipeMostLikesRV!!.onItemClick = { foodRecipe, i ->
@@ -169,33 +169,33 @@ class MainActivity : AppCompatActivity() {
         var result = ArrayList<FoodRecipe>()
 
         var foodRecipe: FoodRecipe = FoodRecipe(1, "Canh khổ qua nhồi thịt",
-            R.drawable.khoquanhoithit, 2, "15 phút",
+            "khoquanhoithit", 2, "15 phút",
             Date(2022, 2,2), true,
             ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
 
-        foodRecipe = FoodRecipe(1, "Canh chua cá lóc", R.drawable.canhcaloc, 2, "15 phút",
+        foodRecipe = FoodRecipe(1, "Canh chua cá lóc", "canhcaloc", 2, "15 phút",
             Date(2022, 2,2), true,
             ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
 
 
-        foodRecipe = FoodRecipe(1, "Bò sốt me", R.drawable.bosotme, 2, "15 phút",
+        foodRecipe = FoodRecipe(1, "Bò sốt me", "bosotme", 2, "15 phút",
             Date(2022, 2,2), true,
             ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
 
-        foodRecipe = FoodRecipe(1, "Bò kho", R.drawable.bokho, 2, "15 phút",
+        foodRecipe = FoodRecipe(1, "Bò kho", "bokho", 2, "15 phút",
             Date(2022, 2,2), true,
             ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
 
-        foodRecipe = FoodRecipe(1, "Bún bò huế", R.drawable.bunbohue, 2, "15 phút",
+        foodRecipe = FoodRecipe(1, "Bún bò huế","bunbohue", 2, "15 phút",
             Date(2022, 2,2), true,
             ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
 
-        foodRecipe = FoodRecipe(1, "Bưởi trộn khô gà", R.drawable.buoitronkhoga, 2, "15 phút",
+        foodRecipe = FoodRecipe(1, "Bưởi trộn khô gà", "buoitronkhoga", 2, "15 phút",
             Date(2022, 2,2), true,
             ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
@@ -206,33 +206,33 @@ class MainActivity : AppCompatActivity() {
     fun generateRecipeMostLikesData(): ArrayList<FoodRecipe> {
         var result = ArrayList<FoodRecipe>()
 
-        var foodRecipe = FoodRecipe(1, "Cơm rang dưa bò", R.drawable.comrangduabo, 2, "15 phút",
+        var foodRecipe = FoodRecipe(1, "Cơm rang dưa bò", "comrangduabo", 2, "15 phút",
             Date(2022, 2,2), true,
             ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
 
-        foodRecipe= FoodRecipe(1, "Mì trứng xào bò", R.drawable.mitrungxaobo, 2, "15 phút",
+        foodRecipe= FoodRecipe(1, "Mì trứng xào bò", "mitrungxaobo", 2, "15 phút",
             Date(2022, 2,2), true,
             ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
 
 
-        foodRecipe= FoodRecipe(1, "Mì quảng gà", R.drawable.miquangga, 2, "15 phút",
+        foodRecipe= FoodRecipe(1, "Mì quảng gà", "miquangga", 2, "15 phút",
             Date(2022, 2,2), true,
             ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
 
-        foodRecipe= FoodRecipe(1, "Thịt xiên nướng cà ri", R.drawable.thitxiennuong, 2, "15 phút",
+        foodRecipe= FoodRecipe(1, "Thịt xiên nướng cà ri", "thitxiennuong", 2, "15 phút",
             Date(2022, 2,2), true,
             ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
 
-        foodRecipe= FoodRecipe(1, "Mực nướng Malaysia", R.drawable.mucnuongmalaysia, 2, "15 phút",
+        foodRecipe= FoodRecipe(1, "Mực nướng Malaysia", "mucnuongmalaysia", 2, "15 phút",
             Date(2022, 2,2), true,
             ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)
 
-        foodRecipe= FoodRecipe(1, "Thịt ba chỉ nướng mật ong", R.drawable.thitbachimatong, 2, "15 phút",
+        foodRecipe= FoodRecipe(1, "Thịt ba chỉ nướng mật ong", "thitbachimatong", 2, "15 phút",
             Date(2022, 2,2), true,
             ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
         result.add(foodRecipe)

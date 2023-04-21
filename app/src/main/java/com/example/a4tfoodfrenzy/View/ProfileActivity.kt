@@ -84,9 +84,9 @@ class ProfileActivity : AppCompatActivity() {
         }
 
 
-        val adapter = TabProfileAdapter(supportFragmentManager)
-        adapter.addFragment(TabFoodRecipeSaved(), "Món đã lưu")
-        adapter.addFragment(TabMyFoodRecipe(), "Món của tôi")
+        val adapter = TabProfileAdapter(this, supportFragmentManager)
+        adapter.addFragment(TabFoodRecipeSaved(this), "Món đã lưu")
+        adapter.addFragment(TabMyFoodRecipe(this), "Món của tôi")
         val view_pager = findViewById<ViewPager>(R.id.view_pager)
         view_pager.adapter = adapter
         val tabs = findViewById<TabLayout>(R.id.tab_layout)

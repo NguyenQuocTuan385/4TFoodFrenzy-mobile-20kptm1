@@ -5,7 +5,7 @@ import java.util.Date
 class FoodRecipe(
     private var _id: Int,
     private var _recipeName: String,
-    private var _recipeMainImage: Int,
+    private var _recipeMainImage: String?,
     private var _ration: Int,
     private var _cookTime: String,
     private var _date: Date,
@@ -25,7 +25,7 @@ class FoodRecipe(
     constructor(
         id: Int,
         recipeName: String,
-        recipeImage: Int,
+        recipeImage: String?,
         ration: Int,
         cookTime: String,
         date: Date,
@@ -70,7 +70,7 @@ class FoodRecipe(
             _recipeName = value
         }
 
-    var recipeMainImage: Int
+    var recipeMainImage: String?
         get() = _recipeMainImage
         set(value) {
             _recipeMainImage = value

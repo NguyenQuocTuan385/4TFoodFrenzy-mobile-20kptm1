@@ -1,6 +1,8 @@
 package com.example.a4tfoodfrenzy.Adapter
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -18,7 +20,7 @@ import com.example.a4tfoodfrenzy.View.ShowRecipeDetailsActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-class RecipeListInProfileAdapter(
+class RecipeListInProfileAdapter(private var context: Context,
     private var recipeRenderArray: ArrayList<FoodRecipe>,
     private var isRecipeSavedView: Boolean,
     private var isRecipeCreatedView: Boolean,
@@ -137,7 +139,10 @@ class RecipeListInProfileAdapter(
         val recipeRender: FoodRecipe = recipeRenderArray.get(position)
         // Set item views based on your views and data model
         val recipeIMG = holder.recipeIMG
-        recipeRender.recipeMainImage?.let { recipeIMG.setImageResource(it) }
+        val resources = context.getResources()
+        val resourceId = resources.getIdentifier(recipeRender.recipeMainImage, "drawable", context.packageName)
+        val bitmap = BitmapFactory.decodeResource(resources, resourceId)
+        recipeIMG.setImageBitmap(bitmap)
         val recipeName = holder.recipeName
         recipeName.text = recipeRender.recipeName
         val numOfLike = holder.numOfLike

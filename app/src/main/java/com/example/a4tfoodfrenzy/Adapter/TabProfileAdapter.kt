@@ -1,5 +1,6 @@
 package com.example.a4tfoodfrenzy.Adapter
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +18,7 @@ import com.example.a4tfoodfrenzy.R
 import java.util.*
 import kotlin.collections.ArrayList
 
-class TabProfileAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class TabProfileAdapter(private var context: Context,fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     private val mFragmentList = ArrayList<Fragment>()
     private val mTitleList = ArrayList<String>()
 
@@ -40,13 +41,13 @@ class TabProfileAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR
 }
 
 
-class TabFoodRecipeSaved : Fragment() {
+class TabFoodRecipeSaved(private var context: Context) : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.saved_recipe_in_profile, container, false)
         val recyclerView1 = view.findViewById<RecyclerView>(R.id.gridView1)
 
         val monAn = generateRecipeSaved()
-        val adapter = RecipeListInProfileAdapter(monAn, true, false)
+        val adapter = context?.let { RecipeListInProfileAdapter(it,monAn, true, false) }
         val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
         recyclerView1!!.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
         recyclerView1!!.adapter = adapter
@@ -59,7 +60,7 @@ class TabFoodRecipeSaved : Fragment() {
     private fun generateRecipeSaved(): ArrayList<FoodRecipe> {
         var result = ArrayList<FoodRecipe>()
         for (i in 0..10) {
-            val monAn1 = FoodRecipe(1, "Thịt ba chỉ nướng mật ong", R.drawable.thitbachimatong, 2, "15 phút",
+            val monAn1 = FoodRecipe(1, "Thịt ba chỉ nướng mật ong", "thitbachimatong", 2, "15 phút",
                 Date(2022, 2,2), true,
                 ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
             monAn1.authorName = "Đặng Ngọc Tiến"
@@ -69,13 +70,13 @@ class TabFoodRecipeSaved : Fragment() {
     }
 }
 
-class TabMyFoodRecipe : Fragment() {
+class TabMyFoodRecipe(private var context: Context) : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.created_recipe_in_profile, container, false)
         val recyclerView1 = view.findViewById<RecyclerView>(R.id.created_recipe_RV)
         val monAn = generateRecipeSaved()
 
-        val adapter = RecipeListInProfileAdapter(monAn, false, true)
+        val adapter = context?.let { RecipeListInProfileAdapter(it,monAn, false, true) }
         val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
         recyclerView1!!.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
         recyclerView1!!.adapter = adapter
@@ -87,7 +88,7 @@ class TabMyFoodRecipe : Fragment() {
 
     private fun generateRecipeSaved(): ArrayList<FoodRecipe> {
         var result = ArrayList<FoodRecipe>()
-            val monAn1 = FoodRecipe(1, "Mực nướng Malaysia", R.drawable.mucnuongmalaysia, 2, "15 phút",
+            val monAn1 = FoodRecipe(1, "Mực nướng Malaysia", "mucnuongmalaysia", 2, "15 phút",
                 Date(2022, 2,2), true,
                 ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
             result.add(monAn1)
