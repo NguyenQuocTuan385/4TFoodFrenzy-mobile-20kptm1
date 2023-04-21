@@ -1,6 +1,7 @@
 package com.example.a4tfoodfrenzy.Adapter
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -35,7 +36,10 @@ class UserAdapter(context: Context, list: ArrayList<User>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listItem[position]
         holder.name.text = item.fullname
-        holder.image.setImageResource(item.avatar)
+        val resources = context.getResources()
+        val resourceId = resources.getIdentifier(item.avatar, "drawable", context.packageName)
+        val bitmap = BitmapFactory.decodeResource(resources, resourceId)
+        holder.image.setImageBitmap(bitmap)
     }
 
 }

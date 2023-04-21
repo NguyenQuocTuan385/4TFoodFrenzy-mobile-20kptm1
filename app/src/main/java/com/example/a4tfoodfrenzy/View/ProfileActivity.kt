@@ -2,6 +2,7 @@ package com.example.a4tfoodfrenzy.View
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -130,23 +131,25 @@ class ProfileActivity : AppCompatActivity() {
         }
         else
         {
-            db.collection("users")
-                .document(user.uid)
-                .get()
-                .addOnSuccessListener { document ->
-                    val user = document.toObject(User::class.java)
-                    val name = findViewById<TextView>(R.id.name_profile)
-                    name.text = user?.fullname
-                    val avatar = findViewById<ImageView>(R.id.creatorImage)
-                    avatar.setImageResource(user?.avatar!!)
-                    val email = findViewById<TextView>(R.id.email_profile)
-                    email.text = user?.email
-                    Log.d("TAG", "DocumentSnapshot data: ${document.data}")
-
-                }
-                .addOnFailureListener { exception ->
-                    Log.w("hihi", "Error getting documents: ", exception)
-                }
+//            db.collection("users")
+//                .document(user.uid)
+//                .get()
+//                .addOnSuccessListener { document ->
+//                    val user = document.toObject(User::class.java)
+//                    val name = findViewById<TextView>(R.id.name_profile)
+//                    name.text = user?.fullname
+//                    val avatar = findViewById<ImageView>(R.id.creatorImage)
+//                    val resourceId = resources.getIdentifier(user?.avatar!!, "drawable", packageName)
+//                    val bitmap = BitmapFactory.decodeResource(resources, resourceId)
+//                    avatar.setImageBitmap(bitmap)
+//                    val email = findViewById<TextView>(R.id.email_profile)
+//                    email.text = user?.email
+//                    Log.d("TAG", "DocumentSnapshot data: ${document.data}")
+//
+//                }
+//                .addOnFailureListener { exception ->
+//                    Log.w("hihi", "Error getting documents: ", exception)
+//                }
 
         }
 

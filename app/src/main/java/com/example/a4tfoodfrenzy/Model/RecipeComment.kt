@@ -6,7 +6,7 @@ import androidx.annotation.RequiresApi
 import java.util.Date
 
 class RecipeComment(private var _isLike: Boolean,
-                    private var _image: Int,
+                    private var _image: String?,
                     private var _description: String,
                     private var _date: Date) : Parcelable
 {
@@ -19,7 +19,7 @@ class RecipeComment(private var _isLike: Boolean,
         _nameRecipe: String,
         _avatarUser: Int,
         _isLike: Boolean,
-        _image: Int,
+        _image: String?,
         _description: String,
         _date: Date
     ) : this(_isLike, _image, _description, _date) {
@@ -56,7 +56,7 @@ class RecipeComment(private var _isLike: Boolean,
         _isLike = value
     }
 
-    var image: Int
+    var image: String?
     get() = _image
     set(value) {
         _image = value
@@ -77,7 +77,7 @@ class RecipeComment(private var _isLike: Boolean,
     @RequiresApi(Build.VERSION_CODES.Q)
     constructor(parcel: android.os.Parcel) : this(
         parcel.readByte() != 0.toByte(),
-        parcel.readInt(),
+        parcel.readString(),
         parcel.readString() ?: "",
         Date(parcel.readLong())
     ) {
@@ -91,7 +91,7 @@ class RecipeComment(private var _isLike: Boolean,
         parcel.writeString(_username)
         parcel.writeString(_nameRecipe)
         parcel.writeInt(_avatarUser)
-        parcel.writeInt(_image)
+        parcel.writeString(_image)
         parcel.writeBoolean(_isLike)
         parcel.writeString(_description)
         parcel.writeLong(_date.time)

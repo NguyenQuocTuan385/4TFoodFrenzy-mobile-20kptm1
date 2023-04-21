@@ -3,6 +3,7 @@ package com.example.a4tfoodfrenzy.View
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -33,14 +34,14 @@ class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
             RecipeCookStep(
                 "1. Bắp bò rửa sơ để ráo\n" +
                         "2. Hành tây, xà lách, cà chua rửa sạch rồi để ráo nước",
-                R.drawable.bosotme2
+                "bosotme2"
             )
         )
         stepList.add(
             RecipeCookStep(
                 "1. Cho 1 muỗng canh dầu ăn vào làm nóng, chỉnh lửa vừa, phi thơm hành tỏi và cho bò vào xào trong 2 phút cho săn\n2. " +
                         "Cho gói sốt me vào đảo đều trong 3 phút. Nêm nếm lại cho vừa ăn\n3. Thêm hành tây vào xào sơ khoảng 1 phút rồi tắt bếp.",
-                R.drawable.bosotme5
+                "bosotme5"
             )
         )
         stepList.add(
@@ -48,14 +49,14 @@ class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
                 "1. Xếp rau, cà chua thái lát ra đĩa, cho bò lên trên. \n" +
                         "2. Rắc thêm mè để thêm phần hấp dẫn.\n" +
                         "3. Thưởng thức cùng bánh mì ngay khi còn nóng. Ngon hơn khi dùng với cơm nóng hoặc",
-                R.drawable.bosotme3
+                "bosotme3"
             )
         )
 
         stepList.add(
             RecipeCookStep(
                 "3. Thưởng thức cùng bánh mì ngay khi còn nóng. Ngon hơn khi dùng với cơm nóng hoặc",
-                R.drawable.bosotme4
+                "bosotme4"
             )
         )
 
@@ -109,7 +110,11 @@ class StepsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val step = stepsList[position]
 
-        holder.stepIMG.setImageResource(step.imageResource)
+        val resources = mainContext.getResources()
+        val resourceId = resources.getIdentifier(step.image, "drawable", mainContext.packageName)
+        val bitmap = BitmapFactory.decodeResource(resources, resourceId)
+        holder.stepIMG.setImageBitmap(bitmap)
+
         holder.stepInstruction.text = step.description
         holder.toolbar.title = "Bước ${position + 1}"
 

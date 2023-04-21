@@ -1,5 +1,7 @@
 package com.example.a4tfoodfrenzy.Adapter
 
+import android.content.Context
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +12,7 @@ import com.example.a4tfoodfrenzy.Model.RecipeComment
 import com.example.a4tfoodfrenzy.R
 import java.text.SimpleDateFormat
 
-class CommentListAdapter(
+class CommentListAdapter(private var context:Context,
     private var recipeCommentArray: ArrayList<RecipeComment>, private var isCmtListUserView: Boolean,
     private var isCmtListAdminView: Boolean
 ) : RecyclerView.Adapter<CommentListAdapter.ViewHolder>() {
@@ -91,11 +93,14 @@ class CommentListAdapter(
         val avatarIV = holder.avatarIV
         cmtRender.avatarUser?.let { avatarIV.setImageResource(it) }
         val foodIV = holder.foodIV
-        if (cmtRender.image == 0) {
+        if (cmtRender.image == null) {
             foodIV.visibility = View.GONE
         }
         else {
-            foodIV.setImageResource(cmtRender.image)
+            val resources = context.getResources()
+            val resourceId = resources.getIdentifier(cmtRender.image, "drawable", context.packageName)
+            val bitmap = BitmapFactory.decodeResource(resources, resourceId)
+            foodIV.setImageBitmap(bitmap)
         }
     }
 }

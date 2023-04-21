@@ -87,7 +87,7 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
                                                     userFullName!!,
                                                     null,
                                                     "",
-                                                    R.drawable.defaultavt,
+                                                    "defaultavt",
                                                     arrayListOf(),
                                                     arrayListOf(),
                                                     arrayListOf()

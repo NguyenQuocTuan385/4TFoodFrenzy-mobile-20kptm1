@@ -29,7 +29,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
     private fun createStepList():ArrayList<RecipeCookStep>{
         val list= arrayListOf<RecipeCookStep>()
         for (i in 1..6) {
-            list.add(RecipeCookStep("Lọc bớt mỡ và rửa sạch miếng thịt lợn sữa", R.drawable.monan1))
+            list.add(RecipeCookStep("Lọc bớt mỡ và rửa sạch miếng thịt lợn sữa", "monan1"))
         }
         return list
     }

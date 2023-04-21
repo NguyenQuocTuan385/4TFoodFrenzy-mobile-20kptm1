@@ -1,6 +1,7 @@
 package com.example.a4tfoodfrenzy.Adapter
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +26,6 @@ class AddStepAdapter(context: Context, list:ArrayList<RecipeCookStep>)
                 popMenus(it)
             }
         }
-
     }
     private fun popMenus(v:View)
     {
@@ -48,7 +48,10 @@ class AddStepAdapter(context: Context, list:ArrayList<RecipeCookStep>)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item=listItem[position]
         holder.step.text="Bước ${position+1}"
-        holder.image.setImageResource(item.imageResource)
+        val resources = context.getResources()
+        val resourceId = resources.getIdentifier(item.image, "drawable", context.packageName)
+        val bitmap = BitmapFactory.decodeResource(resources, resourceId)
+        holder.image.setImageBitmap(bitmap)
         holder.des.text=item.description
     }
 

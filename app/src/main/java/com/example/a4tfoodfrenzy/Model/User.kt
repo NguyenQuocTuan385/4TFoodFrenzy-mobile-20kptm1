@@ -8,12 +8,12 @@ class User(
     private var _fullname: String,
     private var _birthday: Date?,
     private var _bio: String,
-    private var _avatar: Int,
+    private var _avatar: String,
     private var _recipeCmts: ArrayList<Int>,
     private var _myFoodRecipes: ArrayList<Int>,
     private var _foodRecipeSaved: ArrayList<Int>
 ) {
-    constructor() : this(0, "", "", null, "", 0, ArrayList(), ArrayList(), ArrayList())
+    constructor() : this(0, "", "", null, "", "", ArrayList(), ArrayList(), ArrayList())
 
     var id: Int
         get() = _id
@@ -46,7 +46,7 @@ class User(
             _bio = value
         }
 
-    var avatar: Int
+    var avatar: String
         get() = _avatar
         set(value) {
             _avatar = value

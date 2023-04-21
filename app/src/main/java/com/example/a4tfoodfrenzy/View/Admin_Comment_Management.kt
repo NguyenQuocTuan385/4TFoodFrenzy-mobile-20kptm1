@@ -41,7 +41,7 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "Bún bò huế",
                 R.drawable.avt,
                 true,
-                R.drawable.bokho,
+                "bokho",
                 "Rất ngon và đơn giản",
                 Date()
             )
@@ -52,7 +52,7 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "Bún bò huế",
                 R.drawable.avt,
                 true,
-                0,
+                null,
                 "Đẹp quá",
                 Date()
             )
@@ -63,7 +63,7 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "Bún bò huế",
                 R.drawable.avt,
                 true,
-                R.drawable.comrangduabo,
+                "comrangduabo",
                 "Ngon như Hiền Phương ??",
                 Date()
             )
@@ -74,7 +74,7 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "Bún bò huế",
                 R.drawable.avt,
                 true,
-                R.drawable.thitxiennuong,
+                "thitxiennuong",
                 "Ngon như Bao Tran nhà em vậydâdadadasdsadasdasdasdsadasdadasdsdadsad",
                 Date()
             )
@@ -85,7 +85,7 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "Bún bò huế",
                 R.drawable.avt,
                 true,
-                R.drawable.thitxiennuong,
+                "thitxiennuong",
                 "Ngon như Hong Suong nhà em vậydâdadadasdsadasdasdasdsadasdadasdsdadsad",
                 Date()
             )
@@ -96,12 +96,12 @@ class Admin_Comment_Management : AppCompatActivity() {
                 "Bún bò huế",
                 R.drawable.avt,
                 true,
-                R.drawable.thitxiennuong,
+                "thitxiennuong",
                 "Ngon như Dieu Trang nhà em vậydâdadadasdsadasdasdasdsadasdadasdsdadsad",
                 Date()
             )
         )
-        adapterCmtRV = CommentListAdapter(recipeCommentList, false, true)
+        adapterCmtRV = CommentListAdapter(this,recipeCommentList, false, true)
         commentRV.adapter = adapterCmtRV
         commentRV.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
