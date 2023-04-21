@@ -1,12 +1,14 @@
 package com.example.a4tfoodfrenzy.View
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
@@ -20,6 +22,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginBtn: Button
     private lateinit var emailInput: TextInputLayout
     private lateinit var passwordInput: TextInputLayout
+    private lateinit var pDialog:SweetAlertDialog
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +36,8 @@ class LoginActivity : AppCompatActivity() {
         loginBtn=findViewById(R.id.loginBtn)
         emailInput=findViewById(R.id.emailInput)
         passwordInput=findViewById(R.id.passwordInput)
+        pDialog=  SweetAlertDialog(this,SweetAlertDialog.PROGRESS_TYPE)
+
 
 
         toolbarLogin.setNavigationOnClickListener {
@@ -47,8 +53,10 @@ class LoginActivity : AppCompatActivity() {
         loginBtn.setOnClickListener {
             val email= emailInput.editText?.text.toString()
             val password= passwordInput.editText?.text.toString()
+            showLoadingAlert()
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
+                    stopLoadingAlert()
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         val user = auth.currentUser
@@ -56,12 +64,31 @@ class LoginActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     } else {
-                        // If sign in fails, display a message to the user.
-                        Toast.makeText(baseContext, "Authentication failed.",
-                            Toast.LENGTH_SHORT).show()
+                      showErrorAlert()
                     }
                 }
 
         }
+    }
+    private fun showLoadingAlert()
+    {
+        pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+        pDialog.progressHelper.barColor = Color.parseColor("#FFB200")
+        pDialog.titleText = "Vui lòng đợi..."
+        pDialog.setCancelable(false)
+        pDialog.show()
+    }
+    private fun stopLoadingAlert()
+    {
+        pDialog.cancel()
+    }
+    private fun showErrorAlert() {
+        val sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+        sweetAlertDialog.setTitleText("Thất bại")
+        sweetAlertDialog.setContentText("Bạn vui lòng đăng nhập lại")
+        sweetAlertDialog.setConfirmButton("OK") {
+            it.dismissWithAnimation()
+        }
+        sweetAlertDialog.show()
     }
 }

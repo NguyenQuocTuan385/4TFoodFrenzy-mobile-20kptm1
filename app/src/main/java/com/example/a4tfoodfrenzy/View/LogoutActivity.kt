@@ -1,9 +1,11 @@
 package com.example.a4tfoodfrenzy.View
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -46,4 +48,5 @@ class LogoutActivity: AppCompatActivity() {
             }
         }
     }
+
 }

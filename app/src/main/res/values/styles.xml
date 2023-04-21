@@ -21,4 +21,9 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="progressBarTheme" parent="">
+        <item name="colorSecondary">@color/SecondaryColor</item>
+    </style>
+
+
 </resources>

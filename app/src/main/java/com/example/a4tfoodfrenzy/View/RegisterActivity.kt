@@ -1,6 +1,8 @@
 package com.example.a4tfoodfrenzy.View
 
+import android.app.ProgressDialog
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +29,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var passwordInput: EditText
     private lateinit var createBtn: Button
     private lateinit var db:FirebaseFirestore
+    private lateinit var pDialog:SweetAlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +46,7 @@ class RegisterActivity : AppCompatActivity() {
         emailInput = findViewById(R.id.email)
         passwordInput = findViewById(R.id.password)
         createBtn = findViewById(R.id.btnCreateAccount)
+        pDialog=  SweetAlertDialog(this,SweetAlertDialog.PROGRESS_TYPE)
     }
 
     private fun initListeners() {
@@ -55,6 +60,7 @@ class RegisterActivity : AppCompatActivity() {
 
 
     private fun createAccount() {
+        showLoadingAlert()
         val name = nameInput.text.toString()
         val email = emailInput.text.toString()
         val password = passwordInput.text.toString()
@@ -67,9 +73,9 @@ class RegisterActivity : AppCompatActivity() {
                     if (user != null) {
                         writeUserProfileToFirestore(user.uid, profile)
                     }
-                    showSuccessMessage()
                 } else {
-                    showErrorMessage()
+                    stopLoadingAlert()
+                    showErrorAlert()
                 }
             }
     }
@@ -79,21 +85,50 @@ class RegisterActivity : AppCompatActivity() {
         db.collection("users").document(userId)
             .set(profile)
             .addOnSuccessListener {
-                val intent= Intent(this,LoginActivity::class.java)
-                startActivity(intent)
+                stopLoadingAlert()
+                showSuccessAlert()
                 Log.d("hihi", "DocumentSnapshot successfully written!")
             }
             .addOnFailureListener { e ->
+                stopLoadingAlert()
+                showErrorAlert()
                 Log.w("hihi", "Error writing document", e)
             }
     }
 
-    private fun showSuccessMessage() {
-        Toast.makeText(this, "Tạo thành công", Toast.LENGTH_SHORT).show()
-    }
 
-    private fun showErrorMessage() {
-        Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
+    private fun showSuccessAlert() {
+        val sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+        sweetAlertDialog.setTitleText("Thành công")
+        sweetAlertDialog.setContentText("Bạn đã đăng ký thành công")
+        sweetAlertDialog.setConfirmButton("OK") {
+            it.dismissWithAnimation()
+            val intent= Intent(this,LoginActivity::class.java)
+            startActivity(intent)
+        }
+        sweetAlertDialog.setCancelable(false)
+        sweetAlertDialog.show()
+    }
+    private fun showErrorAlert() {
+        val sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+        sweetAlertDialog.setTitleText("Thất bại")
+        sweetAlertDialog.setContentText("Bạn vui lòng thực hiện lại")
+        sweetAlertDialog.setConfirmButton("OK") {
+            it.dismissWithAnimation()
+        }
+        sweetAlertDialog.show()
+    }
+    private fun showLoadingAlert()
+    {
+        pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+        pDialog.progressHelper.barColor = Color.parseColor("#FFB200")
+        pDialog.titleText = "Vui lòng đợi..."
+        pDialog.setCancelable(false)
+        pDialog.show()
+    }
+    private fun stopLoadingAlert()
+    {
+        pDialog.cancel()
     }
 
 }
