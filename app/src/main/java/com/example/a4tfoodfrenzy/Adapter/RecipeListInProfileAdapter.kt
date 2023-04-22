@@ -152,6 +152,6 @@ class RecipeListInProfileAdapter(private var context: Context,
         val authorAvatarIMG = holder.authorAvatarIMG
         recipeRender.authorAvatar?.let { authorAvatarIMG.setImageResource(it) }
         val uploadDate = holder.uploadDate
-        uploadDate.text = recipeRender.uploadDate.toString()
+        uploadDate.text = recipeRender.date.toString()
     }
 }

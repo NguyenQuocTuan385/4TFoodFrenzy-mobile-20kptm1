@@ -4,6 +4,7 @@ class RecipeCookStep(
     private var _description: String,
     private var _image: String?
 ) {
+    constructor():this("",null)
     var description: String
         get() = _description
         set(value) {

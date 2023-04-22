@@ -62,7 +62,7 @@ class TabFoodRecipeSaved(private var context: Context) : Fragment() {
         for (i in 0..10) {
             val monAn1 = FoodRecipe(1, "Thịt ba chỉ nướng mật ong", "thitbachimatong", 2, "15 phút",
                 Date(2022, 2,2), true,
-                ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
+                ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(),"Đặng Ngọc Tiến",R.drawable.defaultavt,0)
             monAn1.authorName = "Đặng Ngọc Tiến"
             result.add(monAn1)
         }
@@ -91,6 +91,7 @@ class TabMyFoodRecipe(private var context: Context) : Fragment() {
             val monAn1 = FoodRecipe(1, "Mực nướng Malaysia", "mucnuongmalaysia", 2, "15 phút",
                 Date(2022, 2,2), true,
                 ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
+
             result.add(monAn1)
         return result
     }

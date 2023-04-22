@@ -2,8 +2,6 @@ package com.example.a4tfoodfrenzy.View
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,10 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.RecipeCateListAdapter
 import com.example.a4tfoodfrenzy.Adapter.RecipeListAdapter
+import com.example.a4tfoodfrenzy.Helper.GenerateDBModel
 import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -31,12 +32,17 @@ class MainActivity : AppCompatActivity() {
     var adapterRecipeMostLikesRV: RecipeListAdapter? = null
     val db = Firebase.firestore
     val storage = FirebaseStorage.getInstance()
+    val generateDBModel = GenerateDBModel(this)
     @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val cateRecipeRV = findViewById<RecyclerView>(R.id.cateRecipeRV)
+        val recipeTodayEatRV = findViewById<RecyclerView>(R.id.recipeTodayEatRV)
+        val recipeMostLikesRV = findViewById<RecyclerView>(R.id.recipeMostLikesRV)
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
+
         var cateRecipeList = generateCateRecipeData() //implemened below
 
         adapterCateRecipeRV = RecipeCateListAdapter(cateRecipeList, true, false)
@@ -47,24 +53,24 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val recipeTodayEatRV = findViewById<RecyclerView>(R.id.recipeTodayEatRV)
-        var recipeTodayEat = generateRecipeTodayEatData() //implemened below
-        adapterRecipeTodayEatRV = RecipeListAdapter(this, recipeTodayEat)
-        recipeTodayEatRV!!.adapter = adapterRecipeTodayEatRV
-        recipeTodayEatRV!!.layoutManager = GridLayoutManager(this, 3)
-        adapterRecipeTodayEatRV!!.onItemClick = { foodRecipe, i ->
-            val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
-            startActivity(intent)
+        generateRecipeTodayEatData() {recipeTodayEat ->
+            adapterRecipeTodayEatRV = RecipeListAdapter(this, recipeTodayEat)
+            recipeTodayEatRV!!.adapter = adapterRecipeTodayEatRV
+            recipeTodayEatRV!!.layoutManager = GridLayoutManager(this, 3)
+            adapterRecipeTodayEatRV!!.onItemClick = { foodRecipe, i ->
+                val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
+                startActivity(intent)
+            }
         }
 
-        val recipeMostLikesRV = findViewById<RecyclerView>(R.id.recipeMostLikesRV)
-        var recipeMostLikes = generateRecipeMostLikesData() //implemened below
-        adapterRecipeMostLikesRV = RecipeListAdapter(this, recipeMostLikes)
-        recipeMostLikesRV!!.adapter = adapterRecipeMostLikesRV
-        recipeMostLikesRV!!.layoutManager = GridLayoutManager(this, 3)
-        adapterRecipeMostLikesRV!!.onItemClick = { foodRecipe, i ->
-            val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
-            startActivity(intent)
+        generateRecipeMostLikesData() {recipeMostLikes ->
+            adapterRecipeMostLikesRV = RecipeListAdapter(this, recipeMostLikes)
+            recipeMostLikesRV!!.adapter = adapterRecipeMostLikesRV
+            recipeMostLikesRV!!.layoutManager = GridLayoutManager(this, 3)
+            adapterRecipeMostLikesRV!!.onItemClick = { foodRecipe, i ->
+                val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         findViewById<LinearLayout>(R.id.searchLL).setOnClickListener {
@@ -80,7 +86,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
         val menu = bottomNavigationView.menu
 
         menu.findItem(R.id.home).isChecked = true
@@ -108,11 +113,11 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-//        generateDatabaseRecipeFoodCate()
-//        generateDatabaseRecipeComment()
-//        generateDatabaseRecipeDiets()
-//        generateDatabaseRecipeFood()
-//        generateDatabaseUsers()
+//        generateDBModel.generateDatabaseRecipeFoodCate()
+//        generateDBModel.generateDatabaseRecipeComment()
+//        generateDBModel.generateDatabaseRecipeDiets()
+//        generateDBModel.generateDatabaseRecipeFood()
+//        generateDBModel.generateDatabaseUsers()
     }
     fun generateCateRecipeData(): ArrayList<RecipeCategorySuggest> {
         var result = ArrayList<RecipeCategorySuggest>()
@@ -145,79 +150,82 @@ class MainActivity : AppCompatActivity() {
 
         return result
     }
-    fun generateRecipeTodayEatData(): ArrayList<FoodRecipe> {
+    fun generateRecipeTodayEatData(callback:(ArrayList<FoodRecipe>) -> Unit ) {
         var result = ArrayList<FoodRecipe>()
 
-        var foodRecipe: FoodRecipe = FoodRecipe(1, "Canh khổ qua nhồi thịt",
-            "khoquanhoithit", 2, "15 phút",
-            Date(2022, 2,2), true,
-            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-        result.add(foodRecipe)
+        val randomIndex = (0..10).random() // lấy ngẫu nhiên một số từ 0 đến 10
+        val recipesCollection = db.collection("RecipeFoods")
+        val recipeQuery = recipesCollection.orderBy(FieldPath.documentId())
+            .startAt(randomIndex.toString()).limit(6)
+        recipeQuery.get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot) {
+                    val foodRecipe = document.toObject(FoodRecipe::class.java)
+                    result.add(foodRecipe)
+                }
+                callback(result)
+            }
+            .addOnFailureListener { exception ->
+                Log.d("TAG", "Error getting documents: ", exception)
+                callback(arrayListOf())
+            }
 
-        foodRecipe = FoodRecipe(1, "Canh chua cá lóc", "canhcaloc", 2, "15 phút",
-            Date(2022, 2,2), true,
-            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-        result.add(foodRecipe)
-
-
-        foodRecipe = FoodRecipe(1, "Bò sốt me", "bosotme", 2, "15 phút",
-            Date(2022, 2,2), true,
-            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-        result.add(foodRecipe)
-
-        foodRecipe = FoodRecipe(1, "Bò kho", "bokho", 2, "15 phút",
-            Date(2022, 2,2), true,
-            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-        result.add(foodRecipe)
-
-        foodRecipe = FoodRecipe(1, "Bún bò huế","bunbohue", 2, "15 phút",
-            Date(2022, 2,2), true,
-            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-        result.add(foodRecipe)
-
-        foodRecipe = FoodRecipe(1, "Bưởi trộn khô gà", "buoitronkhoga", 2, "15 phút",
-            Date(2022, 2,2), true,
-            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-        result.add(foodRecipe)
-
-        return result
     }
 
-    fun generateRecipeMostLikesData(): ArrayList<FoodRecipe> {
+    fun generateRecipeMostLikesData(callback:(ArrayList<FoodRecipe>) -> Unit ) {
         var result = ArrayList<FoodRecipe>()
 
-        var foodRecipe = FoodRecipe(1, "Cơm rang dưa bò", "comrangduabo", 2, "15 phút",
-            Date(2022, 2,2), true,
-            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-        result.add(foodRecipe)
+        val recipesCollection = db.collection("RecipeFoods").orderBy("numOfLikes").limit(6)
 
-        foodRecipe= FoodRecipe(1, "Mì trứng xào bò", "mitrungxaobo", 2, "15 phút",
-            Date(2022, 2,2), true,
-            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-        result.add(foodRecipe)
+        recipesCollection.get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot) {
+                    val foodRecipe = document.toObject(FoodRecipe::class.java)
+                    result.add(foodRecipe)
+                }
+                callback(result)
+            }
+            .addOnFailureListener { exception ->
+                Log.d("TAG", "Error getting documents: ", exception)
+                callback(arrayListOf())
+            }
 
-
-        foodRecipe= FoodRecipe(1, "Mì quảng gà", "miquangga", 2, "15 phút",
-            Date(2022, 2,2), true,
-            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-        result.add(foodRecipe)
-
-        foodRecipe= FoodRecipe(1, "Thịt xiên nướng cà ri", "thitxiennuong", 2, "15 phút",
-            Date(2022, 2,2), true,
-            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-        result.add(foodRecipe)
-
-        foodRecipe= FoodRecipe(1, "Mực nướng Malaysia", "mucnuongmalaysia", 2, "15 phút",
-            Date(2022, 2,2), true,
-            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-        result.add(foodRecipe)
-
-        foodRecipe= FoodRecipe(1, "Thịt ba chỉ nướng mật ong", "thitbachimatong", 2, "15 phút",
-            Date(2022, 2,2), true,
-            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-        result.add(foodRecipe)
-
-        return result
     }
+//    fun generateRecipeMostLikesData(): ArrayList<FoodRecipe> {
+//        var result = ArrayList<FoodRecipe>()
+//
+//        var foodRecipe = FoodRecipe(1, "Cơm rang dưa bò", "comrangduabo", 2, "15 phút",
+//            Date(2022, 2,2), true,
+//            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
+//        result.add(foodRecipe)
+//
+//        foodRecipe= FoodRecipe(1, "Mì trứng xào bò", "mitrungxaobo", 2, "15 phút",
+//            Date(2022, 2,2), true,
+//            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
+//        result.add(foodRecipe)
+//
+//
+//        foodRecipe= FoodRecipe(1, "Mì quảng gà", "miquangga", 2, "15 phút",
+//            Date(2022, 2,2), true,
+//            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
+//        result.add(foodRecipe)
+//
+//        foodRecipe= FoodRecipe(1, "Thịt xiên nướng cà ri", "thitxiennuong", 2, "15 phút",
+//            Date(2022, 2,2), true,
+//            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
+//        result.add(foodRecipe)
+//
+//        foodRecipe= FoodRecipe(1, "Mực nướng Malaysia", "mucnuongmalaysia", 2, "15 phút",
+//            Date(2022, 2,2), true,
+//            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
+//        result.add(foodRecipe)
+//
+//        foodRecipe= FoodRecipe(1, "Thịt ba chỉ nướng mật ong", "thitbachimatong", 2, "15 phút",
+//            Date(2022, 2,2), true,
+//            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
+//        result.add(foodRecipe)
+//
+//        return result
+//    }
 
 }

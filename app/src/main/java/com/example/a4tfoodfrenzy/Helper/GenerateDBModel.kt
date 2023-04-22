@@ -293,7 +293,7 @@ class GenerateDBModel(private var context: Context) {
         }
     }
 
-    private fun generateDatabaseRecipeFood(){
+    fun generateDatabaseRecipeFood(){
         var result = ArrayList<FoodRecipe>()
 
         var listIngredient=ArrayList<RecipeIngredient>()
@@ -338,7 +338,7 @@ class GenerateDBModel(private var context: Context) {
             RecipeCookStep(
                 "Sơ chế, rửa sạch nguyên vật liệu, để ráo nước hoàn toàn, tiến hành cắt thái\n" +
                         "- Cá ngừ rã đông ở nhiệt độ mát, sau đó rửa sạch",
-                "foods/foodrecipe1_1"
+                "foods/foodrecipe1_1.png"
             )
         )
 
@@ -346,19 +346,19 @@ class GenerateDBModel(private var context: Context) {
             RecipeCookStep(
                 "Đặt chảo lên bếp mở lửa vừa cho 100gr dầu ăn vào làm nóng, sau đó cho cá ngừ vào chiên vàng đều 2 mặt, vớt ra thấm ráo dầu.\n" +
                         "Chuẩn bị chảo khác, mở lửa vừa cho 50gr nước cùng với xốt cà chua, cá ngừ đã chiên vàng vào nấu thêm khoảng 5 phút, nêm nếm cho vừa ăn thì tắt bếp.",
-                "foods/foodrecipe1_2"
+                "foods/foodrecipe1_2.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Cho món ăn ra dĩa và thưởng thúc cùng với cơm trắng",
-                "foods/foodrecipe1_3"
+                "foods/foodrecipe1_3.png"
             )
         )
 
         var mon_an_1=
-            FoodRecipe(1,"Cá ngừ chiên sốt gà","foods/foodrecipe1_3",2,"Dưới 30 phút", Date(),true,
+            FoodRecipe(1,"Cá ngừ chiên sốt gà","foods/foodrecipe1_3.png",2,"Dưới 30 phút", Date(),true,
             arrayListOf(2),listStep,listIngredient,
             arrayListOf(1,2),
             arrayListOf(1,2,5,10),"Hiền Phương", R.drawable.defaultavt,15)
@@ -376,28 +376,28 @@ class GenerateDBModel(private var context: Context) {
         listStep.add(
             RecipeCookStep(
                 "Rửa sạch các nguyên liệu đã sơ chế để ráo nước. Ướp cá và thịt ba rọi với sốt gia vị trong vòng 10 phút.",
-                "foods/foodrecipe2_1"
+                "foods/foodrecipe2_1.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Cho 1 muỗng canh dầu ăn vào nồi làm nóng. Băm nhuyễn hành tím, tỏi cho vào phi thơm. Cho hỗn hợp cá, thịt ba rọi đã ướp vào đảo nhẹ tay 2 - 3 phút cho thịt và cá hơi săn lại. Thêm 100ml nước lọc vào, kho lửa liu riu 15 phút đến khi nước hơi sệt sệt lại. Nêm nếm lần cuối cho vừa ăn rồi tắt bếp.",
-                "foods/foodrecipe2_2"
+                "foods/foodrecipe2_2.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Cho cá hú kho thịt ba rọi ra đĩa, rắc ít hành lá cắt nhuyễn.",
-                "foods/foodrecipe2_3"
+                "foods/foodrecipe2_3.png"
             )
         )
 
         var mon_an_2= FoodRecipe(
             2,
             "Cá Hú Kho Thịt Ba Rọi Heo",
-            "foods/foodrecipe2_3",
+            "foods/foodrecipe2_3.png",
             2,
             "Dưới 30 phút",
             Date(),
@@ -424,26 +424,26 @@ class GenerateDBModel(private var context: Context) {
             RecipeCookStep(
                 "Sơ chế, rửa sạch nguyên vật liệu, để ráo nước hoàn toàn, tiến hành cắt thái\n" +
                         "Mọc rã đông ở nhiệt độ mát.",
-                "foods/foodrecipe3_1"
+                "foods/foodrecipe3_1.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Chuẩn bị chảo mở lửa vừa cho 50gr nước cùng với xốt cà chua, mọc viên vào đảo đều khoảng 5 phút, nêm nếm cho vừa ăn thì tắt bếp.",
-                "foods/foodrecipe3_2"
+                "foods/foodrecipe3_2.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Cho món ăn ra dĩa và thưởng thúc cùng với cơm trắng.",
-                "foods/foodrecipe3_3"
+                "foods/foodrecipe3_3.png"
             )
         )
 
         var mon_an_3=
-            FoodRecipe(3,"Mọc Viên Xốt Cà","foods/foodrecipe3_3",2,"Dưới 30 phút", Date(),true,
+            FoodRecipe(3,"Mọc Viên Xốt Cà","foods/foodrecipe3_3.png",2,"Dưới 30 phút", Date(),true,
             arrayListOf(2),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(1,2,5,6,10),"Đặng Ngọc Tiến", R.drawable.avt,8)
@@ -459,34 +459,34 @@ class GenerateDBModel(private var context: Context) {
         listStep.add(
             RecipeCookStep(
                 "Rửa sạch các nguyên liệu đã sơ chế, để ráo nước. Rau om, ngò gai cắt nhỏ. Khoai mỡ bào nhuyễn.",
-                "foods/foodrecipe4_1"
+                "foods/foodrecipe4_1.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Đặt nồi lên bếp, cho 2 muỗng canh dầu ăn vào rồi cho thịt heo xay vào xào săn lại. Sau đó, rót 750ml nước lọc vào nồi đun sôi lên.",
-                "foods/foodrecipe4_2"
+                "foods/foodrecipe4_2.png"
             )
         )
         listStep.add(
             RecipeCookStep(
                 "Tiếp đến, cho khoai mỡ vào nấu 15 phút. Từ từ cho gói gia vị hoàn chỉnh món canh rau củ vào khuấy đều. Khi khoai đã nhừ, dùng muỗng canh tán thêm cho nhuyễn. Cho ngò gai, rau om lên mặt, nêm nếm lại cho vừa ăn rồi tắt bếp.",
-                "foods/foodrecipe4_3"
+                "foods/foodrecipe4_3.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Bày món ăn ra tô, rắc một ít tiêu xay lên mặt và thưởng thức. Món canh ngon hơn khi ăn nóng cùng cơm trắng.",
-                "foods/foodrecipe4_4"
+                "foods/foodrecipe4_4.png"
             )
         )
 
         var mon_an_4 = FoodRecipe(
             4,
             "Canh Thịt Bằm Nấu Khoai Mỡ",
-            "foods/foodrecipe4_4",
+            "foods/foodrecipe4_4.png",
             2,
             "Dưới 30 phút",
             Date(),
@@ -515,32 +515,32 @@ class GenerateDBModel(private var context: Context) {
                         "- Hành tây, hành boa rô băm nhỏ\n" +
                         "- Hành lá, ớt cắt nhỏ\n" +
                         "- Nấm đông cô cắt hạt lựu nhỏ.",
-                "foods/foodrecipe5_1"
+                "foods/foodrecipe5_1.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Bắt nồi lên bếp cho 500ml nước lọc vào đun sôi sau đó cho nguyên miếng đậu hủ vào luộc 5 phút rồi vớt ra cho ráo nước, cắt thành miếng vừa ăn rồi xếp ra đĩa.",
-                "foods/foodrecipe5_2"
+                "foods/foodrecipe5_2.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Bắt chảo lên bếp cho 20gr canh dầu ăn vào làm nóng, sau đó cho hành boa rô, hành tây vào phi thơm, tiếp tục cho thêm 150ml nước lọc và gói 2 sốt xào chay vào nấu khoảng 5 phút để xốt sệt lại, nêm nếm lại cho vừa ăn rồi tắt bếp.",
-                "foods/foodrecipe5_3"
+                "foods/foodrecipe5_3.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Rưới xốt nấm vừa nấu xong lên đĩa đậu hủ rắc thêm hành lá, ớt cắt nhỏ lên và thưởng thức. Ăn kèm với cơm trắng",
-                "foods/foodrecipe5_4"
+                "foods/foodrecipe5_4.png"
             )
         )
 
-        var mon_an_5= FoodRecipe(5,"Đậu Hũ Xốt Nấm Đông Cô Chay","foods/foodrecipe5_4",2,"Dưới 30 phút",
+        var mon_an_5= FoodRecipe(5,"Đậu Hũ Xốt Nấm Đông Cô Chay","foods/foodrecipe5_4.png",2,"Dưới 30 phút",
             Date(),true,
             arrayListOf(1),listStep,listIngredient,
             arrayListOf(5,6,7),
@@ -560,7 +560,7 @@ class GenerateDBModel(private var context: Context) {
                 "Sơ chế, rửa sạch nguyên vật liệu, để ráo nước hoàn toàn, tiến hành cắt thái\n" +
                         "- Hành lá, ớt cắt nhỏ\n" +
                         "- Cá lóc rã đông ở nhiệt độ mát, rửa sạch, ướp với xốt kho tộ khoảng 30 phút",
-                "foods/foodrecipe6_1"
+                "foods/foodrecipe6_1.png"
             )
         )
 
@@ -568,21 +568,21 @@ class GenerateDBModel(private var context: Context) {
             RecipeCookStep(
                 "- Chuẩn bị chảo cho cá đã ướp và 200ml nước vào kho với lửa nhỏ, khoảng 15 phút\n" +
                         "- Nêm nếm lại cho vừa ăn, cuối cùng cho hành lá, ớt rồi tắt bếp.",
-                "foods/foodrecipe6_2"
+                "foods/foodrecipe6_2.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Ăn kèm với cơm trắng",
-                "foods/foodrecipe6_3"
+                "foods/foodrecipe6_3.png"
             )
         )
 
         var mon_an_6= FoodRecipe(
             6,
             "Cá Lóc Kho Tộ",
-            "foods/foodrecipe6_3",
+            "foods/foodrecipe6_3.png",
             2,
             "Dưới 30 phút",
             Date(),
@@ -611,7 +611,7 @@ class GenerateDBModel(private var context: Context) {
                         "- Hành lá, ớt cắt nhỏ\n" +
                         "- Tiêu xanh đập dập\n" +
                         "- Sườn cốt lết rửa sạch, cắt miếng nhỏ vừa ăn, ướp với xốt kho tộ khoảng 30 phút",
-                "foods/foodrecipe7_1"
+                "foods/foodrecipe7_1.png"
             )
         )
 
@@ -619,18 +619,18 @@ class GenerateDBModel(private var context: Context) {
             RecipeCookStep(
                 "Chuẩn bị chảo cho sườn cốt lết đã ướp, tiêu xanh và 200ml nước vào kho với lửa nhỏ, khoảng 15 phút\n" +
                         "Nêm nếm lại cho vừa ăn, cuối cùng cho hành lá, ớt, tiêu xay rồi tắt bếp.",
-                "foods/foodrecipe7_2"
+                "foods/foodrecipe7_2.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Ăn kèm với cơm trắng",
-                "foods/foodrecipe7_3"
+                "foods/foodrecipe7_3.png"
             )
         )
 
-        var mon_an_7= FoodRecipe(7,"Sườn Cốt Lết Heo Kho Tiêu","foods/foodrecipe7_3",2,"Dưới 30 phút",
+        var mon_an_7= FoodRecipe(7,"Sườn Cốt Lết Heo Kho Tiêu","foods/foodrecipe7_3.png",2,"Dưới 30 phút",
             Date(),true,
             arrayListOf(2),listStep,listIngredient,
             arrayListOf(),
@@ -651,26 +651,26 @@ class GenerateDBModel(private var context: Context) {
                 "Sơ chế, rửa sạch nguyên vật liệu, để ráo nước hoàn toàn, tiến hành cắt thái\n" +
                         "- Gừng cắt sợi nhỏ vừa ăn\n" +
                         "- Thịt vịt rã đông ở nhiệt độ mát, rửa sạch, ướp với xốt kho tộ khoảng 30 phút",
-                "foods/foodrecipe8_1"
+                "foods/foodrecipe8_1.png"
             )
         )
         listStep.add(
             RecipeCookStep(
                 "Chuẩn bị chảo cho thịt vịt đã ướp, gừng và 200ml nước vào kho với lửa vừa, khoảng 20 phút.\n" +
                         "Nêm nếm lại cho vừa ăn rồi tắt bếp.",
-                "foods/foodrecipe8_2"
+                "foods/foodrecipe8_2.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Ăn kèm với cơm trắng",
-                "foods/foodrecipe8_3"
+                "foods/foodrecipe8_3.png"
             )
         )
 
         var mon_an_8=
-            FoodRecipe(8,"Vịt Kho Gừng","foods/foodrecipe8_3",2,"Dưới 30 phút", Date(),true,
+            FoodRecipe(8,"Vịt Kho Gừng","foods/foodrecipe8_3.png",2,"Dưới 30 phút", Date(),true,
             arrayListOf(2),listStep,listIngredient,
             arrayListOf(11,12,13),
             arrayListOf(6),"Ngọc Thư", R.drawable.defaultavt,5)
@@ -687,19 +687,19 @@ class GenerateDBModel(private var context: Context) {
         listStep.add(
             RecipeCookStep(
                 "Thịt bò ướp 1g dầu hào, tỏi băm, 5g bột bắp. Phi tỏi thơm xào chín\n",
-                "foods/foodrecipe9_1"
+                "foods/foodrecipe9_1.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Bông cải hấp chín, xào sơ hoặc chứ thế thêm vào đĩa với bò xào, rắc xíu rong biển.\n",
-                "foods/foodrecipe9_2"
+                "foods/foodrecipe9_2.png"
             )
         )
 
         var mon_an_9=
-            FoodRecipe(9,"Cơm Bò Xào Bông Cải\n","foods/foodrecipe9_2",2,"Dưới 30 phút", Date(),true,
+            FoodRecipe(9,"Cơm Bò Xào Bông Cải\n","foods/foodrecipe9_2.png",2,"Dưới 30 phút", Date(),true,
             arrayListOf(2),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(14,15),"Ngọc Thư", R.drawable.defaultavt,5)
@@ -721,32 +721,32 @@ class GenerateDBModel(private var context: Context) {
         listStep.add(
             RecipeCookStep(
                 "Bò xắt miếng vừa ăn.\nƯớp bò với tỏi băm, hạt nêm. Bọc kín 30 phút trong tủ mát",
-                "foods/foodrecipe9_2"
+                "foods/foodrecipe10_1.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Dưa cải chua rửa qua, nếu chua quá thì nên trụng sơ rồi để ráo nước.",
-                "foods/foodrecipe10_2"
+                "foods/foodrecipe10_2.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Bắc chảo phi tổ thơm cho bò vào xào săn.\nThêm nước hoặc nước dừa nấu sôi. Tắt bếp để đó. Nguội thì nấu sôi lại lần nữa rồi lại tắt bếp để đó.",
-                "foods/foodrecipe10_3"
+                "foods/foodrecipe10_3.png"
             )
         )
 
         listStep.add(
             RecipeCookStep(
                 "Sau cùng thêm dưa cải nấu mềm.\nNêm lại vừa ăn, thêm cà chua rau thơm.",
-                "foods/foodrecipe10_4"
+                "foods/foodrecipe10_4.png"
             )
         )
 
-        var mon_an_10= FoodRecipe(10,"Canh Bò Nấu Dưa Cải Chua","foods/foodrecipe10_4",4,"Dưới 1 tiếng",
+        var mon_an_10= FoodRecipe(10,"Canh Bò Nấu Dưa Cải Chua","foods/foodrecipe10_4.png",4,"Dưới 1 tiếng",
             Date(),true,
             arrayListOf(1,4),listStep,listIngredient,
             arrayListOf(),

@@ -14,13 +14,13 @@ class FoodRecipe(
     private var _recipeSteps: ArrayList<RecipeCookStep>,
     private var _recipeIngres: ArrayList<RecipeIngredient>,
     private var _recipeCmts: ArrayList<Int>,
-    private var _userSavedRecipes: ArrayList<Int>
+    private var _userSavedRecipes: ArrayList<Int>,
 ) {
     private var _authorName: String? = null
     private var _authorAvatar: Int? = null
     private var _numOfLikes: Int? = null
-    private var _uploadDate: Date? = null
 
+    constructor():this(0,"",null,0,"",Date(),false, arrayListOf(), arrayListOf(), arrayListOf(), arrayListOf(), arrayListOf())
     // constructor if there is author, likes, date
     constructor(
         id: Long,
@@ -54,7 +54,6 @@ class FoodRecipe(
     ) {
         _authorName = name
         _numOfLikes = likes
-        _uploadDate = date
         _authorAvatar = avatar
     }
 
@@ -145,11 +144,5 @@ class FoodRecipe(
         get() = _numOfLikes
         set(value) {
             _numOfLikes = value
-        }
-
-    var uploadDate: Date?
-        get() = _uploadDate
-        set(value) {
-            _uploadDate = value
         }
 }

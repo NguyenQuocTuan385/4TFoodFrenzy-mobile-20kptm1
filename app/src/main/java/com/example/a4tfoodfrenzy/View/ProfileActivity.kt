@@ -150,9 +150,6 @@ class ProfileActivity : AppCompatActivity() {
                             // Xử lý ngoại lệ nếu có lỗi xảy ra
                         }
                     }
-//                    val resourceId = resources.getIdentifier(user?.avatar!!, "drawable", packageName)
-//                    val bitmap = BitmapFactory.decodeResource(resources, resourceId)
-//                    avatar.setImageBitmap(bitmap)
 
                     val email = findViewById<TextView>(R.id.email_profile)
                     email.text = user?.email

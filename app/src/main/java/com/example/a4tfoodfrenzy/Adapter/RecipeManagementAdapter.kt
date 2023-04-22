@@ -35,7 +35,7 @@ class RecipeManagementAdapter(private var context:Context,private var recipeList
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentRecipe = recipeList[position]
-        val uploadDateString = "${currentRecipe.uploadDate?.date}/${currentRecipe.uploadDate?.month}/${currentRecipe.uploadDate?.year}"
+        val uploadDateString = "${currentRecipe.date?.date}/${currentRecipe.date?.month}/${currentRecipe.date?.year}"
 
         val resources = context.getResources()
         val resourceId = resources.getIdentifier(currentRecipe.recipeMainImage, "drawable", context.packageName)
