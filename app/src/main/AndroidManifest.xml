@@ -36,12 +36,6 @@
             android:name=".View.AddNewRecipe"
             android:exported="false" />
         <activity
-            android:name=".View.AdminAccountManagement"
-            android:exported="false" />
-        <activity
-            android:name=".View.Admin_Comment_Management"
-            android:exported="false" />
-        <activity
             android:name=".View.ShowRecipeDetailsDescriptionActivity"
             android:exported="false" />
         <activity
@@ -110,9 +104,6 @@
         <activity
             android:name=".View.CommentDetailsManagementActivity"
             android:exported="true" />
-        <activity
-            android:name=".View.AdminRecipeManagementActivity"
-            android:exported="false" />
         <activity
             android:name=".View.LoginRegisterActivity"
             android:exported="false" />
