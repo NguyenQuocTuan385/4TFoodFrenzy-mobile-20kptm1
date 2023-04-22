@@ -3,6 +3,7 @@ package com.example.a4tfoodfrenzy.View
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
@@ -34,8 +35,12 @@ class SearchScreen : AppCompatActivity() {
 
         searchET.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                val intent = Intent(this, AfterSearchActivity::class.java)
-                startActivity(intent)
+                if (!searchET.text.isNullOrEmpty()) {
+                    val intent = Intent(this, AfterSearchActivity::class.java)
+                    intent.putExtra("keySearch",searchET.text.toString())
+                    intent.putExtra("typeSearch","recipe")
+                    startActivity(intent)
+                }
             }
             true
         }
@@ -45,45 +50,64 @@ class SearchScreen : AppCompatActivity() {
         }
         findViewById<Button>(R.id.btnMore1HCook).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
+            intent.putExtra("keySearch","Trên 1 tiếng")
+            intent.putExtra("typeSearch","cookTime")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnLess1HCook).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
+            intent.putExtra("keySearch","Dưới 1 tiếng")
+            intent.putExtra("typeSearch","cookTime")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnLess45MCook).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
+            intent.putExtra("keySearch","Dưới 45 phút")
+            intent.putExtra("typeSearch","cookTime")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnLess30MCook).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
+            intent.putExtra("keySearch","Dưới 30 phút")
+            intent.putExtra("typeSearch","cookTime")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnLess15MCook).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
+            intent.putExtra("keySearch","Dưới 15 phút")
+            intent.putExtra("typeSearch","cookTime")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnFastFood).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
+            intent.putExtra("keySearch","Ăn vặt")
+            intent.putExtra("typeSearch","recipeCategory")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnDrink).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
+            intent.putExtra("keySearch","Thức uống")
+            intent.putExtra("typeSearch","recipeCategory")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnDessert).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
+            intent.putExtra("keySearch","Món tráng miệng")
+            intent.putExtra("typeSearch","recipeCategory")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnMainFood).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
+            intent.putExtra("keySearch","Món chính")
+            intent.putExtra("typeSearch","recipeCategory")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnAppetizer).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
+            intent.putExtra("keySearch","Khai vị")
+            intent.putExtra("typeSearch","recipeCategory")
             startActivity(intent)
         }
-
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
         val menu = bottomNavigationView.menu

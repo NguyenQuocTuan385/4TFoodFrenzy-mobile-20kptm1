@@ -8,7 +8,7 @@ class RecipeCategory (
     private var _recipeCateName: String,
     private var _foodRecipes: ArrayList<Int>
 ): Parcelable {
-
+    constructor():this(0,"", arrayListOf())
     // Getter and Setter for _id
     var id: Long
         get() = _id
