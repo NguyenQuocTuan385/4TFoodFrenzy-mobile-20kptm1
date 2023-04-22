@@ -63,10 +63,12 @@
         android:src="@drawable/avt"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars" >
+
+    </de.hdodenhof.circleimageview.CircleImageView>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/name_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
@@ -89,7 +91,7 @@
         app:layout_constraintTop_toBottomOf="@+id/creatorImage" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/editTextPersonName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
@@ -111,7 +113,7 @@
         android:layout_marginTop="30dp"
         android:text="Tuổi"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPersonName" />
 
     <EditText
         android:id="@+id/editTextTextPersonName2"
@@ -139,7 +141,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName3"
+        android:id="@+id/editTextEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
@@ -161,10 +163,10 @@
         android:layout_marginTop="30dp"
         android:text="Vài dòng về bạn và đam mê nấu nướng"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName4"
+        android:id="@+id/editTextBio"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
@@ -177,5 +179,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <ImageView
+        android:id="@+id/updateAvt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="27dp"
+        app:layout_constraintStart_toStartOf="@+id/creatorImage"
+        app:layout_constraintTop_toTopOf="@+id/creatorImage"
+        app:srcCompat="@drawable/baseline_add_a_photo_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

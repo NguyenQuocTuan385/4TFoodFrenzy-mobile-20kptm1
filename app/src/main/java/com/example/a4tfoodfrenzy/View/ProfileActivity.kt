@@ -1,10 +1,12 @@
 package com.example.a4tfoodfrenzy.View
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
@@ -25,6 +27,14 @@ import com.google.firebase.storage.FirebaseStorage
 import java.util.*
 
 class ProfileActivity : AppCompatActivity() {
+    private lateinit var tabAdapter: TabProfileAdapter
+    private lateinit var view_pager: ViewPager
+    private lateinit var tabs: TabLayout
+    private lateinit var option_adapter: ImageView
+    private lateinit var list_option: List<String>
+    private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var menu: Menu
+    private lateinit var progressDialog: ProgressDialog
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     val storageRef = FirebaseStorage.getInstance()
@@ -32,33 +42,27 @@ class ProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
-        auth=FirebaseAuth.getInstance()
-        db=Firebase.firestore
 
-        // tạo dữ liệu mẫu
-//        createDataUsers()
+        auth = FirebaseAuth.getInstance()
+        db = Firebase.firestore
 
-//        // lấy dữ liệu từ firebase
-//        val db = Firebase.firestore
-//        val user = db.collection("users").document("ngoctien")
-//        user.get()
-//            .addOnSuccessListener { document ->
-//                if (document != null) {
-//                    val user = document.toObject(User::class.java)
-//                    val name = findViewById<TextView>(R.id.name_profile)
-//                    name.text = user?.fullname
-//                    val avatar = findViewById<ImageView>(R.id.creatorImage)
-//                    avatar.setImageResource(user?.avatar!!)
-//                    Log.d("TAG", "DocumentSnapshot data: ${document.data}")
-//                }
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.d("TAG", "get failed with ", exception)
-//            }
+        tabProfile()
+        optionProfile()
+        bottomNavigation()
+    }
 
-
-        val option_adapter = findViewById<ImageView>(R.id.option_profile)
-        val list_option = listOf<String>("Chỉnh sửa thông tin", "Đăng xuất")
+    private fun tabProfile() {
+        tabAdapter = TabProfileAdapter(this, supportFragmentManager)
+        tabAdapter.addFragment(TabFoodRecipeSaved(this), "Món đã lưu")
+        tabAdapter.addFragment(TabMyFoodRecipe(this), "Món của tôi")
+        view_pager = findViewById(R.id.view_pager)
+        view_pager.adapter = tabAdapter
+        tabs = findViewById(R.id.tab_layout)
+        tabs.setupWithViewPager(view_pager)
+    }
+    private fun optionProfile() {
+        option_adapter = findViewById(R.id.option_profile)
+        list_option = listOf("Chỉnh sửa thông tin", "Đăng xuất")
         option_adapter.setOnClickListener {
             val popup = PopupMenu(this, option_adapter)
             for (i in list_option) {
@@ -83,18 +87,10 @@ class ProfileActivity : AppCompatActivity() {
             }
             popup.show()
         }
-
-
-        val adapter = TabProfileAdapter(this, supportFragmentManager)
-        adapter.addFragment(TabFoodRecipeSaved(this), "Món đã lưu")
-        adapter.addFragment(TabMyFoodRecipe(this), "Món của tôi")
-        val view_pager = findViewById<ViewPager>(R.id.view_pager)
-        view_pager.adapter = adapter
-        val tabs = findViewById<TabLayout>(R.id.tab_layout)
-        tabs.setupWithViewPager(view_pager)
-
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
-        val menu = bottomNavigationView.menu
+    }
+    private fun bottomNavigation() {
+        bottomNavigationView = findViewById(R.id.botNavbar)
+        menu = bottomNavigationView.menu
         menu.findItem(R.id.profile).isChecked = true
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
@@ -120,6 +116,7 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
     }
+
     override fun onResume()
     {
         super.onResume()
@@ -132,6 +129,10 @@ class ProfileActivity : AppCompatActivity() {
         }
         else
         {
+            progressDialog = ProgressDialog(this)
+            progressDialog.setTitle("Đang tải dữ liệu...")
+            progressDialog.show()
+
             db.collection("users")
                 .document(user.uid)
                 .get()
@@ -160,7 +161,7 @@ class ProfileActivity : AppCompatActivity() {
                     Log.w("hihi", "Error getting documents: ", exception)
                 }
 
+            progressDialog.dismiss()
         }
-
     }
 }
