@@ -1,9 +1,15 @@
 package com.example.a4tfoodfrenzy.View
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
@@ -16,11 +22,15 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
+import java.io.ByteArrayOutputStream
 
 
 class GoogleAuthenticateActivity : AppCompatActivity() {
     lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var firebaseAuth: FirebaseAuth
+    val storageRef = FirebaseStorage.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,13 +93,59 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
                                                 val userFullName =
                                                     firebaseAuth.currentUser?.displayName
                                                 val helperFunctionDB = HelperFunctionDB(this)
+
+                                                // lấy avatar của user từ google
+                                                val userAvatar =
+                                                    firebaseAuth.currentUser?.photoUrl.toString()
+                                                Log.d("userAvatar", userAvatar)
+
+                                                // upload avatar to firebase storage
+                                                val storageRef = Firebase.storage.reference
+                                                val user_id = firebaseAuth.currentUser?.uid
+                                                val avatarRef =
+                                                    storageRef.child("users/$user_id")
+//                                                val options = RequestOptions()
+//                                                    .override(300, 300)
+//                                                    .centerCrop()
+                                                Glide.with(this)
+                                                    .asBitmap()
+                                                    .load(userAvatar)
+                                                    .apply(RequestOptions.circleCropTransform())
+                                                    .into(object : SimpleTarget<Bitmap>() {
+                                                        override fun onResourceReady(
+                                                            resource: Bitmap,
+                                                            transition: Transition<in Bitmap>?
+                                                        ) {
+                                                            val baos = ByteArrayOutputStream()
+                                                            resource.compress(
+                                                                Bitmap.CompressFormat.PNG,
+                                                                100,
+                                                                baos
+                                                            )
+                                                            val data = baos.toByteArray()
+                                                            avatarRef.putBytes(data)
+                                                                .addOnSuccessListener {
+                                                                    Log.d(
+                                                                        "uploadAvatar",
+                                                                        "Upload avatar success"
+                                                                    )
+                                                                }
+                                                                .addOnFailureListener {
+                                                                    Log.d(
+                                                                        "uploadAvatar",
+                                                                        "Upload avatar failed"
+                                                                    )
+                                                                }
+                                                        }
+                                                    })
+
                                                 helperFunctionDB.findSlotIdEmptyInCollection("users") {idSlot ->
                                                     val profile = User(
                                                         idSlot, userEmail!!,
                                                         userFullName!!,
                                                         null,
                                                         "",
-                                                        "users/defaultavt.png",
+                                                        "users/$user_id",
                                                         arrayListOf(),
                                                         arrayListOf(),
                                                         arrayListOf()
