@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
 import com.facebook.AccessToken
@@ -83,8 +84,8 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                             if (it.isEmpty) {
                                 // get user name from google's database
                                 val userFullName = user?.displayName
-                                val mainActivity = MainActivity()
-                                mainActivity.findSlotIdEmptyInCollection("users") {idSlot ->
+                                val helperFunctionDB = HelperFunctionDB(this)
+                                helperFunctionDB.findSlotIdEmptyInCollection("users") {idSlot ->
                                     val profile = User(
                                         idSlot,
                                         userEmail!!,

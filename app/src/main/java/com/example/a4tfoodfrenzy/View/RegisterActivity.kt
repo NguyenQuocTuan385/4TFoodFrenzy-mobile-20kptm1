@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
 import com.google.firebase.auth.FirebaseAuth
@@ -69,8 +70,8 @@ class RegisterActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    val mainActivity = MainActivity()
-                    mainActivity.findSlotIdEmptyInCollection("users") {idSlot ->
+                    val helperFunctionDB = HelperFunctionDB(this)
+                    helperFunctionDB.findSlotIdEmptyInCollection("users") {idSlot ->
                         val profile = User(idSlot, email, name, null, "", "users/defaultavt.png", arrayListOf(), arrayListOf(), arrayListOf())
                         if (user != null) {
                             writeUserProfileToFirestore(user.uid, profile)
