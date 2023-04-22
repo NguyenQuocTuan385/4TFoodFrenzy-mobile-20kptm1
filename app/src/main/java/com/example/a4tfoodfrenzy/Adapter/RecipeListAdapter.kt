@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.a4tfoodfrenzy.R
 import com.google.firebase.storage.FirebaseStorage
 
@@ -57,11 +58,12 @@ class RecipeListAdapter(private var context:Context,
         val recipeImg = holder.recipeIV
         val imageRef = foodRecipe.recipeMainImage?.let { storageRef.getReference(it) }
         if (imageRef != null) {
-            imageRef.getBytes(Long.MAX_VALUE).addOnSuccessListener { bytes ->
-                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                recipeImg.setImageBitmap(bitmap)
+            imageRef.downloadUrl.addOnSuccessListener { uri ->
+                Glide.with(context)
+                    .load(uri)
+                    .into(recipeImg)
             }.addOnFailureListener { exception ->
-                // Xử lý ngoại lệ nếu có lỗi xảy ra
+                // Xử lý lỗi
             }
         }
     }

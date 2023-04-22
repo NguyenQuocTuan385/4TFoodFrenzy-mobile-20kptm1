@@ -47,8 +47,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/loadingavt" />
+            android:layout_marginTop="15dp" />
 
         <TextView
             android:id="@+id/name_profile"

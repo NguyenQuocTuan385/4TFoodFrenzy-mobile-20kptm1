@@ -57,8 +57,10 @@ class MainActivity : AppCompatActivity() {
             adapterRecipeTodayEatRV = RecipeListAdapter(this, recipeTodayEat)
             recipeTodayEatRV!!.adapter = adapterRecipeTodayEatRV
             recipeTodayEatRV!!.layoutManager = GridLayoutManager(this, 3)
+
             adapterRecipeTodayEatRV!!.onItemClick = { foodRecipe, i ->
                 val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
+                intent.putExtra("foodRecipe",foodRecipe)
                 startActivity(intent)
             }
         }

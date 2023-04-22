@@ -2,6 +2,7 @@ package com.example.a4tfoodfrenzy.View
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.FoodImage
 import com.example.a4tfoodfrenzy.Adapter.FoodImageAdapter
+import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.R
 
 class ShowRecipeDetailsActivity : AppCompatActivity() {
@@ -30,6 +32,8 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         imgList.add(FoodImage(R.drawable.bosotme3))
         imgList.add(FoodImage(R.drawable.bosotme4))
         imgList.add(FoodImage(R.drawable.bosotme5))
+
+        val foodRecipe: FoodRecipe? = intent.getParcelableExtra("foodRecipe")
 
         val adapter = FoodImageAdapter(imgList)
         rv.adapter = adapter

@@ -21,7 +21,6 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:background="@drawable/rounded_border_gray"
-            android:src="@drawable/loadingavt"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
