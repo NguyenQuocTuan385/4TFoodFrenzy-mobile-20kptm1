@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view"
+    >
+    <item
+        android:id="@+id/navUser"
+        android:icon="@drawable/profile"
+        android:title="Quản lý người dùng"/>
+    <item
+        android:id="@+id/navComment"
+        android:icon="@drawable/comment"
+        android:title="Quản lý bình luận"/>
+    <item
+        android:id="@+id/navRecipe"
+        android:icon="@drawable/cookbook"
+        android:title="Quản lý công thức"/>
+
+    <item android:title="Hồ sơ">
+        <menu>
+            <item
+                android:id="@+id/navLogout"
+                android:icon="@drawable/logout"
+                android:title="Đăng xuất">
+            </item>
+
+        </menu>
+    </item>
+
+</menu>
