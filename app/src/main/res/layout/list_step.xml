@@ -52,9 +52,9 @@
     <ImageView
         android:id="@+id/optionMenuStep"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_gravity="center"
         android:layout_weight="1"
-        app:srcCompat="@drawable/baseline_more_vert_24" />
+        app:srcCompat="@drawable/baseline_more_vert_24_black" />
 
 </LinearLayout>

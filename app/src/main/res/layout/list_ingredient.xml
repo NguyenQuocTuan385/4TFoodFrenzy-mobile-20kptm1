@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/baseline_density_medium_24"
+        android:layout_gravity="center"
         >
     </ImageView>
 
@@ -28,6 +29,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="Thịt heo"
+        android:layout_gravity="center"
         android:gravity="left"
         android:textColor="@color/black"
         android:textSize="18dp"></TextView>
@@ -35,9 +37,10 @@
     <ImageView
         android:id="@+id/optionMenu"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
         android:layout_weight="1"
-        app:srcCompat="@drawable/baseline_more_vert_24"
+        app:srcCompat="@drawable/baseline_more_vert_24_black"
         />
 
 </LinearLayout>
