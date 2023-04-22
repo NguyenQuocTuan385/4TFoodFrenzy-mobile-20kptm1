@@ -1,5 +1,7 @@
 package com.example.a4tfoodfrenzy.Model
 
+import android.os.Parcel
+import android.os.Parcelable
 import java.util.Date
 
 class FoodRecipe(
@@ -15,7 +17,7 @@ class FoodRecipe(
     private var _recipeIngres: ArrayList<RecipeIngredient>,
     private var _recipeCmts: ArrayList<Int>,
     private var _userSavedRecipes: ArrayList<Int>,
-) {
+) : Parcelable{
     private var _authorName: String? = null
     private var _authorAvatar: Int? = null
     private var _numOfLikes: Int? = null
@@ -145,4 +147,58 @@ class FoodRecipe(
         set(value) {
             _numOfLikes = value
         }
+
+    // implement methods of Parcelable
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeLong(_id)
+        dest.writeString(_recipeName)
+        dest.writeString(_recipeMainImage)
+        dest.writeInt(_ration)
+        dest.writeString(_cookTime)
+        dest.writeLong(_date.time)
+        dest.writeByte(if (_isPublic) 1 else 0)
+        dest.writeList(_recipeDiets)
+        dest.writeList(_recipeSteps)
+        dest.writeList(_recipeIngres)
+        dest.writeList(_recipeCmts)
+        dest.writeList(_userSavedRecipes)
+        dest.writeString(_authorName)
+        dest.writeValue(_authorAvatar)
+        dest.writeValue(_numOfLikes)
+    }
+    private constructor(parcel: Parcel) : this(
+        parcel.readLong(),
+        parcel.readString() ?: "",
+        parcel.readString(),
+        parcel.readInt(),
+        parcel.readString() ?: "",
+        Date(parcel.readLong()),
+        parcel.readByte() != 0.toByte(),
+        ArrayList<Int>().apply { parcel.readList(this, Int::class.java.classLoader) },
+        ArrayList<RecipeCookStep>().apply { parcel.readList(this, RecipeCookStep::class.java.classLoader) },
+        ArrayList<RecipeIngredient>().apply { parcel.readList(this, RecipeIngredient::class.java.classLoader) },
+        ArrayList<Int>().apply { parcel.readList(this, Int::class.java.classLoader) },
+        ArrayList<Int>().apply { parcel.readList(this, Int::class.java.classLoader) },
+    ) {
+        _authorName = parcel.readString()
+        _authorAvatar = parcel.readValue(Int::class.java.classLoader) as? Int
+        _numOfLikes = parcel.readValue(Int::class.java.classLoader) as? Int
+    }
+
+    companion object {
+        @JvmField
+        val CREATOR = object : Parcelable.Creator<FoodRecipe> {
+            override fun createFromParcel(parcel: Parcel): FoodRecipe {
+                return FoodRecipe(parcel)
+            }
+
+            override fun newArray(size: Int): Array<FoodRecipe?> {
+                return arrayOfNulls(size)
+            }
+        }
+    }
 }
