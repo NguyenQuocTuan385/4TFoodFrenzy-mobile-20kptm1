@@ -31,8 +31,8 @@ class MainActivity : AppCompatActivity() {
     var adapterRecipeTodayEatRV: RecipeListAdapter? = null
     var adapterRecipeMostLikesRV: RecipeListAdapter? = null
     val db = Firebase.firestore
-    val storage = FirebaseStorage.getInstance()
     val generateDBModel = GenerateDBModel(this)
+    val dbManagement = DBManagement()
     @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +53,34 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        generateRecipeTodayEatData() {recipeTodayEat ->
-            adapterRecipeTodayEatRV = RecipeListAdapter(this, recipeTodayEat)
+        if (DBManagement.isInitialized == false) {
+            dbManagement.addListenerChangeDataFoodRecipe { foodRecipes ->
+                adapterRecipeTodayEatRV = RecipeListAdapter(this, foodRecipes)
+                recipeTodayEatRV!!.adapter = adapterRecipeTodayEatRV
+                recipeTodayEatRV!!.layoutManager = GridLayoutManager(this, 3)
+
+                adapterRecipeTodayEatRV!!.onItemClick = { foodRecipe, i ->
+                    val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
+                    intent.putExtra("foodRecipe",foodRecipe)
+                    startActivity(intent)
+                }
+
+                adapterRecipeMostLikesRV = RecipeListAdapter(this, foodRecipes)
+                recipeMostLikesRV!!.adapter = adapterRecipeMostLikesRV
+                recipeMostLikesRV!!.layoutManager = GridLayoutManager(this, 3)
+                adapterRecipeMostLikesRV!!.onItemClick = { foodRecipe, i ->
+                    val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+            dbManagement.addListenerChangeDataRecipeCategories {  }
+            dbManagement.addListenerChangeDataRecipeComment {  }
+            dbManagement.addListenerChangeDataRecipeDiets {  }
+            dbManagement.addListenerChangeDataUser {  }
+            DBManagement.isInitialized = true
+        }
+        else {
+            adapterRecipeTodayEatRV = RecipeListAdapter(this, DBManagement.foodRecipeList)
             recipeTodayEatRV!!.adapter = adapterRecipeTodayEatRV
             recipeTodayEatRV!!.layoutManager = GridLayoutManager(this, 3)
 
@@ -63,10 +89,8 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("foodRecipe",foodRecipe)
                 startActivity(intent)
             }
-        }
 
-        generateRecipeMostLikesData() {recipeMostLikes ->
-            adapterRecipeMostLikesRV = RecipeListAdapter(this, recipeMostLikes)
+            adapterRecipeMostLikesRV = RecipeListAdapter(this, DBManagement.foodRecipeList)
             recipeMostLikesRV!!.adapter = adapterRecipeMostLikesRV
             recipeMostLikesRV!!.layoutManager = GridLayoutManager(this, 3)
             adapterRecipeMostLikesRV!!.onItemClick = { foodRecipe, i ->
@@ -121,6 +145,11 @@ class MainActivity : AppCompatActivity() {
 //        generateDBModel.generateDatabaseRecipeFood()
 //        generateDBModel.generateDatabaseUsers()
     }
+    override fun onDestroy() {
+        super.onDestroy()
+        // Hủy đăng ký listener
+        dbManagement.destroyListener()
+    }
     fun generateCateRecipeData(): ArrayList<RecipeCategorySuggest> {
         var result = ArrayList<RecipeCategorySuggest>()
         var typeRecipe: RecipeCategorySuggest = RecipeCategorySuggest("Nấu nhanh",
@@ -152,47 +181,47 @@ class MainActivity : AppCompatActivity() {
 
         return result
     }
-    fun generateRecipeTodayEatData(callback:(ArrayList<FoodRecipe>) -> Unit ) {
-        var result = ArrayList<FoodRecipe>()
-
-        val randomIndex = (0..10).random() // lấy ngẫu nhiên một số từ 0 đến 10
-        val recipesCollection = db.collection("RecipeFoods")
-        val recipeQuery = recipesCollection.orderBy(FieldPath.documentId())
-            .startAt(randomIndex.toString()).limit(6)
-        recipeQuery.get()
-            .addOnSuccessListener { querySnapshot ->
-                for (document in querySnapshot) {
-                    val foodRecipe = document.toObject(FoodRecipe::class.java)
-                    result.add(foodRecipe)
-                }
-                callback(result)
-            }
-            .addOnFailureListener { exception ->
-                Log.d("TAG", "Error getting documents: ", exception)
-                callback(arrayListOf())
-            }
-
-    }
-
-    fun generateRecipeMostLikesData(callback:(ArrayList<FoodRecipe>) -> Unit ) {
-        var result = ArrayList<FoodRecipe>()
-
-        val recipesCollection = db.collection("RecipeFoods").orderBy("numOfLikes").limit(6)
-
-        recipesCollection.get()
-            .addOnSuccessListener { querySnapshot ->
-                for (document in querySnapshot) {
-                    val foodRecipe = document.toObject(FoodRecipe::class.java)
-                    result.add(foodRecipe)
-                }
-                callback(result)
-            }
-            .addOnFailureListener { exception ->
-                Log.d("TAG", "Error getting documents: ", exception)
-                callback(arrayListOf())
-            }
-
-    }
+//    fun generateRecipeTodayEatData(callback:(ArrayList<FoodRecipe>) -> Unit ) {
+//        var result = ArrayList<FoodRecipe>()
+//
+//        val randomIndex = (0..10).random() // lấy ngẫu nhiên một số từ 0 đến 10
+//        val recipesCollection = db.collection("RecipeFoods")
+//        val recipeQuery = recipesCollection.orderBy(FieldPath.documentId())
+//            .startAt(randomIndex.toString()).limit(6)
+//        recipeQuery.get()
+//            .addOnSuccessListener { querySnapshot ->
+//                for (document in querySnapshot) {
+//                    val foodRecipe = document.toObject(FoodRecipe::class.java)
+//                    result.add(foodRecipe)
+//                }
+//                callback(result)
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.d("TAG", "Error getting documents: ", exception)
+//                callback(arrayListOf())
+//            }
+//
+//    }
+//
+//    fun generateRecipeMostLikesData(callback:(ArrayList<FoodRecipe>) -> Unit ) {
+//        var result = ArrayList<FoodRecipe>()
+//
+//        val recipesCollection = db.collection("RecipeFoods").orderBy("numOfLikes").limit(6)
+//
+//        recipesCollection.get()
+//            .addOnSuccessListener { querySnapshot ->
+//                for (document in querySnapshot) {
+//                    val foodRecipe = document.toObject(FoodRecipe::class.java)
+//                    result.add(foodRecipe)
+//                }
+//                callback(result)
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.d("TAG", "Error getting documents: ", exception)
+//                callback(arrayListOf())
+//            }
+//
+//    }
 //    fun generateRecipeMostLikesData(): ArrayList<FoodRecipe> {
 //        var result = ArrayList<FoodRecipe>()
 //
