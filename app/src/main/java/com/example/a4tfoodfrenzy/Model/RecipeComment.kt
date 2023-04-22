@@ -14,6 +14,7 @@ class RecipeComment(private var _isLike: Boolean,
     private var _nameRecipe: String = ""
     private var _avatarUser: Int = 0
 
+    constructor():this(false,null,"",Date())
     constructor(
         _username: String,
         _nameRecipe: String,
