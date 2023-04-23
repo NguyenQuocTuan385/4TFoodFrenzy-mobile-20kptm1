@@ -12,11 +12,11 @@ class FoodRecipe(
     private var _cookTime: String,
     private var _date: Date,
     private var _isPublic: Boolean,
-    private var _recipeDiets: ArrayList<Int>,
+    private var _recipeDiets: ArrayList<Long>,
     private var _recipeSteps: ArrayList<RecipeCookStep>,
     private var _recipeIngres: ArrayList<RecipeIngredient>,
-    private var _recipeCmts: ArrayList<Int>,
-    private var _userSavedRecipes: ArrayList<Int>,
+    private var _recipeCmts: ArrayList<Long>,
+    private var _userSavedRecipes: ArrayList<Long>,
 ) : Parcelable{
     private var _authorName: String? = null
     private var _authorAvatar: Int? = null
@@ -32,11 +32,11 @@ class FoodRecipe(
         cookTime: String,
         date: Date,
         isPublic: Boolean,
-        _recipeDiets: ArrayList<Int>,
+        _recipeDiets: ArrayList<Long>,
         _recipeSteps: ArrayList<RecipeCookStep>,
         _recipeIngres: ArrayList<RecipeIngredient>,
-        _recipeCmts: ArrayList<Int>,
-        _userSavedRecipes: ArrayList<Int>,
+        _recipeCmts: ArrayList<Long>,
+        _userSavedRecipes: ArrayList<Long>,
         name: String,
         avatar: Int,
         likes: Int,
@@ -112,19 +112,19 @@ class FoodRecipe(
             _recipeIngres = value
         }
 
-    var recipeCmts: ArrayList<Int>
+    var recipeCmts: ArrayList<Long>
         get() = _recipeCmts
         set(value) {
             _recipeCmts = value
         }
 
-    var recipeDiets: ArrayList<Int>
+    var recipeDiets: ArrayList<Long>
         get() = _recipeDiets
         set(value) {
             _recipeDiets = value
         }
 
-    var userSavedRecipes: ArrayList<Int>
+    var userSavedRecipes: ArrayList<Long>
         get() = _userSavedRecipes
         set(value) {
             _userSavedRecipes = value
@@ -178,11 +178,11 @@ class FoodRecipe(
         parcel.readString() ?: "",
         Date(parcel.readLong()),
         parcel.readByte() != 0.toByte(),
-        ArrayList<Int>().apply { parcel.readList(this, Int::class.java.classLoader) },
+        ArrayList<Long>().apply { parcel.readList(this, Long::class.java.classLoader) },
         ArrayList<RecipeCookStep>().apply { parcel.readList(this, RecipeCookStep::class.java.classLoader) },
         ArrayList<RecipeIngredient>().apply { parcel.readList(this, RecipeIngredient::class.java.classLoader) },
-        ArrayList<Int>().apply { parcel.readList(this, Int::class.java.classLoader) },
-        ArrayList<Int>().apply { parcel.readList(this, Int::class.java.classLoader) },
+        ArrayList<Long>().apply { parcel.readList(this, Long::class.java.classLoader) },
+        ArrayList<Long>().apply { parcel.readList(this, Long::class.java.classLoader) },
     ) {
         _authorName = parcel.readString()
         _authorAvatar = parcel.readValue(Int::class.java.classLoader) as? Int

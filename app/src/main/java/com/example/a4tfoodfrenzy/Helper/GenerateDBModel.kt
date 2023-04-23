@@ -1235,17 +1235,17 @@ class GenerateDBModel(private var context: Context) {
             RecipeCookStep(
                 "Lúc này sẽ nêm đường, đường nâu ít ngọt, tùy theo loại đường mà bạn dùng.\n" +
                         "Đường của mình ở đây là 2 vá. Tắt lửa, khuấy cho đường tan. Đậy nắp thêm 5p => hoàn thành.",
-                "food/fooddrecipe31_4.png"
+                "foods/foodrecipe31_4.png"
             )
         )
         listStep.add(
             RecipeCookStep(
                 "Món này có thể dùng nóng, ướp lạnh, cho đá, cách nào cũng ngon. Bảo quản ngăn mat tủ lạnh trong 3 ngày :)",
-                "food/foodrecipe31_5"
+                "food/foodrecipe31_5.png"
             )
         )
 
-        var mon_an_31 = FoodRecipe(31,"Chè đậu xanh lá dữa","food/foodrecipe31_5", 2, "Dưới 30 phút",
+        var mon_an_31 = FoodRecipe(31,"Chè đậu xanh lá dữa","foods/foodrecipe31_5.png", 2, "Dưới 30 phút",
             Date(),true,arrayListOf(),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",

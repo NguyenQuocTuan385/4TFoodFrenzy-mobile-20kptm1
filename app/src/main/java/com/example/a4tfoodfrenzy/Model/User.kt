@@ -9,9 +9,9 @@ class User(
     private var _birthday: Date?,
     private var _bio: String,
     private var _avatar: String,
-    private var _recipeCmts: ArrayList<Int>,
-    private var _myFoodRecipes: ArrayList<Int>,
-    private var _foodRecipeSaved: ArrayList<Int>
+    private var _recipeCmts: ArrayList<Long>,
+    private var _myFoodRecipes: ArrayList<Long>,
+    private var _foodRecipeSaved: ArrayList<Long>
 ) {
     constructor() : this(0, "", "", null, "", "", ArrayList(), ArrayList(), ArrayList())
 
@@ -52,19 +52,19 @@ class User(
             _avatar = value
         }
 
-    var myFoodRecipes: ArrayList<Int>
+    var myFoodRecipes: ArrayList<Long>
         get() = _myFoodRecipes
         set(value) {
             _myFoodRecipes = value
         }
 
-    var foodRecipeSaved: ArrayList<Int>
+    var foodRecipeSaved: ArrayList<Long>
         get() = _foodRecipeSaved
         set(value) {
             _foodRecipeSaved = value
         }
 
-    var recipeCmts: ArrayList<Int>
+    var recipeCmts: ArrayList<Long>
         get() = _recipeCmts
         set(value) {
             _recipeCmts = value
