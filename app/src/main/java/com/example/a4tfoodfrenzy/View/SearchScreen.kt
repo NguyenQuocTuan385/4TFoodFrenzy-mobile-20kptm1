@@ -36,25 +36,31 @@ class SearchScreen : AppCompatActivity() {
             val intent = Intent(this, AfterSearchActivity::class.java)
             if (recipeCate.recipeCateTitle.equals("Đồ uống")) {
                 intent.putExtra("keySearch","Thức uống")
+                intent.putExtra("pageSearch","search")
                 intent.putExtra("typeSearch","recipeCategory")
             } else if (recipeCate.recipeCateTitle.equals("Món gà")) {
                 intent.putExtra("keySearch","Gà")
+                intent.putExtra("pageSearch","search")
                 intent.putExtra("typeSearch","recipe")
             }
             else if (recipeCate.recipeCateTitle.equals("Nấu nhanh")) {
                 intent.putExtra("keySearch","Nấu nhanh")
+                intent.putExtra("pageSearch","search")
                 intent.putExtra("typeSearch","recipeCategory")
             }
             else if (recipeCate.recipeCateTitle.equals("Đồ ăn vặt")) {
                 intent.putExtra("keySearch","Ăn vặt")
+                intent.putExtra("pageSearch","search")
                 intent.putExtra("typeSearch","recipeCategory")
             }
             else if (recipeCate.recipeCateTitle.equals("Ăn chay")) {
                 intent.putExtra("keySearch","Ăn chay")
+                intent.putExtra("pageSearch","search")
                 intent.putExtra("typeSearch","recipeCategory")
             }
             else if (recipeCate.recipeCateTitle.equals("Món chính")) {
                 intent.putExtra("keySearch","Món chính")
+                intent.putExtra("pageSearch","search")
                 intent.putExtra("typeSearch","recipeCategory")
             }
             startActivity(intent)
@@ -65,6 +71,7 @@ class SearchScreen : AppCompatActivity() {
                 if (!searchET.text.isNullOrEmpty()) {
                     val intent = Intent(this, AfterSearchActivity::class.java)
                     intent.putExtra("keySearch",searchET.text.toString())
+                    intent.putExtra("pageSearch","search")
                     intent.putExtra("typeSearch","recipe")
                     startActivity(intent)
                 }
@@ -74,60 +81,70 @@ class SearchScreen : AppCompatActivity() {
         findViewById<Button>(R.id.btnMore1HCook).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Trên 1 tiếng")
+            intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","cookTime")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnLess1HCook).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Dưới 1 tiếng")
+            intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","cookTime")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnLess45MCook).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Dưới 45 phút")
+            intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","cookTime")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnLess30MCook).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Dưới 30 phút")
+            intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","cookTime")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnLess15MCook).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Dưới 15 phút")
+            intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","cookTime")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnFastFood).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Ăn vặt")
+            intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","recipeCategory")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnDrink).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Thức uống")
+            intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","recipeCategory")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnDessert).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Món tráng miệng")
+            intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","recipeCategory")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnMainFood).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Món chính")
+            intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","recipeCategory")
             startActivity(intent)
         }
         findViewById<Button>(R.id.btnAppetizer).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Khai vị")
+            intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","recipeCategory")
             startActivity(intent)
         }

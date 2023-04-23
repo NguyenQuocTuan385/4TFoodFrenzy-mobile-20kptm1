@@ -25,6 +25,9 @@ class AfterSearchActivity : AppCompatActivity() {
     var adapterRecipeAfterSearchRV: RecipeListAdapter? = null
     var recipeAfterSearchRV:RecyclerView? = null
     val db = Firebase.firestore
+    val REQUEST_CODE_FILTER = 1111
+    val REQUEST_CODE_BACK_FILTER = 2222
+    val REQUEST_CODE_APPLY_FILTER = 3333
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_after_search)
@@ -33,16 +36,23 @@ class AfterSearchActivity : AppCompatActivity() {
         val searchET = findViewById<EditText>(R.id.searchET)
         recipeAfterSearchRV = findViewById(R.id.recipeAfterSearchRV)
 
+        val keySearch = intent.getStringExtra("keySearch")
+        val typeSearch = intent.getStringExtra("typeSearch")
+        val pageSearch = intent.getStringExtra("pageSearch")
         findViewById<ImageView>(R.id.imgBack).setOnClickListener {
-            val intent = Intent(this, SearchScreen::class.java)
-            startActivity(intent)
+            if (pageSearch.equals("home")){
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            } else {
+                val intent = Intent(this, SearchScreen::class.java)
+                startActivity(intent)
+            }
         }
         findViewById<ImageView>(R.id.imgFilter).setOnClickListener {
             val intent = Intent(this, SortRecipeActivity::class.java)
             startActivity(intent)
         }
-        val keySearch = intent.getStringExtra("keySearch")
-        val typeSearch = intent.getStringExtra("typeSearch")
+
         searchET.setText(keySearch)
         if (typeSearch.toString() == "cookTime") {
             val recipeAfterSearch = findRecipeListWithCookTime(keySearch.toString())
@@ -59,6 +69,7 @@ class AfterSearchActivity : AppCompatActivity() {
         } else {
             val recipeAfterSearch = findRecipeListWithKeyword(keySearch.toString())
             setRecipeListAdapter(recipeAfterSearch)
+
         }
         searchET.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -97,6 +108,17 @@ class AfterSearchActivity : AppCompatActivity() {
                     true
                 }
                 else -> false
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode === REQUEST_CODE_FILTER) {
+            if (requestCode === REQUEST_CODE_BACK_FILTER) {
+
+            } else if (requestCode === REQUEST_CODE_APPLY_FILTER) {
+
             }
         }
     }

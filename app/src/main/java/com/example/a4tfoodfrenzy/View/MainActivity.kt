@@ -54,25 +54,31 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, AfterSearchActivity::class.java)
             if (recipeCate.recipeCateTitle.equals("Đồ uống")) {
                 intent.putExtra("keySearch","Thức uống")
+                intent.putExtra("pageSearch","home")
                 intent.putExtra("typeSearch","recipeCategory")
             } else if (recipeCate.recipeCateTitle.equals("Nấu nhanh")) {
                 intent.putExtra("keySearch","Nấu nhanh")
+                intent.putExtra("pageSearch","home")
                 intent.putExtra("typeSearch","recipeCategory")
             }
             else if (recipeCate.recipeCateTitle.equals("Đồ ăn vặt")) {
                 intent.putExtra("keySearch","Ăn vặt")
+                intent.putExtra("pageSearch","home")
                 intent.putExtra("typeSearch","recipeCategory")
             }
             else if (recipeCate.recipeCateTitle.equals("Ăn chay")) {
                 intent.putExtra("keySearch","Ăn chay")
+                intent.putExtra("pageSearch","home")
                 intent.putExtra("typeSearch","recipeCategory")
             }
             else if (recipeCate.recipeCateTitle.equals("Món chính")) {
                 intent.putExtra("keySearch","Món chính")
+                intent.putExtra("pageSearch","home")
                 intent.putExtra("typeSearch","recipeCategory")
             }
             else if (recipeCate.recipeCateTitle.equals("Khai vị")) {
                 intent.putExtra("keySearch","Khai vị")
+                intent.putExtra("pageSearch","home")
                 intent.putExtra("typeSearch","recipeCategory")
             }
             startActivity(intent)
@@ -137,12 +143,14 @@ class MainActivity : AppCompatActivity() {
         btnViewMoreTodayEat.setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Hôm nay ăn gì")
+            intent.putExtra("pageSearch","home")
             intent.putExtra("typeSearch","recipeTodayEat")
             startActivity(intent)
         }
         btnViewMoreMostLikes.setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Các món được yêu thích nhất")
+            intent.putExtra("pageSearch","home")
             intent.putExtra("typeSearch","recipeMostLikes")
             startActivity(intent)
         }

@@ -6,7 +6,7 @@ import android.os.Parcelable
 class RecipeDiet (
     private var _id: Long,
     private var _dietName: String,
-    private var _foodRecipes: ArrayList<Int>
+    private var _foodRecipes: ArrayList<Long>
 ) :Parcelable{
 
     constructor():this(0,"", arrayListOf())
@@ -19,7 +19,7 @@ class RecipeDiet (
         get() = _dietName
         set(value) { _dietName = value }
 
-    var foodRecipes: ArrayList<Int>
+    var foodRecipes: ArrayList<Long>
         get() = _foodRecipes
         set(value) { _foodRecipes = value }
 
@@ -27,7 +27,7 @@ class RecipeDiet (
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
         parcel.readString()!!,
-        parcel.readArrayList(ClassLoader.getSystemClassLoader()) as ArrayList<Int>
+        parcel.readArrayList(ClassLoader.getSystemClassLoader()) as ArrayList<Long>
     )
 
     // Ghi dữ liệu của đối tượng RecipeDiet vào Parcel

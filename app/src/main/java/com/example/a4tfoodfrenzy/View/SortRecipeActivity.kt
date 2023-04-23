@@ -30,31 +30,9 @@ class SortRecipeActivity : AppCompatActivity() {
             "Thời gian nấu",
             "Ngày đăng"
         )
-        var recipeCateList : ArrayList<RecipeCategory> = ArrayList()
-        recipeCateList.add(RecipeCategory(1,"Khai vị", ArrayList()))
-        recipeCateList.add(RecipeCategory(2,"Món chính",ArrayList()))
-        recipeCateList.add(RecipeCategory(3,"Tráng miệng",ArrayList()))
-        recipeCateList.add(RecipeCategory(4,"Ăn vặt",ArrayList()))
-        recipeCateList.add(RecipeCategory(5,"Điểm tâm",ArrayList()))
-        recipeCateList.add(RecipeCategory(7,"Thức uống",ArrayList()))
+        var categoryNameTypeList : ArrayList<String> = arrayListOf("Khai vị","Món chính","Tráng miệng","Ăn vặt","Điểm tâm","Thức uống")
 
-        var categoryNameTypeList : ArrayList<String> = ArrayList()
-        for (recipeCateTemp in recipeCateList) {
-            categoryNameTypeList.add(recipeCateTemp.recipeCateName)
-        }
-
-        var recipeDietList : ArrayList<RecipeDiet> = ArrayList()
-        recipeDietList.add(RecipeDiet(1,"Không thịt", ArrayList()))
-        recipeDietList.add(RecipeDiet(2,"Không gluten",ArrayList()))
-        recipeDietList.add(RecipeDiet(3,"Không đường",ArrayList()))
-        recipeDietList.add(RecipeDiet(4,"Món chay",ArrayList()))
-        recipeDietList.add(RecipeDiet(5,"Món thuần chay",ArrayList()))
-        recipeDietList.add(RecipeDiet(7,"Thức uống",ArrayList()))
-
-        var dietTypeNameList : ArrayList<String> = ArrayList()
-        for (recipeDietTemp in recipeDietList) {
-            dietTypeNameList.add(recipeDietTemp.dietName)
-        }
+        var dietTypeNameList : ArrayList<String> = arrayListOf("Không thịt","Không gluten","Không đường","Món chay","Món thuần chay","Không cồn")
 
         findViewById<ImageView>(R.id.toolbarBackButton).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
@@ -237,10 +215,10 @@ class ExpandRecyclerViewAdapter(private val sortList: ArrayList<SortList>, priva
 
         // set visibility when expand / collapse
         if (mainSortType.isExpanded()) {
-            holder.arrow.setImageResource(com.google.android.material.R.drawable.material_ic_menu_arrow_down_black_24dp)
+            holder.arrow.setImageResource(com.google.android.material.R.drawable.material_ic_menu_arrow_up_black_24dp)
             holder.expandableRelativeLayout.visibility = View.VISIBLE
         } else {
-            holder.arrow.setImageResource(com.google.android.material.R.drawable.material_ic_menu_arrow_up_black_24dp)
+            holder.arrow.setImageResource(com.google.android.material.R.drawable.material_ic_menu_arrow_down_black_24dp)
             holder.expandableRelativeLayout.visibility = View.GONE
         }
 
@@ -260,9 +238,9 @@ class ExpandRecyclerViewAdapter(private val sortList: ArrayList<SortList>, priva
 
         holder.linearLayout.setOnClickListener {
             if (!mainSortType.isExpanded())
-                holder.arrow.setImageResource(com.google.android.material.R.drawable.material_ic_menu_arrow_up_black_24dp)
-            else
                 holder.arrow.setImageResource(com.google.android.material.R.drawable.material_ic_menu_arrow_down_black_24dp)
+            else
+                holder.arrow.setImageResource(com.google.android.material.R.drawable.material_ic_menu_arrow_up_black_24dp)
 
             mainSortType.setExpanded(!mainSortType.expand)
             notifyItemChanged(holder.absoluteAdapterPosition)
