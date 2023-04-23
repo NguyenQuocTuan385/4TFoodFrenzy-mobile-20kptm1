@@ -94,50 +94,50 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
                                                     firebaseAuth.currentUser?.displayName
                                                 val helperFunctionDB = HelperFunctionDB(this)
 
-                                                // lấy avatar của user từ google
-                                                val userAvatar =
-                                                    firebaseAuth.currentUser?.photoUrl.toString()
-                                                Log.d("userAvatar", userAvatar)
-
-                                                // upload avatar to firebase storage
-                                                val storageRef = Firebase.storage.reference
-                                                val user_id = firebaseAuth.currentUser?.uid
-                                                val avatarRef =
-                                                    storageRef.child("users/$user_id")
-//                                                val options = RequestOptions()
-//                                                    .override(300, 300)
-//                                                    .centerCrop()
-                                                Glide.with(this)
-                                                    .asBitmap()
-                                                    .load(userAvatar)
-                                                    .apply(RequestOptions.circleCropTransform())
-                                                    .into(object : SimpleTarget<Bitmap>() {
-                                                        override fun onResourceReady(
-                                                            resource: Bitmap,
-                                                            transition: Transition<in Bitmap>?
-                                                        ) {
-                                                            val baos = ByteArrayOutputStream()
-                                                            resource.compress(
-                                                                Bitmap.CompressFormat.PNG,
-                                                                100,
-                                                                baos
-                                                            )
-                                                            val data = baos.toByteArray()
-                                                            avatarRef.putBytes(data)
-                                                                .addOnSuccessListener {
-                                                                    Log.d(
-                                                                        "uploadAvatar",
-                                                                        "Upload avatar success"
-                                                                    )
-                                                                }
-                                                                .addOnFailureListener {
-                                                                    Log.d(
-                                                                        "uploadAvatar",
-                                                                        "Upload avatar failed"
-                                                                    )
-                                                                }
-                                                        }
-                                                    })
+//                                                // lấy avatar của user từ google
+//                                                val userAvatar =
+//                                                    firebaseAuth.currentUser?.photoUrl.toString()
+//                                                Log.d("userAvatar", userAvatar)
+//
+//                                                // upload avatar to firebase storage
+//                                                val storageRef = Firebase.storage.reference
+//                                                val user_id = firebaseAuth.currentUser?.uid
+//                                                val avatarRef =
+//                                                    storageRef.child("users/$user_id")
+////                                                val options = RequestOptions()
+////                                                    .override(300, 300)
+////                                                    .centerCrop()
+//                                                Glide.with(this)
+//                                                    .asBitmap()
+//                                                    .load(userAvatar)
+//                                                    .apply(RequestOptions.circleCropTransform())
+//                                                    .into(object : SimpleTarget<Bitmap>() {
+//                                                        override fun onResourceReady(
+//                                                            resource: Bitmap,
+//                                                            transition: Transition<in Bitmap>?
+//                                                        ) {
+//                                                            val baos = ByteArrayOutputStream()
+//                                                            resource.compress(
+//                                                                Bitmap.CompressFormat.PNG,
+//                                                                100,
+//                                                                baos
+//                                                            )
+//                                                            val data = baos.toByteArray()
+//                                                            avatarRef.putBytes(data)
+//                                                                .addOnSuccessListener {
+//                                                                    Log.d(
+//                                                                        "uploadAvatar",
+//                                                                        "Upload avatar success"
+//                                                                    )
+//                                                                }
+//                                                                .addOnFailureListener {
+//                                                                    Log.d(
+//                                                                        "uploadAvatar",
+//                                                                        "Upload avatar failed"
+//                                                                    )
+//                                                                }
+//                                                        }
+//                                                    })
 
                                                 helperFunctionDB.findSlotIdEmptyInCollection("users") {idSlot ->
                                                     val profile = User(
@@ -145,7 +145,8 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
                                                         userFullName!!,
                                                         null,
                                                         "",
-                                                        "users/$user_id",
+//                                                        "users/$user_id",
+                                                        "users/defaultavt.png",
                                                         arrayListOf(),
                                                         arrayListOf(),
                                                         arrayListOf()
