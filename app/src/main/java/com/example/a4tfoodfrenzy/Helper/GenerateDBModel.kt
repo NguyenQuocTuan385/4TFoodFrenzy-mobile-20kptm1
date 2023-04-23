@@ -1204,6 +1204,130 @@ class GenerateDBModel(private var context: Context) {
             R.drawable.avt,0)
         result.add(mon_an_20)
 
+        // Snack - tgt
+        // 26
+        listStep = arrayListOf()
+        listStep.add(RecipeCookStep("Thịt bò thái thành miếng rộng 5cm – dài 4cm – dày 0,3cm ngang thớ.", "foods/foodrecipe26_1.png"))
+        listStep.add(RecipeCookStep("Cho tất cả các gia vị nước sốt ở trên vào một cái bát và trộn đều thành hỗn hợp nước sốt gia vị.", "foods/foodrecipe26_2.png"))
+        listStep.add(RecipeCookStep("Cho thịt bò, hành lá vào và trộn đều cho thịt bò ngấm đều nước sốt gia vị. Ướp thịt bò ít nhất là 1 giờ.", "foods/foodrecipe26_3.png"))
+        listStep.add(RecipeCookStep("Nướng thịt bò ở nhiệt độ cao vừa phải. Nếu lửa quá lớn, thịt bò sẽ bị cháy vì trong nước ướp thịt có đường. Nướng thịt bò khoảng 2 phút mỗi bên là được", "foods/foodrecipe26_4.png"))
+
+        listIngredient = arrayListOf()
+        listIngredient.add(RecipeIngredient(450,"Thịt bò", "g", 118))
+        listIngredient.add(RecipeIngredient(1, "Hành lá", "cây", 10))
+        listIngredient.add(RecipeIngredient(5, "Nước tương", "muỗng canh", 29))
+        listIngredient.add(RecipeIngredient(3, "Đường trắng", "muỗng canh", 99))
+        listIngredient.add(RecipeIngredient(2, "Rượu trắng", "muỗng canh", 123))
+        listIngredient.add(RecipeIngredient(4, "Nước ép thơm", "muỗng canh", 120))
+        listIngredient.add(RecipeIngredient(1, "Tỏi băm", "muỗng canh", 50))
+        listIngredient.add(RecipeIngredient(1, "Gừng băm", "muỗng cà phê", 60))
+        listIngredient.add(RecipeIngredient(2, "Dầu mè", "muỗng canh", 20))
+        listIngredient.add(RecipeIngredient(2, "Mè trắng", "muỗng cà phê", 10))
+
+
+        var mon_an_26 = FoodRecipe(26,"Bò Nướng Kiểu Hàn Quốc","foods/foodrecipe26.png",4,"Dưới 45 phút",
+            Date(),true,
+            arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Trương Gia Tiến",
+            R.drawable.avt,0)
+        result.add(mon_an_26)
+
+        // 27
+        listStep = arrayListOf()
+        listStep.add(RecipeCookStep("1. Đổ sứa ra tô lớn\n2. Rửa qua 2-3 lần nước rồi để ráo", "foods/foodrecipe27_1.png"))
+        listStep.add(RecipeCookStep("Cho đường, dầu mè vào trộn đều, để khoảng 3 phút để ngấm gia vị", "foods/foodrecipe27_2.png"))
+        listStep.add(RecipeCookStep("1. Cho wasabi và xì dầu sau đó trộn đều rồi tiếp tục để khoảng 3 phút.\n2. Sau 3 phút thì ta có thể thưởng thức", "foods/foodrecipe27_3.png"))
+
+        listIngredient = arrayListOf()
+        listIngredient.add(RecipeIngredient(250, "Sứa", "g", 150))
+        listIngredient.add(RecipeIngredient(1, "Wasabi", "muỗng cà phê", 20))
+        listIngredient.add(RecipeIngredient(1, "Xì dầu", "muỗng canh", 50))
+        listIngredient.add(RecipeIngredient(1, "Đường", "muỗng cà phê", 80))
+        listIngredient.add(RecipeIngredient(1, "Dầu mè", "muỗng cà phê", 40))
+
+        var mon_an_27 = FoodRecipe(27,"Sứa Trộn Wasabi","foods/foodrecipe27.png",1,"Dưới 15 phút",
+            Date(),true,
+            arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Trương Gia Tiến",
+            R.drawable.avt,0)
+        result.add(mon_an_27)
+
+        // 28
+        listStep = arrayListOf()
+        listStep.add(RecipeCookStep("1. Nướng 2 quả ớt ngọt trong nckd ở 150C trong 20 phút.\n 2. Bóc vỏ của quả ớt ra bỏ đi, xé nhỏ, bỏ núm và hạt.", "foods/foodrecipe28_1.png"))
+        listStep.add(RecipeCookStep("Cho bột thì là, bột tiểu hồi vào máy xay và xay đến khi thật nhuyễn.", "foods/foodrecipe28_2.png"))
+        listStep.add(RecipeCookStep("1. Cho muối và đường vào máy. \n2. Bổ đôi quả chanh, vắt nước cốt vào máy xay.\n3. Cho hết ớt ngọt vào vừa nướng vào máy", "foods/foodrecipe28_3.png"))
+        listStep.add(RecipeCookStep("Cho tiếp dầu điều hoặc dầu ô liu, và bột hạnh nhân. Xay nhuyễn tất cả là xong. Ở đây mình không dùng máy xay sinh tố mà dùng máy xay tay cho nhanh gọn", "foods/foodrecipe28_4.png"))
+        listStep.add(RecipeCookStep("Có thể dùng nước sốt này để chấm bất kỳ thứ gì bạn muốn nhe, ví dụ như món bánh mì que đính kèm! Sốt này có thể để tủ lạnh trong hũ kín 1 tuần vẫn ngon", "foods/foodrecipe28_5.png"))
+
+        listIngredient = arrayListOf()
+        listIngredient.add(RecipeIngredient(2, "Ớt ngọt (màu đỏ, vàng, cam)", "quả", 150))
+        listIngredient.add(RecipeIngredient(1, "Muối", "muỗng cà phê", 20))
+        listIngredient.add(RecipeIngredient(1, "Đường nâu", "muỗng canh", 150))
+        listIngredient.add(RecipeIngredient(1, "Bột thì là", "muỗng canh", 10))
+        listIngredient.add(RecipeIngredient(1, "Bột tiểu hồi", "muỗng canh", 30))
+        listIngredient.add(RecipeIngredient(4, "Dầu điều (hoặc dầu ô liu)", "muỗng canh", 100))
+        listIngredient.add(RecipeIngredient(5, "Bột hạnh nhân", "muỗng canh", 30))
+        listIngredient.add(RecipeIngredient(1, "Chanh tươi", "quả", 10))
+        listIngredient.add(RecipeIngredient(2, "Bánh mì", "ổ", 150))
+
+        var mon_an_28 = FoodRecipe(28,"Bánh Mì Chấm Sốt Ớt Ngọt Đà Lạt","foods/foodrecipe28.png",3,"Dưới 45 phút",
+            Date(),true,
+            arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Trương Gia Tiến",
+            R.drawable.avt,0)
+        result.add(mon_an_28)
+
+        // 29
+        listStep = arrayListOf()
+        listStep.add(RecipeCookStep("Xay 1 cup yến mạch thành bột mịn, nếu bạn có sẵn bột yến mạch thì khỏi xay.", "foods/foodrecipe29_1.png"))
+        listStep.add(RecipeCookStep("Cho vào thố với chút muối, không muối cũng không sao cả chỉ để chúng thêm mặn mà thôi.","foods/foodrecipe29_2.png"))
+        listStep.add(RecipeCookStep("Nấu sôi nước, cho vào tô bột yến mạch trộn 2 phút đến khi không dính và bột trở nên dày hơn", "foods/foodrecipe29_3.png"))
+        listStep.add(RecipeCookStep("Nhồi mịn, khi nguội bớt thì cho ra bàn có phủ bột áo ngắt thành 5 viên.", "foods/foodrecipe29_4.png"))
+        listStep.add(RecipeCookStep("Thêm ít bột áo cán dẹp từng viên bột, dùng 1 cái chén để cắt cho tròn hoặc để hình con amip cũng được nốt.", "foods/foodrecipe29_5.png"))
+        listStep.add(RecipeCookStep("Nướng khô trên một chảo nóng hai mặt, nó sẽ phồng lên như cái gối. Hãy lật qua lại để bánh chín và vàng đều. 1 bánh nướng chừng 3 phút là xong", "foods/foodrecipe29_6.png"))
+        listStep.add(RecipeCookStep("Bánh vàng cạnh thì lấy ra khỏi chảo, hoàn tất và lặp lại quá trình với những bánh khác.\n" +
+                "Khi nguội bánh roti yến mạch sẽ xẹp và mềm dẻo hơn, sẵn sàng để dùng kèm các món Ấn có độ sệt như cà ri, masala…", "foods/foodrecipe29_7.png"))
+
+        listIngredient = arrayListOf()
+        listIngredient.add(RecipeIngredient(1, "Bột yến mạch", "cup", 100))
+        listIngredient.add(RecipeIngredient(1, "Bột yến mạch áo", "cup", 80))
+        listIngredient.add(RecipeIngredient(1, "Nước sôi", "cup", 0))
+        listIngredient.add(RecipeIngredient(1, "Muối", "muỗng cà phê", 10))
+
+        var mon_an_29 = FoodRecipe(29,"Bánh Roti yến mạch","foods/foodrecipe29.png",4,"Dưới 30 phút",
+            Date(),true,
+            arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Trương Gia Tiến",
+            R.drawable.avt,0)
+        result.add(mon_an_29)
+
+        // 30
+        listStep = arrayListOf()
+        listStep.add(RecipeCookStep("Lấy dao cắt bỏ phần rìa vàng của sandwich, lấy cây cà mỏng ra, xúc xích cắt khúc vừa cuộn", "foods/foodrecipe30_1.png"))
+        listStep.add(RecipeCookStep("Cuộn xúc xích lại như này","foods/foodrecipe30_2.png"))
+        listStep.add(RecipeCookStep("Trứng gà đánh đều ra, sau đó nhúng vào trứng lăn qua bột xù", "foods/foodrecipe30_3.png"))
+        listStep.add(RecipeCookStep("Dầu bật sôi bỏ vào chiên vàng đều", "foods/foodrecipe30_4.png"))
+        listStep.add(RecipeCookStep("Chấm tương ớt cay cay giòn thơm béo cực", "foods/foodrecipe30_5.png"))
+
+        listIngredient = arrayListOf()
+        listIngredient.add(RecipeIngredient(2, "Xúc xích", "cây", 130))
+        listIngredient.add(RecipeIngredient(3, "Sandwich", "miếng", 100))
+        listIngredient.add(RecipeIngredient(1, "Trứng gà", "quả", 50))
+        listIngredient.add(RecipeIngredient(1, "Bột chiên xù", "bịch", 70))
+
+        var mon_an_30 = FoodRecipe(30,"Xúc Xích Cuộn Sandwich Chiên xù","foods/foodrecipe30.png",2,"Dưới 30 phút",
+            Date(),true,
+            arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Trương Gia Tiến",
+            R.drawable.avt,0)
+        result.add(mon_an_30)
+
         // món tráng miệng
         listIngredient=ArrayList<RecipeIngredient>()
         listIngredient.add(RecipeIngredient(5,"Lá dứa", "cái", 50))
