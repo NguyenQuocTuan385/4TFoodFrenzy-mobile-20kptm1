@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.GridSpacingItemDecoration
@@ -30,8 +31,34 @@ class SearchScreen : AppCompatActivity() {
 
         val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
         cateRecipeRV!!.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
-
         cateRecipeRV!!.adapter = adapterTypeRecipeRV
+        adapterTypeRecipeRV!!.onItemClick = { recipeCate, i ->
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            if (recipeCate.recipeCateTitle.equals("Đồ uống")) {
+                intent.putExtra("keySearch","Thức uống")
+                intent.putExtra("typeSearch","recipeCategory")
+            } else if (recipeCate.recipeCateTitle.equals("Món gà")) {
+                intent.putExtra("keySearch","Gà")
+                intent.putExtra("typeSearch","recipe")
+            }
+            else if (recipeCate.recipeCateTitle.equals("Nấu nhanh")) {
+                intent.putExtra("keySearch","Nấu nhanh")
+                intent.putExtra("typeSearch","recipeCategory")
+            }
+            else if (recipeCate.recipeCateTitle.equals("Đồ ăn vặt")) {
+                intent.putExtra("keySearch","Ăn vặt")
+                intent.putExtra("typeSearch","recipeCategory")
+            }
+            else if (recipeCate.recipeCateTitle.equals("Ăn chay")) {
+                intent.putExtra("keySearch","Ăn chay")
+                intent.putExtra("typeSearch","recipeCategory")
+            }
+            else if (recipeCate.recipeCateTitle.equals("Món chính")) {
+                intent.putExtra("keySearch","Món chính")
+                intent.putExtra("typeSearch","recipeCategory")
+            }
+            startActivity(intent)
+        }
 
         searchET.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -43,10 +70,6 @@ class SearchScreen : AppCompatActivity() {
                 }
             }
             true
-        }
-        adapterTypeRecipeRV!!.onItemClick = { foodRecipe, i ->
-            val intent = Intent(this, AfterSearchActivity::class.java)
-            startActivity(intent)
         }
         findViewById<Button>(R.id.btnMore1HCook).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)

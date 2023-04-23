@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.GridLayoutManager
@@ -42,7 +43,10 @@ class MainActivity : AppCompatActivity() {
         val recipeTodayEatRV = findViewById<RecyclerView>(R.id.recipeTodayEatRV)
         val recipeMostLikesRV = findViewById<RecyclerView>(R.id.recipeMostLikesRV)
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
-
+        val btnViewMoreTodayEat = findViewById<Button>(R.id.btnViewMoreTodayEat)
+        btnViewMoreTodayEat.visibility = View.GONE
+        val btnViewMoreMostLikes = findViewById<Button>(R.id.btnViewMoreMostLikes)
+        btnViewMoreMostLikes.visibility = View.GONE
         var cateRecipeList = generateCateRecipeData() //implemened below
 
         adapterCateRecipeRV = RecipeCateListAdapter(cateRecipeList, true, false)
@@ -55,7 +59,8 @@ class MainActivity : AppCompatActivity() {
 
         if (DBManagement.isInitialized == false) {
             dbManagement.addListenerChangeDataFoodRecipe { foodRecipes ->
-                adapterRecipeTodayEatRV = RecipeListAdapter(this, foodRecipes)
+                val recipesListToday = generateRecipeTodayEatData(foodRecipes)
+                adapterRecipeTodayEatRV = RecipeListAdapter(this, recipesListToday)
                 recipeTodayEatRV!!.adapter = adapterRecipeTodayEatRV
                 recipeTodayEatRV!!.layoutManager = GridLayoutManager(this, 3)
 
@@ -64,10 +69,12 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra("foodRecipe",foodRecipe)
                     startActivity(intent)
                 }
+                btnViewMoreTodayEat.visibility = View.VISIBLE
 
-                adapterRecipeMostLikesRV = RecipeListAdapter(this, foodRecipes)
+                adapterRecipeMostLikesRV = RecipeListAdapter(this,generateRecipeMostLikesData(foodRecipes))
                 recipeMostLikesRV!!.adapter = adapterRecipeMostLikesRV
                 recipeMostLikesRV!!.layoutManager = GridLayoutManager(this, 3)
+                btnViewMoreMostLikes.visibility = View.VISIBLE
                 adapterRecipeMostLikesRV!!.onItemClick = { foodRecipe, i ->
                     val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
                     startActivity(intent)
@@ -80,7 +87,8 @@ class MainActivity : AppCompatActivity() {
             DBManagement.isInitialized = true
         }
         else {
-            adapterRecipeTodayEatRV = RecipeListAdapter(this, DBManagement.foodRecipeList)
+            val recipesListToday = generateRecipeTodayEatData(DBManagement.foodRecipeList)
+            adapterRecipeTodayEatRV = RecipeListAdapter(this,recipesListToday)
             recipeTodayEatRV!!.adapter = adapterRecipeTodayEatRV
             recipeTodayEatRV!!.layoutManager = GridLayoutManager(this, 3)
 
@@ -90,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
 
-            adapterRecipeMostLikesRV = RecipeListAdapter(this, DBManagement.foodRecipeList)
+            adapterRecipeMostLikesRV = RecipeListAdapter(this, generateRecipeMostLikesData(DBManagement.foodRecipeList))
             recipeMostLikesRV!!.adapter = adapterRecipeMostLikesRV
             recipeMostLikesRV!!.layoutManager = GridLayoutManager(this, 3)
             adapterRecipeMostLikesRV!!.onItemClick = { foodRecipe, i ->
@@ -103,11 +111,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SearchScreen::class.java)
             startActivity(intent)
         }
-        findViewById<Button>(R.id.btnViewMoreTodayEat).setOnClickListener {
+        btnViewMoreTodayEat.setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             startActivity(intent)
         }
-        findViewById<Button>(R.id.btnViewMoreMostLikes).setOnClickListener {
+        btnViewMoreMostLikes.setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             startActivity(intent)
         }
@@ -181,47 +189,29 @@ class MainActivity : AppCompatActivity() {
 
         return result
     }
-//    fun generateRecipeTodayEatData(callback:(ArrayList<FoodRecipe>) -> Unit ) {
-//        var result = ArrayList<FoodRecipe>()
+    fun generateRecipeTodayEatData(recipeList:ArrayList<FoodRecipe>): ArrayList<FoodRecipe> {
+        var result = ArrayList<FoodRecipe>()
+        val randomIndexSet = mutableSetOf<Int>()
+
+        while(randomIndexSet.size != 6) {
+            val randomIndex = (0 until recipeList.size).random()
+            if (!randomIndexSet.contains(randomIndex)) {
+                randomIndexSet.add(randomIndex)
+                result.add(recipeList.get(randomIndex))
+            }
+        }
+        return result
+    }
 //
-//        val randomIndex = (0..10).random() // lấy ngẫu nhiên một số từ 0 đến 10
-//        val recipesCollection = db.collection("RecipeFoods")
-//        val recipeQuery = recipesCollection.orderBy(FieldPath.documentId())
-//            .startAt(randomIndex.toString()).limit(6)
-//        recipeQuery.get()
-//            .addOnSuccessListener { querySnapshot ->
-//                for (document in querySnapshot) {
-//                    val foodRecipe = document.toObject(FoodRecipe::class.java)
-//                    result.add(foodRecipe)
-//                }
-//                callback(result)
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.d("TAG", "Error getting documents: ", exception)
-//                callback(arrayListOf())
-//            }
-//
-//    }
-//
-//    fun generateRecipeMostLikesData(callback:(ArrayList<FoodRecipe>) -> Unit ) {
-//        var result = ArrayList<FoodRecipe>()
-//
-//        val recipesCollection = db.collection("RecipeFoods").orderBy("numOfLikes").limit(6)
-//
-//        recipesCollection.get()
-//            .addOnSuccessListener { querySnapshot ->
-//                for (document in querySnapshot) {
-//                    val foodRecipe = document.toObject(FoodRecipe::class.java)
-//                    result.add(foodRecipe)
-//                }
-//                callback(result)
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.d("TAG", "Error getting documents: ", exception)
-//                callback(arrayListOf())
-//            }
-//
-//    }
+    fun generateRecipeMostLikesData(recipeList:ArrayList<FoodRecipe>): ArrayList<FoodRecipe> {
+        var result = ArrayList<FoodRecipe>()
+
+        val sortedRecipes = recipeList.sortedByDescending { it.numOfLikes }
+        for (i in 0 until 6) {
+            result.add(sortedRecipes.get(i))
+        }
+        return result
+    }
 //    fun generateRecipeMostLikesData(): ArrayList<FoodRecipe> {
 //        var result = ArrayList<FoodRecipe>()
 //

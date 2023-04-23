@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.*
 import com.example.a4tfoodfrenzy.Adapter.RecipeListAdapter
+import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.RecipeCategory
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -43,15 +44,11 @@ class AfterSearchActivity : AppCompatActivity() {
         val typeSearch = intent.getStringExtra("typeSearch")
         searchET.setText(keySearch)
         if (typeSearch.toString() == "cookTime") {
-            generateRecipeWithCookTime(searchET.text.toString()) { recipeAfterSearch ->
-                setRecipeListAdapter(recipeAfterSearch)
-            }
+            val recipeAfterSearch = generateRecipeWithCookTime(keySearch.toString())
+            setRecipeListAdapter(recipeAfterSearch)
         } else if (typeSearch.toString() == "recipeCategory") {
-//            generateRecipeCategory(searchET.text.toString()) {recipeCategory ->
-//                generateRecipeWithCategory(recipeCategory) {recipeAfterSearch ->
-//                    setRecipeListAdapter(recipeAfterSearch)
-//                }
-//            }
+            val recipeAfterSearch = generateRecipeWithCategory(keySearch.toString())
+            setRecipeListAdapter(recipeAfterSearch)
         } else {
 
         }
@@ -95,24 +92,15 @@ class AfterSearchActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-    fun generateRecipeWithCookTime(cookTime:String ,callback:(ArrayList<FoodRecipe>) -> Unit ) {
+    fun generateRecipeWithCookTime(cookTime:String):ArrayList<FoodRecipe> {
         var result = ArrayList<FoodRecipe>()
 
-        val recipesCollection = db.collection("RecipeFoods")
-        val query = recipesCollection.whereEqualTo("cookTime",cookTime)
-        query.get()
-            .addOnSuccessListener { querySnapshot ->
-                for (document in querySnapshot) {
-                    val foodRecipe = document.toObject(FoodRecipe::class.java)
-                    result.add(foodRecipe)
-                }
-                callback(result)
+        for (foodRecipe in DBManagement.foodRecipeList) {
+            if (foodRecipe.cookTime == cookTime) {
+                result.add(foodRecipe)
             }
-            .addOnFailureListener { exception ->
-                Log.d("TAG", "Error getting documents: ", exception)
-                callback(arrayListOf())
-            }
-
+        }
+        return result
     }
 //    fun generateRecipeCategory(recipeCategory:String ,callback:(RecipeCategory) -> Unit ) {
 //        val recipeCategory = RecipeCategory()
@@ -131,22 +119,24 @@ class AfterSearchActivity : AppCompatActivity() {
 //                callback(recipeCategory)
 //            }
 //    }
-//    fun generateRecipeWithCategory(recipeCategory: RecipeCategory, callback: (ArrayList<FoodRecipe>) -> Unit) {
-//        var result = ArrayList<FoodRecipe>()
-//
-//        val recipeQuery = db.collection("RecipeFoods").whereIn("id",recipeCategory.foodRecipes)
-//
-//        recipeQuery.get()
-//            .addOnSuccessListener { querySnapshot ->
-//                for (document in querySnapshot) {
-//                    val foodRecipe = document.toObject(FoodRecipe::class.java)
-//                    result.add(foodRecipe)
-//                }
-//                callback(result)
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.d("TAG", "Error getting documents: ", exception)
-//                callback(arrayListOf())
-//            }
-//    }
+    fun findRecipeCategory(recipeCateName : String):RecipeCategory {
+        for (recipeCate in DBManagement.recipeCateList) {
+            if (recipeCate.recipeCateName == recipeCateName) {
+                return recipeCate
+            }
+        }
+        return RecipeCategory()
+    }
+    fun generateRecipeWithCategory(recipeCateName : String) : ArrayList<FoodRecipe> {
+        var result = ArrayList<FoodRecipe>()
+
+        val recipeCategory = findRecipeCategory(recipeCateName)
+
+        for (foodRecipe in DBManagement.foodRecipeList) {
+            if (recipeCategory.foodRecipes.contains(foodRecipe.id)) {
+                result.add(foodRecipe)
+            }
+        }
+        return result
+    }
 }

@@ -231,22 +231,28 @@ class GenerateDBModel(private var context: Context) {
     fun generateDatabaseRecipeComment() {
         var recipeCmtsList:ArrayList<RecipeComment> = ArrayList()
         helperFunctionDB.uploadImageToCloudStorage("bosotme","comments")
+        helperFunctionDB.uploadImageToCloudStorage("bokho","comments")
+        helperFunctionDB.uploadImageToCloudStorage("canhcaloc","comments")
+        helperFunctionDB.uploadImageToCloudStorage("comrangduabo","comments")
+        helperFunctionDB.uploadImageToCloudStorage("bo_nuong","comments")
+        helperFunctionDB.uploadImageToCloudStorage("bunbohue","comments")
+
         var recipeCmt = RecipeComment(true, "comments/bosotme.png", "Món này nấu ngon lắm, hy vọng bạn ra tiếp công thức mới <3", Date())
         recipeCmtsList.add(recipeCmt)
 
         recipeCmt = RecipeComment(false, "comments/bokho.png", "Món này có vẻ vẫn còn thiếu gì đó khiến vị chưa được ngon lắm", Date())
-        helperFunctionDB.uploadImageToCloudStorage("bokho","comments")
+
         recipeCmtsList.add(recipeCmt)
 
         recipeCmt = RecipeComment(true, null, "Công thức rất rõ ràng, tôi sẽ thử nấu lại lần tiếp theo", Date())
         recipeCmtsList.add(recipeCmt)
 
         recipeCmt = RecipeComment(true, "comments/canhcaloc.png", "Món ăn ngon quá :3", Date())
-        helperFunctionDB.uploadImageToCloudStorage("canhcaloc","comments")
+
         recipeCmtsList.add(recipeCmt)
 
         recipeCmt = RecipeComment(true, "comments/comrangduabo.png", "Món ăn tuyệt nhất mà tôi từng nấu trước đó", Date())
-        helperFunctionDB.uploadImageToCloudStorage("comrangduabo","comments")
+
         recipeCmtsList.add(recipeCmt)
 
         recipeCmt = RecipeComment(true, null, "Tôi có một góp ý nho nhỏ là hình như công thức thiếu 1 nguyên liệu quan trọng nào đó", Date())
@@ -262,14 +268,14 @@ class GenerateDBModel(private var context: Context) {
         recipeCmtsList.add(recipeCmt)
 
         recipeCmt = RecipeComment(true, "comments/bonuong.png", "Món ăn rất tuyệt vời, 100 điểm :3", Date())
-        helperFunctionDB.uploadImageToCloudStorage("bo_nuong","comments")
+
         recipeCmtsList.add(recipeCmt)
 
         recipeCmt = RecipeComment(false, null, "Công thức gì chả có đầu có đuôi gì cả, 0 điểm", Date())
         recipeCmtsList.add(recipeCmt)
 
         recipeCmt = RecipeComment(true, "comments/bunbohue.png", "Niceeeeeeeee", Date())
-        helperFunctionDB.uploadImageToCloudStorage("bunbohue","comments")
+
         recipeCmtsList.add(recipeCmt)
 
         recipeCmt = RecipeComment(false, null, "Too bad", Date())
@@ -297,42 +303,42 @@ class GenerateDBModel(private var context: Context) {
         var result = ArrayList<FoodRecipe>()
 
         var listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(150,"Xốt cà chua","g"))
-        listIngredient.add(RecipeIngredient(300,"Cá ngừ sạch","g"))
+        listIngredient.add(RecipeIngredient(150,"Xốt cà chua","g",50))
+        listIngredient.add(RecipeIngredient(300,"Cá ngừ sạch","g",100))
 
         var listStep=ArrayList<RecipeCookStep>()
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe1_1","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe1_2","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe1_3","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe2_1","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe2_2","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe2_3","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe3_1","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe3_2","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe3_3","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe4_1","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe4_2","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe4_3","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe4_4","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe5_1","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe5_2","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe5_3","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe5_4","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe6_1","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe6_2","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe6_3","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe7_1","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe7_2","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe7_3","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe8_1","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe8_2","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe8_3","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe9_1","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe9_2","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe10_1","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe10_2","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe10_3","foods")
-//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe10_4","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe1_1","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe1_2","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe1_3","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe2_1","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe2_2","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe2_3","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe3_1","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe3_2","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe3_3","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe4_1","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe4_2","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe4_3","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe4_4","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe5_1","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe5_2","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe5_3","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe5_4","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe6_1","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe6_2","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe6_3","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe7_1","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe7_2","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe7_3","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe8_1","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe8_2","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe8_3","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe9_1","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe9_2","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe10_1","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe10_2","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe10_3","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe10_4","foods")
 
         listStep.add(
             RecipeCookStep(
@@ -366,10 +372,10 @@ class GenerateDBModel(private var context: Context) {
         result.add(mon_an_1)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(60,"Xốt Kho Tộ CookyMADE","g"))
-        listIngredient.add(RecipeIngredient(200,"Ba Rọi Heo Cooky (Thịt Tươi)","g"))
-        listIngredient.add(RecipeIngredient(15,"Hành Lá, Ớt Chỉ Thiên Đỏ","g"))
-        listIngredient.add(RecipeIngredient(200,"Cá Hú Tươi Làm Sạch Cắt Khúc","g"))
+        listIngredient.add(RecipeIngredient(60,"Xốt Kho Tộ CookyMADE","g",100))
+        listIngredient.add(RecipeIngredient(200,"Ba Rọi Heo Cooky (Thịt Tươi)","g",150))
+        listIngredient.add(RecipeIngredient(15,"Hành Lá, Ớt Chỉ Thiên Đỏ","g",50))
+        listIngredient.add(RecipeIngredient(200,"Cá Hú Tươi Làm Sạch Cắt Khúc","g",100))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -415,8 +421,8 @@ class GenerateDBModel(private var context: Context) {
 
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(150,"Mọc Viên","g"))
-        listIngredient.add(RecipeIngredient(150,"Xốt Cà Chua","g"))
+        listIngredient.add(RecipeIngredient(150,"Mọc Viên","g",100))
+        listIngredient.add(RecipeIngredient(150,"Xốt Cà Chua","g",150))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -450,9 +456,9 @@ class GenerateDBModel(private var context: Context) {
         result.add(mon_an_3)
 
         listIngredient = ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(200, "Khoai Mỡ (Cắt Sẵn)", "g"))
-        listIngredient.add(RecipeIngredient(36, "Bộ Nêm Canh (Ngò Gai, Ngò Om, Bột Gia Vị Canh CookyMADE)", "g"))
-        listIngredient.add(RecipeIngredient(100, "Thịt Heo Xay", "g"))
+        listIngredient.add(RecipeIngredient(200, "Khoai Mỡ (Cắt Sẵn)", "g",100))
+        listIngredient.add(RecipeIngredient(36, "Bộ Nêm Canh (Ngò Gai, Ngò Om, Bột Gia Vị Canh CookyMADE)", "g",50))
+        listIngredient.add(RecipeIngredient(100, "Thịt Heo Xay", "g",150))
 
         listStep = ArrayList<RecipeCookStep>()
 
@@ -503,9 +509,9 @@ class GenerateDBModel(private var context: Context) {
         result.add(mon_an_4)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(280,"Đậu Hũ Ta Vị Nguyên","g"))
-        listIngredient.add(RecipeIngredient(15,"Hành Lá, Ớt Chỉ Thiên Đỏ","g"))
-        listIngredient.add(RecipeIngredient(160,"Bộ Xốt Nấm Đông Cô","g"))
+        listIngredient.add(RecipeIngredient(280,"Đậu Hũ Ta Vị Nguyên","g",50))
+        listIngredient.add(RecipeIngredient(15,"Hành Lá, Ớt Chỉ Thiên Đỏ","g",100))
+        listIngredient.add(RecipeIngredient(160,"Bộ Xốt Nấm Đông Cô","g",50))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -549,9 +555,9 @@ class GenerateDBModel(private var context: Context) {
         result.add(mon_an_5)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(60,"Xốt Kho Tộ CookyMADE","g"))
-        listIngredient.add(RecipeIngredient(15,"Hành Lá, Ớt Chỉ Thiên Đỏ","g"))
-        listIngredient.add(RecipeIngredient(200,"Cá Lóc Tươi Làm Sạch (Cắt Khúc)","g"))
+        listIngredient.add(RecipeIngredient(60,"Xốt Kho Tộ CookyMADE","g",50))
+        listIngredient.add(RecipeIngredient(15,"Hành Lá, Ớt Chỉ Thiên Đỏ","g",100))
+        listIngredient.add(RecipeIngredient(200,"Cá Lóc Tươi Làm Sạch (Cắt Khúc)","g",150))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -599,9 +605,9 @@ class GenerateDBModel(private var context: Context) {
         result.add(mon_an_6)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(60,"Xốt Kho Tộ CookyMADE","g"))
-        listIngredient.add(RecipeIngredient(300,"Cốt Lết Heo Cooky (Thịt Tươi)","g"))
-        listIngredient.add(RecipeIngredient(37,"Bộ Kho Tiêu (Tiêu Xanh, Hành Lá, Ớt Chỉ Thiên Đỏ, Tiêu Đen Xay)","g"))
+        listIngredient.add(RecipeIngredient(60,"Xốt Kho Tộ CookyMADE","g",150))
+        listIngredient.add(RecipeIngredient(300,"Cốt Lết Heo Cooky (Thịt Tươi)","g",50))
+        listIngredient.add(RecipeIngredient(37,"Bộ Kho Tiêu (Tiêu Xanh, Hành Lá, Ớt Chỉ Thiên Đỏ, Tiêu Đen Xay)","g",100))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -639,10 +645,10 @@ class GenerateDBModel(private var context: Context) {
         result.add(mon_an_7)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(60,"Xốt Kho Tộ CookyMADE","g"))
-        listIngredient.add(RecipeIngredient(300,"Thịt Vịt Xiêm (Chặt Sẵn)","g"))
-        listIngredient.add(RecipeIngredient(30,"Kho Gừng (Gừng Củ Tươi Gọt Sẵn)","g"))
-        listIngredient.add(RecipeIngredient(1,"(Lựa chọn) Dừa Xiêm Bến Tre","trái"))
+        listIngredient.add(RecipeIngredient(60,"Xốt Kho Tộ CookyMADE","g",150))
+        listIngredient.add(RecipeIngredient(300,"Thịt Vịt Xiêm (Chặt Sẵn)","g",50))
+        listIngredient.add(RecipeIngredient(30,"Kho Gừng (Gừng Củ Tươi Gọt Sẵn)","g",200))
+        listIngredient.add(RecipeIngredient(1,"(Lựa chọn) Dừa Xiêm Bến Tre","trái",50))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -677,10 +683,10 @@ class GenerateDBModel(private var context: Context) {
         result.add(mon_an_8)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(200,"Thịt bò","g"))
-        listIngredient.add(RecipeIngredient(300,"Bông cải xanh","g"))
-        listIngredient.add(RecipeIngredient(1,"Dầu hào","g"))
-        listIngredient.add(RecipeIngredient(5,"Bột bắp","g"))
+        listIngredient.add(RecipeIngredient(200,"Thịt bò","g",100))
+        listIngredient.add(RecipeIngredient(300,"Bông cải xanh","g",50))
+        listIngredient.add(RecipeIngredient(1,"Dầu hào","g",100))
+        listIngredient.add(RecipeIngredient(5,"Bột bắp","g",50))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -706,14 +712,14 @@ class GenerateDBModel(private var context: Context) {
         result.add(mon_an_9)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(500,"Bò vụn","g"))
-        listIngredient.add(RecipeIngredient(500,"Cải chua","g"))
-        listIngredient.add(RecipeIngredient(2,"Cà chua","trái"))
-        listIngredient.add(RecipeIngredient(1,"Hành lá","tép"))
-        listIngredient.add(RecipeIngredient(1,"Ngò gai","tép"))
-        listIngredient.add(RecipeIngredient(3,"Tỏi băm","mcf"))
-        listIngredient.add(RecipeIngredient(1,"Nước lọc","lít"))
-        listIngredient.add(RecipeIngredient(5,"Dầu ăn","g"))
+        listIngredient.add(RecipeIngredient(500,"Bò vụn","g",50))
+        listIngredient.add(RecipeIngredient(500,"Cải chua","g",100))
+        listIngredient.add(RecipeIngredient(2,"Cà chua","trái",150))
+        listIngredient.add(RecipeIngredient(1,"Hành lá","tép",120))
+        listIngredient.add(RecipeIngredient(1,"Ngò gai","tép",150))
+        listIngredient.add(RecipeIngredient(3,"Tỏi băm","mcf",20))
+        listIngredient.add(RecipeIngredient(1,"Nước lọc","lít",40))
+        listIngredient.add(RecipeIngredient(5,"Dầu ăn","g",50))
 
 
         listStep=ArrayList<RecipeCookStep>()

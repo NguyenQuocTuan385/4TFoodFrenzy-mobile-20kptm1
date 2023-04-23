@@ -6,7 +6,7 @@ import android.os.Parcelable
 class RecipeCategory (
     private var _id: Long,
     private var _recipeCateName: String,
-    private var _foodRecipes: ArrayList<Int>
+    private var _foodRecipes: ArrayList<Long>
 ): Parcelable {
     constructor():this(0,"", arrayListOf())
     // Getter and Setter for _id
@@ -18,7 +18,7 @@ class RecipeCategory (
         get() = _recipeCateName
         set(value) { _recipeCateName = value }
 
-    var foodRecipes: ArrayList<Int>
+    var foodRecipes: ArrayList<Long>
         get() = _foodRecipes
         set(value) { _foodRecipes = value }
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -32,7 +32,7 @@ class RecipeCategory (
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
         parcel.readString()!!,
-        ArrayList<Int>().apply {
+        ArrayList<Long>().apply {
             parcel.readList(this, Int::class.java.classLoader)
         }
     )

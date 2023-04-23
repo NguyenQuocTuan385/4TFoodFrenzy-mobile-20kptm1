@@ -6,35 +6,44 @@ import android.os.Parcelable
 class RecipeIngredient(
     private var _ingreQuantity: Int,
     private var _ingreName: String,
-    private var _ingreUnit: String
+    private var _ingreUnit: String,
+    private var _ingreCalo: Int?
 ) : Parcelable{
-    constructor() : this(0, "", "")
+    constructor() : this(0, "", "",0)
 
-    // Getter and Setter for _ingreQuantity
+
     var ingreQuantity: Int
         get() = _ingreQuantity
         set(value) {
             _ingreQuantity = value
         }
 
-    // Getter and Setter for _ingreQuantity
+
     var ingreName: String
         get() = _ingreName
         set(value) {
             _ingreName = value
         }
 
-    // Getter and Setter for _ingreQuantity
+
     var ingreUnit: String
         get() = _ingreUnit
         set(value) {
             _ingreUnit = value
         }
+
+    var ingreCalo: Int?
+        get() = _ingreCalo
+        set(value) {
+            _ingreCalo = value
+        }
+
     // Hàm đọc dữ liệu từ Parcel và khởi tạo đối tượng RecipeIngredient
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString()!!,
-        parcel.readString()!!
+        parcel.readString()!!,
+        parcel.readInt()
     )
 
     // Ghi dữ liệu của đối tượng RecipeIngredient vào Parcel
