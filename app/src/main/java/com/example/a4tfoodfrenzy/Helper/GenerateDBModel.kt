@@ -197,25 +197,22 @@ class GenerateDBModel(private var context: Context) {
     fun generateDatabaseRecipeFoodCate() {
         var recipeCatesList:ArrayList<RecipeCategory> = ArrayList()
 
-        var recipeCate = RecipeCategory(1,"Khai vị", arrayListOf(1,3,5,7,9,12,13,21,25))
+        var recipeCate = RecipeCategory(1,"Khai vị", arrayListOf())
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(2,"Món chính", arrayListOf(1,3,6,8,10,11,14,20,22))
+        recipeCate = RecipeCategory(2,"Món chính", arrayListOf(1,2,4,5,6,7,8,9,10))
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(3,"Ăn vặt", arrayListOf(5,7,9,15,16,17))
+        recipeCate = RecipeCategory(3,"Ăn vặt", arrayListOf(3))
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(4,"Nấu nhanh", arrayListOf(6,5,12,13,18,19))
+        recipeCate = RecipeCategory(4,"Ăn chay", arrayListOf())
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(5,"Ăn chay", arrayListOf(6,8,10,14,18,21,22,26,28,29))
+        recipeCate = RecipeCategory(5,"Món tráng miệng", arrayListOf())
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(6,"Món tráng miệng", arrayListOf(6,8,10,13,18,23,24,27,28,29,30))
-        recipeCatesList.add(recipeCate)
-
-        recipeCate = RecipeCategory(7,"Thức uống", arrayListOf(2,3,5,6,8,10,13,15,18,25))
+        recipeCate = RecipeCategory(6,"Thức uống", arrayListOf(11,12,13,14,15))
         recipeCatesList.add(recipeCate)
 
         for(recipecate in recipeCatesList) {
@@ -307,38 +304,59 @@ class GenerateDBModel(private var context: Context) {
         listIngredient.add(RecipeIngredient(300,"Cá ngừ sạch","g",100))
 
         var listStep=ArrayList<RecipeCookStep>()
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe1_1","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe1_2","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe1_3","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe2_1","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe2_2","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe2_3","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe3_1","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe3_2","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe3_3","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe4_1","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe4_2","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe4_3","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe4_4","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe5_1","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe5_2","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe5_3","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe5_4","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe6_1","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe6_2","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe6_3","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe7_1","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe7_2","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe7_3","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe8_1","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe8_2","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe8_3","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe9_1","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe9_2","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe10_1","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe10_2","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe10_3","foods")
-        helperFunctionDB.uploadImageToCloudStorage("foodrecipe10_4","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe1_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe1_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe1_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe2_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe2_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe2_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe3_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe3_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe3_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe4_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe4_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe4_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe4_4","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe5_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe5_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe5_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe5_4","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe6_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe6_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe6_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe7_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe7_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe7_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe8_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe8_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe8_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe9_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe9_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe10_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe10_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe10_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe10_4","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe11_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe11_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe11_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe11_4","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe11_5","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe12_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe12_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe12_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe12_4","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe13_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe13_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe13_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe13_4","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe13_5","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe13_6","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe14_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe14_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe14_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe14_4","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe15_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe15_2","foods")
 
         listStep.add(
             RecipeCookStep(
@@ -759,6 +777,233 @@ class GenerateDBModel(private var context: Context) {
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,10)
         result.add(mon_an_10)
+
+        listIngredient=ArrayList<RecipeIngredient>()
+        listIngredient.add(RecipeIngredient(20,"Rong chân vịt hoặc rong sụn khô (khoảng 10 cọng rong)","g",50))
+        listIngredient.add(RecipeIngredient(100,"Đường phèn","g",100))
+        listIngredient.add(RecipeIngredient(5,"Táo đỏ","quả",150))
+        listIngredient.add(RecipeIngredient(1,"Gừng bằng 1 đốt ngón tay cái","nhánh",120))
+        listIngredient.add(RecipeIngredient(3,"Lá dứa","",150))
+
+
+        listStep=ArrayList<RecipeCookStep>()
+
+        listStep.add(
+            RecipeCookStep(
+                "Rong rửa sơ, ngâm với nước dấm hoặc chanh pha loãng 1 tiếng cho nở. Cần phải ngâm với chanh hoặc dấm để rong bớt tanh nha.\n" +
+                        "Rong nở xong nhặt sạch sạn và rửa sạch, để ráo",
+                "foods/foodrecipe11_1.png"
+            )
+        )
+
+        listStep.add(
+            RecipeCookStep(
+                "Cho 3 lít nước vào nồi cùng táo đỏ, gừng cắt lát, 03 lá dứa buộc chặt (nếu có). Đun sôi nước rồi thả rong vào. Cho nước sôi lại rồi để liu riu 15 phút cho rong tan mềm. Lúc này bạn kiểm tra nhen, nếu thấy nước rong đặc thì thêm nước (nấu đặc sẽ thành thạch, phải ăn kèm thứ khác mới ngon nha).",
+                "foods/foodrecipe11_2.png"
+            )
+        )
+
+        listStep.add(
+            RecipeCookStep(
+                "Vớt lá dứa, cho đường phèn vào nước rong, chỉ hơi man mát thôi nha rồi khuấy đều. Nếu không có lá dứa bạn cho 2 thìa cf tinh chất vani rồi tắt bếp. Đây là rong vừa nấu xong, vẫn còn chưa mềm hết, phần rong trắng là vẫn còn sần sật đó.",
+                "foods/foodrecipe11_3.png"
+            )
+        )
+
+        listStep.add(
+            RecipeCookStep(
+                "Đây là nước rong để nguội, rong trong suốt và mềm như yến. Bạn bỏ vào chai và cất tủ lạnh uống trong 1, 2 ngày nha! Rong khi nguội chỉ loãng như vậy thôi nha!",
+                "foods/foodrecipe11_4.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Tips: Nếu khi để nguội mà nước rong của bạn đông lại thì bạn nấu sôi lại và chế thêm nước, đường cho vừa khẩu vị của bạn nhen!\n" +
+                        "Nếu loãng thì không phải chỉnh ạ!",
+                "foods/foodrecipe11_5.png"
+            )
+        )
+
+        var mon_an_11= FoodRecipe(11,"Nước uống từ rong biển","foods/foodrecipe11_5.png",1,"Trên 1 tiếng",
+            Date(),true,
+            arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,10)
+        result.add(mon_an_11)
+
+        listIngredient=ArrayList<RecipeIngredient>()
+        listIngredient.add(RecipeIngredient(0,"Bột rau câu","",50))
+        listIngredient.add(RecipeIngredient(0,"Cốt dừa","",100))
+        listIngredient.add(RecipeIngredient(0,"Crystal light vị chanh","",150))
+        listIngredient.add(RecipeIngredient(0,"Bột khoai tím","",120))
+        listIngredient.add(RecipeIngredient(0,"Tắc","",50))
+        listIngredient.add(RecipeIngredient(0,"Trà","",50))
+        listIngredient.add(RecipeIngredient(0,"Đá","",50))
+        listIngredient.add(RecipeIngredient(0,"Lá bạc hà (hoặc húng lủi)","",100))
+        listIngredient.add(RecipeIngredient(0,"Đường","",150))
+
+        listStep=ArrayList<RecipeCookStep>()
+
+        listStep.add(
+            RecipeCookStep(
+                "Trước tiên, dùng 2 khuôn chữ nhật hoặc vuông đổ thạch rau câu màu trắng và vàng (đây là phần bún và đậu - mình dùng cốt dừa và bột crystal light để pha màu)\n" +
+                        "Lấy 1 ly, cho bột khoai tím và bột rau câu dẻo vào, làm rau câu tím ở phần đáy ly (đây sẽ là mắm tôm)\n" +
+                        "Vắt tiếp 2 trái tắc vào ly",
+                "foods/foodrecipe12_1.png"
+            )
+        )
+
+        listStep.add(
+            RecipeCookStep(
+                "Cho nước đường, và trà vào ly",
+                "foods/foodrecipe12_2.png"
+            )
+        )
+
+        listStep.add(
+            RecipeCookStep("Cho đá viên vào. Rồi bây giờ bắt đầu xếp rau câu vàng và trắng vào ly"
+                ,"foods/foodrecipe12_3.png"
+            )
+        )
+
+        listStep.add(
+            RecipeCookStep(
+                "Thêm 1 lát tắc, 1 ít húng lủi hoặc bạc hà.\n" +
+                        "Thế là đã xong 1 ly bún đậu mắm tôm ^^"
+                ,"foods/foodrecipe12_4.png"
+            )
+        )
+
+        var mon_an_12 = FoodRecipe(12,"Bún đậu mắm tôm phiên bản nước uống","foods/foodrecipe12_4.png",1,"Dưới 15 phút",
+            Date(),true,
+            arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,10)
+        result.add(mon_an_12)
+
+        listIngredient=ArrayList<RecipeIngredient>()
+        listIngredient.add(RecipeIngredient(300,"Lá tía tô","g",50))
+        listIngredient.add(RecipeIngredient(2,"Nước","lít",100))
+        listIngredient.add(RecipeIngredient(2,"Thìa ăn phở giấm (hoặc nước cốt chanh)","",150))
+
+        listStep=ArrayList<RecipeCookStep>()
+
+        listStep.add(
+            RecipeCookStep(
+                "Tía tô nhặt lấy lá, bỏ cành. Rửa sạch. Nếu không rõ nguồn gốc mua thì ngâm với nước muối loãng.",
+                "foods/foodrecipe13_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Cho lá tía tô và nước vào nồi, đun sôi khoảng 5 phút. Lá tía tô chuyển từ đỏ sang xanh thì vớt lá ra.",
+                "foods/foodrecipe13_2.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep("Cho thêm đường vào nồi nước luộc tía tô, độ ngọt vừa khẩu vị. Đun và khuấy cho tan đường."
+                ,"foods/foodrecipe13_3.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Tắt bếp, cho chút giấm (nước cốt chanh) vào khuấy đều, nếm độ chua vừa khẩu vị. Nhờ chất chua, màu nước lá tía tô chuyển sang hồng đẹp."
+                ,"foods/foodrecipe13_4.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Rót nước tía tô lọc qua rây cho sạch cặn lá sót lại. Để nguội thì cho vào bình kín, cất ngăn mát."
+                ,"foods/foodrecipe13_5.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Khi uống, pha loãng hoặc thêm đá/đường hoặc pha với rượu/soda theo khẩu vị người uống."
+                ,"foods/foodrecipe13_6.png"
+            )
+        )
+
+        var mon_an_13 = FoodRecipe(13,"Nước uống từ lá tía tô","foods/foodrecipe13_6.png",1,"Dưới 30 phút",
+            Date(),true,
+            arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,10)
+        result.add(mon_an_13)
+
+        listIngredient=ArrayList<RecipeIngredient>()
+        listIngredient.add(RecipeIngredient(4,"Chanh","quả",50))
+        listIngredient.add(RecipeIngredient(3,"Sả","nhánh",100))
+        listIngredient.add(RecipeIngredient(50,"Gừng","g",150))
+        listIngredient.add(RecipeIngredient(15,"Tỏi","g",50))
+        listIngredient.add(RecipeIngredient(2,"Nước","lít",100))
+
+        listStep=ArrayList<RecipeCookStep>()
+
+        listStep.add(
+            RecipeCookStep(
+                "Chanh vắt lấy nước (giữ lại phần vỏ), gừng thái mỏng, cho nước cốt chanh, gừng, tỏi vào máy sinh tố Electrolux xay mịn.",
+                "foods/foodrecipe14_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Sả đập dập cho vào nồi, cùng với vỏ chanh, và 2 lít nước nấu sôi đúng 1 tiếng. - Nấu vỏ chanh và sả sôi, để lửa nhỏ và đậy nắp. Nên nước cũng không hao hụt bao nhiêu. Sau khi nấu vỏ chanh và sả được 1 tiếng, cho hỗn hợp đã xay mịn ở bước 1 vào nấu sôi lại tắc bếp, rồi lượt vào chai, để nguội cho vào tủ lạnh",
+                "foods/foodrecipe14_2.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep("Mới uống nên uống ly nhỏ, từ từ tăng dần"
+                ,"foods/foodrecipe14_3.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Chia hỗn hợp nước thanh lọc đã nấu ra làm 3 phần.\n" +
+                        "Sáng ngủ dậy uống 1 phần, rồi 1 tiếng sau đó mới được ăn sáng.\n" +
+                        "Trưa và Chiều cũng uống trước bữa ăn 1 tiếng.\n" +
+                        "Chúc cả nhà thành công."
+                ,"foods/foodrecipe14_4.png"
+            )
+        )
+
+        var mon_an_14 = FoodRecipe(14,"Nước Uống Thanh Lọc Giảm Mỡ","foods/foodrecipe14_4.png",2,"Dưới 30 phút",
+            Date(),true,
+            arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,10)
+        result.add(mon_an_14)
+
+        listIngredient=ArrayList<RecipeIngredient>()
+        listIngredient.add(RecipeIngredient(0,"Nước cam (bán sẵn)","",50))
+        listIngredient.add(RecipeIngredient(0,"Đào ngâm (bán sẵn)","",100))
+        listIngredient.add(RecipeIngredient(0,"Thạch cam (bán sẵn)","",150))
+
+        listStep=ArrayList<RecipeCookStep>()
+
+        listStep.add(
+            RecipeCookStep(
+                "Cho đào và thạch cam vào cốc", "foods/foodrecipe15_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Đổ nước cam vào, thêm đá nếu muốn uống lạnh. Cùng thưởng thức thôi",
+                "foods/foodrecipe15_2.png"
+            )
+        )
+
+        var mon_an_15 = FoodRecipe(15,"Nước cam giải khát mùa hè","foods/foodrecipe15_2.png",2,"Dưới 15 phút",
+            Date(),true,
+            arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,10)
+        result.add(mon_an_15)
 
         for(recipefood in result) {
             db.collection("RecipeFoods").add(recipefood).addOnSuccessListener { documentReference ->
