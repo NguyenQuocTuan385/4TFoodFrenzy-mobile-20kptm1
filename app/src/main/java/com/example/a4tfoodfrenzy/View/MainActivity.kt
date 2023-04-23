@@ -44,20 +44,43 @@ class MainActivity : AppCompatActivity() {
         val recipeMostLikesRV = findViewById<RecyclerView>(R.id.recipeMostLikesRV)
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
         val btnViewMoreTodayEat = findViewById<Button>(R.id.btnViewMoreTodayEat)
-        btnViewMoreTodayEat.visibility = View.GONE
         val btnViewMoreMostLikes = findViewById<Button>(R.id.btnViewMoreMostLikes)
-        btnViewMoreMostLikes.visibility = View.GONE
         var cateRecipeList = generateCateRecipeData() //implemened below
 
         adapterCateRecipeRV = RecipeCateListAdapter(cateRecipeList, true, false)
         cateRecipeRV!!.adapter = adapterCateRecipeRV
         cateRecipeRV!!.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-        adapterCateRecipeRV!!.onItemClick = { foodRecipe, i ->
+        adapterCateRecipeRV!!.onItemClick = { recipeCate, i ->
             val intent = Intent(this, AfterSearchActivity::class.java)
+            if (recipeCate.recipeCateTitle.equals("Đồ uống")) {
+                intent.putExtra("keySearch","Thức uống")
+                intent.putExtra("typeSearch","recipeCategory")
+            } else if (recipeCate.recipeCateTitle.equals("Nấu nhanh")) {
+                intent.putExtra("keySearch","Nấu nhanh")
+                intent.putExtra("typeSearch","recipeCategory")
+            }
+            else if (recipeCate.recipeCateTitle.equals("Đồ ăn vặt")) {
+                intent.putExtra("keySearch","Ăn vặt")
+                intent.putExtra("typeSearch","recipeCategory")
+            }
+            else if (recipeCate.recipeCateTitle.equals("Ăn chay")) {
+                intent.putExtra("keySearch","Ăn chay")
+                intent.putExtra("typeSearch","recipeCategory")
+            }
+            else if (recipeCate.recipeCateTitle.equals("Món chính")) {
+                intent.putExtra("keySearch","Món chính")
+                intent.putExtra("typeSearch","recipeCategory")
+            }
+            else if (recipeCate.recipeCateTitle.equals("Khai vị")) {
+                intent.putExtra("keySearch","Khai vị")
+                intent.putExtra("typeSearch","recipeCategory")
+            }
             startActivity(intent)
         }
 
         if (DBManagement.isInitialized == false) {
+            btnViewMoreTodayEat.visibility = View.GONE
+            btnViewMoreMostLikes.visibility = View.GONE
             dbManagement.addListenerChangeDataFoodRecipe { foodRecipes ->
                 val recipesListToday = generateRecipeTodayEatData(foodRecipes)
                 adapterRecipeTodayEatRV = RecipeListAdapter(this, recipesListToday)
@@ -113,10 +136,14 @@ class MainActivity : AppCompatActivity() {
         }
         btnViewMoreTodayEat.setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
+            intent.putExtra("keySearch","Hôm nay ăn gì")
+            intent.putExtra("typeSearch","recipeTodayEat")
             startActivity(intent)
         }
         btnViewMoreMostLikes.setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
+            intent.putExtra("keySearch","Các món được yêu thích nhất")
+            intent.putExtra("typeSearch","recipeMostLikes")
             startActivity(intent)
         }
 
@@ -175,13 +202,7 @@ class MainActivity : AppCompatActivity() {
         typeRecipe = RecipeCategorySuggest("Đồ ăn vặt", R.drawable.doanvathome)
         result.add(typeRecipe)
 
-        typeRecipe = RecipeCategorySuggest("Hải sản", R.drawable.haisanhome)
-        result.add(typeRecipe)
-
-        typeRecipe = RecipeCategorySuggest("Rau củ", R.drawable.raucuhome)
-        result.add(typeRecipe)
-
-        typeRecipe = RecipeCategorySuggest("Điểm tâm", R.drawable.banhmihome)
+        typeRecipe = RecipeCategorySuggest("Ăn chay", R.drawable.raucuhome)
         result.add(typeRecipe)
 
         typeRecipe = RecipeCategorySuggest("Khai vị", R.drawable.khaivihome)
@@ -202,7 +223,7 @@ class MainActivity : AppCompatActivity() {
         }
         return result
     }
-//
+
     fun generateRecipeMostLikesData(recipeList:ArrayList<FoodRecipe>): ArrayList<FoodRecipe> {
         var result = ArrayList<FoodRecipe>()
 

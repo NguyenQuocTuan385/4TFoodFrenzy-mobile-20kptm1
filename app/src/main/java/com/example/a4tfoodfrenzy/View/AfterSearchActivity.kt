@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -44,13 +45,29 @@ class AfterSearchActivity : AppCompatActivity() {
         val typeSearch = intent.getStringExtra("typeSearch")
         searchET.setText(keySearch)
         if (typeSearch.toString() == "cookTime") {
-            val recipeAfterSearch = generateRecipeWithCookTime(keySearch.toString())
+            val recipeAfterSearch = findRecipeListWithCookTime(keySearch.toString())
             setRecipeListAdapter(recipeAfterSearch)
         } else if (typeSearch.toString() == "recipeCategory") {
-            val recipeAfterSearch = generateRecipeWithCategory(keySearch.toString())
+            val recipeAfterSearch = findRecipeListWithCategory(keySearch.toString())
+            setRecipeListAdapter(recipeAfterSearch)
+        } else if (typeSearch.toString() == "recipeTodayEat") {
+            setRecipeListAdapter(DBManagement.foodRecipeList)
+        }
+        else if (typeSearch.toString() == "recipeMostLikes") {
+            val recipeAfterSearch = generateRecipeMostLikesData(DBManagement.foodRecipeList)
             setRecipeListAdapter(recipeAfterSearch)
         } else {
-
+            val recipeAfterSearch = findRecipeListWithKeyword(keySearch.toString())
+            setRecipeListAdapter(recipeAfterSearch)
+        }
+        searchET.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (!searchET.text.isNullOrEmpty()) {
+                    val recipeAfterSearch = findRecipeListWithKeyword(searchET.text.toString())
+                    setRecipeListAdapter(recipeAfterSearch)
+                }
+            }
+            true
         }
 
         val menu = bottomNavigationView.menu
@@ -92,7 +109,7 @@ class AfterSearchActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-    fun generateRecipeWithCookTime(cookTime:String):ArrayList<FoodRecipe> {
+    fun findRecipeListWithCookTime(cookTime:String):ArrayList<FoodRecipe> {
         var result = ArrayList<FoodRecipe>()
 
         for (foodRecipe in DBManagement.foodRecipeList) {
@@ -102,23 +119,7 @@ class AfterSearchActivity : AppCompatActivity() {
         }
         return result
     }
-//    fun generateRecipeCategory(recipeCategory:String ,callback:(RecipeCategory) -> Unit ) {
-//        val recipeCategory = RecipeCategory()
-//        val recipeCatesCollection = db.collection("RecipeCates")
-//        val recipeCateQuery = recipeCatesCollection.whereEqualTo("recipeCateName",recipeCategory)
-//
-//        recipeCateQuery.get()
-//            .addOnSuccessListener { querySnapshot ->
-//                for (document in querySnapshot) {
-//                    val recipeCategory = document.toObject(RecipeCategory::class.java)
-//                }
-//                callback(recipeCategory)
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.d("TAG", "Error getting documents: ", exception)
-//                callback(recipeCategory)
-//            }
-//    }
+
     fun findRecipeCategory(recipeCateName : String):RecipeCategory {
         for (recipeCate in DBManagement.recipeCateList) {
             if (recipeCate.recipeCateName == recipeCateName) {
@@ -127,7 +128,7 @@ class AfterSearchActivity : AppCompatActivity() {
         }
         return RecipeCategory()
     }
-    fun generateRecipeWithCategory(recipeCateName : String) : ArrayList<FoodRecipe> {
+    fun findRecipeListWithCategory(recipeCateName : String) : ArrayList<FoodRecipe> {
         var result = ArrayList<FoodRecipe>()
 
         val recipeCategory = findRecipeCategory(recipeCateName)
@@ -136,6 +137,26 @@ class AfterSearchActivity : AppCompatActivity() {
             if (recipeCategory.foodRecipes.contains(foodRecipe.id)) {
                 result.add(foodRecipe)
             }
+        }
+        return result
+    }
+    fun findRecipeListWithKeyword(keySearch: String):ArrayList<FoodRecipe> {
+        var result = ArrayList<FoodRecipe>()
+
+        for (foodRecipe in DBManagement.foodRecipeList) {
+            if (foodRecipe.recipeName.toLowerCase().contains(keySearch.toLowerCase()))
+            {
+                result.add(foodRecipe)
+            }
+        }
+        return result
+    }
+    fun generateRecipeMostLikesData(recipeList:ArrayList<FoodRecipe>): ArrayList<FoodRecipe> {
+        var result = ArrayList<FoodRecipe>()
+
+        val sortedRecipes = recipeList.sortedByDescending { it.numOfLikes }
+        for (recipe in sortedRecipes) {
+            result.add(recipe)
         }
         return result
     }
