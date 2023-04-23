@@ -368,6 +368,28 @@ class GenerateDBModel(private var context: Context) {
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe20_1","foods")
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe20_2","foods")
 
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe31_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe31_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe31_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe31_4","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe31_5","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe32_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe32_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe32_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe32_4","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe33_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe33_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe34_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe34_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe34_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe34_4","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe34_5","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe34_6","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe35_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe35_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe35_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe35_4","foods")
+
         listStep.add(
             RecipeCookStep(
                 "Sơ chế, rửa sạch nguyên vật liệu, để ráo nước hoàn toàn, tiến hành cắt thái\n" +
@@ -1182,6 +1204,209 @@ class GenerateDBModel(private var context: Context) {
             R.drawable.avt,0)
         result.add(mon_an_20)
 
+        // món tráng miệng
+        listIngredient=ArrayList<RecipeIngredient>()
+        listIngredient.add(RecipeIngredient(5,"Lá dứa", "cái", 50))
+        listIngredient.add(RecipeIngredient(300,"Đậu xanh", "g", 300))
+
+        listStep=ArrayList<RecipeCookStep>()
+        listStep.add(
+            RecipeCookStep(
+                "Đậu xanh vo sạch, ngâm nước nóng 30p.\n" +
+                        "Lá dứa mình chuẩn bị tầm 5 lá.",
+                "foods/foodrecipe31_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Bắt nươc nấu sôi, cho đậu xanh vào nấu, nấu sôi vớt bọt tầm 10p.\n" +
+                        "Cho thêm lá dứa vào, lại nấu sôi vớt bọt.",
+                "foods/foodrecipe31_2.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Nấu sôi, b hạ lửa nhỏ đậy nắp, nấu thêm 20p cho đậu nở bung ra.\n" +
+                        "Sau khi đậu nở bung, mềm, vớt bỏ lá dứa.",
+                "foods/foodrecipe31_3.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Lúc này sẽ nêm đường, đường nâu ít ngọt, tùy theo loại đường mà bạn dùng.\n" +
+                        "Đường của mình ở đây là 2 vá. Tắt lửa, khuấy cho đường tan. Đậy nắp thêm 5p => hoàn thành.",
+                "food/fooddrecipe31_4.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Món này có thể dùng nóng, ướp lạnh, cho đá, cách nào cũng ngon. Bảo quản ngăn mat tủ lạnh trong 3 ngày :)",
+                "food/foodrecipe31_5"
+            )
+        )
+
+        var mon_an_31 = FoodRecipe(31,"Chè đậu xanh lá dữa","food/foodrecipe31_5", 2, "Dưới 30 phút",
+            Date(),true,arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,10)
+        result.add(mon_an_31)
+
+
+        listIngredient= ArrayList()
+        listIngredient.add(RecipeIngredient(200,"Bột nếp", "g", 100))
+        listIngredient.add(RecipeIngredient(300,"Mật mía", "ml", 300))
+
+        listStep= ArrayList()
+        listStep.add(
+            RecipeCookStep(
+                "Bột năng trộn bột nếp, chia làm 3 phần. Đun sôi nước. Vừa đổ vừa quấy 1 phần sao cho bột sệt sệt dạng sữa chua. Đổ tiếp 1 phần vào trộn đều (tạo thành 1 hỗn hợp lợn cợn như cơm nát, nếu khô quá có thể thêm chút nước) Để bột nghỉ 30 phút. Thêm nốt chỗ bột còn lại vào (chừa lại 1 ít để áo bột) tùy độ hút nước của bột mà điều chỉnh (khi làm nên dự trù thêm bột ở ngoài) nặn to nhỏ, dài dẹp tùy thích. Khi nặn xong áo qua 1 lớp bột (bước này có thể làm xong cất tủ đông ăn dần)",
+                "foods/foodrecipe32_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Đun 1 nồi nước thật sôi, thả bánh, hạ lửa trung bình nhỏ đun đến khi bánh nổi vớt ra thả ngay vào 1 bát nước lạnh",
+                "foods/foodrecipe32_2.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Gừng thái sợi, mật mía và 1 ít nước đun sôi. Thả bánh vào đun tiếp đến khi nước sệt sệt là được",
+                "foods/foodrecipe32_3.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Bánh ngon nhất khi thưởng thức nóng.",
+                "foods/foodrecipe32_4.png"
+            )
+        )
+
+        var mon_an_32 = FoodRecipe(32,"Bánh nếp mía","foods/foodrecipe32_4.png", 2, "Dưới 2 tiếng",
+            Date(),true,arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,10)
+        result.add(mon_an_32)
+
+
+        listIngredient= ArrayList()
+        listIngredient.add(RecipeIngredient(200,"Bột mỳ", "g", 100))
+        listIngredient.add(RecipeIngredient(300,"Sữa tươi", "ml", 300))
+        listIngredient.add(RecipeIngredient(160,"Đường", "g", 50))
+
+        listStep= ArrayList()
+        listStep.add(
+            RecipeCookStep(
+                "Lấy ra 1mcf đường và 30g sữa tươi cho vào men ủ 30 phút sau đó cho vào thau bột cùng đường nước lá cẩm sữa tươi quậy đều ủ 1 h cho vào 2mc dầu ăn ủ thêm 15 phút. bắc xửng nước thật sôi cho bột vào đầy khuôn haps với lửa lớn. mình hấp bằng chén lớn nhưng bị đụng nắp nên chuyển sang hộp nhỏ",
+                "foods/foodrecipe33_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Ghim bánh không dính là bánh chín lấy ra",
+                "foods/foodrecipe33_2.png"
+            )
+        )
+
+        var mon_an_33 = FoodRecipe(33,"Bánh bò bông","foods/foodrecipe33_2.png", 2, "Dưới 2 tiếng",
+            Date(),true,arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,10)
+        result.add(mon_an_33)
+
+
+        listIngredient= ArrayList()
+        listIngredient.add( RecipeIngredient(1, "chùm ruột", "kg",100))
+        listIngredient.add( RecipeIngredient(700, "đường vàng", "g", 100))
+
+        listStep= ArrayList()
+        listStep.add(
+            RecipeCookStep(
+                "Chùm ruột rửa sạch, để ráo, cho vô bịch nilong, bỏ vô ngăn đông tủ lạnh 1 ngày. Sau 1 ngày lấy ra rả đông, cho từng ít một khăn xô vắt ráo nước.",
+                "foods/foodrecipe34_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Cho đường vô chùm ruột trộn đều, để ướp 5 tiếng cho tan hết đường.",
+                "foods/foodrecipe34_2.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Đổ chùm ruột ngâm đường vô chảo,bắc lên bếp rim lửa to cho đến khi chùm ruột bắt đầu chuyển màu thì hạ nhỏ lửa.",
+                "foods/foodrecipe34_3.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Tiếp tục rim chùm ruột đến khi đường cạn hết, rút vô trái chùm ruột và chuyển màu đỏ đẹp mắt thì tắt bếp. (Trong lúc rim lâu lâu đảo nhẹ tay).",
+                "foods/foodrecipe34_4.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Cho chùm ruột ra khay để nguội rồi cho vô hũ sạch, bảo quản trong ngăn mát tủ lạnh.",
+                "foods/foodrecipe34_5.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Mứt chùm ruột để ăn vặt hoặc làm si rô đá bào đều ngon.",
+                "foods/foodrecipe34_6.png"
+            )
+        )
+
+        var mon_an_34 = FoodRecipe(34,"Mứt chùm ruột","foods/foodrecipe34_6.png", 2, "Dưới 3 tiếng",
+            Date(),true,arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,10)
+        result.add(mon_an_34)
+
+        listIngredient= ArrayList()
+        listIngredient.add(  RecipeIngredient(200, "bột ớt", "g", 100))
+        listIngredient.add(  RecipeIngredient(40, "bột ngọt", "g",40))
+        listIngredient.add(  RecipeIngredient(40, "muối", "g", 20))
+
+        listStep= ArrayList()
+        listStep.add(
+            RecipeCookStep(
+                "Nấu nước với ít muối,chờ nước sôi vừa bỏ khoai vào ngâm tầm 2-3 phút vớt ra giấy để khô.",
+                "foods/foodrecipe35_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Trộn khoai tây với bột ớt,bột ngọt,muối,xíu dầu lắc đều đợi ngấm gia vị 3-5 phút",
+                "foods/foodrecipe35_2.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Bỏ vào lò chiên không dầu thôi bật 200 độ chiên khoảng 20-25 phút",
+                "foods/foodrecipe35_3.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Sản phẩm hoàn thành gắp ra dĩa và sơi thôi",
+                   "foods/foodrecipe35_4.png"
+            )
+        )
+
+        var mon_an_35 = FoodRecipe(35,"Khoai tây chiên","foods/foodrecipe35_4.png", 2, "Dưới 30 phút",
+            Date(),true,arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,10)
+        result.add(mon_an_35)
+
+
+        // thêm vào firebase
         for(recipefood in result) {
             db.collection("RecipeFoods").add(recipefood).addOnSuccessListener { documentReference ->
                 Log.d("TAG", "DocumentSnapshot added with ID: ${documentReference.id}")
