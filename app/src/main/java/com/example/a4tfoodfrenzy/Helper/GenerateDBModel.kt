@@ -197,19 +197,19 @@ class GenerateDBModel(private var context: Context) {
     fun generateDatabaseRecipeFoodCate() {
         var recipeCatesList:ArrayList<RecipeCategory> = ArrayList()
 
-        var recipeCate = RecipeCategory(1,"Khai vị", arrayListOf())
+        var recipeCate = RecipeCategory(1,"Khai vị", arrayListOf(16,17,18,19,20))
         recipeCatesList.add(recipeCate)
 
         recipeCate = RecipeCategory(2,"Món chính", arrayListOf(1,2,4,5,6,7,8,9,10))
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(3,"Ăn vặt", arrayListOf(3))
+        recipeCate = RecipeCategory(3,"Ăn vặt", arrayListOf(26,27,28,29,30))
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(4,"Ăn chay", arrayListOf())
+        recipeCate = RecipeCategory(4,"Ăn chay", arrayListOf(21,22,23,24,25))
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(5,"Món tráng miệng", arrayListOf())
+        recipeCate = RecipeCategory(5,"Món tráng miệng", arrayListOf(31,32,33,34,35))
         recipeCatesList.add(recipeCate)
 
         recipeCate = RecipeCategory(6,"Thức uống", arrayListOf(11,12,13,14,15))
@@ -357,6 +357,16 @@ class GenerateDBModel(private var context: Context) {
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe14_4","foods")
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe15_1","foods")
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe15_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe16_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe16_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe17_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe18_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe18_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe19_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe19_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe19_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe20_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe20_2","foods")
 
         listStep.add(
             RecipeCookStep(
@@ -829,7 +839,7 @@ class GenerateDBModel(private var context: Context) {
             arrayListOf(),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",
-            R.drawable.avt,10)
+            R.drawable.avt,0)
         result.add(mon_an_11)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -880,7 +890,7 @@ class GenerateDBModel(private var context: Context) {
             arrayListOf(),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",
-            R.drawable.avt,10)
+            R.drawable.avt,0)
         result.add(mon_an_12)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -931,7 +941,7 @@ class GenerateDBModel(private var context: Context) {
             arrayListOf(),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",
-            R.drawable.avt,10)
+            R.drawable.avt,0)
         result.add(mon_an_13)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -975,7 +985,7 @@ class GenerateDBModel(private var context: Context) {
             arrayListOf(),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",
-            R.drawable.avt,10)
+            R.drawable.avt,0)
         result.add(mon_an_14)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -1002,8 +1012,175 @@ class GenerateDBModel(private var context: Context) {
             arrayListOf(),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",
-            R.drawable.avt,10)
+            R.drawable.avt,0)
         result.add(mon_an_15)
+
+        listIngredient=ArrayList<RecipeIngredient>()
+        listIngredient.add(RecipeIngredient(3,"Khía muối","",50))
+        listIngredient.add(RecipeIngredient(0,"Tỏi","",100))
+        listIngredient.add(RecipeIngredient(0,"Ớt","",150))
+        listIngredient.add(RecipeIngredient(0,"Đường","",50))
+        listIngredient.add(RecipeIngredient(0,"Chanh","",50))
+        listIngredient.add(RecipeIngredient(0,"Cà chua","",50))
+        listIngredient.add(RecipeIngredient(0,"Đậu đũa","",50))
+        listIngredient.add(RecipeIngredient(0,"Đu đủ già","",50))
+
+        listStep=ArrayList<RecipeCookStep>()
+
+        listStep.add(
+            RecipeCookStep(
+                "Sử dụng ba khía muối thì mọi người trụng lại với nước sôi để làm giảm độ mặn. Mình sử dụng ba khía loại ướp sẵn tỏi ớt cũng rất thơm ngon",
+                "foods/foodrecipe16_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Cà chua bỏ hạt, cắt nhỏ. Đậu đũa để sống hoặc luộc chín rồi ngâm nước đá lạnh. Đu đủ già bỏ vỏ, cắt thành các khúc rồi ngâm nước muối cho bớt mủ, sau đó cắt lát mỏng/bào sợi rồi ngâm nước đá cho giòn.",
+                null
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Ba khía đập dập sơ, cho các nguyên liệu vào trong hộp to, trộn đều. Thêm đường, nước cốt chanh, ớt tỏi tùy khẩu vị. Để khoảng 15-20 phút cho các nguyên liệu thấm gia vị. Đu đủ, đậu đũa giòn sừn sựt, ba khía mặn mặn chua chua cay cay, ăn với cơm trắng nóng hoặc bún tươi bao ngon luôn ạ. Bỏ tủ lạnh ăn dần vẫn ngon ạ ^^"
+                ,"foods/foodrecipe16_2.png"
+            )
+        )
+
+        var mon_an_16= FoodRecipe(16,"Gỏi ba khía","foods/foodrecipe16_2.png",4,"Dưới 45 phút",
+            Date(),true,
+            arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,0)
+        result.add(mon_an_16)
+
+        listIngredient=ArrayList<RecipeIngredient>()
+        listIngredient.add(RecipeIngredient(300,"giò sống","g",50))
+        listIngredient.add(RecipeIngredient(100,"cà rốt thái sợi","g",100))
+        listIngredient.add(RecipeIngredient(100,"đậu quả","g",150))
+        listIngredient.add(RecipeIngredient(0,"Gia vị: tiêu; nước mắm; muối","",50))
+        listIngredient.add(RecipeIngredient(50,"Mộc nhĩ","g",50))
+
+        listStep=ArrayList<RecipeCookStep>()
+
+        listStep.add(
+            RecipeCookStep(
+                "Giò sống ướp với1/2 thìa cafe muối ; 1 thìa canh nước mắm; 1/2 thìa cafe tiêu. Cà rốt thái sợi trần sơ qua nước sôi cùng đậu quả (vớt ra ngâm nước lạnh) mộc nhĩ, váng đậu ngâm nước ấm cho nở rồi rửa sạch.",null
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Trải 1 lớp giấy bạc bằng với lớp váng đậu rồi phết 1 lớp giò sống lên dàn đều cho cà rốt đều lên trên. Sau đó trải 1 lớp mộc nhĩ phết giò sống lên rồi 1 lớp đậu que cuối cùng là 1 lớp giò rồi cuộn tròn lại nhớ cuộn chặt tay nếu ko giò sẽ dễ bị bung ra khi hấp. Và không được đẹp.",null
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Cố định giò bằng cách xoắn chặt 2 đầu giấy bạc. Đem hấp cách thủy 15-20p",null
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Sau đó lấy ra để nguội rồi thái thành từng khoanh và thưởng thức. Nuớc chấm có thể chấm với nước tương; nước mắm chua ngọt; tương ớt, sốt mayonnaise (tùy sở thích mỗi người)"
+                ,"foods/foodrecipe17_1.png"
+            )
+        )
+
+        var mon_an_17= FoodRecipe(17,"Giò hoa khai vị","foods/foodrecipe17_1.png",4,"Dưới 45 phút",
+            Date(),true,
+            arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,0)
+        result.add(mon_an_17)
+
+        listIngredient=ArrayList<RecipeIngredient>()
+        listIngredient.add(RecipeIngredient(2,"khổ qua","trái",50))
+        listIngredient.add(RecipeIngredient(0,"Tôm thẻ","",100))
+        listIngredient.add(RecipeIngredient(0,"Rau thơm","",150))
+        listIngredient.add(RecipeIngredient(2,"Chanh","trái",50))
+        listIngredient.add(RecipeIngredient(0,"tỏi","",50))
+        listIngredient.add(RecipeIngredient(0,"ớt","",50))
+        listIngredient.add(RecipeIngredient(2,"đường","mc",50))
+        listIngredient.add(RecipeIngredient(1,"nước mắm","mc",50))
+
+        listStep=ArrayList<RecipeCookStep>()
+
+        listStep.add(
+            RecipeCookStep("Khổ qua bỏ ruột bỏ luôn phần trắng bào mỏng rồi ngâm trong nước đá khoảng 2 h cho trong. tôm thẻ lột vỏ (mình làm tôm thủy tinh ăn cho giòn). đem luộc tôm chín để nguội. nặn 2 trái chanh, thêm 1/2 mc nước mắm, 2mc đường quậy đều bằm tỏi ớt nhuyển, chia 2 một phần trộn vào tôm, phần kia trộn vào khổ qua"
+                , "foods/foodrecipe18_1.png"))
+        listStep.add(
+            RecipeCookStep("Cho khổ qua ra dĩa cho rau thơm tiếp đến cho tôm lên có thể cho mè rang hay đậu phộng lên.",
+                "foods/foodrecipe18_2.png"
+                )
+        )
+
+        var mon_an_18= FoodRecipe(18,"Gỏi khổ qua","foods/foodrecipe18_2.png",3,"Trên 1 tiếng",
+            Date(),true,
+            arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,0)
+        result.add(mon_an_18)
+
+        listIngredient=ArrayList<RecipeIngredient>()
+        listIngredient.add(RecipeIngredient(2,"mướp đắng","quả",50))
+        listIngredient.add(RecipeIngredient(2,"gừng nhỏ","miếng",100))
+        listIngredient.add(RecipeIngredient(1,"xì dầu","muỗng canh",150))
+        listIngredient.add(RecipeIngredient(1,"dầu ô liu","muỗng canh",50))
+        listIngredient.add(RecipeIngredient(1,"dầu mè","muỗng cà phê",50))
+        listIngredient.add(RecipeIngredient(1,"đường (tuỳ ý)","muỗng cà phê",50))
+
+        listStep=ArrayList<RecipeCookStep>()
+
+        listStep.add(
+            RecipeCookStep("Rửa sạch mướp đắng, cắt đôi, nạo hạt ra. Thái lát mỏng. Gừng gọt vỏ, thái sợi, cắt nhỏ.", "foods/foodrecipe19_1.png"))
+        listStep.add(
+            RecipeCookStep("Cho xì dầu, dầu mè, dầu ô liu, xíu đường (có thể không cho đường nếu muốn).",
+                "foods/foodrecipe19_2.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep("Trộn đều và măm măm thôi!",
+                "foods/foodrecipe19_3.png"
+            )
+        )
+
+        var mon_an_19= FoodRecipe(19,"Mướp đắng trộn gừng","foods/foodrecipe19_3.png",2,"Dưới 15 phút",
+            Date(),true,
+            arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,0)
+        result.add(mon_an_19)
+
+        listIngredient=ArrayList<RecipeIngredient>()
+        listIngredient.add(RecipeIngredient(100,"bạc hà","g",50))
+        listIngredient.add(RecipeIngredient(20,"tôm đất hấp chín","g",100))
+        listIngredient.add(RecipeIngredient(0,"Rau thơm: húng quế, húng cay,…","g",150))
+        listIngredient.add(RecipeIngredient(1,"Mè rang","mcf",50))
+        listIngredient.add(RecipeIngredient(1,"Hành phi","mcf",50))
+        listIngredient.add(RecipeIngredient(2,"Nước mắm trộn gỏi","muỗng canh",50))
+
+        listStep=ArrayList<RecipeCookStep>()
+
+        listStep.add(
+            RecipeCookStep("Loại rau này có người bóp muối sơ rồi trộn còn mình thích trụng sơ. Sau đó vắt ráo.",
+                "foods/foodrecipe20_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep("Thêm các nguyên liệu rau thơm tôm nước mắm, hành phi, mè rang là ăn được.",
+                "foods/foodrecipe20_2.png"
+            )
+        )
+
+        var mon_an_20 = FoodRecipe(20,"Gỏi Bạc Hà Tôm Đất","foods/foodrecipe20_2.png",2,"Dưới 30 phút",
+            Date(),true,
+            arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,0)
+        result.add(mon_an_20)
 
         for(recipefood in result) {
             db.collection("RecipeFoods").add(recipefood).addOnSuccessListener { documentReference ->
