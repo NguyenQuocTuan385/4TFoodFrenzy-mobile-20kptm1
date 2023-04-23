@@ -14,6 +14,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import com.bumptech.glide.Glide
+import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
 import com.google.firebase.auth.FirebaseAuth
@@ -122,40 +124,62 @@ class EditProfileActivity : AppCompatActivity() {
         progressDialog.setMessage("Đang tải...")
         progressDialog.show()
 
-        db = FirebaseFirestore.getInstance()
-        auth = FirebaseAuth.getInstance()
-        val user = auth.currentUser
-        val user_id = user?.uid
-        val docRef = db.collection("users").document(user_id.toString())
-        docRef.get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    val user = document.toObject(User::class.java)
-                    name = findViewById(R.id.name_profile)
-                    name.text = user?.fullname
-                    avatar = findViewById(R.id.creatorImage)
-                    val imageRef = user?.avatar?.let { storageRef.getReference(it) }
-                    if (imageRef != null) {
-                        imageRef.getBytes(Long.MAX_VALUE).addOnSuccessListener { bytes ->
-                            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                            avatar.setImageBitmap(bitmap)
-                        }.addOnFailureListener { exception ->
-                            // Xử lý ngoại lệ nếu có lỗi xảy ra
-                        }
-                    }
-                    nameET = findViewById(R.id.editTextPersonName)
-                    nameET.setText(user?.fullname)
-                    emailET = findViewById(R.id.editTextEmail)
-                    emailET.setText(user?.email)
-                    bioET = findViewById<EditText>(R.id.editTextBio)
-                    bioET.setText(user?.bio)
+        val user_current = DBManagement.user_current
+        name = findViewById(R.id.name_profile)
+        name.text = user_current?.fullname ?: ""
 
-                    Log.d("TAG", "DocumentSnapshot data: ${document.data}")
-                }
+        avatar = findViewById(R.id.creatorImage)
+        val imageRef = user_current?.avatar?.let { storageRef.getReference(it) }
+        if (imageRef != null) {
+            imageRef.downloadUrl.addOnSuccessListener { uri ->
+                Glide.with(this)
+                    .load(uri)
+                    .into(avatar)
+            }.addOnFailureListener { exception ->
+                // Xử lý lỗi
             }
-            .addOnFailureListener { exception ->
-                Log.d("TAG", "get failed with ", exception)
-            }
+        }
+        nameET = findViewById(R.id.editTextPersonName)
+        nameET.setText(user_current?.fullname)
+        emailET = findViewById(R.id.editTextEmail)
+        emailET.setText(user_current?.email)
+        bioET = findViewById(R.id.editTextBio)
+        bioET.setText(user_current?.bio)
+
+//        db = FirebaseFirestore.getInstance()
+//        auth = FirebaseAuth.getInstance()
+//        val user = auth.currentUser
+//        val user_id = user?.uid
+//        val docRef = db.collection("users").document(user_id.toString())
+//        docRef.get()
+//            .addOnSuccessListener { document ->
+//                if (document != null) {
+//                    val user = document.toObject(User::class.java)
+//                    name = findViewById(R.id.name_profile)
+//                    name.text = user?.fullname
+//                    avatar = findViewById(R.id.creatorImage)
+//                    val imageRef = user?.avatar?.let { storageRef.getReference(it) }
+//                    if (imageRef != null) {
+//                        imageRef.getBytes(Long.MAX_VALUE).addOnSuccessListener { bytes ->
+//                            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+//                            avatar.setImageBitmap(bitmap)
+//                        }.addOnFailureListener { exception ->
+//                            // Xử lý ngoại lệ nếu có lỗi xảy ra
+//                        }
+//                    }
+//                    nameET = findViewById(R.id.editTextPersonName)
+//                    nameET.setText(user?.fullname)
+//                    emailET = findViewById(R.id.editTextEmail)
+//                    emailET.setText(user?.email)
+//                    bioET = findViewById<EditText>(R.id.editTextBio)
+//                    bioET.setText(user?.bio)
+//
+//                    Log.d("TAG", "DocumentSnapshot data: ${document.data}")
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.d("TAG", "get failed with ", exception)
+//            }
         if(progressDialog.isShowing)
         {
             progressDialog.dismiss()

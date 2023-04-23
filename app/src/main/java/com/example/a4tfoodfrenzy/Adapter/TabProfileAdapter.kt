@@ -13,10 +13,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.GridSpacingItemDecoration
 import com.example.a4tfoodfrenzy.Adapter.RecipeListInProfileAdapter
+import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
+import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class TabProfileAdapter(private var context: Context,fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     private val mFragmentList = ArrayList<Fragment>()
@@ -57,16 +60,24 @@ class TabFoodRecipeSaved(private var context: Context) : Fragment() {
         return view
     }
 
-    private fun generateRecipeSaved(): ArrayList<FoodRecipe> {
+    private fun generateRecipeSaved(): HashMap<FoodRecipe, User> {
+        var HashMap = HashMap<FoodRecipe, User>()
         var result = ArrayList<FoodRecipe>()
-        for (i in 0..10) {
-            val monAn1 = FoodRecipe(1, "Thịt ba chỉ nướng mật ong", "thitbachimatong", 2, "15 phút",
-                Date(2022, 2,2), true,
-                ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(),"Đặng Ngọc Tiến",R.drawable.defaultavt,0)
-            monAn1.authorName = "Đặng Ngọc Tiến"
-            result.add(monAn1)
+
+        val recipeSaved = DBManagement.user_current?.foodRecipeSaved
+
+        DBManagement.foodRecipeList.forEach {
+            if (recipeSaved?.contains(it.id) == true) {
+                result.add(it)
+                DBManagement.userList.forEach { user ->
+                    if (user.myFoodRecipes?.contains(it.id) == true) {
+                        HashMap[it] = user
+                    }
+                }
+            }
         }
-        return result
+
+        return HashMap
     }
 }
 
@@ -86,13 +97,16 @@ class TabMyFoodRecipe(private var context: Context) : Fragment() {
         return view
     }
 
-    private fun generateRecipeSaved(): ArrayList<FoodRecipe> {
-        var result = ArrayList<FoodRecipe>()
-            val monAn1 = FoodRecipe(1, "Mực nướng Malaysia", "mucnuongmalaysia", 2, "15 phút",
-                Date(2022, 2,2), true,
-                ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
+    private fun generateRecipeSaved(): HashMap<FoodRecipe, User> {
+        var HashMap = HashMap<FoodRecipe, User>()
+        val recipeCreated = DBManagement.user_current?.myFoodRecipes
 
-            result.add(monAn1)
-        return result
+        DBManagement.foodRecipeList.forEach {
+           if(recipeCreated?.contains(it.id) == true) {
+               HashMap[it] = DBManagement.user_current!!
+           }
+        }
+
+        return HashMap
     }
 }
