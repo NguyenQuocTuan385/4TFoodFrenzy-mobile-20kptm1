@@ -30,7 +30,7 @@ class GenerateDBModel(private var context: Context) {
             "Xin chào, tôi là một đầu bếp trực tuyến đam mê nấu ăn và chia sẻ kiến thức về ẩm thực. Tôi rất vui khi được giới thiệu với các bạn qua đoạn tiểu sử này.",
             "users/defaultavt.png",
             arrayListOf(1,2),
-            arrayListOf(1, 2),
+            arrayListOf(1, 2,3,4),
             arrayListOf(1,2,3)
         );
         users.add(user1)
@@ -43,7 +43,7 @@ class GenerateDBModel(private var context: Context) {
             "Tôi đã có hơn 5 năm kinh nghiệm làm việc trong lĩnh vực ẩm thực và tôi luôn cố gắng nâng cao kỹ năng và khả năng của mình bằng cách học hỏi từ các chuyên gia và thực hành nhiều hơn.",
             "users/avt.png",
             arrayListOf(3,4),
-            arrayListOf(),
+            arrayListOf(5,6),
             arrayListOf(1,2,3)
         )
         users.add(user2)
@@ -56,7 +56,7 @@ class GenerateDBModel(private var context: Context) {
             "Tôi đã có cơ hội làm việc tại nhiều nhà hàng và khách sạn nổi tiếng ở nhiều quốc gia khác nhau, từ đó tôi đã học được rất nhiều kiến thức và kinh nghiệm về ẩm thực.",
             "users/avt.png",
             arrayListOf(5,6),
-            arrayListOf(3,4),
+            arrayListOf(7,8),
             arrayListOf(5)
         )
         users.add(user3)
@@ -69,7 +69,7 @@ class GenerateDBModel(private var context: Context) {
             "Tôi đã có cơ hội làm việc tại nhiều nhà hàng và khách sạn nổi tiếng ở nhiều quốc gia khác nhau, từ đó tôi đã học được rất nhiều kiến thức và kinh nghiệm về ẩm thực.",
             "users/defaultavt.png",
             arrayListOf(),
-            arrayListOf(),
+            arrayListOf(9,10,11),
             arrayListOf(5,6,7)
         )
         users.add(user4)
@@ -82,7 +82,7 @@ class GenerateDBModel(private var context: Context) {
             "Với tinh thần cầu tiến và đam mê nấu ăn, tôi đã trở thành một đầu bếp trực tuyến chuyên nghiệp. Tôi thường xuyên tạo ra các món ăn ngon và độc đáo và chia sẻ với mọi người qua kênh YouTube của mình.",
             "users/defaultavt.png",
             arrayListOf(7,8),
-            arrayListOf(),
+            arrayListOf(12,13,14,15),
             arrayListOf(1,3,4)
         )
         users.add(user5)
@@ -95,7 +95,7 @@ class GenerateDBModel(private var context: Context) {
             "Sau khi thực hiện một số dự án nấu ăn trực tuyến, tôi nhận thấy rằng đây là một cách tuyệt vời để kết nối với mọi người và chia sẻ sở thích của mình với những người có cùng sở thích.",
             "users/defaultavt.png",
             arrayListOf(),
-            arrayListOf(5,6),
+            arrayListOf(16,17,18),
             arrayListOf(3,5,8)
         )
         users.add(user6)
@@ -108,7 +108,7 @@ class GenerateDBModel(private var context: Context) {
             "Tôi yêu thích việc sáng tạo các món ăn mới và khám phá văn hóa ẩm thực của các nước khác nhau. Tôi tin rằng món ăn không chỉ là thứ để ăn uống, mà nó còn là một phần không thể thiếu trong cuộc sống của mỗi người.",
             "users/defaultavt.png",
             arrayListOf(9,10),
-            arrayListOf(7),
+            arrayListOf(19,20,26,27,28,29,30),
             arrayListOf()
         )
         users.add(user7)
@@ -121,7 +121,7 @@ class GenerateDBModel(private var context: Context) {
             "Tôi rất háo hức khi được hỗ trợ và giúp đỡ những người mới bắt đầu trong lĩnh vực nấu ăn. Tôi sẽ chia sẻ những kiến thức và kinh nghiệm của mình để giúp mọi người trở thành những đầu bếp tài ba.",
             "users/defaultavt.png",
             arrayListOf(11,12),
-            arrayListOf(8),
+            arrayListOf(31,32,33),
             arrayListOf()
         )
         users.add(user8)
@@ -134,7 +134,7 @@ class GenerateDBModel(private var context: Context) {
             "Không chỉ là một đầu bếp trực tuyến, tôi còn là một người đam mê giảng dạy nấu ăn. Tôi tin rằng mỗi người đều có thể học và phát triển kỹ năng nấu ăn của mình, và tôi luôn sẵn sàng chia sẻ kiến thức và kinh nghiệm của mình để giúp mọi người.",
             "users/defaultavt.png",
             arrayListOf(13),
-            arrayListOf(),
+            arrayListOf(34),
             arrayListOf()
         )
         users.add(user9)
@@ -147,7 +147,7 @@ class GenerateDBModel(private var context: Context) {
             "Tôi đã có cơ hội làm việc tại nhiều nhà hàng và khách sạn nổi tiếng ở nhiều quốc gia khác nhau, từ đó tôi đã học được rất nhiều kiến thức và kinh nghiệm về ẩm thực.",
             "users/defaultavt.png",
             arrayListOf(14,15),
-            arrayListOf(9, 10),
+            arrayListOf(35),
             arrayListOf(1, 2, 3)
         )
         users.add(user10)
@@ -166,22 +166,22 @@ class GenerateDBModel(private var context: Context) {
     fun generateDatabaseRecipeDiets() {
         var recipeDietsList:ArrayList<RecipeDiet> = ArrayList()
 
-        var recipeDiet = RecipeDiet(1,"Không đường", arrayListOf(1,3,5,7,9,12,13,21,25))
+        var recipeDiet = RecipeDiet(1,"Không đường", arrayListOf(1,2,6,8,9,10,11,13,14,15,16,18,19,20))
         recipeDietsList.add(recipeDiet)
 
-        recipeDiet = RecipeDiet(2,"Không Gluten", arrayListOf(1,3,6,8,10,11,14,20,22))
+        recipeDiet = RecipeDiet(2,"Không Gluten", arrayListOf(3,5,7,12,17,26,27,28,29,30))
         recipeDietsList.add(recipeDiet)
 
-        recipeDiet = RecipeDiet(3,"Không thịt", arrayListOf(5,7,9,15,16,17))
+        recipeDiet = RecipeDiet(3,"Không thịt", arrayListOf(1,2,3,4,5,6,7,31,32,33,34,35))
         recipeDietsList.add(recipeDiet)
 
-        recipeDiet = RecipeDiet(4,"Món thuần chay", arrayListOf(6,5,12,13,18,19))
+        recipeDiet = RecipeDiet(4,"Món thuần chay", arrayListOf(3,4,5,6,7,8,9,10,11,12,13))
         recipeDietsList.add(recipeDiet)
 
-        recipeDiet = RecipeDiet(5,"Không cồn", arrayListOf(6,8,10,14,18,21,22,26,28,29))
+        recipeDiet = RecipeDiet(5,"Không cồn", arrayListOf(26,27,28,29,30,31,32,33,34,35))
         recipeDietsList.add(recipeDiet)
 
-        recipeDiet = RecipeDiet(6,"Món chay", arrayListOf(6,8,10,13,18,23,24,27,28,29,30))
+        recipeDiet = RecipeDiet(6,"Món chay", arrayListOf(3,4,5,7,8,9,10,12,13))
         recipeDietsList.add(recipeDiet)
 
         for(recipediet in recipeDietsList) {
@@ -234,56 +234,56 @@ class GenerateDBModel(private var context: Context) {
         helperFunctionDB.uploadImageToCloudStorage("bo_nuong","comments")
         helperFunctionDB.uploadImageToCloudStorage("bunbohue","comments")
 
-        var recipeCmt = RecipeComment(true, "comments/bosotme.png", "Món này nấu ngon lắm, hy vọng bạn ra tiếp công thức mới <3", Date())
+        var recipeCmt = RecipeComment(1, true, "comments/bosotme.png", "Món này nấu ngon lắm, hy vọng bạn ra tiếp công thức mới <3", Date())
         recipeCmtsList.add(recipeCmt)
 
-        recipeCmt = RecipeComment(false, "comments/bokho.png", "Món này có vẻ vẫn còn thiếu gì đó khiến vị chưa được ngon lắm", Date())
-
-        recipeCmtsList.add(recipeCmt)
-
-        recipeCmt = RecipeComment(true, null, "Công thức rất rõ ràng, tôi sẽ thử nấu lại lần tiếp theo", Date())
-        recipeCmtsList.add(recipeCmt)
-
-        recipeCmt = RecipeComment(true, "comments/canhcaloc.png", "Món ăn ngon quá :3", Date())
+        recipeCmt = RecipeComment(2, false, "comments/bokho.png", "Món này có vẻ vẫn còn thiếu gì đó khiến vị chưa được ngon lắm", Date())
 
         recipeCmtsList.add(recipeCmt)
 
-        recipeCmt = RecipeComment(true, "comments/comrangduabo.png", "Món ăn tuyệt nhất mà tôi từng nấu trước đó", Date())
+        recipeCmt = RecipeComment(3, true, null, "Công thức rất rõ ràng, tôi sẽ thử nấu lại lần tiếp theo", Date())
+        recipeCmtsList.add(recipeCmt)
+
+        recipeCmt = RecipeComment(4, true, "comments/canhcaloc.png", "Món ăn ngon quá :3", Date())
 
         recipeCmtsList.add(recipeCmt)
 
-        recipeCmt = RecipeComment(true, null, "Tôi có một góp ý nho nhỏ là hình như công thức thiếu 1 nguyên liệu quan trọng nào đó", Date())
-        recipeCmtsList.add(recipeCmt)
-
-        recipeCmt = RecipeComment(false, null, "Món ăn dở tệ", Date())
-        recipeCmtsList.add(recipeCmt)
-
-        recipeCmt = RecipeComment(true, null, "So refreshing dear", Date())
-        recipeCmtsList.add(recipeCmt)
-
-        recipeCmt = RecipeComment(true, null, "Món ăn rất healthy, thanh đạm", Date())
-        recipeCmtsList.add(recipeCmt)
-
-        recipeCmt = RecipeComment(true, "comments/bonuong.png", "Món ăn rất tuyệt vời, 100 điểm :3", Date())
+        recipeCmt = RecipeComment(5, true, "comments/comrangduabo.png", "Món ăn tuyệt nhất mà tôi từng nấu trước đó", Date())
 
         recipeCmtsList.add(recipeCmt)
 
-        recipeCmt = RecipeComment(false, null, "Công thức gì chả có đầu có đuôi gì cả, 0 điểm", Date())
+        recipeCmt = RecipeComment(6, true, null, "Tôi có một góp ý nho nhỏ là hình như công thức thiếu 1 nguyên liệu quan trọng nào đó", Date())
         recipeCmtsList.add(recipeCmt)
 
-        recipeCmt = RecipeComment(true, "comments/bunbohue.png", "Niceeeeeeeee", Date())
+        recipeCmt = RecipeComment(7, false, null, "Món ăn dở tệ", Date())
+        recipeCmtsList.add(recipeCmt)
+
+        recipeCmt = RecipeComment(8, true, null, "So refreshing dear", Date())
+        recipeCmtsList.add(recipeCmt)
+
+        recipeCmt = RecipeComment(9, true, null, "Món ăn rất healthy, thanh đạm", Date())
+        recipeCmtsList.add(recipeCmt)
+
+        recipeCmt = RecipeComment(10, true, "comments/bonuong.png", "Món ăn rất tuyệt vời, 100 điểm :3", Date())
 
         recipeCmtsList.add(recipeCmt)
 
-        recipeCmt = RecipeComment(false, null, "Too bad", Date())
+        recipeCmt = RecipeComment(11, false, null, "Công thức gì chả có đầu có đuôi gì cả, 0 điểm", Date())
         recipeCmtsList.add(recipeCmt)
 
-        recipeCmt = RecipeComment(false, null, "Món ăn cần nhiều hình ảnh minh họa cho " +
+        recipeCmt = RecipeComment(12, true, "comments/bunbohue.png", "Niceeeeeeeee", Date())
+
+        recipeCmtsList.add(recipeCmt)
+
+        recipeCmt = RecipeComment(13, false, null, "Too bad", Date())
+        recipeCmtsList.add(recipeCmt)
+
+        recipeCmt = RecipeComment(14, false, null, "Món ăn cần nhiều hình ảnh minh họa cho " +
                 "rõ các bước hơn", Date()
         )
         recipeCmtsList.add(recipeCmt)
 
-        recipeCmt = RecipeComment(false, null, "Không góp ý", Date())
+        recipeCmt = RecipeComment(15, false, null, "Không góp ý", Date())
         recipeCmtsList.add(recipeCmt)
 
         for(recipecmt in recipeCmtsList) {
@@ -300,8 +300,8 @@ class GenerateDBModel(private var context: Context) {
         var result = ArrayList<FoodRecipe>()
 
         var listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(150,"Xốt cà chua","g",50))
-        listIngredient.add(RecipeIngredient(300,"Cá ngừ sạch","g",100))
+        listIngredient.add(RecipeIngredient(150.5,"Xốt cà chua","g",50.0))
+        listIngredient.add(RecipeIngredient(300.5,"Cá ngừ sạch","g",100.0))
 
         var listStep=ArrayList<RecipeCookStep>()
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe1_1","foods")
@@ -368,6 +368,35 @@ class GenerateDBModel(private var context: Context) {
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe20_1","foods")
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe20_2","foods")
 
+        //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe26","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe26_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe26_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe26_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe26_4","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe27","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe27_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe27_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe27_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe28","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe28_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe28_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe28_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe28_4","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe28_5","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe29","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe29_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe29_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe29_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe29_4","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe29_5","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe29_6","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe29_7","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe30","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe30_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe30_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe30_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe30_4","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe30_5","foods")
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe31_1","foods")
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe31_2","foods")
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe31_3","foods")
@@ -415,17 +444,17 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_1=
             FoodRecipe(1,"Cá ngừ chiên sốt gà","foods/foodrecipe1_3.png",2,"Dưới 30 phút", Date(),true,
-            arrayListOf(2),listStep,listIngredient,
-            arrayListOf(1,2),
-            arrayListOf(1,2,5,10),"Hiền Phương", R.drawable.defaultavt,15)
+                arrayListOf(1,3),listStep,listIngredient,
+                arrayListOf(1,2),
+                arrayListOf(1,2,5,10),"Hiền Phương", R.drawable.defaultavt,15)
 
         result.add(mon_an_1)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(60,"Xốt Kho Tộ CookyMADE","g",100))
-        listIngredient.add(RecipeIngredient(200,"Ba Rọi Heo Cooky (Thịt Tươi)","g",150))
-        listIngredient.add(RecipeIngredient(15,"Hành Lá, Ớt Chỉ Thiên Đỏ","g",50))
-        listIngredient.add(RecipeIngredient(200,"Cá Hú Tươi Làm Sạch Cắt Khúc","g",100))
+        listIngredient.add(RecipeIngredient(60.0,"Xốt Kho Tộ CookyMADE","g",100.0))
+        listIngredient.add(RecipeIngredient(200.0,"Ba Rọi Heo Cooky (Thịt Tươi)","g",150.0))
+        listIngredient.add(RecipeIngredient(15.0,"Hành Lá, Ớt Chỉ Thiên Đỏ","g",50.0))
+        listIngredient.add(RecipeIngredient(200.5,"Cá Hú Tươi Làm Sạch Cắt Khúc","g",100.0))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -458,7 +487,7 @@ class GenerateDBModel(private var context: Context) {
             "Dưới 30 phút",
             Date(),
             true,
-            arrayListOf(2),
+            arrayListOf(1,3),
             listStep,
             listIngredient,
             arrayListOf(),
@@ -471,8 +500,8 @@ class GenerateDBModel(private var context: Context) {
 
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(150,"Mọc Viên","g",100))
-        listIngredient.add(RecipeIngredient(150,"Xốt Cà Chua","g",150))
+        listIngredient.add(RecipeIngredient(150.0,"Mọc Viên","g",100.0))
+        listIngredient.add(RecipeIngredient(150.5,"Xốt Cà Chua","g",150.0))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -500,15 +529,15 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_3=
             FoodRecipe(3,"Mọc Viên Xốt Cà","foods/foodrecipe3_3.png",2,"Dưới 30 phút", Date(),true,
-            arrayListOf(2),listStep,listIngredient,
-            arrayListOf(),
-            arrayListOf(1,2,5,6,10),"Đặng Ngọc Tiến", R.drawable.avt,8)
+                arrayListOf(2,3,4,6),listStep,listIngredient,
+                arrayListOf(),
+                arrayListOf(1,2,5,6,10),"Đặng Ngọc Tiến", R.drawable.avt,8)
         result.add(mon_an_3)
 
         listIngredient = ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(200, "Khoai Mỡ (Cắt Sẵn)", "g",100))
-        listIngredient.add(RecipeIngredient(36, "Bộ Nêm Canh (Ngò Gai, Ngò Om, Bột Gia Vị Canh CookyMADE)", "g",50))
-        listIngredient.add(RecipeIngredient(100, "Thịt Heo Xay", "g",150))
+        listIngredient.add(RecipeIngredient(200.0, "Khoai Mỡ (Cắt Sẵn)", "g",100.0))
+        listIngredient.add(RecipeIngredient(36.5, "Bộ Nêm Canh (Ngò Gai, Ngò Om, Bột Gia Vị Canh CookyMADE)", "g",50.0))
+        listIngredient.add(RecipeIngredient(100.5, "Thịt Heo Xay", "g",150.0))
 
         listStep = ArrayList<RecipeCookStep>()
 
@@ -547,7 +576,7 @@ class GenerateDBModel(private var context: Context) {
             "Dưới 30 phút",
             Date(),
             true,
-            arrayListOf(1),
+            arrayListOf(3,4,6),
             listStep,
             listIngredient,
             arrayListOf(3,4),
@@ -559,9 +588,9 @@ class GenerateDBModel(private var context: Context) {
         result.add(mon_an_4)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(280,"Đậu Hũ Ta Vị Nguyên","g",50))
-        listIngredient.add(RecipeIngredient(15,"Hành Lá, Ớt Chỉ Thiên Đỏ","g",100))
-        listIngredient.add(RecipeIngredient(160,"Bộ Xốt Nấm Đông Cô","g",50))
+        listIngredient.add(RecipeIngredient(280.5,"Đậu Hũ Ta Vị Nguyên","g",50.0))
+        listIngredient.add(RecipeIngredient(15.0,"Hành Lá, Ớt Chỉ Thiên Đỏ","g",100.0))
+        listIngredient.add(RecipeIngredient(160.0,"Bộ Xốt Nấm Đông Cô","g",50.0))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -598,16 +627,16 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_5= FoodRecipe(5,"Đậu Hũ Xốt Nấm Đông Cô Chay","foods/foodrecipe5_4.png",2,"Dưới 30 phút",
             Date(),true,
-            arrayListOf(1),listStep,listIngredient,
+            arrayListOf(2,3,4,6),listStep,listIngredient,
             arrayListOf(5,6,7),
             arrayListOf(3,4,6),"Bùi Hoàng Vũ",
             R.drawable.defaultavt,100)
         result.add(mon_an_5)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(60,"Xốt Kho Tộ CookyMADE","g",50))
-        listIngredient.add(RecipeIngredient(15,"Hành Lá, Ớt Chỉ Thiên Đỏ","g",100))
-        listIngredient.add(RecipeIngredient(200,"Cá Lóc Tươi Làm Sạch (Cắt Khúc)","g",150))
+        listIngredient.add(RecipeIngredient(60.0,"Xốt Kho Tộ CookyMADE","g",50.0))
+        listIngredient.add(RecipeIngredient(15.5,"Hành Lá, Ớt Chỉ Thiên Đỏ","g",100.0))
+        listIngredient.add(RecipeIngredient(200.0,"Cá Lóc Tươi Làm Sạch (Cắt Khúc)","g",150.0))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -643,7 +672,7 @@ class GenerateDBModel(private var context: Context) {
             "Dưới 30 phút",
             Date(),
             true,
-            arrayListOf(2),
+            arrayListOf(1,3,4),
             listStep,
             listIngredient,
             arrayListOf(8,9,10),
@@ -655,9 +684,9 @@ class GenerateDBModel(private var context: Context) {
         result.add(mon_an_6)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(60,"Xốt Kho Tộ CookyMADE","g",150))
-        listIngredient.add(RecipeIngredient(300,"Cốt Lết Heo Cooky (Thịt Tươi)","g",50))
-        listIngredient.add(RecipeIngredient(37,"Bộ Kho Tiêu (Tiêu Xanh, Hành Lá, Ớt Chỉ Thiên Đỏ, Tiêu Đen Xay)","g",100))
+        listIngredient.add(RecipeIngredient(60.5,"Xốt Kho Tộ CookyMADE","g",150.0))
+        listIngredient.add(RecipeIngredient(300.5,"Cốt Lết Heo Cooky (Thịt Tươi)","g",50.0))
+        listIngredient.add(RecipeIngredient(37.5,"Bộ Kho Tiêu (Tiêu Xanh, Hành Lá, Ớt Chỉ Thiên Đỏ, Tiêu Đen Xay)","g",100.0))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -688,17 +717,17 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_7= FoodRecipe(7,"Sườn Cốt Lết Heo Kho Tiêu","foods/foodrecipe7_3.png",2,"Dưới 30 phút",
             Date(),true,
-            arrayListOf(2),listStep,listIngredient,
+            arrayListOf(2,3,4,6),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(4),"Trần Thị Ngọc Nhi",
             R.drawable.defaultavt,10)
         result.add(mon_an_7)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(60,"Xốt Kho Tộ CookyMADE","g",150))
-        listIngredient.add(RecipeIngredient(300,"Thịt Vịt Xiêm (Chặt Sẵn)","g",50))
-        listIngredient.add(RecipeIngredient(30,"Kho Gừng (Gừng Củ Tươi Gọt Sẵn)","g",200))
-        listIngredient.add(RecipeIngredient(1,"(Lựa chọn) Dừa Xiêm Bến Tre","trái",50))
+        listIngredient.add(RecipeIngredient(60.5,"Xốt Kho Tộ CookyMADE","g",150.0))
+        listIngredient.add(RecipeIngredient(300.0,"Thịt Vịt Xiêm (Chặt Sẵn)","g",50.0))
+        listIngredient.add(RecipeIngredient(30.0,"Kho Gừng (Gừng Củ Tươi Gọt Sẵn)","g",200.0))
+        listIngredient.add(RecipeIngredient(1.5,"(Lựa chọn) Dừa Xiêm Bến Tre","trái",50.0))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -727,16 +756,16 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_8=
             FoodRecipe(8,"Vịt Kho Gừng","foods/foodrecipe8_3.png",2,"Dưới 30 phút", Date(),true,
-            arrayListOf(2),listStep,listIngredient,
-            arrayListOf(11,12,13),
-            arrayListOf(6),"Ngọc Thư", R.drawable.defaultavt,5)
+                arrayListOf(1,4,6),listStep,listIngredient,
+                arrayListOf(11,12,13),
+                arrayListOf(6),"Ngọc Thư", R.drawable.defaultavt,5)
         result.add(mon_an_8)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(200,"Thịt bò","g",100))
-        listIngredient.add(RecipeIngredient(300,"Bông cải xanh","g",50))
-        listIngredient.add(RecipeIngredient(1,"Dầu hào","g",100))
-        listIngredient.add(RecipeIngredient(5,"Bột bắp","g",50))
+        listIngredient.add(RecipeIngredient(200.5,"Thịt bò","g",100.0))
+        listIngredient.add(RecipeIngredient(300.0,"Bông cải xanh","g",50.0))
+        listIngredient.add(RecipeIngredient(1.0,"Dầu hào","g",100.0))
+        listIngredient.add(RecipeIngredient(5.5,"Bột bắp","g",50.0))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -756,20 +785,20 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_9=
             FoodRecipe(9,"Cơm Bò Xào Bông Cải","foods/foodrecipe9_2.png",2,"Dưới 30 phút", Date(),true,
-            arrayListOf(2),listStep,listIngredient,
-            arrayListOf(),
-            arrayListOf(14,15),"Ngọc Thư", R.drawable.defaultavt,5)
+                arrayListOf(1,4,6),listStep,listIngredient,
+                arrayListOf(),
+                arrayListOf(14,15),"Ngọc Thư", R.drawable.defaultavt,5)
         result.add(mon_an_9)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(500,"Bò vụn","g",50))
-        listIngredient.add(RecipeIngredient(500,"Cải chua","g",100))
-        listIngredient.add(RecipeIngredient(2,"Cà chua","trái",150))
-        listIngredient.add(RecipeIngredient(1,"Hành lá","tép",120))
-        listIngredient.add(RecipeIngredient(1,"Ngò gai","tép",150))
-        listIngredient.add(RecipeIngredient(3,"Tỏi băm","mcf",20))
-        listIngredient.add(RecipeIngredient(1,"Nước lọc","lít",40))
-        listIngredient.add(RecipeIngredient(5,"Dầu ăn","g",50))
+        listIngredient.add(RecipeIngredient(500.0,"Bò vụn","g",50.0))
+        listIngredient.add(RecipeIngredient(500.0,"Cải chua","g",100.0))
+        listIngredient.add(RecipeIngredient(2.0,"Cà chua","trái",150.0))
+        listIngredient.add(RecipeIngredient(1.0,"Hành lá","tép",120.0))
+        listIngredient.add(RecipeIngredient(1.0,"Ngò gai","tép",150.0))
+        listIngredient.add(RecipeIngredient(3.0,"Tỏi băm","mcf",20.0))
+        listIngredient.add(RecipeIngredient(1.0,"Nước lọc","lít",40.0))
+        listIngredient.add(RecipeIngredient(5.0,"Dầu ăn","g",50.0))
 
 
         listStep=ArrayList<RecipeCookStep>()
@@ -804,18 +833,18 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_10= FoodRecipe(10,"Canh Bò Nấu Dưa Cải Chua","foods/foodrecipe10_4.png",4,"Dưới 1 tiếng",
             Date(),true,
-            arrayListOf(1,4),listStep,listIngredient,
+            arrayListOf(1,4,6),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,10)
         result.add(mon_an_10)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(20,"Rong chân vịt hoặc rong sụn khô (khoảng 10 cọng rong)","g",50))
-        listIngredient.add(RecipeIngredient(100,"Đường phèn","g",100))
-        listIngredient.add(RecipeIngredient(5,"Táo đỏ","quả",150))
-        listIngredient.add(RecipeIngredient(1,"Gừng bằng 1 đốt ngón tay cái","nhánh",120))
-        listIngredient.add(RecipeIngredient(3,"Lá dứa","",150))
+        listIngredient.add(RecipeIngredient(20.0,"Rong chân vịt hoặc rong sụn khô (khoảng 10 cọng rong)","g",50.0))
+        listIngredient.add(RecipeIngredient(100.0,"Đường phèn","g",100.0))
+        listIngredient.add(RecipeIngredient(5.0,"Táo đỏ","quả",150.0))
+        listIngredient.add(RecipeIngredient(1.0,"Gừng bằng 1 đốt ngón tay cái","nhánh",120.0))
+        listIngredient.add(RecipeIngredient(3.0,"Lá dứa","",150.0))
 
 
         listStep=ArrayList<RecipeCookStep>()
@@ -858,22 +887,22 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_11= FoodRecipe(11,"Nước uống từ rong biển","foods/foodrecipe11_5.png",1,"Trên 1 tiếng",
             Date(),true,
-            arrayListOf(),listStep,listIngredient,
+            arrayListOf(1,4),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,0)
         result.add(mon_an_11)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(0,"Bột rau câu","",50))
-        listIngredient.add(RecipeIngredient(0,"Cốt dừa","",100))
-        listIngredient.add(RecipeIngredient(0,"Crystal light vị chanh","",150))
-        listIngredient.add(RecipeIngredient(0,"Bột khoai tím","",120))
-        listIngredient.add(RecipeIngredient(0,"Tắc","",50))
-        listIngredient.add(RecipeIngredient(0,"Trà","",50))
-        listIngredient.add(RecipeIngredient(0,"Đá","",50))
-        listIngredient.add(RecipeIngredient(0,"Lá bạc hà (hoặc húng lủi)","",100))
-        listIngredient.add(RecipeIngredient(0,"Đường","",150))
+        listIngredient.add(RecipeIngredient(0.0,"Bột rau câu","",50.0))
+        listIngredient.add(RecipeIngredient(0.0,"Cốt dừa","",100.0))
+        listIngredient.add(RecipeIngredient(0.0,"Crystal light vị chanh","",150.0))
+        listIngredient.add(RecipeIngredient(0.0,"Bột khoai tím","",120.0))
+        listIngredient.add(RecipeIngredient(0.0,"Tắc","",50.0))
+        listIngredient.add(RecipeIngredient(0.0,"Trà","",50.0))
+        listIngredient.add(RecipeIngredient(0.0,"Đá","",50.0))
+        listIngredient.add(RecipeIngredient(0.0,"Lá bạc hà (hoặc húng lủi)","",100.0))
+        listIngredient.add(RecipeIngredient(0.0,"Đường","",150.0))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -909,16 +938,16 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_12 = FoodRecipe(12,"Bún đậu mắm tôm phiên bản nước uống","foods/foodrecipe12_4.png",1,"Dưới 15 phút",
             Date(),true,
-            arrayListOf(),listStep,listIngredient,
+            arrayListOf(2,4,6),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,0)
         result.add(mon_an_12)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(300,"Lá tía tô","g",50))
-        listIngredient.add(RecipeIngredient(2,"Nước","lít",100))
-        listIngredient.add(RecipeIngredient(2,"Thìa ăn phở giấm (hoặc nước cốt chanh)","",150))
+        listIngredient.add(RecipeIngredient(300.0,"Lá tía tô","g",50.0))
+        listIngredient.add(RecipeIngredient(2.0,"Nước","lít",100.0))
+        listIngredient.add(RecipeIngredient(2.0,"Thìa ăn phở giấm (hoặc nước cốt chanh)","",150.0))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -960,18 +989,18 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_13 = FoodRecipe(13,"Nước uống từ lá tía tô","foods/foodrecipe13_6.png",1,"Dưới 30 phút",
             Date(),true,
-            arrayListOf(),listStep,listIngredient,
+            arrayListOf(1,4,6),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,0)
         result.add(mon_an_13)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(4,"Chanh","quả",50))
-        listIngredient.add(RecipeIngredient(3,"Sả","nhánh",100))
-        listIngredient.add(RecipeIngredient(50,"Gừng","g",150))
-        listIngredient.add(RecipeIngredient(15,"Tỏi","g",50))
-        listIngredient.add(RecipeIngredient(2,"Nước","lít",100))
+        listIngredient.add(RecipeIngredient(4.0,"Chanh","quả",50.0))
+        listIngredient.add(RecipeIngredient(3.0,"Sả","nhánh",100.0))
+        listIngredient.add(RecipeIngredient(50.0,"Gừng","g",150.0))
+        listIngredient.add(RecipeIngredient(15.0,"Tỏi","g",50.0))
+        listIngredient.add(RecipeIngredient(2.0,"Nước","lít",100.0))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -1004,16 +1033,16 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_14 = FoodRecipe(14,"Nước Uống Thanh Lọc Giảm Mỡ","foods/foodrecipe14_4.png",2,"Dưới 30 phút",
             Date(),true,
-            arrayListOf(),listStep,listIngredient,
+            arrayListOf(1),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,0)
         result.add(mon_an_14)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(0,"Nước cam (bán sẵn)","",50))
-        listIngredient.add(RecipeIngredient(0,"Đào ngâm (bán sẵn)","",100))
-        listIngredient.add(RecipeIngredient(0,"Thạch cam (bán sẵn)","",150))
+        listIngredient.add(RecipeIngredient(0.0,"Nước cam (bán sẵn)","",50.0))
+        listIngredient.add(RecipeIngredient(0.0,"Đào ngâm (bán sẵn)","",100.0))
+        listIngredient.add(RecipeIngredient(0.0,"Thạch cam (bán sẵn)","",150.0))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -1031,21 +1060,21 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_15 = FoodRecipe(15,"Nước cam giải khát mùa hè","foods/foodrecipe15_2.png",2,"Dưới 15 phút",
             Date(),true,
-            arrayListOf(),listStep,listIngredient,
+            arrayListOf(1),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,0)
         result.add(mon_an_15)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(3,"Khía muối","",50))
-        listIngredient.add(RecipeIngredient(0,"Tỏi","",100))
-        listIngredient.add(RecipeIngredient(0,"Ớt","",150))
-        listIngredient.add(RecipeIngredient(0,"Đường","",50))
-        listIngredient.add(RecipeIngredient(0,"Chanh","",50))
-        listIngredient.add(RecipeIngredient(0,"Cà chua","",50))
-        listIngredient.add(RecipeIngredient(0,"Đậu đũa","",50))
-        listIngredient.add(RecipeIngredient(0,"Đu đủ già","",50))
+        listIngredient.add(RecipeIngredient(3.0,"Khía muối","",50.0))
+        listIngredient.add(RecipeIngredient(0.0,"Tỏi","",100.0))
+        listIngredient.add(RecipeIngredient(0.0,"Ớt","",150.0))
+        listIngredient.add(RecipeIngredient(0.0,"Đường","",50.0))
+        listIngredient.add(RecipeIngredient(0.0,"Chanh","",50.0))
+        listIngredient.add(RecipeIngredient(0.0,"Cà chua","",50.0))
+        listIngredient.add(RecipeIngredient(0.0,"Đậu đũa","",50.0))
+        listIngredient.add(RecipeIngredient(0.0,"Đu đủ già","",50.0))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -1070,18 +1099,18 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_16= FoodRecipe(16,"Gỏi ba khía","foods/foodrecipe16_2.png",4,"Dưới 45 phút",
             Date(),true,
-            arrayListOf(),listStep,listIngredient,
+            arrayListOf(1),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,0)
         result.add(mon_an_16)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(300,"giò sống","g",50))
-        listIngredient.add(RecipeIngredient(100,"cà rốt thái sợi","g",100))
-        listIngredient.add(RecipeIngredient(100,"đậu quả","g",150))
-        listIngredient.add(RecipeIngredient(0,"Gia vị: tiêu; nước mắm; muối","",50))
-        listIngredient.add(RecipeIngredient(50,"Mộc nhĩ","g",50))
+        listIngredient.add(RecipeIngredient(300.0,"giò sống","g",50.0))
+        listIngredient.add(RecipeIngredient(100.0,"cà rốt thái sợi","g",100.0))
+        listIngredient.add(RecipeIngredient(100.0,"đậu quả","g",150.0))
+        listIngredient.add(RecipeIngredient(0.0,"Gia vị: tiêu; nước mắm; muối","",50.0))
+        listIngredient.add(RecipeIngredient(50.0,"Mộc nhĩ","g",50.0))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -1109,21 +1138,21 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_17= FoodRecipe(17,"Giò hoa khai vị","foods/foodrecipe17_1.png",4,"Dưới 45 phút",
             Date(),true,
-            arrayListOf(),listStep,listIngredient,
+            arrayListOf(2),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,0)
         result.add(mon_an_17)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(2,"khổ qua","trái",50))
-        listIngredient.add(RecipeIngredient(0,"Tôm thẻ","",100))
-        listIngredient.add(RecipeIngredient(0,"Rau thơm","",150))
-        listIngredient.add(RecipeIngredient(2,"Chanh","trái",50))
-        listIngredient.add(RecipeIngredient(0,"tỏi","",50))
-        listIngredient.add(RecipeIngredient(0,"ớt","",50))
-        listIngredient.add(RecipeIngredient(2,"đường","mc",50))
-        listIngredient.add(RecipeIngredient(1,"nước mắm","mc",50))
+        listIngredient.add(RecipeIngredient(2.0,"khổ qua","trái",50.0))
+        listIngredient.add(RecipeIngredient(0.0,"Tôm thẻ","",100.0))
+        listIngredient.add(RecipeIngredient(0.0,"Rau thơm","",150.0))
+        listIngredient.add(RecipeIngredient(2.0,"Chanh","trái",50.0))
+        listIngredient.add(RecipeIngredient(0.0,"tỏi","",50.0))
+        listIngredient.add(RecipeIngredient(0.0,"ớt","",50.0))
+        listIngredient.add(RecipeIngredient(2.0,"đường","mc",50.0))
+        listIngredient.add(RecipeIngredient(1.0,"nước mắm","mc",50.0))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -1133,24 +1162,24 @@ class GenerateDBModel(private var context: Context) {
         listStep.add(
             RecipeCookStep("Cho khổ qua ra dĩa cho rau thơm tiếp đến cho tôm lên có thể cho mè rang hay đậu phộng lên.",
                 "foods/foodrecipe18_2.png"
-                )
+            )
         )
 
         var mon_an_18= FoodRecipe(18,"Gỏi khổ qua","foods/foodrecipe18_2.png",3,"Trên 1 tiếng",
             Date(),true,
-            arrayListOf(),listStep,listIngredient,
+            arrayListOf(1),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,0)
         result.add(mon_an_18)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(2,"mướp đắng","quả",50))
-        listIngredient.add(RecipeIngredient(2,"gừng nhỏ","miếng",100))
-        listIngredient.add(RecipeIngredient(1,"xì dầu","muỗng canh",150))
-        listIngredient.add(RecipeIngredient(1,"dầu ô liu","muỗng canh",50))
-        listIngredient.add(RecipeIngredient(1,"dầu mè","muỗng cà phê",50))
-        listIngredient.add(RecipeIngredient(1,"đường (tuỳ ý)","muỗng cà phê",50))
+        listIngredient.add(RecipeIngredient(2.0,"mướp đắng","quả",50.0))
+        listIngredient.add(RecipeIngredient(2.0,"gừng nhỏ","miếng",100.0))
+        listIngredient.add(RecipeIngredient(1.0,"xì dầu","muỗng canh",150.0))
+        listIngredient.add(RecipeIngredient(1.0,"dầu ô liu","muỗng canh",50.0))
+        listIngredient.add(RecipeIngredient(1.0,"dầu mè","muỗng cà phê",50.0))
+        listIngredient.add(RecipeIngredient(1.0,"đường (tuỳ ý)","muỗng cà phê",50.0))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -1169,19 +1198,19 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_19= FoodRecipe(19,"Mướp đắng trộn gừng","foods/foodrecipe19_3.png",2,"Dưới 15 phút",
             Date(),true,
-            arrayListOf(),listStep,listIngredient,
+            arrayListOf(1),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,0)
         result.add(mon_an_19)
 
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(100,"bạc hà","g",50))
-        listIngredient.add(RecipeIngredient(20,"tôm đất hấp chín","g",100))
-        listIngredient.add(RecipeIngredient(0,"Rau thơm: húng quế, húng cay,…","g",150))
-        listIngredient.add(RecipeIngredient(1,"Mè rang","mcf",50))
-        listIngredient.add(RecipeIngredient(1,"Hành phi","mcf",50))
-        listIngredient.add(RecipeIngredient(2,"Nước mắm trộn gỏi","muỗng canh",50))
+        listIngredient.add(RecipeIngredient(100.0,"bạc hà","g",50.0))
+        listIngredient.add(RecipeIngredient(20.0,"tôm đất hấp chín","g",100.0))
+        listIngredient.add(RecipeIngredient(0.0,"Rau thơm: húng quế, húng cay,…","g",150.0))
+        listIngredient.add(RecipeIngredient(1.0,"Mè rang","mcf",50.0))
+        listIngredient.add(RecipeIngredient(1.0,"Hành phi","mcf",50.0))
+        listIngredient.add(RecipeIngredient(2.0,"Nước mắm trộn gỏi","muỗng canh",50.0))
 
         listStep=ArrayList<RecipeCookStep>()
 
@@ -1198,7 +1227,7 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_20 = FoodRecipe(20,"Gỏi Bạc Hà Tôm Đất","foods/foodrecipe20_2.png",2,"Dưới 30 phút",
             Date(),true,
-            arrayListOf(),listStep,listIngredient,
+            arrayListOf(1),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,0)
@@ -1213,21 +1242,21 @@ class GenerateDBModel(private var context: Context) {
         listStep.add(RecipeCookStep("Nướng thịt bò ở nhiệt độ cao vừa phải. Nếu lửa quá lớn, thịt bò sẽ bị cháy vì trong nước ướp thịt có đường. Nướng thịt bò khoảng 2 phút mỗi bên là được", "foods/foodrecipe26_4.png"))
 
         listIngredient = arrayListOf()
-        listIngredient.add(RecipeIngredient(450,"Thịt bò", "g", 118))
-        listIngredient.add(RecipeIngredient(1, "Hành lá", "cây", 10))
-        listIngredient.add(RecipeIngredient(5, "Nước tương", "muỗng canh", 29))
-        listIngredient.add(RecipeIngredient(3, "Đường trắng", "muỗng canh", 99))
-        listIngredient.add(RecipeIngredient(2, "Rượu trắng", "muỗng canh", 123))
-        listIngredient.add(RecipeIngredient(4, "Nước ép thơm", "muỗng canh", 120))
-        listIngredient.add(RecipeIngredient(1, "Tỏi băm", "muỗng canh", 50))
-        listIngredient.add(RecipeIngredient(1, "Gừng băm", "muỗng cà phê", 60))
-        listIngredient.add(RecipeIngredient(2, "Dầu mè", "muỗng canh", 20))
-        listIngredient.add(RecipeIngredient(2, "Mè trắng", "muỗng cà phê", 10))
+        listIngredient.add(RecipeIngredient(450.0,"Thịt bò", "g", 118.5))
+        listIngredient.add(RecipeIngredient(1.0, "Hành lá", "cây", 10.0))
+        listIngredient.add(RecipeIngredient(5.0, "Nước tương", "muỗng canh", 29.0))
+        listIngredient.add(RecipeIngredient(3.0, "Đường trắng", "muỗng canh", 99.0))
+        listIngredient.add(RecipeIngredient(2.0, "Rượu trắng", "muỗng canh", 123.0))
+        listIngredient.add(RecipeIngredient(4.0, "Nước ép thơm", "muỗng canh", 120.0))
+        listIngredient.add(RecipeIngredient(1.0, "Tỏi băm", "muỗng canh", 50.0))
+        listIngredient.add(RecipeIngredient(1.0, "Gừng băm", "muỗng cà phê", 60.0))
+        listIngredient.add(RecipeIngredient(2.0, "Dầu mè", "muỗng canh", 20.0))
+        listIngredient.add(RecipeIngredient(2.0, "Mè trắng", "muỗng cà phê", 10.0))
 
 
         var mon_an_26 = FoodRecipe(26,"Bò Nướng Kiểu Hàn Quốc","foods/foodrecipe26.png",4,"Dưới 45 phút",
             Date(),true,
-            arrayListOf(),listStep,listIngredient,
+            arrayListOf(2,5),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Trương Gia Tiến",
             R.drawable.avt,0)
@@ -1240,15 +1269,15 @@ class GenerateDBModel(private var context: Context) {
         listStep.add(RecipeCookStep("1. Cho wasabi và xì dầu sau đó trộn đều rồi tiếp tục để khoảng 3 phút.\n2. Sau 3 phút thì ta có thể thưởng thức", "foods/foodrecipe27_3.png"))
 
         listIngredient = arrayListOf()
-        listIngredient.add(RecipeIngredient(250, "Sứa", "g", 150))
-        listIngredient.add(RecipeIngredient(1, "Wasabi", "muỗng cà phê", 20))
-        listIngredient.add(RecipeIngredient(1, "Xì dầu", "muỗng canh", 50))
-        listIngredient.add(RecipeIngredient(1, "Đường", "muỗng cà phê", 80))
-        listIngredient.add(RecipeIngredient(1, "Dầu mè", "muỗng cà phê", 40))
+        listIngredient.add(RecipeIngredient(250.0, "Sứa", "g", 150.0))
+        listIngredient.add(RecipeIngredient(1.0, "Wasabi", "muỗng cà phê", 20.0))
+        listIngredient.add(RecipeIngredient(1.0, "Xì dầu", "muỗng canh", 50.0))
+        listIngredient.add(RecipeIngredient(1.0, "Đường", "muỗng cà phê", 80.0))
+        listIngredient.add(RecipeIngredient(1.0, "Dầu mè", "muỗng cà phê", 40.0))
 
         var mon_an_27 = FoodRecipe(27,"Sứa Trộn Wasabi","foods/foodrecipe27.png",1,"Dưới 15 phút",
             Date(),true,
-            arrayListOf(),listStep,listIngredient,
+            arrayListOf(2,5),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Trương Gia Tiến",
             R.drawable.avt,0)
@@ -1263,19 +1292,19 @@ class GenerateDBModel(private var context: Context) {
         listStep.add(RecipeCookStep("Có thể dùng nước sốt này để chấm bất kỳ thứ gì bạn muốn nhe, ví dụ như món bánh mì que đính kèm! Sốt này có thể để tủ lạnh trong hũ kín 1 tuần vẫn ngon", "foods/foodrecipe28_5.png"))
 
         listIngredient = arrayListOf()
-        listIngredient.add(RecipeIngredient(2, "Ớt ngọt (màu đỏ, vàng, cam)", "quả", 150))
-        listIngredient.add(RecipeIngredient(1, "Muối", "muỗng cà phê", 20))
-        listIngredient.add(RecipeIngredient(1, "Đường nâu", "muỗng canh", 150))
-        listIngredient.add(RecipeIngredient(1, "Bột thì là", "muỗng canh", 10))
-        listIngredient.add(RecipeIngredient(1, "Bột tiểu hồi", "muỗng canh", 30))
-        listIngredient.add(RecipeIngredient(4, "Dầu điều (hoặc dầu ô liu)", "muỗng canh", 100))
-        listIngredient.add(RecipeIngredient(5, "Bột hạnh nhân", "muỗng canh", 30))
-        listIngredient.add(RecipeIngredient(1, "Chanh tươi", "quả", 10))
-        listIngredient.add(RecipeIngredient(2, "Bánh mì", "ổ", 150))
+        listIngredient.add(RecipeIngredient(2.0, "Ớt ngọt (màu đỏ, vàng, cam)", "quả", 150.0))
+        listIngredient.add(RecipeIngredient(1.0, "Muối", "muỗng cà phê", 20.0))
+        listIngredient.add(RecipeIngredient(1.0, "Đường nâu", "muỗng canh", 150.0))
+        listIngredient.add(RecipeIngredient(1.0, "Bột thì là", "muỗng canh", 10.0))
+        listIngredient.add(RecipeIngredient(1.0, "Bột tiểu hồi", "muỗng canh", 30.0))
+        listIngredient.add(RecipeIngredient(4.0, "Dầu điều (hoặc dầu ô liu)", "muỗng canh", 100.0))
+        listIngredient.add(RecipeIngredient(5.0, "Bột hạnh nhân", "muỗng canh", 30.0))
+        listIngredient.add(RecipeIngredient(1.0, "Chanh tươi", "quả", 10.0))
+        listIngredient.add(RecipeIngredient(2.0, "Bánh mì", "ổ", 150.0))
 
         var mon_an_28 = FoodRecipe(28,"Bánh Mì Chấm Sốt Ớt Ngọt Đà Lạt","foods/foodrecipe28.png",3,"Dưới 45 phút",
             Date(),true,
-            arrayListOf(),listStep,listIngredient,
+            arrayListOf(2,5),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Trương Gia Tiến",
             R.drawable.avt,0)
@@ -1293,14 +1322,14 @@ class GenerateDBModel(private var context: Context) {
                 "Khi nguội bánh roti yến mạch sẽ xẹp và mềm dẻo hơn, sẵn sàng để dùng kèm các món Ấn có độ sệt như cà ri, masala…", "foods/foodrecipe29_7.png"))
 
         listIngredient = arrayListOf()
-        listIngredient.add(RecipeIngredient(1, "Bột yến mạch", "cup", 100))
-        listIngredient.add(RecipeIngredient(1, "Bột yến mạch áo", "cup", 80))
-        listIngredient.add(RecipeIngredient(1, "Nước sôi", "cup", 0))
-        listIngredient.add(RecipeIngredient(1, "Muối", "muỗng cà phê", 10))
+        listIngredient.add(RecipeIngredient(1.0, "Bột yến mạch", "cup", 100.0))
+        listIngredient.add(RecipeIngredient(1.0, "Bột yến mạch áo", "cup", 80.0))
+        listIngredient.add(RecipeIngredient(1.0, "Nước sôi", "cup", 0.0))
+        listIngredient.add(RecipeIngredient(1.0, "Muối", "muỗng cà phê", 10.0))
 
         var mon_an_29 = FoodRecipe(29,"Bánh Roti yến mạch","foods/foodrecipe29.png",4,"Dưới 30 phút",
             Date(),true,
-            arrayListOf(),listStep,listIngredient,
+            arrayListOf(2,5),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Trương Gia Tiến",
             R.drawable.avt,0)
@@ -1315,14 +1344,14 @@ class GenerateDBModel(private var context: Context) {
         listStep.add(RecipeCookStep("Chấm tương ớt cay cay giòn thơm béo cực", "foods/foodrecipe30_5.png"))
 
         listIngredient = arrayListOf()
-        listIngredient.add(RecipeIngredient(2, "Xúc xích", "cây", 130))
-        listIngredient.add(RecipeIngredient(3, "Sandwich", "miếng", 100))
-        listIngredient.add(RecipeIngredient(1, "Trứng gà", "quả", 50))
-        listIngredient.add(RecipeIngredient(1, "Bột chiên xù", "bịch", 70))
+        listIngredient.add(RecipeIngredient(2.0, "Xúc xích", "cây", 130.0))
+        listIngredient.add(RecipeIngredient(3.0, "Sandwich", "miếng", 100.0))
+        listIngredient.add(RecipeIngredient(1.0, "Trứng gà", "quả", 50.0))
+        listIngredient.add(RecipeIngredient(1.0, "Bột chiên xù", "bịch", 70.0))
 
         var mon_an_30 = FoodRecipe(30,"Xúc Xích Cuộn Sandwich Chiên xù","foods/foodrecipe30.png",2,"Dưới 30 phút",
             Date(),true,
-            arrayListOf(),listStep,listIngredient,
+            arrayListOf(2,5),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),"Trương Gia Tiến",
             R.drawable.avt,0)
@@ -1330,8 +1359,8 @@ class GenerateDBModel(private var context: Context) {
 
         // món tráng miệng
         listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(5,"Lá dứa", "cái", 50))
-        listIngredient.add(RecipeIngredient(300,"Đậu xanh", "g", 300))
+        listIngredient.add(RecipeIngredient(5.0,"Lá dứa", "cái", 50.0))
+        listIngredient.add(RecipeIngredient(300.0,"Đậu xanh", "g", 300.0))
 
         listStep=ArrayList<RecipeCookStep>()
         listStep.add(
@@ -1371,15 +1400,15 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_31 = FoodRecipe(31,"Chè đậu xanh lá dữa","foods/foodrecipe31_5.png", 2, "Dưới 30 phút",
             Date(),true,arrayListOf(),listStep,listIngredient,
-            arrayListOf(),
+            arrayListOf(3,5),
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,10)
         result.add(mon_an_31)
 
 
         listIngredient= ArrayList()
-        listIngredient.add(RecipeIngredient(200,"Bột nếp", "g", 100))
-        listIngredient.add(RecipeIngredient(300,"Mật mía", "ml", 300))
+        listIngredient.add(RecipeIngredient(200.0,"Bột nếp", "g", 100.0))
+        listIngredient.add(RecipeIngredient(300.0,"Mật mía", "ml", 300.0))
 
         listStep= ArrayList()
         listStep.add(
@@ -1409,16 +1438,16 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_32 = FoodRecipe(32,"Bánh nếp mía","foods/foodrecipe32_4.png", 2, "Dưới 2 tiếng",
             Date(),true,arrayListOf(),listStep,listIngredient,
-            arrayListOf(),
+            arrayListOf(3,5),
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,10)
         result.add(mon_an_32)
 
 
         listIngredient= ArrayList()
-        listIngredient.add(RecipeIngredient(200,"Bột mỳ", "g", 100))
-        listIngredient.add(RecipeIngredient(300,"Sữa tươi", "ml", 300))
-        listIngredient.add(RecipeIngredient(160,"Đường", "g", 50))
+        listIngredient.add(RecipeIngredient(200.0,"Bột mỳ", "g", 100.0))
+        listIngredient.add(RecipeIngredient(300.0,"Sữa tươi", "ml", 300.0))
+        listIngredient.add(RecipeIngredient(160.0,"Đường", "g", 50.0))
 
         listStep= ArrayList()
         listStep.add(
@@ -1443,8 +1472,8 @@ class GenerateDBModel(private var context: Context) {
 
 
         listIngredient= ArrayList()
-        listIngredient.add( RecipeIngredient(1, "chùm ruột", "kg",100))
-        listIngredient.add( RecipeIngredient(700, "đường vàng", "g", 100))
+        listIngredient.add( RecipeIngredient(1.0, "chùm ruột", "kg",100.0))
+        listIngredient.add( RecipeIngredient(700.0, "đường vàng", "g", 100.0))
 
         listStep= ArrayList()
         listStep.add(
@@ -1486,15 +1515,15 @@ class GenerateDBModel(private var context: Context) {
 
         var mon_an_34 = FoodRecipe(34,"Mứt chùm ruột","foods/foodrecipe34_6.png", 2, "Dưới 3 tiếng",
             Date(),true,arrayListOf(),listStep,listIngredient,
-            arrayListOf(),
+            arrayListOf(3,5),
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,10)
         result.add(mon_an_34)
 
         listIngredient= ArrayList()
-        listIngredient.add(  RecipeIngredient(200, "bột ớt", "g", 100))
-        listIngredient.add(  RecipeIngredient(40, "bột ngọt", "g",40))
-        listIngredient.add(  RecipeIngredient(40, "muối", "g", 20))
+        listIngredient.add(  RecipeIngredient(200.0, "bột ớt", "g", 100.0))
+        listIngredient.add(  RecipeIngredient(40.0, "bột ngọt", "g",40.0))
+        listIngredient.add(  RecipeIngredient(40.0, "muối", "g", 20.0))
 
         listStep= ArrayList()
         listStep.add(
@@ -1518,13 +1547,13 @@ class GenerateDBModel(private var context: Context) {
         listStep.add(
             RecipeCookStep(
                 "Sản phẩm hoàn thành gắp ra dĩa và sơi thôi",
-                   "foods/foodrecipe35_4.png"
+                "foods/foodrecipe35_4.png"
             )
         )
 
         var mon_an_35 = FoodRecipe(35,"Khoai tây chiên","foods/foodrecipe35_4.png", 2, "Dưới 30 phút",
             Date(),true,arrayListOf(),listStep,listIngredient,
-            arrayListOf(),
+            arrayListOf(3,5),
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,10)
         result.add(mon_an_35)

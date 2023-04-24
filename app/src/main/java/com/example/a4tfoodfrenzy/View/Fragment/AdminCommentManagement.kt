@@ -43,7 +43,7 @@ class AdminCommentManagement : Fragment() {
         var recipeCommentList = ArrayList<RecipeComment>()
 
         recipeCommentList.add(
-            RecipeComment(
+            RecipeComment(1,
                 "Đặng Ngọc Tiến",
                 "Bún bò huế",
                 R.drawable.avt,
@@ -54,7 +54,7 @@ class AdminCommentManagement : Fragment() {
             )
         )
         recipeCommentList.add(
-            RecipeComment(
+            RecipeComment(2,
                 "Đặng Ngọc Tiến",
                 "Bún bò huế",
                 R.drawable.avt,
@@ -65,7 +65,7 @@ class AdminCommentManagement : Fragment() {
             )
         )
         recipeCommentList.add(
-            RecipeComment(
+            RecipeComment(3,
                 "Trương Gia Tiến",
                 "Bún bò huế",
                 R.drawable.avt,
@@ -76,7 +76,7 @@ class AdminCommentManagement : Fragment() {
             )
         )
         recipeCommentList.add(
-            RecipeComment(
+            RecipeComment(4,
                 "Nguyễn Văn Việt",
                 "Bún bò huế",
                 R.drawable.avt,
@@ -87,7 +87,7 @@ class AdminCommentManagement : Fragment() {
             )
         )
         recipeCommentList.add(
-            RecipeComment(
+            RecipeComment(5,
                 "Nguyễn Văn Việt",
                 "Bún bò huế",
                 R.drawable.avt,
@@ -98,7 +98,7 @@ class AdminCommentManagement : Fragment() {
             )
         )
         recipeCommentList.add(
-            RecipeComment(
+            RecipeComment(6,
                 "Nguyễn Văn Việt",
                 "Bún bò huế",
                 R.drawable.avt,

@@ -54,23 +54,30 @@ class AfterSearchActivity : AppCompatActivity() {
         }
 
         searchET.setText(keySearch)
-        if (typeSearch.toString() == "cookTime") {
-            val recipeAfterSearch = findRecipeListWithCookTime(keySearch.toString())
-            setRecipeListAdapter(recipeAfterSearch)
-        } else if (typeSearch.toString() == "recipeCategory") {
-            val recipeAfterSearch = findRecipeListWithCategory(keySearch.toString())
-            setRecipeListAdapter(recipeAfterSearch)
-        } else if (typeSearch.toString() == "recipeTodayEat") {
-            setRecipeListAdapter(DBManagement.foodRecipeList)
+        if (adapterRecipeAfterSearchRV == null) {
+            if (typeSearch.toString() == "cookTime") {
+                val recipeAfterSearch = findRecipeListWithCookTime(keySearch.toString())
+                setRecipeListAdapter(recipeAfterSearch)
+            } else if (typeSearch.toString() == "recipeCategory") {
+                val recipeAfterSearch = findRecipeListWithCategory(keySearch.toString())
+                setRecipeListAdapter(recipeAfterSearch)
+            } else if (typeSearch.toString() == "recipeTodayEat") {
+                setRecipeListAdapter(DBManagement.foodRecipeList)
+            }
+            else if (typeSearch.toString() == "recipeMostLikes") {
+                val recipeAfterSearch = generateRecipeMostLikesData(DBManagement.foodRecipeList)
+                setRecipeListAdapter(recipeAfterSearch)
+            } else {
+                val recipeAfterSearch = findRecipeListWithKeyword(keySearch.toString())
+                setRecipeListAdapter(recipeAfterSearch)
+            }
+            adapterRecipeAfterSearchRV!!.onItemClick = { foodRecipe, i ->
+                val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
+                intent.putExtra("foodRecipe",foodRecipe)
+                startActivity(intent)
+            }
         }
-        else if (typeSearch.toString() == "recipeMostLikes") {
-            val recipeAfterSearch = generateRecipeMostLikesData(DBManagement.foodRecipeList)
-            setRecipeListAdapter(recipeAfterSearch)
-        } else {
-            val recipeAfterSearch = findRecipeListWithKeyword(keySearch.toString())
-            setRecipeListAdapter(recipeAfterSearch)
 
-        }
         searchET.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 if (!searchET.text.isNullOrEmpty()) {
@@ -135,7 +142,7 @@ class AfterSearchActivity : AppCompatActivity() {
         var result = ArrayList<FoodRecipe>()
 
         for (foodRecipe in DBManagement.foodRecipeList) {
-            if (foodRecipe.cookTime == cookTime) {
+            if (foodRecipe.cookTime == cookTime && (foodRecipe.isPublic == true)) {
                 result.add(foodRecipe)
             }
         }
@@ -144,7 +151,7 @@ class AfterSearchActivity : AppCompatActivity() {
 
     fun findRecipeCategory(recipeCateName : String):RecipeCategory {
         for (recipeCate in DBManagement.recipeCateList) {
-            if (recipeCate.recipeCateName == recipeCateName) {
+            if (recipeCate.recipeCateName == recipeCateName ) {
                 return recipeCate
             }
         }
@@ -156,7 +163,7 @@ class AfterSearchActivity : AppCompatActivity() {
         val recipeCategory = findRecipeCategory(recipeCateName)
 
         for (foodRecipe in DBManagement.foodRecipeList) {
-            if (recipeCategory.foodRecipes.contains(foodRecipe.id)) {
+            if (recipeCategory.foodRecipes.contains(foodRecipe.id) && (foodRecipe.isPublic == true)) {
                 result.add(foodRecipe)
             }
         }
@@ -166,7 +173,7 @@ class AfterSearchActivity : AppCompatActivity() {
         var result = ArrayList<FoodRecipe>()
 
         for (foodRecipe in DBManagement.foodRecipeList) {
-            if (foodRecipe.recipeName.toLowerCase().contains(keySearch.toLowerCase()))
+            if (foodRecipe.recipeName.toLowerCase().contains(keySearch.toLowerCase()) && (foodRecipe.isPublic == true))
             {
                 result.add(foodRecipe)
             }
@@ -178,7 +185,9 @@ class AfterSearchActivity : AppCompatActivity() {
 
         val sortedRecipes = recipeList.sortedByDescending { it.numOfLikes }
         for (recipe in sortedRecipes) {
-            result.add(recipe)
+            if (recipe.isPublic == true) {
+                result.add(recipe)
+            }
         }
         return result
     }

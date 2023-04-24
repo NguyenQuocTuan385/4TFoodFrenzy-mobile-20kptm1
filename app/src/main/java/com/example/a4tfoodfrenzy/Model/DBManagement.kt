@@ -154,5 +154,6 @@ class DBManagement {
         registrationRecipeCategory?.remove()
         registrationRecipeDiet?.remove()
         registrationRecipeComment?.remove()
+        registrationUsserCurrent?.remove()
     }
 }

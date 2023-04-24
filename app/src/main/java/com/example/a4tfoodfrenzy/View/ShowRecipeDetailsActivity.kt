@@ -6,6 +6,7 @@ import android.content.Intent
 import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -56,7 +57,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         val currentFoodRecipe: FoodRecipe? =
             intent.extras?.getParcelable("foodRecipe", FoodRecipe::class.java)!!
         val imagePathList = arrayListOf(currentFoodRecipe!!.recipeMainImage)
-        var recipeAuthor: User? = null
+        var recipeAuthor : User? =  null
         var ingredientString = ""
         var stepString = ""
         var dietString = ""
@@ -80,16 +81,16 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             cateString = cateString.substring(0, cateString.length - 2)
 
         // generate ingredient text
-        for ((i, ingredient) in currentFoodRecipe.recipeIngres.withIndex())
+        for((i, ingredient) in currentFoodRecipe.recipeIngres.withIndex())
             ingredientString += "${i + 1}. ${ingredient.ingreName}  <b>${ingredient.ingreQuantity} ${ingredient.ingreUnit}</b><br>"
 
         // generate step string
-        for ((i, step) in currentFoodRecipe.recipeSteps.withIndex()) {
+        for((i, step) in currentFoodRecipe.recipeSteps.withIndex()){
             stepString += "<b> Bước ${i + 1}: </b> <br>${step.description}<br><br>"
         }
 
         // find user in user list
-        for (user in DBManagement.userList) {
+        for(user in DBManagement.userList) {
             if (user.myFoodRecipes.contains(currentFoodRecipe.id)) {
                 recipeAuthor = user
                 break
