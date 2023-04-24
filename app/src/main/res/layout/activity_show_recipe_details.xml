@@ -78,29 +78,32 @@
 
             <TextView
                 android:id="@+id/foodNameTitleTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+
                 android:layout_height="wrap_content"
                 android:paddingStart="5dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:text="Bắp Bò Xốt Me"
+                android:text="Bắp Bò Xốt Me hihihihih hihi"
                 android:textColor="@color/black"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imageView3"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/imageView3"
                 android:layout_width="100dp"
-                android:layout_height="30dp"
 
-                android:src="@drawable/unsave_recipe_button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="30dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="20dp"
-                />
+                android:src="@drawable/unsave_recipe_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
@@ -176,14 +179,15 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:backgroundTint="@color/TertiaryColor"
+                        android:backgroundTint="@color/white"
                         app:cardCornerRadius="5dp"
                         app:cardUseCompatPadding="true"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:strokeColor="@color/black"
+                        app:strokeColor="@color/gray"
+                        app:cardElevation="2dp"
                         app:strokeWidth="1dp">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -257,7 +261,7 @@
                                 android:layout_marginEnd="10dp"
                                 android:layout_marginBottom="10dp"
                                 android:ellipsize="end"
-
+                                android:textColor="@color/black"
                                 android:lines="2"
                                 android:minWidth="50dp"
                                 android:text="là một người có niềm đam mê về ẩm thực, tôi mang đến cho các bạn những công thức nấu ăn tuyệt vời do chính tôi sáng tạo radddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
@@ -287,7 +291,7 @@
                 app:cardCornerRadius="3dp"
                 app:cardElevation="3dp"
                 app:cardUseCompatPadding="true"
-                app:strokeColor="@color/black"
+                app:strokeColor="@color/gray"
                 app:strokeWidth="1dp"
 
                 >
@@ -295,7 +299,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/TertiaryColor"
+                    android:background="@color/white"
                     android:orientation="horizontal"
                     android:paddingTop="5dp"
                     android:paddingBottom="10dp">
@@ -310,16 +314,19 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="20dp"
-                            android:text="@string/food_category"
+                            android:text="Khẩu phần"
                             android:textAlignment="center" />
 
                         <TextView
-                            android:id="@+id/foodCategoryTextView"
+                            android:id="@+id/foodRationTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Món chính"
+                            android:text="4"
                             android:textAlignment="center"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+
+                            />
                     </LinearLayout>
 
                     <LinearLayout
@@ -342,7 +349,9 @@
                             android:layout_height="wrap_content"
                             android:text="Không Gluten"
                             android:textAlignment="center"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            />
                     </LinearLayout>
 
                     <LinearLayout
@@ -356,16 +365,19 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="20dp"
-                            android:text="Nguyên liệu chính"
+                            android:text="Loại món"
                             android:textAlignment="center" />
 
                         <TextView
-                            android:id="@+id/foodMainIngredientTextView"
+                            android:id="@+id/foodCategoryTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Thịt bò, Rau củ"
+                            android:text="Món chính, Thức uống"
                             android:textAlignment="center"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+
+                            />
                     </LinearLayout>
 
 
@@ -392,7 +404,7 @@
                 android:paddingRight="5dp"
                 android:text="1. Xốt me 100g\n2. Hành tây, cà chua, xà lách Lolo xanh 180g\n3. Tỏi tép lột sẵn 10g\n4. Bắp bò cắt mỏng 200g"
                 android:textColor="@color/black"
-
+                android:textSize="20sp"
                 />
 
             <TextView
@@ -417,7 +429,11 @@
                 android:text="Bước 1: Bắp bò rửa sơ để ráo. Hành tây, xà lách, cà chua rửa sạch, để ráo nước.
                 \n\nBước 2: Cho 1 muỗng canh dầu ăn vào làm nóng, chỉnh lửa vừa, phi thơm hành tỏi và cho bò vào xào trong 2 phút cho săn . Cho gói sốt me vào đảo đều trong 3 phút. Nêm nếm lại cho vừa ăn. Thêm hành tây vào xào sơ khoảng 1 phút rồi tắt bếp.
                 \n\nBước 3: Xếp rau, cà chua thái lát ra đĩa, cho bò lên trên. Rắc thêm mè để thêm phần hấp dẫn. Thưởng thức cùng bánh mì ngay khi còn nóng. Ngon hơn khi dùng với cơm nóng hoặc bánh mì."
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                >
+
+            </TextView>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -474,7 +490,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:id="@+id/commentSectionConstraintLayout"
+                >
 
                 <TextView
                     android:id="@+id/bestCommentTextView"

@@ -51,6 +51,7 @@ class RecipeIngredient(
         parcel.writeInt(_ingreQuantity)
         parcel.writeString(_ingreName)
         parcel.writeString(_ingreUnit)
+        parcel.writeInt(ingreCalo!!)
     }
 
     override fun describeContents(): Int {

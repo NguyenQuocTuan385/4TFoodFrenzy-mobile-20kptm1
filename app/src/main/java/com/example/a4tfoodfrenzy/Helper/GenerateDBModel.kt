@@ -755,7 +755,7 @@ class GenerateDBModel(private var context: Context) {
         )
 
         var mon_an_9=
-            FoodRecipe(9,"Cơm Bò Xào Bông Cải\n","foods/foodrecipe9_2.png",2,"Dưới 30 phút", Date(),true,
+            FoodRecipe(9,"Cơm Bò Xào Bông Cải","foods/foodrecipe9_2.png",2,"Dưới 30 phút", Date(),true,
             arrayListOf(2),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(14,15),"Ngọc Thư", R.drawable.defaultavt,5)
