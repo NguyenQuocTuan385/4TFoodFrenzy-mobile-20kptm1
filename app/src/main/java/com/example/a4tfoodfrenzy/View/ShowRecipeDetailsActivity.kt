@@ -53,13 +53,35 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         val dietTextView : TextView = findViewById(R.id.foodDietTextView)
         val categoryTextView : TextView = findViewById(R.id.foodCategoryTextView)
 
-        //
+        // other variables
         val storageRef = Firebase.storage
         val currentFoodRecipe: FoodRecipe? = intent.extras?.getParcelable("foodRecipe", FoodRecipe::class.java)!!
         val imagePathList = arrayListOf(currentFoodRecipe!!.recipeMainImage)
         var recipeAuthor : User? =  null
         var ingredientString = ""
         var stepString = ""
+        var dietString = ""
+        var cateString = ""
+
+        // generate diet string list from DB
+        for((i, diet) in DBManagement.recipeDietList.withIndex()){
+            val temp = diet.foodRecipes.filter { it == currentFoodRecipe.id }
+
+            if(temp.isNotEmpty())
+                if(temp[0] == currentFoodRecipe.id)
+                    dietString += "${diet.dietName}, "
+        }
+        dietString = dietString.substring(0, dietString.length - 2)
+
+        // generate category string list from DB
+        for((i, category) in DBManagement.recipeCateList.withIndex()){
+            val temp = category.foodRecipes.filter { it == currentFoodRecipe.id }
+
+            if(temp.isNotEmpty())
+                if(temp[0] == currentFoodRecipe.id)
+                    cateString += "${category.recipeCateName}, "
+        }
+        cateString = cateString.substring(0, cateString.length - 2)
 
         // generate ingredient text
         for((i, ingredient) in currentFoodRecipe.recipeIngres.withIndex())
@@ -96,7 +118,6 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         if(currentFoodRecipe.recipeCmts.size == 0)
             commentSection.visibility = View.GONE
 
-
         // set data for view
         foodNameTextView.text = currentFoodRecipe.recipeName
         authorBioTextView.text = recipeAuthor?.bio
@@ -106,6 +127,8 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         stepsInstructionTextView.text = HtmlCompat.fromHtml(stepString, HtmlCompat.FROM_HTML_MODE_LEGACY)
         rationTextView.text = currentFoodRecipe.ration.toString() + " người"
         totalComment.text = "(${currentFoodRecipe.recipeCmts.size})"
+        dietTextView.text = dietString
+        categoryTextView.text = cateString
 
         // food image horizontal recycler view
         val adapter = FoodImageAdapter(imagePathList, this)
