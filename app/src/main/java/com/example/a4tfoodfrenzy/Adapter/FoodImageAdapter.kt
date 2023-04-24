@@ -39,35 +39,33 @@ class FoodImageAdapter(private val imageList: ArrayList<String?>, private val cu
         val currentImg = imageList[position]
 
         val imageRef = currentImg?.let { storageRef.getReference(it) }
-        if (imageRef != null) {
-            imageRef.downloadUrl.addOnSuccessListener { uri ->
-                Glide.with(currentContext)
-                    .load(uri)
-                    .into(holder.imgView)
-                Thread.sleep(100)
+        imageRef?.downloadUrl?.addOnSuccessListener { uri ->
+            Glide.with(currentContext)
+                .load(uri)
+                .into(holder.imgView)
+            Thread.sleep(100)
 
-                holder.imgCardView.setOnClickListener{
-                    onImageClick?.invoke(holder.imgView.drawable, position)
+            holder.imgCardView.setOnClickListener{
+                onImageClick?.invoke(holder.imgView.drawable, position)
 
-                    // change selected img position
-                    val prevItem = currentSelectedImage // store prev selected img
-                    currentSelectedImage = position // assign new selected img
+                // change selected img position
+                val prevItem = currentSelectedImage // store prev selected img
+                currentSelectedImage = position // assign new selected img
 
-                    // notify that chosen image changed
-                    notifyItemChanged(prevItem)
-                    notifyItemChanged(currentSelectedImage)
+                // notify that chosen image changed
+                notifyItemChanged(prevItem)
+                notifyItemChanged(currentSelectedImage)
 
-                }
-
-                if(position == currentSelectedImage)
-                    holder.imgCardView.strokeWidth = 20
-
-                // not selected position --> border = 0
-                if(position != currentSelectedImage)
-                    holder.imgCardView.strokeWidth = 0
-            }.addOnFailureListener { exception ->
-                // Xử lý lỗi
             }
+
+            if(position == currentSelectedImage)
+                holder.imgCardView.strokeWidth = 20
+
+            // not selected position --> border = 0
+            if(position != currentSelectedImage)
+                holder.imgCardView.strokeWidth = 0
+        }?.addOnFailureListener { exception ->
+            // Xử lý lỗi
         }
 
 

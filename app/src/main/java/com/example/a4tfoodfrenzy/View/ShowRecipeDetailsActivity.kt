@@ -1,15 +1,13 @@
 package com.example.a4tfoodfrenzy.View
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -39,68 +37,67 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         val showStepDetailsButton: Button = findViewById(R.id.moreDetailsButton)
         val writeCommentButton: Button = findViewById(R.id.writeCommentButton)
         val toolbarBackButton = findViewById<ImageView>(R.id.toolbarBackButton)
-        val foodNameTextView : TextView = findViewById(R.id.foodNameTitleTextView)
-        val authorNameTextView : TextView = findViewById(R.id.authorFullnameTextView)
-        val authorAvatarImageView : ImageView = findViewById(R.id.authorAvatarImageView)
-        val authorTotalRecipeTextView : TextView = findViewById(R.id.totalRecipeTextView)
-        val authorBioTextView : TextView = findViewById(R.id.bioTextView)
-        val ingredientDetailsTextView : TextView = findViewById(R.id.ingredientDetailsTextView)
-        val stepsInstructionTextView : TextView = findViewById(R.id.stepsInstructionTextView)
-        val likePercent : TextView = findViewById(R.id.percentRecookTextView)
-        val totalComment : TextView = findViewById(R.id.totalCommentTextView)
-        val commentSection : ConstraintLayout = findViewById(R.id.commentSectionConstraintLayout)
-        val rationTextView : TextView = findViewById(R.id.foodRationTextView)
-        val dietTextView : TextView = findViewById(R.id.foodDietTextView)
-        val categoryTextView : TextView = findViewById(R.id.foodCategoryTextView)
+        val foodNameTextView: TextView = findViewById(R.id.foodNameTitleTextView)
+        val authorNameTextView: TextView = findViewById(R.id.authorFullnameTextView)
+        val authorAvatarImageView: ImageView = findViewById(R.id.authorAvatarImageView)
+        val authorTotalRecipeTextView: TextView = findViewById(R.id.totalRecipeTextView)
+        val authorBioTextView: TextView = findViewById(R.id.bioTextView)
+        val ingredientDetailsTextView: TextView = findViewById(R.id.ingredientDetailsTextView)
+        val stepsInstructionTextView: TextView = findViewById(R.id.stepsInstructionTextView)
+        val likePercent: TextView = findViewById(R.id.percentRecookTextView)
+        val totalComment: TextView = findViewById(R.id.totalCommentTextView)
+        val commentSection: ConstraintLayout = findViewById(R.id.commentSectionConstraintLayout)
+        val rationTextView: TextView = findViewById(R.id.foodRationTextView)
+        val dietTextView: TextView = findViewById(R.id.foodDietTextView)
+        val categoryTextView: TextView = findViewById(R.id.foodCategoryTextView)
 
         // other variables
         val storageRef = Firebase.storage
-        val currentFoodRecipe: FoodRecipe? = intent.extras?.getParcelable("foodRecipe", FoodRecipe::class.java)!!
+        val currentFoodRecipe: FoodRecipe? =
+            intent.extras?.getParcelable("foodRecipe", FoodRecipe::class.java)!!
         val imagePathList = arrayListOf(currentFoodRecipe!!.recipeMainImage)
-        var recipeAuthor : User? =  null
+        var recipeAuthor: User? = null
         var ingredientString = ""
         var stepString = ""
         var dietString = ""
         var cateString = ""
 
         // generate diet string list from DB
-        for((i, diet) in DBManagement.recipeDietList.withIndex()){
-            val temp = diet.foodRecipes.filter { it == currentFoodRecipe.id }
-
-            if(temp.isNotEmpty())
-                if(temp[0] == currentFoodRecipe.id)
-                    dietString += "${diet.dietName}, "
+        for ( diet in DBManagement.recipeDietList) {
+            if (diet.foodRecipes.contains(currentFoodRecipe.id))
+                dietString += "${diet.dietName}, "
         }
-        dietString = dietString.substring(0, dietString.length - 2)
+        if (dietString.length >= 2)
+            dietString = dietString.substring(0, dietString.length - 2)
 
         // generate category string list from DB
-        for((i, category) in DBManagement.recipeCateList.withIndex()){
-            val temp = category.foodRecipes.filter { it == currentFoodRecipe.id }
-
-            if(temp.isNotEmpty())
-                if(temp[0] == currentFoodRecipe.id)
-                    cateString += "${category.recipeCateName}, "
+        for (category in DBManagement.recipeCateList) {
+            if (category.foodRecipes.contains(currentFoodRecipe.id)){
+                cateString += "${category.recipeCateName}, "
+            }
         }
-        cateString = cateString.substring(0, cateString.length - 2)
+        if (cateString.length >= 2)
+            cateString = cateString.substring(0, cateString.length - 2)
 
         // generate ingredient text
-        for((i, ingredient) in currentFoodRecipe.recipeIngres.withIndex())
+        for ((i, ingredient) in currentFoodRecipe.recipeIngres.withIndex())
             ingredientString += "${i + 1}. ${ingredient.ingreName}  <b>${ingredient.ingreQuantity} ${ingredient.ingreUnit}</b><br>"
 
         // generate step string
-        for((i, step) in currentFoodRecipe.recipeSteps.withIndex()){
+        for ((i, step) in currentFoodRecipe.recipeSteps.withIndex()) {
             stepString += "<b> Bước ${i + 1}: </b> <br>${step.description}<br><br>"
         }
 
         // find user in user list
-        for(user in DBManagement.userList)
-            if(user.myFoodRecipes.filter { it == currentFoodRecipe.id }[0] == currentFoodRecipe.id){
+        for (user in DBManagement.userList) {
+            if (user.myFoodRecipes.contains(currentFoodRecipe.id)) {
                 recipeAuthor = user
                 break
             }
+        }
 
         // assign img url to list
-        for(step in currentFoodRecipe.recipeSteps)
+        for (step in currentFoodRecipe.recipeSteps)
             imagePathList.add(step.image)
 
         // assign user avatar image
@@ -115,7 +112,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         }
 
         // hide comment section if there is no comment
-        if(currentFoodRecipe.recipeCmts.size == 0)
+        if (currentFoodRecipe.recipeCmts.size == 0)
             commentSection.visibility = View.GONE
 
         // set data for view
@@ -123,8 +120,10 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         authorBioTextView.text = recipeAuthor?.bio
         authorNameTextView.text = recipeAuthor?.fullname
         authorTotalRecipeTextView.text = recipeAuthor?.myFoodRecipes?.size.toString()
-        ingredientDetailsTextView.text = HtmlCompat.fromHtml(ingredientString, HtmlCompat.FROM_HTML_MODE_LEGACY)
-        stepsInstructionTextView.text = HtmlCompat.fromHtml(stepString, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        ingredientDetailsTextView.text =
+            HtmlCompat.fromHtml(ingredientString, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        stepsInstructionTextView.text =
+            HtmlCompat.fromHtml(stepString, HtmlCompat.FROM_HTML_MODE_LEGACY)
         rationTextView.text = currentFoodRecipe.ration.toString() + " người"
         totalComment.text = "(${currentFoodRecipe.recipeCmts.size})"
         dietTextView.text = dietString
@@ -157,7 +156,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         showStepDetailsButton.setOnClickListener {
             val myIntent = Intent(this, ShowRecipeDetailsDescriptionActivity::class.java)
 
-            myIntent.putExtra("stepList", currentFoodRecipe.recipeSteps)
+            myIntent.putExtra("stepFoodRecipe", currentFoodRecipe)
 
             startActivity(myIntent)
         }
@@ -178,6 +177,9 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         }
     }
 
+    fun showText(text: String, context: Context) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+    }
 //    fun calculateLike() : Double{
 //        var res : Double = 0.0
 //
