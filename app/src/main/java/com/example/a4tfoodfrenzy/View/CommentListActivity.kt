@@ -32,14 +32,14 @@ class CommentListActivity : AppCompatActivity() {
         }
         var cmtList = ArrayList<RecipeComment>()
 
-        cmtList.add(RecipeComment("Đặng Ngọc Tiến", "",
+        cmtList.add(RecipeComment(1, "Đặng Ngọc Tiến", "",
             R.drawable.avt,true,
             "comrangduabo","Rất ngon và đơn giản", Date()
         ))
-        cmtList.add(RecipeComment("Đặng Ngọc Tiến", "", R.drawable.avt,true, null,"Đẹp quá", Date()))
-        cmtList.add(RecipeComment("Trương Gia Tiến", "",
+        cmtList.add(RecipeComment(2, "Đặng Ngọc Tiến", "", R.drawable.avt,true, null,"Đẹp quá", Date()))
+        cmtList.add(RecipeComment(3, "Trương Gia Tiến", "",
             R.drawable.avt,true, null,"Món ăn tuyệt vời quá", Date()))
-        cmtList.add(RecipeComment("Nguyễn Văn Việt", "",
+        cmtList.add(RecipeComment(4, "Nguyễn Văn Việt", "",
             R.drawable.avt,true,
             "mitrungxaobo","Sao tôi làm món ăn bò sốt me mà ra mì hải sản vậy ?", Date()))
 

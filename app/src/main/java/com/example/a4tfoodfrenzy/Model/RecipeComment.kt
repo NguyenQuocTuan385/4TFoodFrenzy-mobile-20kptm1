@@ -5,7 +5,7 @@ import android.os.Parcelable
 import androidx.annotation.RequiresApi
 import java.util.Date
 
-class RecipeComment(private var _isLike: Boolean,
+class RecipeComment(private var _id:Long, private var _isLike: Boolean,
                     private var _image: String?,
                     private var _description: String,
                     private var _date: Date) : Parcelable
@@ -14,8 +14,9 @@ class RecipeComment(private var _isLike: Boolean,
     private var _nameRecipe: String = ""
     private var _avatarUser: Int = 0
 
-    constructor():this(false,null,"",Date())
+    constructor():this(0,false,null,"",Date())
     constructor(
+        _id: Long,
         _username: String,
         _nameRecipe: String,
         _avatarUser: Int,
@@ -23,7 +24,7 @@ class RecipeComment(private var _isLike: Boolean,
         _image: String?,
         _description: String,
         _date: Date
-    ) : this(_isLike, _image, _description, _date) {
+    ) : this(_id,_isLike, _image, _description, _date) {
     this._username = _username
     this._nameRecipe = _nameRecipe
     this._avatarUser = _avatarUser
@@ -32,6 +33,12 @@ class RecipeComment(private var _isLike: Boolean,
     this._description = _description
     this._date = _date
 }
+
+    var id: Long
+        get() = _id
+        set(value) {
+            _id = value
+        }
 
     var username: String
     get() = _username
@@ -77,6 +84,7 @@ class RecipeComment(private var _isLike: Boolean,
 
     @RequiresApi(Build.VERSION_CODES.Q)
     constructor(parcel: android.os.Parcel) : this(
+        parcel.readLong(),
         parcel.readByte() != 0.toByte(),
         parcel.readString(),
         parcel.readString() ?: "",
@@ -89,6 +97,7 @@ class RecipeComment(private var _isLike: Boolean,
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun writeToParcel(parcel: android.os.Parcel, flags: Int) {
+        parcel.writeLong(_id)
         parcel.writeString(_username)
         parcel.writeString(_nameRecipe)
         parcel.writeInt(_avatarUser)

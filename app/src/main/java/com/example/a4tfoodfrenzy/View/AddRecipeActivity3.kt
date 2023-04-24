@@ -33,10 +33,10 @@ class AddRecipeActivity3 : AppCompatActivity() {
     }
     private fun createIngredientList(): ArrayList<RecipeIngredient> {
         val list = ArrayList<RecipeIngredient>()
-        list.add(RecipeIngredient(250, "Hải sản","g",50))
-        list.add(RecipeIngredient(100, "Thịt bò","kg",150))
-        list.add(RecipeIngredient(10, "Muối","g",200))
-        list.add(RecipeIngredient(8, "Đường","g",50))
+        list.add(RecipeIngredient(250.0, "Hải sản","g",50.0))
+        list.add(RecipeIngredient(100.0, "Thịt bò","kg",150.0))
+        list.add(RecipeIngredient(10.0, "Muối","g",200.0))
+        list.add(RecipeIngredient(8.0, "Đường","g",50.0))
         return list
     }
 

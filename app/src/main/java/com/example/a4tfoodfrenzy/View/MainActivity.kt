@@ -107,6 +107,7 @@ class MainActivity : AppCompatActivity() {
                 btnViewMoreMostLikes.visibility = View.VISIBLE
                 adapterRecipeMostLikesRV!!.onItemClick = { foodRecipe, i ->
                     val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
+                    intent.putExtra("foodRecipe",foodRecipe)
                     startActivity(intent)
                 }
             }
@@ -136,6 +137,7 @@ class MainActivity : AppCompatActivity() {
             recipeMostLikesRV!!.layoutManager = GridLayoutManager(this, 3)
             adapterRecipeMostLikesRV!!.onItemClick = { foodRecipe, i ->
                 val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
+                intent.putExtra("foodRecipe",foodRecipe)
                 startActivity(intent)
             }
         }

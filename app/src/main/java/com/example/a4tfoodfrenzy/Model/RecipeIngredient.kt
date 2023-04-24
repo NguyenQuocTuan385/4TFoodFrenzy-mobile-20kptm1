@@ -4,15 +4,15 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class RecipeIngredient(
-    private var _ingreQuantity: Int,
+    private var _ingreQuantity: Double,
     private var _ingreName: String,
     private var _ingreUnit: String,
-    private var _ingreCalo: Int?
+    private var _ingreCalo: Double?
 ) : Parcelable{
-    constructor() : this(0, "", "",0)
+    constructor() : this(0.0, "", "",0.0)
 
 
-    var ingreQuantity: Int
+    var ingreQuantity: Double
         get() = _ingreQuantity
         set(value) {
             _ingreQuantity = value
@@ -32,7 +32,7 @@ class RecipeIngredient(
             _ingreUnit = value
         }
 
-    var ingreCalo: Int?
+    var ingreCalo: Double?
         get() = _ingreCalo
         set(value) {
             _ingreCalo = value
@@ -40,18 +40,18 @@ class RecipeIngredient(
 
     // Hàm đọc dữ liệu từ Parcel và khởi tạo đối tượng RecipeIngredient
     constructor(parcel: Parcel) : this(
-        parcel.readInt(),
+        parcel.readDouble(),
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readInt()
+        parcel.readDouble()
     )
 
     // Ghi dữ liệu của đối tượng RecipeIngredient vào Parcel
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(_ingreQuantity)
+        parcel.writeDouble(_ingreQuantity)
         parcel.writeString(_ingreName)
         parcel.writeString(_ingreUnit)
-        parcel.writeInt(ingreCalo!!)
+        parcel.writeDouble(ingreCalo!!)
     }
 
     override fun describeContents(): Int {
