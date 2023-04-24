@@ -17,6 +17,7 @@ import com.example.a4tfoodfrenzy.Helper.GenerateDBModel
 import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.Source
@@ -113,6 +114,9 @@ class MainActivity : AppCompatActivity() {
             dbManagement.addListenerChangeDataRecipeComment {  }
             dbManagement.addListenerChangeDataRecipeDiets {  }
             dbManagement.addListenerChangeDataUser {  }
+            if(FirebaseAuth.getInstance().currentUser != null) {
+                dbManagement.addListenerChangeDataUserCurrent {  }
+            }
             DBManagement.isInitialized = true
         }
         else {

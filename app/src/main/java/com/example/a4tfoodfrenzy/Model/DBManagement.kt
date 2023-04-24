@@ -1,12 +1,14 @@
 package com.example.a4tfoodfrenzy.Model
 
 import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class DBManagement {
     val db = Firebase.firestore
+    var registrationUsserCurrent: ListenerRegistration? = null
     var registrationUser: ListenerRegistration? = null
     var registrationFoodRecipe: ListenerRegistration? = null
     var registrationRecipeComment: ListenerRegistration? = null
@@ -15,6 +17,7 @@ class DBManagement {
 
     companion object {
         var userList = ArrayList<User>()
+        var user_current: User? = null
         var foodRecipeList = ArrayList<FoodRecipe>()
         var recipeCateList = ArrayList<RecipeCategory>()
         var recipeCommentList = ArrayList<RecipeComment>()
@@ -126,6 +129,24 @@ class DBManagement {
                 callback(recipeCateList)
             }
     }
+
+    fun addListenerChangeDataUserCurrent(callback: (User) -> Unit) {
+        val acc = FirebaseAuth.getInstance().currentUser
+        val  userCollection = db.collection("users").document(acc!!.uid)
+        registrationUsserCurrent = userCollection
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w("TAG", "Listen failed.", error)
+                    callback(User())
+                    return@addSnapshotListener
+                }
+
+                // Xử lý dữ liệu khi có thay đổi
+                user_current = value!!.toObject(User::class.java)
+                callback(user_current!!)
+            }
+    }
+
 
     fun destroyListener() {
         registrationUser?.remove()
