@@ -5,6 +5,7 @@ import android.content.Intent
 import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -55,7 +56,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         // other variables
         val storageRef = Firebase.storage
-        val currentFoodRecipe: FoodRecipe? = intent.extras?.getParcelable("foodRecipe", FoodRecipe::class.java)!!
+        val currentFoodRecipe: FoodRecipe? = intent.getParcelableExtra("foodRecipe")
         val imagePathList = arrayListOf(currentFoodRecipe!!.recipeMainImage)
         var recipeAuthor : User? =  null
         var ingredientString = ""
@@ -93,11 +94,12 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         }
 
         // find user in user list
-        for(user in DBManagement.userList)
-            if(user.myFoodRecipes.filter { it == currentFoodRecipe.id }[0] == currentFoodRecipe.id){
+        for(user in DBManagement.userList) {
+            if (user.myFoodRecipes.contains(currentFoodRecipe.id)) {
                 recipeAuthor = user
                 break
             }
+        }
 
         // assign img url to list
         for(step in currentFoodRecipe.recipeSteps)

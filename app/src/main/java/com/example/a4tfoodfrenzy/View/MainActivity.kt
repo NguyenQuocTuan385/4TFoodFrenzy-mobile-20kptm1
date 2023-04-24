@@ -228,7 +228,7 @@ class MainActivity : AppCompatActivity() {
 
         while(randomIndexSet.size != 6) {
             val randomIndex = (0 until recipeList.size).random()
-            if (!randomIndexSet.contains(randomIndex)) {
+            if (!randomIndexSet.contains(randomIndex) && (recipeList.get(randomIndex).isPublic == true)) {
                 randomIndexSet.add(randomIndex)
                 result.add(recipeList.get(randomIndex))
             }
@@ -240,8 +240,14 @@ class MainActivity : AppCompatActivity() {
         var result = ArrayList<FoodRecipe>()
 
         val sortedRecipes = recipeList.sortedByDescending { it.numOfLikes }
-        for (i in 0 until 6) {
-            result.add(sortedRecipes.get(i))
+        var index = 0
+        var numberRecipe = 0
+        while (numberRecipe != 6) {
+            if (sortedRecipes.get(index).isPublic == true) {
+                result.add(sortedRecipes.get(index))
+                numberRecipe++
+            }
+            index++
         }
         return result
     }
