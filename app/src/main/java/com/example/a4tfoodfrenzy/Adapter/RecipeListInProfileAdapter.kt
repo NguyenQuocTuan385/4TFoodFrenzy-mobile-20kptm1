@@ -1,8 +1,11 @@
 package com.example.a4tfoodfrenzy.Adapter
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -13,21 +16,24 @@ import android.widget.PopupMenu
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
 import com.example.a4tfoodfrenzy.View.AddRecipeActivity1
 import com.example.a4tfoodfrenzy.View.AddStepActivity
 import com.example.a4tfoodfrenzy.View.ShowRecipeDetailsActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import de.hdodenhof.circleimageview.CircleImageView
 
 
 class RecipeListInProfileAdapter(private var context: Context,
                                  private var recipeRenderArray: HashMap<FoodRecipe, User>,
-//                                 private var recipeRenderArray: ArrayList<FoodRecipe>,
-//                                 private var author : ArrayList<User>,
                                  private var isRecipeSavedView: Boolean,
                                  private var isRecipeCreatedView: Boolean,
 ) : RecyclerView.Adapter<RecipeListInProfileAdapter.ViewHolder>() {
@@ -38,6 +44,9 @@ class RecipeListInProfileAdapter(private var context: Context,
 
     var onItemClick: ((FoodRecipe, Int) -> Unit)? = null
     val storageRef = FirebaseStorage.getInstance()
+    val db = Firebase.firestore
+    private lateinit var auth: FirebaseAuth
+
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val recipeName : TextView = listItemView.findViewById(R.id.recipeNameManagementTextView)
@@ -46,6 +55,8 @@ class RecipeListInProfileAdapter(private var context: Context,
         val authorName : TextView = listItemView.findViewById(R.id.authorName)
         val authorAvatarIMG : ImageView = listItemView.findViewById(R.id.avatarImageView)
         val uploadDate : TextView = listItemView.findViewById(R.id.uploadDateTextView)
+        val isPublic : TextView = listItemView.findViewById(R.id.isPublicTextView)
+        val listItemView = listItemView
 
         init {
             listItemView.setOnClickListener {
@@ -77,61 +88,6 @@ class RecipeListInProfileAdapter(private var context: Context,
             R.layout.created_item
         }
         val recipeProfileView = inflater.inflate(layoutResult, parent, false)
-        val option_saved_recipe = recipeProfileView.findViewById<ImageView>(R.id.option_saved_recipe)
-        val option_created_recipe = recipeProfileView.findViewById<ImageView>(R.id.option_created_recipe)
-
-        val list_option = listOf<String>("Xóa", "Xem chi tiết")
-        val list_option_created = listOf<String>("Xóa", "Cập nhật", "Chia sẻ")
-
-        if (viewType == RECIPE_SAVED_VIEW) {
-            option_saved_recipe.setOnClickListener {
-                val popupMenu = PopupMenu(context, option_saved_recipe)
-                for (i in list_option.indices) {
-                    popupMenu.menu.add(Menu.NONE, i, i, list_option[i])
-                }
-                popupMenu.setOnMenuItemClickListener { item ->
-                    when (item.itemId) {
-                        0 -> {
-//                            recipeRenderArray.removeAt()
-                        }
-                        1 -> {
-                            // chuyển đến trang xem chi tiết
-                            val intent = Intent(context, ShowRecipeDetailsActivity::class.java)
-//                            intent.putExtra("recipeID", recipeRenderArray.get(adapterPosition).recipeID)
-                            context.startActivity(intent)
-                        }
-                    }
-                    true
-                }
-                popupMenu.show()
-            }
-        }
-        else {
-            option_created_recipe.setOnClickListener {
-                val popupMenu = PopupMenu(context, option_created_recipe)
-                for (i in list_option_created.indices) {
-                    popupMenu.menu.add(Menu.NONE, i, i, list_option_created[i])
-                }
-                popupMenu.setOnMenuItemClickListener { item ->
-                    when (item.itemId) {
-                        0 -> {
-//                            recipeRenderArray.removeAt()
-                        }
-                        1 -> {
-                            // chuyển đến trang cập nhật
-                            val intent = Intent(context, AddRecipeActivity1::class.java)
-//                            intent.putExtra("recipeID", recipeRenderArray.get(adapterPosition).recipeID)
-                            context.startActivity(intent)
-                        }
-                        2 -> {
-                            // chia sẻ
-                        }
-                    }
-                    true
-                }
-                popupMenu.show()
-            }
-        }
 
         // Return a new holder instance
         return ViewHolder(recipeProfileView)
@@ -148,9 +104,9 @@ class RecipeListInProfileAdapter(private var context: Context,
         val recipeName = holder.recipeName
         recipeName.text = recipeRender.recipeName
 
-        if(recipeName.length() > 15) {
+        if (recipeName.length() > 15) {
             recipeName.text = recipeName.text.substring(0, 15) + "..."
-        }else{
+        } else {
             recipeName.text = recipeName.text
         }
 
@@ -182,10 +138,128 @@ class RecipeListInProfileAdapter(private var context: Context,
             }
         }
 
+
+        val shareStatus = holder.isPublic
+        shareStatus.text =  "Đã chia sẻ"
+        if (recipeRender.isPublic && isRecipeCreatedView) {
+            shareStatus.text = "Đã chia sẻ"
+
+            shareStatus.setTextColor(Color.parseColor("#FFB200"))
+        } else if(!recipeRender.isPublic && isRecipeCreatedView) {
+            shareStatus.text = "Chưa chia sẻ"
+            shareStatus.setTextColor(Color.parseColor("#000000"))
+        } else {
+            shareStatus.text = ""
+        }
+
         val numOfLike = holder.numOfLike
         numOfLike.text = recipeRender.numOfLikes.toString()
         val uploadDate = holder.uploadDate
         uploadDate.text = recipeRender.date.toString()
+
+        // xử lý khi click vào item
+        auth = FirebaseAuth.getInstance()
+        val user_id = auth.currentUser?.uid
+
+        val option_saved_recipe = holder.listItemView.findViewById<ImageView>(R.id.option_saved_recipe)
+        val option_created_recipe = holder.listItemView.findViewById<ImageView>(R.id.option_created_recipe)
+        val list_option_saved = listOf("Xóa", "Xem chi tiết")
+        val list_option_created = listOf("Xóa", "Cập nhật", "Chia sẻ")
+        val list_option_created1 = listOf("Xóa", "Cập nhật", "Hủy chia sẻ")
+
+        if(isRecipeSavedView) {
+            option_saved_recipe.setOnClickListener {
+                val popupMenu = PopupMenu(context, option_saved_recipe)
+                for (i in list_option_saved.indices) {
+                    popupMenu.menu.add(Menu.NONE, i, i, list_option_saved[i])
+                }
+                popupMenu.setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        0 -> {
+                            val mapUpdate = mapOf(
+                                "foodRecipeSaved" to FieldValue.arrayRemove(recipeRender.id)
+                            )
+                            db.collection("users").document(user_id.toString()).update(mapUpdate)
+
+                            recipeRenderArray.remove(recipeRender)
+                            notifyDataSetChanged()
+                        }
+                        1 -> {
+
+                        }
+                    }
+                    true
+                }
+                popupMenu.show()
+            }
+        }
+        else {
+            option_created_recipe.setOnClickListener {
+                val popupMenu = PopupMenu(context, option_created_recipe)
+                for (i in list_option_created.indices) {
+                    if(recipeRender.isPublic) {
+                        popupMenu.menu.add(Menu.NONE, i, i, list_option_created1[i])
+                    }
+                    else {
+                        popupMenu.menu.add(Menu.NONE, i, i, list_option_created[i])
+                    }
+                }
+                popupMenu.setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        0 -> {
+                            val mapUpdate = mapOf(
+                                "myFoodRecipes" to FieldValue.arrayRemove(recipeRender.id)
+                            )
+                            db.collection("users").document(user_id.toString()).update(mapUpdate)
+
+                            db.collection("RecipeFoods")
+                                .whereEqualTo("id", recipeRender.id)
+                                .get()
+                                .addOnSuccessListener { documents ->
+                                    for (document in documents) {
+                                        db.collection("RecipeFoods").document(document.id).delete()
+                                    }
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                                }
+
+                            recipeRenderArray.remove(recipeRender)
+                            notifyDataSetChanged()
+                        }
+                        1 -> {
+                            // chuyển đến trang cập nhật
+
+                        }
+                        2 -> {
+                            // chia sẻ
+                            val mapUpdate = mapOf(
+                                "public" to false
+                            )
+                            db.collection("RecipeFoods")
+                                .whereEqualTo("id", recipeRender.id)
+                                .get()
+                                .addOnSuccessListener { documents ->
+                                    for (document in documents) {
+                                        db.collection("RecipeFoods").document(document.id).update(mapUpdate)
+                                    }
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                                }
+
+                            recipeRender.isPublic = false
+                            notifyDataSetChanged()
+                        }
+                    }
+                    true
+                }
+                popupMenu.show()
+            }
+
+        }
+
+
     }
 }
 
