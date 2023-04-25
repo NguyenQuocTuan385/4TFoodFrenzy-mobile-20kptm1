@@ -146,7 +146,104 @@ class DBManagement {
                 callback(user_current!!)
             }
     }
+    fun fetchDataUser(callback: (ArrayList<User>) -> Unit) {
+        val usersCollection = db.collection("users")
 
+        userList = ArrayList()
+        usersCollection.get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot) {
+                    val user = document.toObject(User::class.java)
+                    userList.add(user)
+                }
+                callback(userList)
+            }
+            .addOnFailureListener { exception ->
+                Log.d("TAG", "Error getting documents: ", exception)
+                callback(arrayListOf())
+            }
+    }
+    fun fetchDataFoodRecipe(callback: (ArrayList<FoodRecipe>) -> Unit) {
+        val foodRecipesCollection = db.collection("RecipeFoods")
+
+        foodRecipeList = ArrayList()
+        foodRecipesCollection.get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot) {
+                    val foodRecipe = document.toObject(FoodRecipe::class.java)
+                    foodRecipeList.add(foodRecipe)
+                }
+                callback(foodRecipeList)
+            }
+            .addOnFailureListener { exception ->
+                Log.d("TAG", "Error getting documents: ", exception)
+                callback(arrayListOf())
+            }
+    }
+    fun fetchDataRecipeCmt(callback: (ArrayList<RecipeComment>) -> Unit) {
+        val recipeCmtsCollection = db.collection("RecipeCmts")
+
+        recipeCommentList = ArrayList()
+        recipeCmtsCollection.get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot) {
+                    val recipeCmt = document.toObject(RecipeComment::class.java)
+                    recipeCommentList.add(recipeCmt)
+                }
+                callback(recipeCommentList)
+            }
+            .addOnFailureListener { exception ->
+                Log.d("TAG", "Error getting documents: ", exception)
+                callback(arrayListOf())
+            }
+    }
+    fun fetchDataRecipeCate(callback: (ArrayList<RecipeCategory>) -> Unit) {
+        val recipeCatesCollection = db.collection("RecipeCates")
+
+        recipeCateList = ArrayList()
+        recipeCatesCollection.get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot) {
+                    val recipeCate = document.toObject(RecipeCategory::class.java)
+                    recipeCateList.add(recipeCate)
+                }
+                callback(recipeCateList)
+            }
+            .addOnFailureListener { exception ->
+                Log.d("TAG", "Error getting documents: ", exception)
+                callback(arrayListOf())
+            }
+    }
+    fun fetchDataRecipeDiet(callback: (ArrayList<RecipeDiet>) -> Unit) {
+        val recipeDietsCollection = db.collection("RecipeDiets")
+
+        recipeDietList = ArrayList()
+        recipeDietsCollection.get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot) {
+                    val recipeDiet = document.toObject(RecipeDiet::class.java)
+                    recipeDietList.add(recipeDiet)
+                }
+                callback(recipeDietList)
+            }
+            .addOnFailureListener { exception ->
+                Log.d("TAG", "Error getting documents: ", exception)
+                callback(arrayListOf())
+            }
+    }
+    fun fetchDataUserCurrent(callback: (User) -> Unit) {
+        val acc = FirebaseAuth.getInstance().currentUser
+        val  userCollection = db.collection("users").document(acc!!.uid)
+        userCollection.get()
+            .addOnSuccessListener { document ->
+                user_current = document!!.toObject(User::class.java)
+                callback(user_current!!)
+            }
+            .addOnFailureListener { exception ->
+                Log.d("TAG", "Error getting documents: ", exception)
+                callback(User())
+            }
+    }
 
     fun destroyListener() {
         registrationUser?.remove()

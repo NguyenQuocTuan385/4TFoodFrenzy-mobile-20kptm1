@@ -86,60 +86,58 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (DBManagement.isInitialized == false) {
-            btnViewMoreTodayEat.visibility = View.GONE
-            btnViewMoreMostLikes.visibility = View.GONE
             dbManagement.addListenerChangeDataFoodRecipe { foodRecipes ->
-                val recipesListToday = generateRecipeTodayEatData(foodRecipes)
-                adapterRecipeTodayEatRV = RecipeListAdapter(this, recipesListToday)
-                recipeTodayEatRV!!.adapter = adapterRecipeTodayEatRV
-                recipeTodayEatRV!!.layoutManager = GridLayoutManager(this, 3)
+                if (foodRecipes.isEmpty()) {
+                    dbManagement.fetchDataFoodRecipe { foodRecipeList ->
+                        setRecipeListAdapter(RecipeListAdapter(this, generateRecipeTodayEatData(foodRecipeList)), recipeTodayEatRV)
+                        btnViewMoreTodayEat.visibility = View.VISIBLE
 
-                adapterRecipeTodayEatRV!!.onItemClick = { foodRecipe, i ->
-                    val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
-                    intent.putExtra("foodRecipe",foodRecipe)
-                    startActivity(intent)
-                }
-                btnViewMoreTodayEat.visibility = View.VISIBLE
+                        setRecipeListAdapter(RecipeListAdapter(this, generateRecipeMostLikesData(foodRecipeList)), recipeMostLikesRV)
+                        btnViewMoreMostLikes.visibility = View.VISIBLE
+                    }
+                } else {
+                    setRecipeListAdapter(RecipeListAdapter(this, generateRecipeTodayEatData(foodRecipes)), recipeTodayEatRV)
+                    btnViewMoreTodayEat.visibility = View.VISIBLE
 
-                adapterRecipeMostLikesRV = RecipeListAdapter(this,generateRecipeMostLikesData(foodRecipes))
-                recipeMostLikesRV!!.adapter = adapterRecipeMostLikesRV
-                recipeMostLikesRV!!.layoutManager = GridLayoutManager(this, 3)
-                btnViewMoreMostLikes.visibility = View.VISIBLE
-                adapterRecipeMostLikesRV!!.onItemClick = { foodRecipe, i ->
-                    val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
-                    intent.putExtra("foodRecipe",foodRecipe)
-                    startActivity(intent)
+                    setRecipeListAdapter(RecipeListAdapter(this, generateRecipeMostLikesData(foodRecipes)), recipeMostLikesRV)
+                    btnViewMoreMostLikes.visibility = View.VISIBLE
                 }
             }
-            dbManagement.addListenerChangeDataRecipeCategories {  }
-            dbManagement.addListenerChangeDataRecipeComment {  }
-            dbManagement.addListenerChangeDataRecipeDiets {  }
-            dbManagement.addListenerChangeDataUser {  }
+            dbManagement.addListenerChangeDataRecipeCategories { recipeCategories ->
+                if (recipeCategories.isEmpty()) {
+                    dbManagement.fetchDataRecipeCate {  }
+                }
+            }
+            dbManagement.addListenerChangeDataRecipeComment { recipeComments ->
+                if (recipeComments.isEmpty()) {
+                    dbManagement.fetchDataRecipeCmt {  }
+                }
+            }
+            dbManagement.addListenerChangeDataRecipeDiets { recipeDiets ->
+                if (recipeDiets.isEmpty()) {
+                    dbManagement.fetchDataRecipeDiet {  }
+                }
+            }
+            dbManagement.addListenerChangeDataUser { users ->
+                if (users.isEmpty()) {
+                    dbManagement.fetchDataUser {  }
+                }
+            }
             if(FirebaseAuth.getInstance().currentUser != null) {
-                dbManagement.addListenerChangeDataUserCurrent {  }
+                dbManagement.addListenerChangeDataUserCurrent {user ->
+                    if (user.email.equals("")) {
+                        dbManagement.fetchDataUserCurrent {  }
+                    }
+                }
             }
             DBManagement.isInitialized = true
         }
         else {
-            val recipesListToday = generateRecipeTodayEatData(DBManagement.foodRecipeList)
-            adapterRecipeTodayEatRV = RecipeListAdapter(this,recipesListToday)
-            recipeTodayEatRV!!.adapter = adapterRecipeTodayEatRV
-            recipeTodayEatRV!!.layoutManager = GridLayoutManager(this, 3)
+            setRecipeListAdapter(RecipeListAdapter(this, generateRecipeTodayEatData(DBManagement.foodRecipeList)), recipeTodayEatRV)
+            btnViewMoreTodayEat.visibility = View.VISIBLE
 
-            adapterRecipeTodayEatRV!!.onItemClick = { foodRecipe, i ->
-                val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
-                intent.putExtra("foodRecipe",foodRecipe)
-                startActivity(intent)
-            }
-
-            adapterRecipeMostLikesRV = RecipeListAdapter(this, generateRecipeMostLikesData(DBManagement.foodRecipeList))
-            recipeMostLikesRV!!.adapter = adapterRecipeMostLikesRV
-            recipeMostLikesRV!!.layoutManager = GridLayoutManager(this, 3)
-            adapterRecipeMostLikesRV!!.onItemClick = { foodRecipe, i ->
-                val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
-                intent.putExtra("foodRecipe",foodRecipe)
-                startActivity(intent)
-            }
+            setRecipeListAdapter(RecipeListAdapter(this, generateRecipeMostLikesData(DBManagement.foodRecipeList)), recipeMostLikesRV)
+            btnViewMoreMostLikes.visibility = View.VISIBLE
         }
 
         findViewById<LinearLayout>(R.id.searchLL).setOnClickListener {
@@ -253,41 +251,14 @@ class MainActivity : AppCompatActivity() {
         }
         return result
     }
-//    fun generateRecipeMostLikesData(): ArrayList<FoodRecipe> {
-//        var result = ArrayList<FoodRecipe>()
-//
-//        var foodRecipe = FoodRecipe(1, "Cơm rang dưa bò", "comrangduabo", 2, "15 phút",
-//            Date(2022, 2,2), true,
-//            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-//        result.add(foodRecipe)
-//
-//        foodRecipe= FoodRecipe(1, "Mì trứng xào bò", "mitrungxaobo", 2, "15 phút",
-//            Date(2022, 2,2), true,
-//            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-//        result.add(foodRecipe)
-//
-//
-//        foodRecipe= FoodRecipe(1, "Mì quảng gà", "miquangga", 2, "15 phút",
-//            Date(2022, 2,2), true,
-//            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-//        result.add(foodRecipe)
-//
-//        foodRecipe= FoodRecipe(1, "Thịt xiên nướng cà ri", "thitxiennuong", 2, "15 phút",
-//            Date(2022, 2,2), true,
-//            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-//        result.add(foodRecipe)
-//
-//        foodRecipe= FoodRecipe(1, "Mực nướng Malaysia", "mucnuongmalaysia", 2, "15 phút",
-//            Date(2022, 2,2), true,
-//            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-//        result.add(foodRecipe)
-//
-//        foodRecipe= FoodRecipe(1, "Thịt ba chỉ nướng mật ong", "thitbachimatong", 2, "15 phút",
-//            Date(2022, 2,2), true,
-//            ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList())
-//        result.add(foodRecipe)
-//
-//        return result
-//    }
+    fun setRecipeListAdapter(adapterRecipeList: RecipeListAdapter?, recipeRV: RecyclerView) {
+        recipeRV!!.adapter = adapterRecipeList
+        recipeRV!!.layoutManager = GridLayoutManager(this, 3)
+        adapterRecipeList!!.onItemClick = { foodRecipe, i ->
+            val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
+            intent.putExtra("foodRecipe",foodRecipe)
+            startActivity(intent)
+        }
+    }
 
 }
