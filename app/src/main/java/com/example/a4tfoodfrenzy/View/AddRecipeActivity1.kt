@@ -1,6 +1,8 @@
 package com.example.a4tfoodfrenzy.View
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +10,7 @@ import android.provider.MediaStore
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.appbar.MaterialToolbar
@@ -18,6 +21,7 @@ class AddRecipeActivity1 : AppCompatActivity() {
     private lateinit var imageRecipe:ImageView
     private lateinit var nameRecipeEdit:EditText
     private var imagePath:Uri?=null
+    private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE=123
 
     companion object{
         val IMAGE_REQUEST_CODE=100
@@ -75,10 +79,17 @@ class AddRecipeActivity1 : AppCompatActivity() {
             }
         }
     }
-    private fun pickImageGallery()
-    {
-        val intent=Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-        intent.type="image/*"
+    private fun pickImageGallery() {
+        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            // Quyền truy cập bộ nhớ ngoài chưa được cấp, yêu cầu cấp quyền
+            requestPermissions(
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
+            )
+            return
+        }
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        intent.type = "image/*"
         startActivityForResult(intent, IMAGE_REQUEST_CODE)
     }
     private fun pickImage()
@@ -98,6 +109,20 @@ class AddRecipeActivity1 : AppCompatActivity() {
             imagePath=data?.data as Uri
         }
     }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    pickImageGallery()
+                } else {
+                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
+        }
+    }
+
 
 
 }

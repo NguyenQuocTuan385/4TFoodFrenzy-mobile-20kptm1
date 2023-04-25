@@ -168,7 +168,7 @@
                     android:id="@+id/mainFoodImageView"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     android:src="@color/white"
                     android:contentDescription="This is main Image "
                     />
