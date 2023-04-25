@@ -67,7 +67,7 @@ class AddRecipeActivity1 : AppCompatActivity() {
     private fun sendData(intent: Intent)
     {
         val foodRecipe=FoodRecipe()
-        foodRecipe.recipeMainImage=nameRecipeEdit.text.toString()
+        foodRecipe.recipeName=nameRecipeEdit.text.toString()
         foodRecipe.recipeMainImage=imagePath.toString()
         intent.putExtra("foodRecipe",foodRecipe)
     }
