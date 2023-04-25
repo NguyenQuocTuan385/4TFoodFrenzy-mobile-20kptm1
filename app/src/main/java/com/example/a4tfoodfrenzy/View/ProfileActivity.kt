@@ -29,6 +29,7 @@ import com.google.firebase.storage.FirebaseStorage
 import java.util.*
 
 class ProfileActivity : AppCompatActivity() {
+
     private lateinit var name_profile: TextView
     private lateinit var avatar_profile: ImageView
     private lateinit var email_profile: TextView

@@ -8,18 +8,24 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.RecipeComment
+import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
+import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 
 class CommentListAdapter(private var context:Context,
-    private var recipeCommentArray: ArrayList<RecipeComment>, private var isCmtListUserView: Boolean,
+    private var recipeCommentArray: HashMap<RecipeComment, User>,
+    private var isCmtListUserView: Boolean,
     private var isCmtListAdminView: Boolean
 ) : RecyclerView.Adapter<CommentListAdapter.ViewHolder>() {
     companion object {
         private const val CMT_LIST_USER_VIEW = 1
         private const val CMT_LIST_ADMIN_VIEW = 2
     }
+    val storageRef = FirebaseStorage.getInstance()
 
     var onItemClick: ((RecipeComment, Int) -> Unit)? = null
     fun setCmtListUserView(isCmtListUserView: Boolean) {
@@ -41,7 +47,8 @@ class CommentListAdapter(private var context:Context,
         init {
             listItemView.setOnClickListener {
                 onItemClick?.invoke(
-                    recipeCommentArray.get(adapterPosition), adapterPosition
+                    recipeCommentArray.keys.elementAt(adapterPosition),
+                    adapterPosition
                 )
             }
         }
@@ -79,28 +86,45 @@ class CommentListAdapter(private var context:Context,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // Get the data model based on position
-        val cmtRender: RecipeComment = recipeCommentArray.get(position)
+        val cmtRender: RecipeComment = recipeCommentArray.keys.elementAt(position)
         // Set item views based on your views and data model
         val nameTV = holder.nameTV
-        nameTV.text = cmtRender.username
+        nameTV.text = recipeCommentArray[cmtRender]?.fullname
         val foodTV = holder.foodTV
         foodTV.text = cmtRender.nameRecipe
         val cmtDescripTV = holder.cmtDescripTV
         cmtDescripTV.text = cmtRender.description
         val timeTV = holder.timeTV
-        val formatter = SimpleDateFormat("dd-MM-yyyy")
+        val formatter = SimpleDateFormat("dd/MM/yyyy")
         timeTV.text = formatter.format(cmtRender.date)
+
         val avatarIV = holder.avatarIV
-        cmtRender.avatarUser?.let { avatarIV.setImageResource(it) }
+        val imageRef = recipeCommentArray[cmtRender]?.avatar?.let { storageRef.getReference(it) }
+        if (imageRef != null) {
+            imageRef.downloadUrl.addOnSuccessListener { uri ->
+                Glide.with(context)
+                    .load(uri)
+                    .into(avatarIV)
+            }.addOnFailureListener { exception ->
+                // Xử lý lỗi
+            }
+        }
         val foodIV = holder.foodIV
         if (cmtRender.image == null) {
             foodIV.visibility = View.GONE
         }
         else {
-            val resources = context.getResources()
-            val resourceId = resources.getIdentifier(cmtRender.image, "drawable", context.packageName)
-            val bitmap = BitmapFactory.decodeResource(resources, resourceId)
-            foodIV.setImageBitmap(bitmap)
+            foodIV.visibility = View.VISIBLE
+            val imageRef = cmtRender.image?.let { storageRef.getReference(it) }
+            if (imageRef != null) {
+                imageRef.downloadUrl.addOnSuccessListener { uri ->
+                    Glide.with(context)
+                        .load(uri)
+                        .into(foodIV)
+                }.addOnFailureListener { exception ->
+                    // Xử lý lỗi
+                }
+            }
         }
     }
 }

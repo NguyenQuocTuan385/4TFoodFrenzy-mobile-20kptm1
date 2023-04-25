@@ -225,7 +225,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         toListComment.setOnClickListener {
             val myIntent = Intent(this, CommentListActivity::class.java)
-
+            myIntent.putExtra("foodComment", currentFoodRecipe)
             startActivity(myIntent)
         }
     }
