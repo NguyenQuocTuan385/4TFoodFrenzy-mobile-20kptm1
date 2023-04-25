@@ -79,7 +79,7 @@
                 android:paddingBottom="8dp"
                 android:text="Bò nướng mlem"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

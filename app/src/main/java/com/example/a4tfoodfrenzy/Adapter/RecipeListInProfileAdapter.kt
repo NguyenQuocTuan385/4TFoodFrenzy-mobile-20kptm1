@@ -104,9 +104,12 @@ class RecipeListInProfileAdapter(private var context: Context,
         val recipeName = holder.recipeName
         recipeName.text = recipeRender.recipeName
 
-        if (recipeName.length() > 15) {
-            recipeName.text = recipeName.text.substring(0, 15) + "..."
-        } else {
+        if (recipeName.length() > 16 && isRecipeSavedView) {
+            recipeName.text = recipeName.text.substring(0, 16) + "..."
+        } else if(recipeName.length() > 13 && isRecipeCreatedView) {
+            recipeName.text = recipeName.text.substring(0, 13) + "..."
+        }
+        else{
             recipeName.text = recipeName.text
         }
 
@@ -185,7 +188,10 @@ class RecipeListInProfileAdapter(private var context: Context,
                             notifyDataSetChanged()
                         }
                         1 -> {
-
+                            val current_foodRecipe = recipeRender
+                            val intent = Intent(context, ShowRecipeDetailsActivity::class.java)
+                            intent.putExtra("foodRecipe", current_foodRecipe)
+                            context.startActivity(intent)
                         }
                     }
                     true
@@ -233,23 +239,45 @@ class RecipeListInProfileAdapter(private var context: Context,
                         }
                         2 -> {
                             // chia sẻ
-                            val mapUpdate = mapOf(
-                                "public" to false
-                            )
-                            db.collection("RecipeFoods")
-                                .whereEqualTo("id", recipeRender.id)
-                                .get()
-                                .addOnSuccessListener { documents ->
-                                    for (document in documents) {
-                                        db.collection("RecipeFoods").document(document.id).update(mapUpdate)
+                            if(recipeRender.isPublic) {
+                                val mapUpdate = mapOf(
+                                    "public" to false
+                                )
+                                db.collection("RecipeFoods")
+                                    .whereEqualTo("id", recipeRender.id)
+                                    .get()
+                                    .addOnSuccessListener { documents ->
+                                        for (document in documents) {
+                                            db.collection("RecipeFoods").document(document.id).update(mapUpdate)
+                                        }
                                     }
-                                }
-                                .addOnFailureListener { exception ->
-                                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
-                                }
+                                    .addOnFailureListener { exception ->
+                                        Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                                    }
 
-                            recipeRender.isPublic = false
-                            notifyDataSetChanged()
+                                recipeRender.isPublic = false
+                                notifyDataSetChanged()
+                            }
+                            else {
+                                val mapUpdate = mapOf(
+                                    "public" to true
+                                )
+                                db.collection("RecipeFoods")
+                                    .whereEqualTo("id", recipeRender.id)
+                                    .get()
+                                    .addOnSuccessListener { documents ->
+                                        for (document in documents) {
+                                            db.collection("RecipeFoods").document(document.id).update(mapUpdate)
+                                        }
+                                    }
+                                    .addOnFailureListener { exception ->
+                                        Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                                    }
+
+                                recipeRender.isPublic = true
+                                notifyDataSetChanged()
+                            }
+
                         }
                     }
                     true

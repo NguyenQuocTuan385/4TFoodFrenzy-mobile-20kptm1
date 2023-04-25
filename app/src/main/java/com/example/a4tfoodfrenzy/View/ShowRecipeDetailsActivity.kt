@@ -3,16 +3,19 @@ package com.example.a4tfoodfrenzy.View
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.opengl.Visibility
+import android.graphics.Typeface
+import android.icu.lang.UProperty.INT_START
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.TextUtils
+import android.text.style.StyleSpan
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -24,6 +27,7 @@ import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+
 
 class ShowRecipeDetailsActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
@@ -55,16 +59,16 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         // other variables
         val storageRef = Firebase.storage
         val currentFoodRecipe: FoodRecipe? =
-            intent.extras?.getParcelable("foodRecipe", FoodRecipe::class.java)!!
+            intent.extras?.getParcelable("foodRecipe")!!
         val imagePathList = arrayListOf(currentFoodRecipe!!.recipeMainImage)
-        var recipeAuthor : User? =  null
-        var ingredientString = ""
-        var stepString = ""
+        var recipeAuthor: User? = null
+        var ingredientString: CharSequence = ""
+        var stepString: CharSequence = ""
         var dietString = ""
         var cateString = ""
 
         // generate diet string list from DB
-        for ( diet in DBManagement.recipeDietList) {
+        for (diet in DBManagement.recipeDietList) {
             if (diet.foodRecipes.contains(currentFoodRecipe.id))
                 dietString += "${diet.dietName}, "
         }
@@ -73,7 +77,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         // generate category string list from DB
         for (category in DBManagement.recipeCateList) {
-            if (category.foodRecipes.contains(currentFoodRecipe.id)){
+            if (category.foodRecipes.contains(currentFoodRecipe.id)) {
                 cateString += "${category.recipeCateName}, "
             }
         }
@@ -81,16 +85,44 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             cateString = cateString.substring(0, cateString.length - 2)
 
         // generate ingredient text
-        for((i, ingredient) in currentFoodRecipe.recipeIngres.withIndex())
-            ingredientString += "${i + 1}. ${ingredient.ingreName}  <b>${ingredient.ingreQuantity} ${ingredient.ingreUnit}</b><br>"
+        for ((i, ingredient) in currentFoodRecipe.recipeIngres.withIndex()) {
+            val ingredientQuantityAndUnitString =
+                SpannableString("${ingredient.ingreQuantity.toInt()} ${ingredient.ingreUnit}")
+
+            ingredientQuantityAndUnitString.setSpan(
+                StyleSpan(Typeface.BOLD),
+                0,
+                ingredientQuantityAndUnitString.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            ingredientString = TextUtils.concat(
+                ingredientString,
+                "${i + 1}. ${ingredient.ingreName} ",
+                ingredientQuantityAndUnitString,
+                "\n\n"
+            )
+        }
 
         // generate step string
-        for((i, step) in currentFoodRecipe.recipeSteps.withIndex()){
-            stepString += "<b> Bước ${i + 1}: </b> <br>${step.description}<br><br>"
+        for ((i, step) in currentFoodRecipe.recipeSteps.withIndex()) {
+            // sub text is step title number
+            val subtext = SpannableString("Bước ${i + 1}:")
+
+            // setSpan to make step title number bold from 0 (start) to length(end)
+            subtext.setSpan(
+                StyleSpan(Typeface.BOLD),
+                0,
+                subtext.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            // concat step title number with step description then concat those with the main step string
+            stepString = TextUtils.concat(stepString, subtext, "\n${step.description}\n\n")
         }
 
         // find user in user list
-        for(user in DBManagement.userList) {
+        for (user in DBManagement.userList) {
             if (user.myFoodRecipes.contains(currentFoodRecipe.id)) {
                 recipeAuthor = user
                 break
@@ -98,8 +130,11 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         }
 
         // assign img url to list
-        for (step in currentFoodRecipe.recipeSteps)
-            imagePathList.add(step.image)
+        for (step in currentFoodRecipe.recipeSteps) {
+            // check null image
+            if (step.image != null)
+                imagePathList.add(step.image)
+        }
 
         // assign user avatar image
         val authorImgRef = recipeAuthor?.avatar?.let { storageRef.getReference(it) }
@@ -121,10 +156,10 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         authorBioTextView.text = recipeAuthor?.bio
         authorNameTextView.text = recipeAuthor?.fullname
         authorTotalRecipeTextView.text = recipeAuthor?.myFoodRecipes?.size.toString()
-        ingredientDetailsTextView.text =
-            HtmlCompat.fromHtml(ingredientString, HtmlCompat.FROM_HTML_MODE_LEGACY)
-        stepsInstructionTextView.text =
-            HtmlCompat.fromHtml(stepString, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        ingredientDetailsTextView.text = ingredientString
+//            HtmlCompat.fromHtml(ingredientString, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        stepsInstructionTextView.text = stepString
+//            HtmlCompat.fromHtml(stepString, HtmlCompat.FROM_HTML_MODE_LEGACY)
         rationTextView.text = currentFoodRecipe.ration.toString() + " người"
         totalComment.text = "(${currentFoodRecipe.recipeCmts.size})"
         dietTextView.text = dietString
@@ -167,8 +202,9 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             startActivity(myIntent)
         }
         toolbarBackButton.setOnClickListener {
-            val myIntent = Intent(this, AfterSearchActivity::class.java)
-            startActivity(myIntent)
+//            val myIntent = Intent(this, AfterSearchActivity::class.java)
+//            startActivity(myIntent)
+            finish()
         }
 
         val toListComment = findViewById<LinearLayout>(R.id.list_commentLinearLayout)

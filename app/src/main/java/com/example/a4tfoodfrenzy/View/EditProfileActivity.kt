@@ -104,10 +104,15 @@ class EditProfileActivity : AppCompatActivity() {
         val bio = bioET.text.toString()
         val user1 = mapOf(
             "fullname" to name,
-            "avatar" to "users/${user_id}",
-            "email" to email,
+//            "email" to email,
             "bio" to bio
         )
+        if(urlAvt != "")
+        {
+            user1.plus("avatar" to "users/${user_id}")
+        }
+
+
         docRef.update(user1)
             .addOnSuccessListener {
                 Log.d("TAG", "DocumentSnapshot successfully updated!")
