@@ -10,6 +10,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextUtils
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -22,17 +23,28 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bumptech.glide.Glide
 import com.example.a4tfoodfrenzy.Adapter.FoodImageAdapter
-import com.example.a4tfoodfrenzy.Model.DBManagement
-import com.example.a4tfoodfrenzy.Model.FoodRecipe
-import com.example.a4tfoodfrenzy.Model.User
+import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
+import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R
+import com.google.firebase.annotations.concurrent.Blocking
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
+import java.time.LocalDate
+import java.util.*
 
 
 class ShowRecipeDetailsActivity : AppCompatActivity() {
+    val db = Firebase.firestore
+    private var _commentID : Long = -1
+
+    @RequiresApi(Build.VERSION_CODES.Q)
     @SuppressLint("SetTextI18n")
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_recipe_details)
@@ -51,7 +63,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         val ingredientDetailsTextView: TextView = findViewById(R.id.ingredientDetailsTextView)
         val stepsInstructionTextView: TextView = findViewById(R.id.stepsInstructionTextView)
         val likePercent: TextView = findViewById(R.id.percentRecookTextView)
-        val totalComment: TextView = findViewById(R.id.totalCommentTextView)
+        val totalCommentTextView: TextView = findViewById(R.id.totalCommentTextView)
         val commentSection: ConstraintLayout = findViewById(R.id.commentSectionConstraintLayout)
         val rationTextView: TextView = findViewById(R.id.foodRationTextView)
         val dietTextView: TextView = findViewById(R.id.foodDietTextView)
@@ -70,6 +82,17 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         var dietString = ""
         var cateString = ""
         val currentUserCommented = isNotExistComment(currentFoodRecipe)
+        var totalComment = 0
+
+        // count total comment (non empty description comment in comment list)
+        // filter to get comment
+        val filteredCommentList = DBManagement.recipeCommentList.filter { comment -> currentFoodRecipe.recipeCmts.contains(comment.id)  }
+
+        for(comment in filteredCommentList){
+            // comment content is null or empty --> haven't write comment --> no count
+            if(comment.description != "")
+                totalComment++
+        }
 
         // generate diet string list from DB
         for (diet in DBManagement.recipeDietList) {
@@ -167,7 +190,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         ingredientDetailsTextView.text = ingredientString
         stepsInstructionTextView.text = stepString
         rationTextView.text = currentFoodRecipe.ration.toString() + " người"
-        totalComment.text = "(${currentFoodRecipe.recipeCmts.size})"
+        totalCommentTextView.text = "(${totalComment})"
         dietTextView.text = dietString
         categoryTextView.text = cateString
 
@@ -210,7 +233,8 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 //            showText(isNotExistComment(currentFoodRecipe).toString(), this)
 //            startActivity(myIntent)
 
-            showLikeDislikePopup()
+            showLikeDislikePopup(currentFoodRecipe)
+
         }
 
         // back to previous navigation icon on toolbar
@@ -254,7 +278,10 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         return true
     }
 
-    private fun showLikeDislikePopup() {
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun showLikeDislikePopup(currentFood: FoodRecipe) {
+        val currentFoodID = currentFood.id
+
         // inflate the layout of the popup window
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView: View = inflater.inflate(R.layout.popup_like_dislike, null)
@@ -279,13 +306,15 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         // set listener for button inside popup window
         // dislike button clicked --> pop dislike popup
         dislikeButton.setOnClickListener {
-            showNextPopup(false)
+            addCommentToDB(false, currentFoodID)
+            showNextPopup(false, currentFood)
             popupWindow.dismiss()
         }
 
         // like button clicked --> pop like popup
         likeButton.setOnClickListener {
-            showNextPopup(true)
+            addCommentToDB(true, currentFoodID)
+            showNextPopup(true, currentFood)
             popupWindow.dismiss()
         }
 
@@ -295,10 +324,11 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun showNextPopup(layoutType: Boolean) {
+    private fun showNextPopup(layoutType: Boolean, currentFoodRecipe: FoodRecipe) {
         // inflate the layout of the popup window
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = inflater.inflate(if(layoutType) R.layout.popup_like else R.layout.popup_dislike, null)
+        val popupView =
+            inflater.inflate(if (layoutType) R.layout.popup_like else R.layout.popup_dislike, null)
 
         // create the popup window
         val popupWindow = PopupWindow(
@@ -309,8 +339,10 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         )
 
         // views (button, text view,...) in popup window
-        val cancelButton = popupView.findViewById<Button>(if(layoutType) R.id.secondCancelButton else R.id.thirdCancelButton)
-        val yesButton = popupView.findViewById<Button>(if(layoutType) R.id.secondYesButton else R.id.thirdYesButton)
+        val cancelButton =
+            popupView.findViewById<Button>(if (layoutType) R.id.secondCancelButton else R.id.thirdCancelButton)
+        val yesButton =
+            popupView.findViewById<Button>(if (layoutType) R.id.secondYesButton else R.id.thirdYesButton)
 
         // show the popup window
         // which view you pass in doesn't matter, it is only used for the window token
@@ -321,11 +353,62 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         }
 
         yesButton.setOnClickListener {
+            val intent = Intent(this, WriteCommentActivity::class.java)
 
+            intent.putExtra("commentID", _commentID)
+            intent.putExtra("foodRecipe", currentFoodRecipe)
+
+            popupWindow.dismiss()
+
+            startActivity(intent)
+            finish()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun addCommentToDB(isLike: Boolean, currentFoodID: Long) {
+        HelperFunctionDB(this).findSlotIdEmptyInCollection("RecipeCmts") { newID ->
+            val cmt = RecipeComment(newID, "", "", 0, isLike, null, "", Date())
+            _commentID = newID
+
+            db.collection("RecipeCmts")
+                .add(cmt)
+                .addOnSuccessListener {
+                    Log.d("hihi", "DocumentSnapshot successfully written!")
+                }
+                .addOnFailureListener { e ->
+                    Log.w("hihi", "Error writing document", e)
+                }
+
+            // get current food document ID
+            db.collection("RecipeFoods")
+                .whereEqualTo("id", currentFoodID)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (!document.isEmpty) {
+                        // add new cmt ID into food recipe
+                        db.collection("RecipeFoods")
+                            .document(document.elementAt(0).id)
+                            .update("recipeCmts", FieldValue.arrayUnion(newID))
+                    }
+                }
+
+            // find user by ID then add new cmt to that user
+            db.collection("users")
+                .whereEqualTo("id", DBManagement.user_current!!.id)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (!document.isEmpty) {
+                        // add new cmt ID into food recipe
+                        db.collection("users")
+                            .document(document.elementAt(0).id)
+                            .update("recipeCmts", FieldValue.arrayUnion(newID))
+                    }
+                }
         }
     }
 
     private fun showText(text: String, context: Context) {
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, text, Toast.LENGTH_LONG).show()
     }
 }
