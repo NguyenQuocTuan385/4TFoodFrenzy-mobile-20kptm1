@@ -1,6 +1,7 @@
 package com.example.a4tfoodfrenzy.View
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -8,6 +9,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Button
+import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -35,8 +37,11 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var avatar: ImageView
     private var urlAvt = ""
     private lateinit var nameET: EditText
+    private lateinit var datePicker: EditText
+    private lateinit var Dob: Date
     private lateinit var emailET: EditText
     private lateinit var bioET: EditText
+    val user_current = DBManagement.user_current
 
     val storageRef = FirebaseStorage.getInstance()
 
@@ -69,6 +74,26 @@ class EditProfileActivity : AppCompatActivity() {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
         }
+
+        datePicker = findViewById(R.id.Dob_profile)
+        datePicker.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+
+            val datePickerDialog = DatePickerDialog(
+                this,
+                DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                    datePicker.setText("$dayOfMonth/${month + 1}/$year")
+                    Dob = Date(year, month, dayOfMonth)
+                },
+                year,
+                month,
+                dayOfMonth
+            )
+            datePickerDialog.show()
+        }
     }
 
     private fun updateProfile() {
@@ -83,6 +108,7 @@ class EditProfileActivity : AppCompatActivity() {
         val docRef = db.collection("users").document(user_id.toString())
 
         val name = nameET.text.toString()
+        val bio = bioET.text.toString()
 
        if(urlAvt != "")
        {
@@ -100,17 +126,16 @@ class EditProfileActivity : AppCompatActivity() {
            }
        }
 
-        val email = emailET.text.toString()
-        val bio = bioET.text.toString()
         val user1 = mapOf(
             "fullname" to name,
-//            "email" to email,
+            "birthday" to Dob,
             "bio" to bio
         )
         if(urlAvt != "")
         {
             user1.plus("avatar" to "users/${user_id}")
         }
+
 
 
         docRef.update(user1)
@@ -129,7 +154,7 @@ class EditProfileActivity : AppCompatActivity() {
         progressDialog.setMessage("Đang tải...")
         progressDialog.show()
 
-        val user_current = DBManagement.user_current
+
         name = findViewById(R.id.name_profile)
         name.text = user_current?.fullname ?: ""
 
@@ -146,45 +171,33 @@ class EditProfileActivity : AppCompatActivity() {
         }
         nameET = findViewById(R.id.editTextPersonName)
         nameET.setText(user_current?.fullname)
+        Dob = user_current?.birthday ?: Date()
+        if(user_current?.birthday != null){
+            datePicker = findViewById(R.id.Dob_profile)
+            val year = user_current?.birthday.toString().split(" ")[5].toInt() - 1900
+            val month = when (user_current?.birthday.toString().split(" ")[1]) {
+                "Jan" -> 1
+                "Feb" -> 2
+                "Mar" -> 3
+                "Apr" -> 4
+                "May" -> 5
+                "Jun" -> 6
+                "Jul" -> 7
+                "Aug" -> 8
+                "Sep" -> 9
+                "Oct" -> 10
+                "Nov" -> 11
+                else -> 12
+            }
+            val date = user_current?.birthday.toString().split(" ")[2] + "/" + month + "/" + year
+            datePicker.setText(date)
+        }
+
         emailET = findViewById(R.id.editTextEmail)
         emailET.setText(user_current?.email)
         bioET = findViewById(R.id.editTextBio)
         bioET.setText(user_current?.bio)
 
-//        db = FirebaseFirestore.getInstance()
-//        auth = FirebaseAuth.getInstance()
-//        val user = auth.currentUser
-//        val user_id = user?.uid
-//        val docRef = db.collection("users").document(user_id.toString())
-//        docRef.get()
-//            .addOnSuccessListener { document ->
-//                if (document != null) {
-//                    val user = document.toObject(User::class.java)
-//                    name = findViewById(R.id.name_profile)
-//                    name.text = user?.fullname
-//                    avatar = findViewById(R.id.creatorImage)
-//                    val imageRef = user?.avatar?.let { storageRef.getReference(it) }
-//                    if (imageRef != null) {
-//                        imageRef.getBytes(Long.MAX_VALUE).addOnSuccessListener { bytes ->
-//                            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-//                            avatar.setImageBitmap(bitmap)
-//                        }.addOnFailureListener { exception ->
-//                            // Xử lý ngoại lệ nếu có lỗi xảy ra
-//                        }
-//                    }
-//                    nameET = findViewById(R.id.editTextPersonName)
-//                    nameET.setText(user?.fullname)
-//                    emailET = findViewById(R.id.editTextEmail)
-//                    emailET.setText(user?.email)
-//                    bioET = findViewById<EditText>(R.id.editTextBio)
-//                    bioET.setText(user?.bio)
-//
-//                    Log.d("TAG", "DocumentSnapshot data: ${document.data}")
-//                }
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.d("TAG", "get failed with ", exception)
-//            }
         if(progressDialog.isShowing)
         {
             progressDialog.dismiss()

@@ -79,7 +79,8 @@
             <TextView
                 android:id="@+id/foodNameTitleTextView"
                 android:layout_width="0dp"
-
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="0dp"
                 android:layout_height="wrap_content"
                 android:paddingStart="5dp"
                 android:paddingTop="5dp"
@@ -89,13 +90,13 @@
                 android:textSize="25sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageView3"
+                app:layout_constraintEnd_toStartOf="@+id/saveRecipeButtonImageView"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/saveRecipeButtonImageView"
                 android:layout_width="100dp"
 
                 android:layout_height="30dp"
@@ -142,6 +143,7 @@
     </LinearLayout>
 
     <ScrollView
+        android:id="@+id/showRecipeDetailsActivityScrollViewContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="This is scrollview for recipe detail"
@@ -167,7 +169,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/avt" />
+                    android:src="@color/white"
+                    android:contentDescription="This is main Image "
+                    />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/authorInfoCardView"
