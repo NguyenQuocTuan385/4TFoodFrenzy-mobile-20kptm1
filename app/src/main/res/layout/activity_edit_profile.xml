@@ -60,7 +60,7 @@
         android:layout_height="80dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/avt"
+        android:src="@drawable/defaultavt"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2"
         tools:srcCompat="@tools:sample/avatars" >
@@ -148,7 +148,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="25dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:enabled="false"
+
         android:minHeight="48dp"
         android:text="dntien20@clc.fitus.edu.vn"
         app:layout_constraintEnd_toEndOf="parent"

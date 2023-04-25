@@ -202,8 +202,9 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             startActivity(myIntent)
         }
         toolbarBackButton.setOnClickListener {
-            val myIntent = Intent(this, AfterSearchActivity::class.java)
-            startActivity(myIntent)
+//            val myIntent = Intent(this, AfterSearchActivity::class.java)
+//            startActivity(myIntent)
+            finish()
         }
 
         val toListComment = findViewById<LinearLayout>(R.id.list_commentLinearLayout)
