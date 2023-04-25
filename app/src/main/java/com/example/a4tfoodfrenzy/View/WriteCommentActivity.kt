@@ -21,18 +21,21 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.lang.reflect.Field
 import java.util.*
+import java.util.concurrent.CountDownLatch
 
 class WriteCommentActivity : AppCompatActivity() {
 
     var imageUri: Uri? = null
     var imgView: ImageView? = null
-    var removeImageConstraintLayout: ConstraintLayout? = null
-    var removeImgButton: LinearLayout? = null
-    var haveChosenImage = false
-    var submitCommentButton: TextView? = null
+    private var removeImageConstraintLayout: ConstraintLayout? = null
+    private var removeImgButton: LinearLayout? = null
+    private var haveChosenImage = false
+    private var submitCommentButton: TextView? = null
     val db = Firebase.firestore
-    var commentEditText : TextView? = null
+    private var commentEditText : TextView? = null
     val storageRef = Firebase.storage
+    private lateinit var toShowDetailIntent : Intent
+    private var currentRecipe : FoodRecipe? = null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,13 +43,11 @@ class WriteCommentActivity : AppCompatActivity() {
         setContentView(layout.activity_write_comment)
 
         val numberID : Long = intent?.extras?.getLong("commentID") as Long
-        val currentRecipe : FoodRecipe = intent?.extras?.get("foodRecipe") as FoodRecipe
+        currentRecipe = intent?.extras?.get("foodRecipe") as FoodRecipe
         val cancelButton: TextView = findViewById(R.id.cancelTextViewBtn)
 
-        // intent
-        val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
-
-        intent.putExtra("foodRecipe", currentRecipe)
+        // assign to intent
+        toShowDetailIntent = Intent(this, ShowRecipeDetailsActivity::class.java)
 
         // find view
         imgView = findViewById(R.id.commentFoodImageView)
@@ -65,12 +66,7 @@ class WriteCommentActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            uploadImage(numberID)
             updateCommentOnDB(numberID, description.toString())
-
-            // end current write comment activity
-            startActivity(intent)
-            finish()
         }
 
         // handle click on add image section, get image from local phone storage
@@ -94,7 +90,7 @@ class WriteCommentActivity : AppCompatActivity() {
 
         // cancel writing comment -> return to recipe details
         cancelButton.setOnClickListener {
-            startActivity(intent)
+            startActivity(toShowDetailIntent)
             finish()
         }
     }
@@ -126,6 +122,12 @@ class WriteCommentActivity : AppCompatActivity() {
                     // write comment desciption to DB
                     db.collection("RecipeCmts").document(documentID)
                         .update("description", description, "date", Date(), "image", imageURL)
+                        .addOnSuccessListener {
+                            uploadImage(numberID)
+
+                            currentRecipe?.recipeCmts?.add(numberID)
+                            toShowDetailIntent.putExtra("foodRecipe", currentRecipe)
+                        }
                 }
             }
     }
@@ -136,5 +138,11 @@ class WriteCommentActivity : AppCompatActivity() {
 
         val imageRef = storageRef.reference.child("comments/${commentNumberID}")
         val uploadTask = imageRef.putFile(imageUri.toString().toUri())
+
+        uploadTask.addOnSuccessListener {
+            startActivity(toShowDetailIntent)
+            finish()
+        }
+            .addOnFailureListener{}
     }
 }

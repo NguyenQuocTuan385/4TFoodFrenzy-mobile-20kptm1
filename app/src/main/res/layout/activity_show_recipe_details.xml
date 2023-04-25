@@ -95,11 +95,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/saveRecipeButtonImageView"
                 android:layout_width="100dp"
-
                 android:layout_height="30dp"
+
+                android:background="@null"
+                android:scaleType="fitXY"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/unsave_recipe_button"
@@ -128,16 +130,10 @@
                 android:paddingStart="4dp"
                 android:paddingEnd="0dp"
 
-                android:text="100%"
+                android:text="100% người dùng sẽ nấu lại món này"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" người sẽ nấu lại món này"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
         </LinearLayout>
 
     </LinearLayout>
