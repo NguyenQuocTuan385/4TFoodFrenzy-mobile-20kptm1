@@ -28,12 +28,9 @@ class AddRecipeActivity3 : AppCompatActivity() {
     private lateinit var addIngredient: Button
     private lateinit var listIngredient: ArrayList<RecipeIngredient>
     private lateinit var listIngredientAdapter: ListIngredientAdapter
-    private lateinit var name:String
-    private lateinit var mainImage:String
-    private lateinit var amountServing:String
-    private lateinit var dietList:ArrayList<Long>
     private lateinit var cate:String
-    private lateinit var time:String
+    private lateinit var foodRecipe:FoodRecipe
+
 
 
     private val ADD_INGREDIENT_REQUEST_CODE = 100
@@ -43,8 +40,8 @@ class AddRecipeActivity3 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_recipe3)
-        initToolbar()
         recieveData()
+        initToolbar()
         setBackToolbar()
         setCloseToolbar()
         setupRecyclerView()
@@ -151,27 +148,20 @@ class AddRecipeActivity3 : AppCompatActivity() {
     }
     private fun sendData(intent: Intent)
     {
-        intent.putExtra("name",name)
-        intent.putExtra("mainImage",mainImage)
-        intent.putExtra("amountServing",amountServing)
-        intent.putExtra("diet",dietList.toLongArray())
+        foodRecipe.recipeIngres=listIngredient
+
+        //gửi loại món ăn sang màn hình 3
         intent.putExtra("cate",cate)
-        intent.putExtra("time",time)
-        intent.putParcelableArrayListExtra("listIngredient",listIngredient)
+
+        //gửi đối tượng FoodRecipe
+        intent.putExtra("foodRecipe",foodRecipe)
     }
     private fun recieveData()
     {
-        name= intent.getStringExtra("name").toString()
-        mainImage= intent.getStringExtra("mainImage").toString()
-        amountServing= intent.getStringExtra("amountServing").toString()
-        val longArray= intent.getLongArrayExtra("diet")
-        if (longArray != null) {
-            dietList= ArrayList(longArray.toList())
-        }
-        time= intent.getStringExtra("time").toString()
+        foodRecipe=intent.getParcelableExtra<FoodRecipe>("foodRecipe") as FoodRecipe
         cate= intent.getStringExtra("cate").toString()
-
     }
+
 
     private fun setupAddIngredientButton() {
         addIngredient = findViewById(R.id.addIngredientBtn)

@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
+import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.appbar.MaterialToolbar
 
@@ -65,8 +66,10 @@ class AddRecipeActivity1 : AppCompatActivity() {
     }
     private fun sendData(intent: Intent)
     {
-        intent.putExtra("name",nameRecipeEdit.text.toString())
-        intent.putExtra("mainImage",imagePath.toString())
+        val foodRecipe=FoodRecipe()
+        foodRecipe.recipeMainImage=nameRecipeEdit.text.toString()
+        foodRecipe.recipeMainImage=imagePath.toString()
+        intent.putExtra("foodRecipe",foodRecipe)
     }
     private fun setupCloseToolbar() {
         toolbarAddRecipe.setOnMenuItemClickListener { menuItem ->

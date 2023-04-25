@@ -28,14 +28,8 @@ class AddRecipeActivity4 : AppCompatActivity() {
     private lateinit var addStepBtn:Button
     private lateinit var stepsAdapter:AddStepAdapter
     private lateinit var listStep:ArrayList<RecipeCookStep>
-
-    private lateinit var name:String
-    private lateinit var mainImage:String
-    private lateinit var amountServing:String
-    private lateinit var dietList:ArrayList<Long>
     private lateinit var cate:String
-    private lateinit var time:String
-    private lateinit var listIngredient: ArrayList<RecipeIngredient>
+    private lateinit var foodRecipe: FoodRecipe
 
     private val ADD_REQUEST_CODE=1
     private val EDIT_REQUEST_CODE=2
@@ -135,13 +129,17 @@ class AddRecipeActivity4 : AppCompatActivity() {
 
         val fullName= user?.fullname
         val avatar= user?.avatar
-        val mainImage=uploadImageToCloudStorage(mainImage)
+        val mainImage= foodRecipe.recipeMainImage?.let { uploadImageToCloudStorage(it) }
         uploadImageStepToCloudStorage()
 
         HelperFunctionDB(this).findSlotIdEmptyInCollection("RecipeFoods"){idSlot ->
             if (fullName != null) {
-                val foodRecipe=FoodRecipe(idSlot,name,mainImage,amountServing.toInt(),time, Date(),true,dietList,listStep,listIngredient,
-                    arrayListOf(), arrayListOf(),fullName,R.drawable.defaultavt,0)
+                foodRecipe.id=idSlot
+                foodRecipe.authorName=fullName
+                foodRecipe.recipeMainImage=mainImage
+                foodRecipe.isPublic=true
+                foodRecipe.date=Date()
+                foodRecipe.recipeSteps=listStep
                 writeFoodRecipeToFirebase(foodRecipe)
                 writeIdFoodToUser(user.id,idSlot)
                writeIdFoodToCategory(idSlot)
@@ -173,16 +171,11 @@ class AddRecipeActivity4 : AppCompatActivity() {
     }
     private fun recieveData()
     {
-        name= intent.getStringExtra("name").toString()
-        mainImage= intent.getStringExtra("mainImage").toString()
-        amountServing= intent.getStringExtra("amountServing").toString()
-        val longArray= intent.getLongArrayExtra("diet")
-        if (longArray != null) {
-            dietList= ArrayList(longArray.toList())
-        }
-        time= intent.getStringExtra("time").toString()
+        //nhận đối tượng FoodRecipe từ màn hình 2
+        foodRecipe=intent.getParcelableExtra<FoodRecipe>("foodRecipe") as FoodRecipe
+
+        //nhận dữ liệu loại món ăn
         cate= intent.getStringExtra("cate").toString()
-        listIngredient= intent.getParcelableArrayListExtra<RecipeIngredient>("listIngredient") as ArrayList<RecipeIngredient>
 
     }
 

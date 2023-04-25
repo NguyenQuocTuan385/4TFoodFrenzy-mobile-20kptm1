@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.CheckboxAdapter
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
+import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.RecipeCategory
 import com.example.a4tfoodfrenzy.Model.RecipeDiet
 import com.example.a4tfoodfrenzy.R
@@ -25,18 +26,16 @@ class AddRecipeActivity2 : AppCompatActivity() {
     private lateinit var continueBtn: Button
     private lateinit var toolbarAddRecipe: MaterialToolbar
     private lateinit var dietList:ArrayList<Long>
-    private lateinit var amountServingEdit:EditText
-    private lateinit var name:String
-    private lateinit var mainImage:String
+    private lateinit var ration:EditText
+    private lateinit var foodRecipe:FoodRecipe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_recipe2)
         dietList= arrayListOf()
-        amountServingEdit=findViewById(R.id.amountServingEdit)
+        ration=findViewById(R.id.amountServingEdit)
         recieveData()
         initToolbar()
         setCateFoodDropdown()
-        recieveData()
         setupTimeDropdown()
         setDietCheckbox()
         setBackToolbar()
@@ -77,7 +76,7 @@ class AddRecipeActivity2 : AppCompatActivity() {
     }
     private fun validateInput():Boolean
     {
-        if(amountServingEdit.text.isNullOrEmpty())
+        if(ration.text.isNullOrEmpty())
         {
             HelperFunctionDB(this).showRemindAlert("Bạn vui lòng nhập khẩu phần")
             return false
@@ -98,19 +97,26 @@ class AddRecipeActivity2 : AppCompatActivity() {
 
         }
     }
+
     private fun sendData(intent: Intent)
     {
-        intent.putExtra("name",name)
-        intent.putExtra("mainImage",mainImage)
-        intent.putExtra("amountServing",amountServingEdit.text.toString())
-        intent.putExtra("diet",dietList.toLongArray())
+        // nhận data từ màn hình 1
+
+        //thêm data vào foodRecipe
+        foodRecipe.ration=ration.text.toString().toInt()
+        foodRecipe.recipeDiets=dietList
+        foodRecipe.cookTime=timedropdown.text.toString()
+
+        //gửi loại món ăn sang màn hình 3
         intent.putExtra("cate",cateFoodDropdown.text.toString())
-        intent.putExtra("time",timedropdown.text.toString())
+
+        //gửi đối tượng FoodRecipe
+        intent.putExtra("foodRecipe",foodRecipe)
     }
     private fun recieveData()
     {
-        name= intent.getStringExtra("name").toString()
-        mainImage= intent.getStringExtra("mainImage").toString()
+        foodRecipe=intent.getParcelableExtra<FoodRecipe>("foodRecipe") as FoodRecipe
+
     }
 
     private fun setCloseToolbar() {

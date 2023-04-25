@@ -48,11 +48,13 @@ class ListIngredientAdapter(private var context: Context, private var list:Array
     override fun getItemCount(): Int {
         return list.size
     }
-    private fun formatNum(num:Double): Any
+    private fun formatNum(num:Double?): Any?
     {
-        if(num%1==0.0)
-        {
-            return num.toInt()
+        if (num != null) {
+            if(num%1==0.0)
+            {
+                return num.toInt()
+            }
         }
         return num
     }
