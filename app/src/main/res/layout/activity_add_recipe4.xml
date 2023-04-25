@@ -140,7 +140,6 @@
                 android:id="@+id/listStep"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
                 tools:listitem="@layout/list_step" />
 
             <com.google.android.material.button.MaterialButton
@@ -149,6 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:padding="15dp"
+                android:layout_marginTop="15dp"
                 android:text="Thêm một bước"
                 android:textColor="@color/white"
                 app:cornerRadius="30dp"
@@ -166,8 +166,6 @@
         android:background="@drawable/button_outline"
         android:paddingTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-
-
         app:layout_constraintEnd_toEndOf="parent">
 
         <Button

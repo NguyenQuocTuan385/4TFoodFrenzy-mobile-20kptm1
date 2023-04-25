@@ -26,11 +26,7 @@ class AddRecipeActivity1 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_recipe1)
         initToolbar()
-        nameRecipeEdit=findViewById(R.id.nameRecipeEdit)
-        imageRecipe=findViewById(R.id.imageRecipe)
-        imageRecipe.setOnClickListener {
-            pickImageGallery()
-        }
+        pickImage()
         setBackToolbar()
         setupContinueButton()
         setupCloseToolbar()
@@ -45,6 +41,7 @@ class AddRecipeActivity1 : AppCompatActivity() {
     }
 
     private fun setupContinueButton() {
+        nameRecipeEdit=findViewById(R.id.nameRecipeEdit)
         continueBtn = findViewById(R.id.continueBtn)
         continueBtn.setOnClickListener {
             if(nameRecipeEdit.text.isNullOrBlank()) {
@@ -60,8 +57,6 @@ class AddRecipeActivity1 : AppCompatActivity() {
             val intent=Intent(this, AddRecipeActivity2::class.java)
             sendData(intent)
             startActivity(intent)
-
-
         }
     }
     private fun sendData(intent: Intent)
@@ -85,6 +80,14 @@ class AddRecipeActivity1 : AppCompatActivity() {
         val intent=Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         intent.type="image/*"
         startActivityForResult(intent, IMAGE_REQUEST_CODE)
+    }
+    private fun pickImage()
+    {
+        imageRecipe=findViewById(R.id.imageRecipe)
+
+        imageRecipe.setOnClickListener {
+            pickImageGallery()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

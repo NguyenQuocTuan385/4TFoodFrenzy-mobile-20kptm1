@@ -5,7 +5,7 @@ import android.os.Parcelable
 
 class RecipeCookStep(
     private var _description: String,
-    private var _image: String?
+    private var _image: String?=null
 ) : Parcelable {
     constructor():this("",null)
     var description: String

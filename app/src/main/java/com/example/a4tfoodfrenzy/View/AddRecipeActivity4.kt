@@ -45,6 +45,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
         setupRecyclerView()
         initToolbar()
         recieveData()
+        setOnItemClick()
         setPopupMenu()
         setBackToolbar()
         setCloseToolbar()
@@ -90,12 +91,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
             popUpMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.update -> {
-                        val intent = Intent(this, AddStepActivity::class.java)
-                        intent.putExtra("mode", "edit")
-                        intent.putExtra("index", listStep.indexOf(step))
-                        intent.putExtra("stepNumber", (listStep.indexOf(step)+1).toString())
-                        intent.putExtra("step", step)
-                        startActivityForResult(intent, EDIT_REQUEST_CODE)
+                        sendDataToUpdate(step)
                         true
                     }
                     R.id.delete -> {
@@ -117,19 +113,31 @@ class AddRecipeActivity4 : AppCompatActivity() {
         }
 
     }
+    private fun sendDataToUpdate(step: RecipeCookStep)
+    {
+        val intent = Intent(this, AddStepActivity::class.java)
+        intent.putExtra("mode", "edit")
+        intent.putExtra("index", listStep.indexOf(step))
+        intent.putExtra("stepNumber", (listStep.indexOf(step)+1).toString())
+        intent.putExtra("step", step)
+        startActivityForResult(intent, EDIT_REQUEST_CODE)
+    }
+    private fun setOnItemClick()
+    {
+        stepsAdapter.onItemClick={step ->
+            sendDataToUpdate(step)
+        }
+    }
     private fun uploadToFirebase()
     {
         val user=DBManagement.user_current
         val category=DBManagement.recipeCateList
 
         val fullName= user?.fullname
-        print(fullName)
         val avatar= user?.avatar
         val mainImage=uploadImageToCloudStorage(mainImage)
+        uploadImageStepToCloudStorage()
 
-        for(i in 0..listStep.size-1) {
-            listStep[i].image= listStep[i].image?.let { uploadImageToCloudStorage(it) }
-        }
         HelperFunctionDB(this).findSlotIdEmptyInCollection("RecipeFoods"){idSlot ->
             if (fullName != null) {
                 val foodRecipe=FoodRecipe(idSlot,name,mainImage,amountServing.toInt(),time, Date(),true,dietList,listStep,listIngredient,
@@ -140,6 +148,21 @@ class AddRecipeActivity4 : AppCompatActivity() {
             }
         }
 
+    }
+    private fun uploadImageStepToCloudStorage()
+    {
+        if(listStep.isNullOrEmpty())
+        {
+            HelperFunctionDB(this).showRemindAlert("Bạn vui lòng thêm bước")
+            return
+        }
+        //upload lên db
+        for(i in 0 until listStep.size) {
+            if(listStep[i].image.isNullOrEmpty())
+                continue
+            else
+                listStep[i].image= listStep[i].image?.let { uploadImageToCloudStorage(it) }
+        }
     }
     private fun uploadImageToCloudStorage(image:String):String
     {

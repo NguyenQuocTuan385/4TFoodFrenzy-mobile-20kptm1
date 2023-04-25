@@ -11,6 +11,7 @@ import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.CheckboxAdapter
+import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.RecipeCategory
 import com.example.a4tfoodfrenzy.Model.RecipeDiet
@@ -74,13 +75,25 @@ class AddRecipeActivity2 : AppCompatActivity() {
     private fun setBackToolbar() {
         toolbarAddRecipe.setNavigationOnClickListener { finish() }
     }
+    private fun validateInput():Boolean
+    {
+        if(amountServingEdit.text.isNullOrEmpty())
+        {
+            HelperFunctionDB(this).showRemindAlert("Bạn vui lòng nhập khẩu phần")
+            return false
+
+        }
+        return true
+    }
 
     private fun setupContinueButton() {
         continueBtn = findViewById(R.id.continueBtn)
         continueBtn.setOnClickListener {
-            val intent=Intent(this, AddRecipeActivity3::class.java)
-            sendData(intent)
-            startActivity(intent)
+            if(validateInput()) {
+                val intent = Intent(this, AddRecipeActivity3::class.java)
+                sendData(intent)
+                startActivity(intent)
+            }
 
 
         }

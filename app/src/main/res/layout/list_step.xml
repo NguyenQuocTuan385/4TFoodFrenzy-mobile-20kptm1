@@ -4,7 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:paddingHorizontal="20dp"
+    android:weightSum="1"
     android:paddingVertical="10dp"
+    android:background="?attr/selectableItemBackground"
     >
     <ImageView
         android:layout_width="wrap_content"
@@ -19,6 +22,8 @@
         android:layout_height="90dp"
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/monan"
+        android:background="@drawable/button_outline"
+        android:clipToOutline="true"
         android:layout_marginLeft="20dp"
         >
 
@@ -28,8 +33,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:paddingLeft="5dp"
+        android:layout_weight="0.5"
+        android:paddingLeft="10dp"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/stepNumberText"
             android:layout_width="80dp"
@@ -38,25 +45,27 @@
             android:textStyle="bold"
 
             android:textColor="@color/black"
-            android:textSize="18dp"></TextView>
+            android:textSize="18dp" />
 
         <TextView
             android:id="@+id/desStep"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="Lọc bớt mỡ và rửa sạch miếng thịt lợn sữa"
+            android:text="Lọc bớt mỡ và rửa sạch miếng thịt lợddn sữa"
             android:textColor="@color/black"
             android:maxLines="3"
+            android:ellipsize="end"
             android:textSize="16dp"></TextView>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <ImageView
         android:id="@+id/optionMenuStep"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_weight="0.25"
         android:layout_gravity="center"
-        android:layout_weight="1"
+        android:background="?attr/selectableItemBackground"
         app:srcCompat="@drawable/baseline_more_vert_24_black" />
 
 </LinearLayout>

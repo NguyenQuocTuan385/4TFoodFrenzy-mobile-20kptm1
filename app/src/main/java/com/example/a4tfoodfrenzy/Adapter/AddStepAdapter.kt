@@ -11,12 +11,15 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Model.RecipeCookStep
+import com.example.a4tfoodfrenzy.Model.RecipeIngredient
 import com.example.a4tfoodfrenzy.R
 
 class AddStepAdapter(private val context: Context, private val list:ArrayList<RecipeCookStep>)
     : RecyclerView.Adapter<AddStepAdapter.ViewHolder>() {
 
     var onButtonClick:((View,RecipeCookStep)->Unit)?=null
+    var onItemClick: ((RecipeCookStep) -> Unit)? = null
+
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val image: ImageView =listItemView.findViewById(R.id.imageStep)
         val des:TextView=listItemView.findViewById(R.id.desStep)
@@ -25,6 +28,9 @@ class AddStepAdapter(private val context: Context, private val list:ArrayList<Re
         init{
             menu.setOnClickListener {
                 onButtonClick?.invoke(it,list[adapterPosition])
+            }
+            itemView.setOnClickListener {
+                onItemClick?.invoke(list[adapterPosition])
             }
         }
     }
@@ -43,11 +49,20 @@ class AddStepAdapter(private val context: Context, private val list:ArrayList<Re
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item=list[position]
         holder.step.text="Bước ${position+1}"
-        val uri= Uri.parse(item.image)
-        holder.image.setImageURI(uri)
-        holder.des.text=item.description
+        if(item.image.isNullOrEmpty()) {
+            holder.image.setImageResource(R.drawable.upload)
+        } else {
+            val uri = Uri.parse(item.image)
+            holder.image.setImageURI(uri)
+        }
+        holder.des.text = item.description
+
+
         holder.menu.setOnClickListener {
             onButtonClick?.invoke(it,item)
+        }
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(item)
         }
     }
 

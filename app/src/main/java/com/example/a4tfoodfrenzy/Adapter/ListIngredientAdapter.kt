@@ -16,10 +16,12 @@ import com.example.a4tfoodfrenzy.Model.RecipeIngredient
 import com.example.a4tfoodfrenzy.R
 import com.example.a4tfoodfrenzy.View.AddIngredient
 import com.example.a4tfoodfrenzy.View.AddRecipeActivity3
+import kotlin.math.roundToInt
 
 class ListIngredientAdapter(private var context: Context, private var list:ArrayList<RecipeIngredient>)
     : RecyclerView.Adapter<ListIngredientAdapter.ViewHolder>() {
     var onButtonClick: ((View,RecipeIngredient) -> Unit)? = null
+    var onItemClick: ((RecipeIngredient) -> Unit)? = null
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val name: TextView =listItemView.findViewById(R.id.name)
         val amount: TextView =listItemView.findViewById(R.id.amount)
@@ -27,6 +29,9 @@ class ListIngredientAdapter(private var context: Context, private var list:Array
         init{
             menu.setOnClickListener {
                 onButtonClick?.invoke(it,list[adapterPosition])
+            }
+            itemView.setOnClickListener {
+                onItemClick?.invoke(list[adapterPosition])
             }
 
         }
@@ -43,13 +48,24 @@ class ListIngredientAdapter(private var context: Context, private var list:Array
     override fun getItemCount(): Int {
         return list.size
     }
+    private fun formatNum(num:Double): Any
+    {
+        if(num%1==0.0)
+        {
+            return num.toInt()
+        }
+        return num
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item=list[position]
         holder.name.text=item.ingreName
-        holder.amount.text="${item.ingreQuantity} ${item.ingreUnit}"
+        holder.amount.text="${formatNum(item.ingreQuantity)} ${item.ingreUnit}"
         holder.menu.setOnClickListener {
             onButtonClick?.invoke(it,item)
+        }
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(item)
         }
 
     }

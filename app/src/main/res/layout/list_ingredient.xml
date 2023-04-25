@@ -5,6 +5,9 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingVertical="10dp"
+    android:weightSum="1"
+    android:paddingHorizontal="20dp"
+    android:background="?attr/selectableItemBackground">
     >
     <ImageView
         android:layout_width="wrap_content"
@@ -20,6 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="250g"
+        android:layout_weight="0.4"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:paddingLeft="20dp"
         android:textColor="@color/black"
         android:textSize="18dp"></TextView>
@@ -31,15 +37,19 @@
         android:text="Thịt heo"
         android:layout_gravity="center"
         android:gravity="left"
+        android:layout_weight="0.35"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textColor="@color/black"
         android:textSize="18dp"></TextView>
 
     <ImageView
         android:id="@+id/optionMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_gravity="center"
-        android:layout_weight="1"
+        android:layout_weight="0.25"
+        android:background="?attr/selectableItemBackground"
         app:srcCompat="@drawable/baseline_more_vert_24_black"
         />
 

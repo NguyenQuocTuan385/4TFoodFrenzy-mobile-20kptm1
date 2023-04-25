@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageView
@@ -48,6 +49,7 @@ class AddRecipeActivity3 : AppCompatActivity() {
         setCloseToolbar()
         setupRecyclerView()
         setupContinueButton()
+        setOnItemClick()
         optionMenu()
         setupAddIngredientButton()
     }
@@ -89,11 +91,7 @@ class AddRecipeActivity3 : AppCompatActivity() {
             popUpMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.update-> {
-                        val intent = Intent(this, AddIngredient::class.java)
-                        intent.putExtra("mode", "edit")
-                        intent.putExtra("index", listIngredient.indexOf(ingredient))
-                        intent.putExtra("ingredient", ingredient)
-                        startActivityForResult(intent, EDIT_INGREDIENT_REQUEST_CODE)
+                        sendDataToUpdate(ingredient)
                         true
                     }
                     R.id.delete-> {
@@ -116,13 +114,40 @@ class AddRecipeActivity3 : AppCompatActivity() {
 
     }
 
+    private fun sendDataToUpdate(ingredient: RecipeIngredient)
+    {
+        val intent = Intent(this, AddIngredient::class.java)
+        intent.putExtra("mode", "edit")
+        intent.putExtra("index", listIngredient.indexOf(ingredient))
+        intent.putExtra("ingredient", ingredient)
+        startActivityForResult(intent, EDIT_INGREDIENT_REQUEST_CODE)
+    }
+    private fun setOnItemClick()
+    {
+        listIngredientAdapter.onItemClick={ingredient ->
+            sendDataToUpdate(ingredient)
+
+        }
+    }
     private fun setupContinueButton() {
         continueBtn = findViewById(R.id.continueBtn)
         continueBtn.setOnClickListener {
-            val intent = Intent(this, AddRecipeActivity4::class.java)
-            sendData(intent)
-            startActivity(intent)
+            if(validateAddIngredient()) {
+                val intent = Intent(this, AddRecipeActivity4::class.java)
+                sendData(intent)
+                startActivity(intent)
+            }
         }
+    }
+    private fun validateAddIngredient():Boolean
+    {
+        if(listIngredient.isNullOrEmpty())
+        {
+            HelperFunctionDB(this).showRemindAlert("Bạn vui lòng thêm nguyên liệu")
+            return false
+
+        }
+        return true
     }
     private fun sendData(intent: Intent)
     {
