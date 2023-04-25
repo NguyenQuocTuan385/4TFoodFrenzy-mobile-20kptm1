@@ -1,14 +1,17 @@
 package com.example.a4tfoodfrenzy.View
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.CheckboxAdapter
+import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.RecipeCategory
 import com.example.a4tfoodfrenzy.Model.RecipeDiet
 import com.example.a4tfoodfrenzy.R
@@ -20,11 +23,19 @@ class AddRecipeActivity2 : AppCompatActivity() {
     private lateinit var list_checkbox:RecyclerView
     private lateinit var continueBtn: Button
     private lateinit var toolbarAddRecipe: MaterialToolbar
+    private lateinit var dietList:ArrayList<Long>
+    private lateinit var amountServingEdit:EditText
+    private lateinit var name:String
+    private lateinit var mainImage:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_recipe2)
+        dietList= arrayListOf()
+        amountServingEdit=findViewById(R.id.amountServingEdit)
+        recieveData()
         initToolbar()
         setCateFoodDropdown()
+        recieveData()
         setupTimeDropdown()
         setDietCheckbox()
         setBackToolbar()
@@ -37,17 +48,8 @@ class AddRecipeActivity2 : AppCompatActivity() {
         toolbarAddRecipe = findViewById(R.id.toolbarAddRecipe)
     }
     private fun setCateFoodDropdown() {
-        var recipeCateList : ArrayList<RecipeCategory> = ArrayList()
-        recipeCateList.add(RecipeCategory(1,"Khai vị", ArrayList()))
-        recipeCateList.add(RecipeCategory(2,"Món chính",ArrayList()))
-        recipeCateList.add(RecipeCategory(3,"Ăn vặt",ArrayList()))
-        recipeCateList.add(RecipeCategory(4,"Nấu nhanh",ArrayList()))
-        recipeCateList.add(RecipeCategory(5,"Ăn chay",ArrayList()))
-        recipeCateList.add(RecipeCategory(6,"Món tráng miệng",ArrayList()))
-        recipeCateList.add(RecipeCategory(7,"Thức uống",ArrayList()))
-
         var items : ArrayList<String> = ArrayList()
-        for (recipeCateTemp:RecipeCategory in recipeCateList) {
+        for (recipeCateTemp:RecipeCategory in DBManagement.recipeCateList) {
             items.add(recipeCateTemp.recipeCateName)
         }
         val adapter = ArrayAdapter(this, R.layout.list_item_dropdown, items)
@@ -62,17 +64,10 @@ class AddRecipeActivity2 : AppCompatActivity() {
     }
     private fun setDietCheckbox()
     {
-        var recipeDietList : ArrayList<RecipeDiet> = ArrayList()
-        recipeDietList.add(RecipeDiet(1,"Không đường", ArrayList()))
-        recipeDietList.add(RecipeDiet(1,"Không Gluten",ArrayList()))
-        recipeDietList.add(RecipeDiet(1,"Không thịt",ArrayList()))
-        recipeDietList.add(RecipeDiet(1,"Món thuần chay",ArrayList()))
-        recipeDietList.add(RecipeDiet(1,"Không cồn",ArrayList()))
-        recipeDietList.add(RecipeDiet(1,"Món chay",ArrayList()))
-
-
         list_checkbox = findViewById(R.id.list_checkbox)
-        list_checkbox.adapter= CheckboxAdapter(this,recipeDietList)
+        var adapter=CheckboxAdapter(this,DBManagement.recipeDietList)
+        list_checkbox.adapter= adapter
+        dietList=adapter.getDietList()
         list_checkbox.layoutManager=LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
     }
 
@@ -83,8 +78,26 @@ class AddRecipeActivity2 : AppCompatActivity() {
     private fun setupContinueButton() {
         continueBtn = findViewById(R.id.continueBtn)
         continueBtn.setOnClickListener {
-            startActivity(Intent(this, AddRecipeActivity3::class.java))
+            val intent=Intent(this, AddRecipeActivity3::class.java)
+            sendData(intent)
+            startActivity(intent)
+
+
         }
+    }
+    private fun sendData(intent: Intent)
+    {
+        intent.putExtra("name",name)
+        intent.putExtra("mainImage",mainImage)
+        intent.putExtra("amountServing",amountServingEdit.text.toString())
+        intent.putExtra("diet",dietList.toLongArray())
+        intent.putExtra("cate",cateFoodDropdown.text.toString())
+        intent.putExtra("time",timedropdown.text.toString())
+    }
+    private fun recieveData()
+    {
+        name= intent.getStringExtra("name").toString()
+        mainImage= intent.getStringExtra("mainImage").toString()
     }
 
     private fun setCloseToolbar() {
