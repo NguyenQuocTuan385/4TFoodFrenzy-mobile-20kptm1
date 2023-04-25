@@ -32,8 +32,8 @@ class ShowRecipeDetailsDescriptionActivity : AppCompatActivity() {
         setContentView(R.layout.activity_show_recipe_details_description)
 
         val rv = findViewById<RecyclerView>(R.id.stepsRecyclerView)
-        val currentFoodRecipe : FoodRecipe? =
-            intent.extras?.getParcelable("stepFoodRecipe", FoodRecipe::class.java)
+        val currentFoodRecipe: FoodRecipe? =
+            intent.extras?.getParcelable("stepFoodRecipe")
         val stepList = currentFoodRecipe?.recipeSteps
         val adapter = StepsAdapter(stepList!!, this, rv, currentFoodRecipe)
 
@@ -100,27 +100,27 @@ class StepsAdapter(
                     .into(holder.stepIMG)
                 Thread.sleep(100)
             }
+        } else
+            holder.stepIMG.visibility = View.GONE
 
-            holder.stepInstruction.text = step.description
-            holder.toolbar.title = "Bước ${position + 1}"
+        holder.stepInstruction.text = step.description
+        holder.toolbar.title = "Bước ${position + 1}"
 
-            val progressList = arrayListOf<String>()
+        val progressList = arrayListOf<String>()
 
-            for (i in 1..stepsList.size)
-                progressList.add(i.toString())
+        for (i in 1..stepsList.size)
+            progressList.add(i.toString())
 
-            // get width
-            val wm: WindowManager =
-                mainContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        // get width
+        val wm: WindowManager =
+            mainContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
-            val adapter =
-                StepProgressAdapter(progressList, position, wm.defaultDisplay.width, this.mainRV)
-            holder.progressRV.adapter = adapter
+        val adapter =
+            StepProgressAdapter(progressList, position, wm.defaultDisplay.width, this.mainRV)
+        holder.progressRV.adapter = adapter
 
-            holder.progressRV.layoutManager =
-                LinearLayoutManager(mainContext, LinearLayoutManager.HORIZONTAL, false)
-
-        }
+        holder.progressRV.layoutManager =
+            LinearLayoutManager(mainContext, LinearLayoutManager.HORIZONTAL, false)
     }
 
     class StepProgressAdapter(
