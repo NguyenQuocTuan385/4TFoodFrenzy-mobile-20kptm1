@@ -4,13 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
-import android.icu.lang.UProperty.INT_START
 import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextUtils
 import android.text.style.StyleSpan
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -55,6 +56,8 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         val rationTextView: TextView = findViewById(R.id.foodRationTextView)
         val dietTextView: TextView = findViewById(R.id.foodDietTextView)
         val categoryTextView: TextView = findViewById(R.id.foodCategoryTextView)
+        val mainScrollView: ScrollView =
+            findViewById(R.id.showRecipeDetailsActivityScrollViewContainer)
 
         // other variables
         val storageRef = Firebase.storage
@@ -66,6 +69,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         var stepString: CharSequence = ""
         var dietString = ""
         var cateString = ""
+        val currentUserCommented = isNotExistComment(currentFoodRecipe)
 
         // generate diet string list from DB
         for (diet in DBManagement.recipeDietList) {
@@ -121,7 +125,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             stepString = TextUtils.concat(stepString, subtext, "\n${step.description}\n\n")
         }
 
-        // find user in user list
+        // find user aka author of current recipe in user list
         for (user in DBManagement.userList) {
             if (user.myFoodRecipes.contains(currentFoodRecipe.id)) {
                 recipeAuthor = user
@@ -129,7 +133,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             }
         }
 
-        // assign img url to list
+        // add img url to list for recycler view
         for (step in currentFoodRecipe.recipeSteps) {
             // check null image
             if (step.image != null)
@@ -143,23 +147,25 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             Glide.with(this)
                 .load(uri)
                 .into(authorAvatarImageView)
-        }?.addOnFailureListener {
-            // Xử lý lỗi
-        }
+        }?.addOnFailureListener {}
 
-        // hide comment section if there is no comment
+        // hide comments if there is no comment
         if (currentFoodRecipe.recipeCmts.size == 0)
             commentSection.visibility = View.GONE
 
+        // hide write comment button if not logged in yet
+        if (!isLoggedIn() || !currentUserCommented) {
+            writeCommentButton.visibility = View.GONE
+        }
+
         // set data for view
         foodNameTextView.text = currentFoodRecipe.recipeName
-        authorBioTextView.text = recipeAuthor?.bio
+        authorBioTextView.text = if (recipeAuthor?.bio == null) "Không có bio" else recipeAuthor.bio
         authorNameTextView.text = recipeAuthor?.fullname
-        authorTotalRecipeTextView.text = recipeAuthor?.myFoodRecipes?.size.toString()
+        authorTotalRecipeTextView.text =
+            if (recipeAuthor?.myFoodRecipes == null) "0" else recipeAuthor.myFoodRecipes.size.toString()
         ingredientDetailsTextView.text = ingredientString
-//            HtmlCompat.fromHtml(ingredientString, HtmlCompat.FROM_HTML_MODE_LEGACY)
         stepsInstructionTextView.text = stepString
-//            HtmlCompat.fromHtml(stepString, HtmlCompat.FROM_HTML_MODE_LEGACY)
         rationTextView.text = currentFoodRecipe.ration.toString() + " người"
         totalComment.text = "(${currentFoodRecipe.recipeCmts.size})"
         dietTextView.text = dietString
@@ -191,6 +197,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         // carousel showing step detail activity
         showStepDetailsButton.setOnClickListener {
             val myIntent = Intent(this, ShowRecipeDetailsDescriptionActivity::class.java)
+            mainScrollView.scrollTo(0, 0)
 
             myIntent.putExtra("stepFoodRecipe", currentFoodRecipe)
 
@@ -198,28 +205,127 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         }
 
         writeCommentButton.setOnClickListener {
-            val myIntent = Intent(this, WriteCommentActivity::class.java)
-            startActivity(myIntent)
+//            val myIntent = Intent(this, WriteCommentActivity::class.java)
+//            myIntent.putExtra("currentRecipeID", currentFoodRecipe.id)
+//            showText(isNotExistComment(currentFoodRecipe).toString(), this)
+//            startActivity(myIntent)
+
+            showLikeDislikePopup()
         }
+
+        // back to previous navigation icon on toolbar
         toolbarBackButton.setOnClickListener {
 //            val myIntent = Intent(this, AfterSearchActivity::class.java)
 //            startActivity(myIntent)
             finish()
         }
 
+        //
         val toListComment = findViewById<LinearLayout>(R.id.list_commentLinearLayout)
+
         toListComment.setOnClickListener {
             val myIntent = Intent(this, CommentListActivity::class.java)
+
             startActivity(myIntent)
         }
     }
 
-    fun showText(text: String, context: Context) {
+    private fun isLoggedIn(): Boolean {
+        if (DBManagement.user_current == null)
+            return false
+        return true
+    }
+
+    // check if current user commented on the current recipe or not
+    // if commented -> false else true
+    private fun isNotExistComment(currentFoodRecipe: FoodRecipe): Boolean {
+        if (!isLoggedIn())
+            return false
+
+        val currentUserCmtList = DBManagement.user_current?.recipeCmts
+        val currentFoodCmtList = currentFoodRecipe.recipeCmts
+
+        if (currentUserCmtList?.size != 0) {
+            if (currentUserCmtList != null) {
+                if (currentFoodCmtList.any { it -> it in currentUserCmtList })
+                    return false
+            }
+        }
+        return true
+    }
+
+    private fun showLikeDislikePopup() {
+        // inflate the layout of the popup window
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView: View = inflater.inflate(R.layout.popup_like_dislike, null)
+
+        // create the popup window
+        val popupWindow = PopupWindow(
+            popupView,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            true
+        )
+
+        // views (button, text view,...) in popup window
+        val dislikeButton = popupView.findViewById<ImageButton>(R.id.firstDislikeButton)
+        val likeButton = popupView.findViewById<ImageButton>(R.id.firstLikeButton)
+        val cancelButton = popupView.findViewById<Button>(R.id.first_cancel_button)
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window token
+        popupWindow.showAtLocation(LinearLayout(this), Gravity.CENTER, 0, 0)
+
+        // set listener for button inside popup window
+        // dislike button clicked --> pop dislike popup
+        dislikeButton.setOnClickListener {
+            showNextPopup(false)
+            popupWindow.dismiss()
+        }
+
+        // like button clicked --> pop like popup
+        likeButton.setOnClickListener {
+            showNextPopup(true)
+            popupWindow.dismiss()
+        }
+
+        // Close current popup
+        cancelButton.setOnClickListener {
+            popupWindow.dismiss()
+        }
+    }
+
+    private fun showNextPopup(layoutType: Boolean) {
+        // inflate the layout of the popup window
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = inflater.inflate(if(layoutType) R.layout.popup_like else R.layout.popup_dislike, null)
+
+        // create the popup window
+        val popupWindow = PopupWindow(
+            popupView,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            true
+        )
+
+        // views (button, text view,...) in popup window
+        val cancelButton = popupView.findViewById<Button>(if(layoutType) R.id.secondCancelButton else R.id.thirdCancelButton)
+        val yesButton = popupView.findViewById<Button>(if(layoutType) R.id.secondYesButton else R.id.thirdYesButton)
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window token
+        popupWindow.showAtLocation(LinearLayout(this), Gravity.CENTER, 0, 0)
+
+        cancelButton.setOnClickListener {
+            popupWindow.dismiss()
+        }
+
+        yesButton.setOnClickListener {
+
+        }
+    }
+
+    private fun showText(text: String, context: Context) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
-//    fun calculateLike() : Double{
-//        var res : Double = 0.0
-//
-//        return res
-//    }
 }

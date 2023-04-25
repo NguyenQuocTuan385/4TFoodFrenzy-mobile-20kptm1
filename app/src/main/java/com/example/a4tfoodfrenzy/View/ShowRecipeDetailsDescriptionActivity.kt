@@ -1,6 +1,7 @@
 package com.example.a4tfoodfrenzy.View
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
@@ -69,10 +70,12 @@ class StepsAdapter(
 
         init {
             closeActivityButton.setOnClickListener {
-                val intent = Intent(mainContext, ShowRecipeDetailsActivity::class.java)
+//                val intent = Intent(mainContext, ShowRecipeDetailsActivity::class.java)
+//
+//                intent.putExtra("foodRecipe", foodRecipe)
+//                mainContext.startActivity(intent)
 
-                intent.putExtra("foodRecipe", foodRecipe)
-                mainContext.startActivity(intent)
+                (mainContext as Activity).finish()
             }
         }
     }
