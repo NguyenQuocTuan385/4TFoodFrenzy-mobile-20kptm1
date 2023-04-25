@@ -1,9 +1,18 @@
 package com.example.a4tfoodfrenzy.Helper
 
 import android.content.Context
+import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.net.Uri
 import android.util.Log
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
+import cn.pedant.SweetAlert.SweetAlertDialog
+import com.example.a4tfoodfrenzy.R
+import com.example.a4tfoodfrenzy.View.LoginActivity
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -13,6 +22,7 @@ import java.io.ByteArrayOutputStream
 class HelperFunctionDB(private var context: Context) {
     val db = Firebase.firestore
     val storage = FirebaseStorage.getInstance()
+    private lateinit var pDialog:SweetAlertDialog
 
     fun uploadImageToCloudStorage(drawableName: String, pathStorage: String) {
         // Tạo đường dẫn đến tệp tin trên Cloud Storage
@@ -60,5 +70,95 @@ class HelperFunctionDB(private var context: Context) {
                 Log.d("TAG", "Error getting documents: ", exception)
                 callback(-1)
             }
+    }
+    fun showWarningAlert(
+        title: String,
+        message: String,
+        onConfirmed: (Boolean) -> Unit
+
+    ){
+        var shouldDelete = false
+        val sweetAlertDialog = SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+        sweetAlertDialog.setTitleText(title)
+        sweetAlertDialog.setContentText(message)
+        sweetAlertDialog.setConfirmButton("Có") {
+            it.dismissWithAnimation()
+            onConfirmed(true)
+
+        }
+        sweetAlertDialog.setCancelButton("Không") {
+            it.dismissWithAnimation()
+            onConfirmed(false)
+        }
+        sweetAlertDialog.show()
+    }
+    fun showRemindAlert(title: String) {
+        val sweetAlertDialog = SweetAlertDialog(context, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+        sweetAlertDialog.setTitleText(title)
+        sweetAlertDialog.setCustomImage(R.drawable.input)
+        sweetAlertDialog.show();
+    }
+    fun showSuccessAlert(
+        title: String,
+        message: String,
+        callback: (Boolean) -> Unit
+    ) {
+        val sweetAlertDialog = SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
+        sweetAlertDialog.setTitleText(title)
+        sweetAlertDialog.setContentText(message)
+        sweetAlertDialog.setConfirmButton("OK") {
+            it.dismissWithAnimation()
+            callback(true)
+        }
+        sweetAlertDialog.setCancelable(false)
+        sweetAlertDialog.show()
+    }
+
+    fun showErrorAlert(
+        title: String,
+        message: String,
+        callback: (Boolean) -> Unit
+    ) {
+        val sweetAlertDialog = SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+        sweetAlertDialog.setTitleText(title)
+        sweetAlertDialog.setContentText(message)
+        sweetAlertDialog.setConfirmButton("OK") {
+            it.dismissWithAnimation()
+            callback(true)
+        }
+        sweetAlertDialog.setCancelable(false)
+        sweetAlertDialog.show()
+    }
+    fun showLoadingAlert()
+    {
+        pDialog = SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE)
+        pDialog.progressHelper.barColor = Color.parseColor("#FFB200")
+        pDialog.titleText = "Vui lòng đợi..."
+        pDialog.setCancelable(false)
+        pDialog.show()
+    }
+    fun stopLoadingAlert()
+    {
+        pDialog.cancel()
+    }
+
+    fun uploadImage(uri:Uri,pathName:String,pathStorage: String)
+    {
+        val inputStream = context.contentResolver.openInputStream(uri)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        val data = outputStream.toByteArray()
+
+        val storageRef = storage.reference.child(pathStorage).child("$pathName.png")
+        storageRef.putBytes(data)
+            .addOnSuccessListener { taskSnapshot ->
+                // Tải lên thành công
+            }
+            .addOnFailureListener { exception ->
+                // Xử lý lỗi
+            }
+
     }
 }

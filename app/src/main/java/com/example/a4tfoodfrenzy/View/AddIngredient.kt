@@ -1,24 +1,20 @@
 package com.example.a4tfoodfrenzy.View
 
-import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.view.MotionEvent
-import android.view.View
 import android.widget.EditText
-import android.widget.NumberPicker
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import com.example.a4tfoodfrenzy.Model.RecipeIngredient
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class AddIngredient : AppCompatActivity() {
     private lateinit var toolbarAddIngredient: MaterialToolbar
     private lateinit var unitIngredientEdit: EditText
-    private lateinit var unitPicker: NumberPicker
-    private lateinit var bottomSheetDialog: BottomSheetDialog
-    private lateinit var listUnit: List<String>
+    private lateinit var amount:EditText
+    private lateinit var ingredientName:EditText
+    private var index:Int=-1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,18 +22,28 @@ class AddIngredient : AppCompatActivity() {
 
         initViews()
         initListeners()
+        val mode = intent.getStringExtra("mode")
+        if(mode.equals("edit")) {
+            val ingredient: RecipeIngredient? = intent.getParcelableExtra("ingredient")
+            index=intent.getIntExtra("index",-1)
+            ingredientName.setText(ingredient?.ingreName)
+            amount.setText(ingredient?.ingreQuantity.toString())
+            unitIngredientEdit.setText(ingredient?.ingreUnit)
+        }
+
     }
 
     private fun initViews() {
         toolbarAddIngredient = findViewById(R.id.toolbarAddIngredient)
         unitIngredientEdit = findViewById(R.id.unitIngredientEdit)
-        listUnit = listOf("g", "kg", "ml", "l", "quả", "trái", "gói")
+        ingredientName=findViewById(R.id.ingredientName)
+        amount=findViewById(R.id.amount)
     }
 
     private fun initListeners() {
         setBackToolbar()
         setCloseToolbar()
-        setUnitPickerListener()
+        //setUnitPickerListener()
     }
 
     private fun setBackToolbar() {
@@ -50,7 +56,7 @@ class AddIngredient : AppCompatActivity() {
         toolbarAddIngredient.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_save -> {
-                    finish()
+                    addIngredient()
                     // Xử lý khi người dùng chọn Save
                     true
                 }
@@ -59,43 +65,16 @@ class AddIngredient : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setUnitPickerListener() {
-        unitIngredientEdit.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_UP) {
-                showUnitPickerDialog()
-                true
-            } else {
-                false
-            }
-        }
-    }
-
-    private fun showUnitPickerDialog() {
-        bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
-        val bottomSheetView = layoutInflater.inflate(R.layout.bottom_dialog_unit, findViewById(R.id.bottomSheetContainer))
-
-        //thêm dữ liệu vào dialog
-        unitPicker = bottomSheetView.findViewById(R.id.unitPicker)
-        unitPicker.minValue = 0
-        unitPicker.maxValue = listUnit.size - 1
-        unitPicker.displayedValues = listUnit.toTypedArray()
-
-        //chọn đơn vị
-        bottomSheetView.findViewById<Toolbar>(R.id.toolBar).setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.action_save -> {
-                    bottomSheetDialog.hide()
-                    val selectedValue = listUnit[unitPicker.value]
-                    unitIngredientEdit.text = Editable.Factory.getInstance().newEditable(selectedValue)
-                    true
-                }
-                else -> false
-            }
-        }
-
-        //hiển thị
-        bottomSheetDialog.setContentView(bottomSheetView)
-        bottomSheetDialog.show()
+    private fun addIngredient()
+    {
+        val name=ingredientName.text.toString()
+        val amount=(amount.text).toString().toDouble()
+        val unit=unitIngredientEdit.text.toString()
+        val recipeIngredient=RecipeIngredient(amount,name,unit,0.0)
+        val intent=Intent()
+        intent.putExtra("ingredient",recipeIngredient)
+        intent.putExtra("index",index)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 }

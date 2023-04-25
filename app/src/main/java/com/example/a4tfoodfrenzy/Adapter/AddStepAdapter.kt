@@ -2,6 +2,7 @@ package com.example.a4tfoodfrenzy.Adapter
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Model.RecipeCookStep
 import com.example.a4tfoodfrenzy.R
 
-class AddStepAdapter(context: Context, list:ArrayList<RecipeCookStep>)
+class AddStepAdapter(private val context: Context, private val list:ArrayList<RecipeCookStep>)
     : RecyclerView.Adapter<AddStepAdapter.ViewHolder>() {
-    private var listItem=list
-    private val context=context
+
+    var onButtonClick:((View,RecipeCookStep)->Unit)?=null
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val image: ImageView =listItemView.findViewById(R.id.imageStep)
         val des:TextView=listItemView.findViewById(R.id.desStep)
@@ -23,17 +24,11 @@ class AddStepAdapter(context: Context, list:ArrayList<RecipeCookStep>)
         val menu:ImageView=listItemView.findViewById(R.id.optionMenuStep)
         init{
             menu.setOnClickListener {
-                popMenus(it)
+                onButtonClick?.invoke(it,list[adapterPosition])
             }
         }
     }
-    private fun popMenus(v:View)
-    {
-        val popupMenu = PopupMenu(context, v)
-        popupMenu.menuInflater.inflate(R.menu.menu_ingredient, popupMenu.menu)
-        popupMenu.show()
 
-    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val context=parent.context
         val inflater = LayoutInflater.from(context)
@@ -42,17 +37,18 @@ class AddStepAdapter(context: Context, list:ArrayList<RecipeCookStep>)
     }
 
     override fun getItemCount(): Int {
-        return listItem.size
+        return list.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item=listItem[position]
+        val item=list[position]
         holder.step.text="Bước ${position+1}"
-        val resources = context.getResources()
-        val resourceId = resources.getIdentifier(item.image, "drawable", context.packageName)
-        val bitmap = BitmapFactory.decodeResource(resources, resourceId)
-        holder.image.setImageBitmap(bitmap)
+        val uri= Uri.parse(item.image)
+        holder.image.setImageURI(uri)
         holder.des.text=item.description
+        holder.menu.setOnClickListener {
+            onButtonClick?.invoke(it,item)
+        }
     }
 
 }

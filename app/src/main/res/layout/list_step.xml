@@ -15,8 +15,8 @@
     </ImageView>
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageStep"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/monan"
         android:layout_marginLeft="20dp"
@@ -35,6 +35,7 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="Bước 1"
+            android:textStyle="bold"
 
             android:textColor="@color/black"
             android:textSize="18dp"></TextView>
@@ -45,6 +46,7 @@
             android:layout_height="wrap_content"
             android:text="Lọc bớt mỡ và rửa sạch miếng thịt lợn sữa"
             android:textColor="@color/black"
+            android:maxLines="3"
             android:textSize="16dp"></TextView>
 
     </androidx.appcompat.widget.LinearLayoutCompat>

@@ -55,7 +55,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat" />
 
             <EditText
-                android:id="@+id/amountServingEdit"
+                android:id="@+id/ingredientName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -87,12 +87,11 @@
 
                     </TextView>
                     <EditText
-                        android:id="@+id/amountIngredientEdit"
-                        android:layout_width="match_parent"
+                        android:id="@+id/amount"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="Nhập số lượng">
                     </EditText>
-
                     <!-- Nội dung của LinearLayout con 1 ở đây -->
                 </LinearLayout>
 
@@ -117,7 +116,6 @@
                         android:id="@+id/unitIngredientEdit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:editable="false"
                         android:hint="Nhập đơn vị">
                     </EditText>
                     <!-- Nội dung của LinearLayout con 2 ở đây -->
