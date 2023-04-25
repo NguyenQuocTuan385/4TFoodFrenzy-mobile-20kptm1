@@ -111,24 +111,27 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginTop="30dp"
-        android:text="Tuổi"
+        android:text="Ngày sinh"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPersonName" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/Dob_profile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="25dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:text="18"
+        android:text=""
+        android:inputType="none"
+        android:focusable="false"
+        android:onClick="showDatePickerDialog"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4" >
+    </EditText>
 
     <TextView
         android:id="@+id/textView5"
@@ -138,7 +141,7 @@
         android:layout_marginTop="30dp"
         android:text="Email"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+        app:layout_constraintTop_toBottomOf="@+id/Dob_profile" />
 
     <EditText
         android:id="@+id/editTextEmail"
@@ -149,9 +152,9 @@
         android:layout_marginEnd="25dp"
         android:ems="10"
         android:enabled="false"
-
         android:minHeight="48dp"
         android:text="dntien20@clc.fitus.edu.vn"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -190,5 +193,17 @@
         app:layout_constraintStart_toStartOf="@+id/creatorImage"
         app:layout_constraintTop_toTopOf="@+id/creatorImage"
         app:srcCompat="@drawable/baseline_add_a_photo_24" />
+
+<!--    <ImageView-->
+<!--        android:id="@+id/datePicker"-->
+<!--        android:layout_width="40dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginEnd="34dp"-->
+<!--        android:layout_marginBottom="7dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName2"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:srcCompat="@drawable/calendar_date_sort_icon" />-->
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
