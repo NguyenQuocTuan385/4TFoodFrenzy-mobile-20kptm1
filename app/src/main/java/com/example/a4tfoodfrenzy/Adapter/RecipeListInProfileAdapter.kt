@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.PopupMenu
@@ -287,6 +288,16 @@ class RecipeListInProfileAdapter(private var context: Context,
 
         }
 
+//        val search_Recipe = holder.listItemView.findViewById<EditText>(R.id.searchRecipe)
+//        search_Recipe.setOnClickListener {
+//            // dùng fitler để tìm kiếm món ăn và cập nhập lại adapter
+//            val filter = recipeRenderArray.filter {
+//                it.key.recipeName.contains(search_Recipe.text.toString())
+//            }
+//            recipeRenderArray.clear()
+//            recipeRenderArray.putAll(filter)
+//            notifyDataSetChanged()
+//        }
 
     }
 }

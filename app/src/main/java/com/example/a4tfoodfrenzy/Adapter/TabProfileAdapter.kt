@@ -2,9 +2,14 @@ package com.example.a4tfoodfrenzy.Adapter
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.EditText
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -57,6 +62,35 @@ class TabFoodRecipeSaved(private var context: Context) : Fragment() {
         recyclerView1!!.layoutManager = GridLayoutManager(inflater.context, 2)
         recyclerView1.adapter = adapter
 
+        val autoComplete_search_Recipe = view.findViewById<AutoCompleteTextView>(R.id.searchRecipe)
+       autoComplete_search_Recipe.setAdapter(ArrayAdapter(inflater.context, android.R.layout.simple_list_item_1, monAn.keys.toList()))
+        autoComplete_search_Recipe.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                recyclerView1!!.adapter = adapter
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(s.toString() == "") {
+                    recyclerView1!!.adapter = adapter
+                } else {
+                    val result = HashMap<FoodRecipe, User>()
+                    monAn.forEach {
+                        if(it.key.recipeName.toLowerCase().contains(s.toString().toLowerCase())) {
+                            result[it.key] = it.value
+                        }
+                    }
+                    val adapter = context?.let { RecipeListInProfileAdapter(it,result, true, false) }
+                    recyclerView1!!.adapter = adapter
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+        })
+
+
         return view
     }
 
@@ -93,6 +127,35 @@ class TabMyFoodRecipe(private var context: Context) : Fragment() {
         recyclerView1!!.adapter = adapter
         recyclerView1!!.layoutManager = GridLayoutManager(inflater.context, 2)
         recyclerView1.adapter = adapter
+
+        val autoComplete_search_Recipe = view.findViewById<AutoCompleteTextView>(R.id.searchRecipe)
+        autoComplete_search_Recipe.setAdapter(ArrayAdapter(inflater.context, android.R.layout.simple_list_item_1, monAn.keys.toList()))
+        autoComplete_search_Recipe.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                recyclerView1!!.adapter = adapter
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(s.toString() == "") {
+                    recyclerView1!!.adapter = adapter
+                } else {
+                    val result = HashMap<FoodRecipe, User>()
+                    monAn.forEach {
+                        if(it.key.recipeName.toLowerCase().contains(s.toString().toLowerCase())) {
+                            result[it.key] = it.value
+                        }
+                    }
+                    val adapter = context?.let { RecipeListInProfileAdapter(it,result, false, true) }
+                    recyclerView1!!.adapter = adapter
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+        })
+
 
         return view
     }

@@ -47,14 +47,15 @@
             android:padding="8dp"
             android:src="@drawable/search_icon" />
 
-        <EditText
+        <AutoCompleteTextView
+            android:id="@+id/searchRecipe"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="0.6"
             android:background="@null"
+            android:hint="Công thức món ăn"
             android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:hint="Công thức món ăn" />
+            android:inputType="text" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
