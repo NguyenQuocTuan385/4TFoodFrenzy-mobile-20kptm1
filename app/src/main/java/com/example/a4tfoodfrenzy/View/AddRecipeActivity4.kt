@@ -125,18 +125,21 @@ class AddRecipeActivity4 : AppCompatActivity() {
     private fun uploadToFirebase()
     {
         val user=DBManagement.user_current
-        val category=DBManagement.recipeCateList
 
         val fullName= user?.fullname
         val avatar= user?.avatar
-        val mainImage= foodRecipe.recipeMainImage?.let { uploadImageToCloudStorage(it) }
+        if(listStep.isNullOrEmpty())
+        {
+            HelperFunctionDB(this).showRemindAlert("Bạn vui lòng thêm bước")
+            return
+        }
+        //val mainImage= foodRecipe.recipeMainImage?.let { uploadImageToCloudStorage(it) }
         uploadImageStepToCloudStorage()
 
         HelperFunctionDB(this).findSlotIdEmptyInCollection("RecipeFoods"){idSlot ->
             if (fullName != null) {
                 foodRecipe.id=idSlot
                 foodRecipe.authorName=fullName
-                foodRecipe.recipeMainImage=mainImage
                 foodRecipe.isPublic=true
                 foodRecipe.date=Date()
                 foodRecipe.recipeSteps=listStep
@@ -149,11 +152,6 @@ class AddRecipeActivity4 : AppCompatActivity() {
     }
     private fun uploadImageStepToCloudStorage()
     {
-        if(listStep.isNullOrEmpty())
-        {
-            HelperFunctionDB(this).showRemindAlert("Bạn vui lòng thêm bước")
-            return
-        }
         //upload lên db
         for(i in 0 until listStep.size) {
             if(listStep[i].image.isNullOrEmpty())
@@ -218,6 +216,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
                     if(document.data.get("recipeCateName").toString().equals(cate))
                     {
                         document.reference.update("foodRecipes",FieldValue.arrayUnion(id))
+                        return@addOnSuccessListener
                     }
                 }
             }
