@@ -91,6 +91,8 @@ class WriteCommentActivity : AppCompatActivity() {
         // cancel writing comment -> return to recipe details
         cancelButton.setOnClickListener {
             startActivity(toShowDetailIntent)
+
+            toShowDetailIntent.putExtra("foodRecipe", currentRecipe)
             finish()
         }
     }

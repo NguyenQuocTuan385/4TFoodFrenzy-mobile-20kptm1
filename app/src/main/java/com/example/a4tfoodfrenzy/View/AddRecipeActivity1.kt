@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
+import com.example.a4tfoodfrenzy.Model.RecipeCategory
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.appbar.MaterialToolbar
 
@@ -91,7 +92,7 @@ class AddRecipeActivity1 : AppCompatActivity() {
             )
             return
         }
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.type = "image/*"
         startActivityForResult(intent, IMAGE_REQUEST_CODE)
     }
