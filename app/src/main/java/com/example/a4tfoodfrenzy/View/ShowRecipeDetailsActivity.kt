@@ -38,7 +38,7 @@ import java.util.*
  *
  */
 class ShowRecipeDetailsActivity : AppCompatActivity() {
-    val db : FirebaseFirestore = Firebase.firestore
+    val db: FirebaseFirestore = Firebase.firestore
     private var _commentID: Long = -1
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -190,11 +190,11 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             writeCommentButton.visibility = View.GONE
         }
 
-
         // check if user have already saved this recipe to change button state
         // user saved recipe
         if (currentFoodRecipe.userSavedRecipes.contains(DBManagement.user_current?.id)) {
             saveRecipeButton.setImageResource(R.drawable.saved_recipe_button)
+
             isSavedFood = true
         } else {
             saveRecipeButton.setImageResource(R.drawable.unsave_recipe_button)
@@ -253,10 +253,20 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         saveRecipeButton.setOnClickListener {
             // current state is saved --> change to unsaved
             if (isSavedFood) {
+                // change image source to unsave
                 saveRecipeButton.setImageResource(R.drawable.unsave_recipe_button)
+
+                // remove save info from db
+                unsaveRecipeFromDB(currentFoodRecipe)
+
                 isSavedFood = false
             } else { // current state is un-saved --> change to saved
+                // change image source to saved
                 saveRecipeButton.setImageResource(R.drawable.saved_recipe_button)
+
+                // save food into DB
+                saveRecipeIntoDB(currentFoodRecipe)
+
                 isSavedFood = true
             }
 
@@ -294,6 +304,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
     // check if current user commented on the current recipe or not
     // if commented -> false else true
     private fun isNotExistComment(currentFoodRecipe: FoodRecipe): Boolean {
+
         if (!isLoggedIn())
             return false
 
@@ -302,8 +313,9 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         if (currentUserCmtList?.size != 0) {
             if (currentUserCmtList != null) {
-                if (currentFoodCmtList.any { it in currentUserCmtList })
+                if (currentFoodCmtList.any { it in currentUserCmtList }) {
                     return false
+                }
             }
         }
         return true
@@ -426,8 +438,10 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
             // find user by ID then add new cmt to that user
             db.collection("users")
-                .whereEqualTo("id", (DBManagement.user_current
-                    ?: return@findSlotIdEmptyInCollection).id)
+                .whereEqualTo(
+                    "id", (DBManagement.user_current
+                        ?: return@findSlotIdEmptyInCollection).id
+                )
                 .get()
                 .addOnSuccessListener { document ->
                     if (!document.isEmpty) {
@@ -442,5 +456,75 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
     private fun showText(text: String, context: Context) {
         Toast.makeText(context, text, Toast.LENGTH_LONG).show()
+    }
+
+
+
+    // add or remove current user's ID into / from current selected recipe food userSavedRecipes field on firestore
+    private fun handleUserToRecipeFoodsCollection(currentFood: FoodRecipe, taskType: Boolean) {
+        // check if user had logged in
+        if (!isLoggedIn())
+            return
+
+        // add user id into recipefood table
+        db.collection("RecipeFoods")
+            .whereEqualTo("id", currentFood.id)
+            .get()
+            .addOnSuccessListener { document ->
+                if (!document.isEmpty) {
+                    val foodDocID = document.elementAt(0).id
+
+                    // add userID to RecipeFoods savedArray with document ID
+                    db.collection("RecipeFoods")
+                        .document(foodDocID)
+                        .update(
+                            "userSavedRecipes",
+                            if (taskType)
+                                FieldValue.arrayUnion(DBManagement.user_current?.id)
+                            else FieldValue.arrayRemove(
+                                DBManagement.user_current?.id
+                            )
+                        )
+                }
+            }
+    }
+
+    // add or remove selected recipe food's ID into / from current users's foodRecipeSaved field on firestore
+    private fun handleRecipeToUserCollection(currentFoodRecipe: FoodRecipe, taskType: Boolean) {
+        // check if user had logged in
+        if (!isLoggedIn())
+            return
+
+        // add RecipeFood ID to user table
+        db.collection("users")
+            .whereEqualTo("id", DBManagement.user_current?.id)
+            .get()
+            .addOnSuccessListener { document ->
+                if (!document.isEmpty) {
+                    val userDocID = document.elementAt(0).id
+
+                    // add userID to RecipeFoods savedArray with document ID
+                    db.collection("users")
+                        .document(userDocID)
+                        .update("foodRecipeSaved",
+                            if(taskType)
+                                FieldValue.arrayUnion(currentFoodRecipe.id)
+                            else
+                                FieldValue.arrayRemove(currentFoodRecipe.id)
+                        )
+                }
+            }
+    }
+
+    // remove (unsave) all info from firestore by calling functions
+    private fun unsaveRecipeFromDB(currentFoodRecipe: FoodRecipe) {
+        handleUserToRecipeFoodsCollection(currentFoodRecipe, false)
+        handleRecipeToUserCollection(currentFoodRecipe, false)
+    }
+
+    // save all needed info into firestore by calling functions
+    private fun saveRecipeIntoDB(currentFoodRecipe: FoodRecipe) {
+        handleUserToRecipeFoodsCollection(currentFoodRecipe, true)
+        handleRecipeToUserCollection(currentFoodRecipe, true)
     }
 }
