@@ -24,27 +24,27 @@ class AdminProfileManagement : Fragment() {
         val list= arrayListOf<User>()
         list.add(
             User(1,"","Dương Chí Thông", Date(1997),"",
-                "avt", ArrayList(), ArrayList(), ArrayList())
+                "avt", ArrayList(), ArrayList(), ArrayList(), false)
         )
         list.add(
             User(2,"","Dương Chí Thông", Date(1997),"",
-                "avt", ArrayList(), ArrayList(), ArrayList())
+                "avt", ArrayList(), ArrayList(), ArrayList(), false)
         )
         list.add(
             User(3,"","Dương Chí Thông", Date(1997),"",
-                "avt", ArrayList(), ArrayList(), ArrayList())
+                "avt", ArrayList(), ArrayList(), ArrayList(), false)
         )
         list.add(
             User(4,"","Dương Chí Thông", Date(1997),"",
-                "avt", ArrayList(), ArrayList(), ArrayList())
+                "avt", ArrayList(), ArrayList(), ArrayList(), false)
         )
         list.add(
             User(5,"","Dương Chí Thông", Date(1997),"",
-                "avt", ArrayList(), ArrayList(), ArrayList())
+                "avt", ArrayList(), ArrayList(), ArrayList(), false)
         )
         list.add(
             User(6,"","Dương Chí Thông", Date(1997),"",
-                "avt", ArrayList(), ArrayList(), ArrayList())
+                "avt", ArrayList(), ArrayList(), ArrayList(), false)
         )
         val adapter= UserAdapter(requireContext(),list)
         val recyclerView= view?.findViewById<RecyclerView>(R.id.list_user)

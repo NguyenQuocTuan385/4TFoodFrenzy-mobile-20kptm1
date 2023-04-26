@@ -86,6 +86,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (DBManagement.isInitialized == false) {
+            if(FirebaseAuth.getInstance().currentUser != null) {
+                dbManagement.addListenerChangeDataUserCurrent {user ->
+                    if (user.email.equals("")) {
+                        dbManagement.fetchDataUserCurrent {  }
+                    }
+                    else if (user.isAdmin == true) {
+                        val intent= Intent(this, AdminDashboard::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                }
+            }
             dbManagement.addListenerChangeDataFoodRecipe { foodRecipes ->
                 if (foodRecipes.isEmpty()) {
                     dbManagement.fetchDataFoodRecipe { foodRecipeList ->
@@ -121,13 +133,6 @@ class MainActivity : AppCompatActivity() {
             dbManagement.addListenerChangeDataUser { users ->
                 if (users.isEmpty()) {
                     dbManagement.fetchDataUser {  }
-                }
-            }
-            if(FirebaseAuth.getInstance().currentUser != null) {
-                dbManagement.addListenerChangeDataUserCurrent {user ->
-                    if (user.email.equals("")) {
-                        dbManagement.fetchDataUserCurrent {  }
-                    }
                 }
             }
             DBManagement.isInitialized = true

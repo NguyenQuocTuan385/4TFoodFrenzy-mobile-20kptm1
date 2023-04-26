@@ -72,7 +72,7 @@ class RegisterActivity : AppCompatActivity() {
                     val user = auth.currentUser
                     val helperFunctionDB = HelperFunctionDB(this)
                     helperFunctionDB.findSlotIdEmptyInCollection("users") {idSlot ->
-                        val profile = User(idSlot, email, name, null, "", "users/defaultavt.png", arrayListOf(), arrayListOf(), arrayListOf())
+                        val profile = User(idSlot, email, name, null, "", "users/defaultavt.png", arrayListOf(), arrayListOf(), arrayListOf(), false)
                         if (user != null) {
                             writeUserProfileToFirestore(user.uid, profile)
                         }
