@@ -149,7 +149,7 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
                                                         "users/defaultavt.png",
                                                         arrayListOf(),
                                                         arrayListOf(),
-                                                        arrayListOf()
+                                                        arrayListOf(), false
                                                     )
 
                                                     // add new user to db

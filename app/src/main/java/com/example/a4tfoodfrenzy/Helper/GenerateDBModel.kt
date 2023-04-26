@@ -31,7 +31,7 @@ class GenerateDBModel(private var context: Context) {
             "users/defaultavt.png",
             arrayListOf(1,2),
             arrayListOf(1, 2,3,4),
-            arrayListOf(1,2,3)
+            arrayListOf(1,2,3), false
         );
         users.add(user1)
 
@@ -44,7 +44,7 @@ class GenerateDBModel(private var context: Context) {
             "users/avt.png",
             arrayListOf(3,4),
             arrayListOf(5,6),
-            arrayListOf(1,2,3)
+            arrayListOf(1,2,3), false
         )
         users.add(user2)
 
@@ -57,7 +57,7 @@ class GenerateDBModel(private var context: Context) {
             "users/avt.png",
             arrayListOf(5,6),
             arrayListOf(7,8),
-            arrayListOf(5)
+            arrayListOf(5), false
         )
         users.add(user3)
 
@@ -70,7 +70,7 @@ class GenerateDBModel(private var context: Context) {
             "users/defaultavt.png",
             arrayListOf(),
             arrayListOf(9,10,11),
-            arrayListOf(5,6,7)
+            arrayListOf(5,6,7), false
         )
         users.add(user4)
 
@@ -83,7 +83,7 @@ class GenerateDBModel(private var context: Context) {
             "users/defaultavt.png",
             arrayListOf(7,8),
             arrayListOf(12,13,14,15),
-            arrayListOf(1,3,4)
+            arrayListOf(1,3,4), false
         )
         users.add(user5)
 
@@ -96,7 +96,7 @@ class GenerateDBModel(private var context: Context) {
             "users/defaultavt.png",
             arrayListOf(),
             arrayListOf(16,17,18),
-            arrayListOf(3,5,8)
+            arrayListOf(3,5,8), false
         )
         users.add(user6)
 
@@ -109,7 +109,7 @@ class GenerateDBModel(private var context: Context) {
             "users/defaultavt.png",
             arrayListOf(9,10),
             arrayListOf(19,20,26,27,28,29,30),
-            arrayListOf()
+            arrayListOf(), false
         )
         users.add(user7)
 
@@ -122,7 +122,7 @@ class GenerateDBModel(private var context: Context) {
             "users/defaultavt.png",
             arrayListOf(11,12),
             arrayListOf(31,32,33),
-            arrayListOf()
+            arrayListOf(), false
         )
         users.add(user8)
 
@@ -135,7 +135,7 @@ class GenerateDBModel(private var context: Context) {
             "users/defaultavt.png",
             arrayListOf(13),
             arrayListOf(34),
-            arrayListOf()
+            arrayListOf(), false
         )
         users.add(user9)
 
@@ -148,9 +148,22 @@ class GenerateDBModel(private var context: Context) {
             "users/defaultavt.png",
             arrayListOf(14,15),
             arrayListOf(35),
-            arrayListOf(1, 2, 3)
+            arrayListOf(1, 2, 3), false
         )
         users.add(user10)
+
+        val user11 = User(
+            11,
+            "admin@4tfoodfrenzy.com",
+            "4TFoodFrenzy",
+            Date(2002, 2, 2),
+            "Tôi đã có cơ hội làm việc tại nhiều nhà hàng và khách sạn nổi tiếng ở nhiều quốc gia khác nhau, từ đó tôi đã học được rất nhiều kiến thức và kinh nghiệm về ẩm thực.",
+            "users/defaultavt.png",
+            arrayListOf(),
+            arrayListOf(),
+            arrayListOf(), true
+        )
+        users.add(user11)
 
         for(user in users) {
             db.collection("users").add(user)
@@ -367,8 +380,8 @@ class GenerateDBModel(private var context: Context) {
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe19_3","foods")
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe20_1","foods")
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe20_2","foods")
-
-        //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe26","foods")
+//
+//                helperFunctionDB.uploadImageToCloudStorage("foodrecipe26","foods")
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe26_1","foods")
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe26_2","foods")
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe26_3","foods")
