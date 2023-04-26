@@ -1,5 +1,6 @@
 package com.example.a4tfoodfrenzy.View
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -10,10 +11,14 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.R
 import com.example.a4tfoodfrenzy.View.Fragment.AdminProfileManagement
 import com.example.a4tfoodfrenzy.View.Fragment.AdminRecipeManagement
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class AdminDashboard : AppCompatActivity() {
 
@@ -79,6 +84,14 @@ class AdminDashboard : AppCompatActivity() {
                             replaceFragment(AdminRecipeManagement())
                             currentFragment=FRAGMENT_RECIPE
                         }
+                    }
+                    R.id.navLogout->{
+                        val auth = Firebase.auth
+                        auth.signOut()
+                        navigateToLogin()
+
+
+
 
                     }
                 }
@@ -104,5 +117,11 @@ class AdminDashboard : AppCompatActivity() {
         val transaction=supportFragmentManager.beginTransaction()
         transaction.replace(R.id.content_frame,fragment)
         transaction.commit() // thêm dòng này
+    }
+    private fun navigateToLogin()
+    {
+        val intent= Intent(this, LoginRegisterActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
