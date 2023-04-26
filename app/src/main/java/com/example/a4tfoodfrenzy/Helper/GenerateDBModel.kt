@@ -152,19 +152,6 @@ class GenerateDBModel(private var context: Context) {
         )
         users.add(user10)
 
-        val user11 = User(
-            11,
-            "admin@4tfoodfrenzy.com",
-            "4TFoodFrenzy",
-            Date(2002, 2, 2),
-            "Tôi đã có cơ hội làm việc tại nhiều nhà hàng và khách sạn nổi tiếng ở nhiều quốc gia khác nhau, từ đó tôi đã học được rất nhiều kiến thức và kinh nghiệm về ẩm thực.",
-            "users/defaultavt.png",
-            arrayListOf(),
-            arrayListOf(),
-            arrayListOf(), true
-        )
-        users.add(user11)
-
         for(user in users) {
             db.collection("users").add(user)
                 .addOnSuccessListener { documentReference ->
