@@ -1,9 +1,11 @@
 package com.example.a4tfoodfrenzy.View
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -26,10 +28,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import java.util.*
 
 class ProfileActivity : AppCompatActivity() {
-
     private lateinit var name_profile: TextView
     private lateinit var avatar_profile: ImageView
     private lateinit var email_profile: TextView
@@ -45,6 +47,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
     val storageRef = FirebaseStorage.getInstance()
     val dbManagement = DBManagement()
+    var user_current = DBManagement.user_current
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,8 +63,8 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun viewProfile() {
-        val user = auth.currentUser
-        if(user==null)
+        var user = auth.currentUser
+        if(user == null)
         {
             val intent= Intent(this,LogoutActivity::class.java)
             startActivity(intent)
@@ -69,14 +72,14 @@ class ProfileActivity : AppCompatActivity() {
         }
         else
         {
-//            DBManagement().addListenerChangeDataUserCurrent {  }
-            val user_current = DBManagement.user_current
+            user_current = DBManagement.user_current
             name_profile = findViewById(R.id.name_profile)
             avatar_profile = findViewById(R.id.creatorImage)
             email_profile = findViewById(R.id.email_profile)
 
             name_profile.text = user_current?.fullname ?: ""
             email_profile.text = user_current?.email ?: ""
+
             val imageRef = user_current?.avatar?.let { storageRef.getReference(it) }
             if (imageRef != null) {
                 imageRef.downloadUrl.addOnSuccessListener { uri ->
@@ -111,7 +114,7 @@ class ProfileActivity : AppCompatActivity() {
                 when (item.title) {
                     "Chỉnh sửa thông tin" -> {
                         val intent = Intent(this, EditProfileActivity::class.java)
-                        startActivity(intent)
+                        startActivityForResult(intent, 1)
                         true
                     }
                     "Đăng xuất" -> {
@@ -154,6 +157,20 @@ class ProfileActivity : AppCompatActivity() {
                     true
                 }
                 else -> false
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK){
+            if(requestCode == 1) {
+                val imageUri = data?.getStringExtra("urlAvt")
+                if (imageUri != null) {
+                    Glide.with(this)
+                        .load(imageUri)
+                        .into(avatar_profile)
+                }
             }
         }
     }

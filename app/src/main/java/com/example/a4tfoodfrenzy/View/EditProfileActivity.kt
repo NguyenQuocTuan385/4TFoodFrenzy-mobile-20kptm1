@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
+import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
@@ -51,30 +52,38 @@ class EditProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
-
         viewProfile()
         event()
     }
 
     private fun event() {
+        // chọn ảnh
         updateAvt = findViewById(R.id.updateAvt)
         updateAvt.setOnClickListener {
             pickImage()
         }
 
+        // cập nhật thông tin
         updateBtn = findViewById(R.id.updateBtn)
         updateBtn.setOnClickListener {
+            val helperFunctionDB= HelperFunctionDB(this)
+            helperFunctionDB.showLoadingAlert()
             updateProfile()
+            helperFunctionDB.stopLoadingAlert()
             val intent = Intent(this, ProfileActivity::class.java)
-            startActivity(intent)
+            // gửi ảnh đến profile
+            intent.putExtra("urlAvt", urlAvt)
+            setResult(RESULT_OK, intent)
+            finish()
         }
 
+        // quay lại
         backBtn = findViewById(R.id.backBtn)
         backBtn.setOnClickListener {
-            val intent = Intent(this, ProfileActivity::class.java)
-            startActivity(intent)
+            finish()
         }
 
+        // chọn ngày sinh
         datePicker = findViewById(R.id.Dob_profile)
         datePicker.setOnClickListener {
             val calendar = Calendar.getInstance()
@@ -97,10 +106,6 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     private fun updateProfile() {
-        progressDialog = ProgressDialog(this)
-        progressDialog.setTitle("Đang cập nhật...")
-        progressDialog.show()
-
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
@@ -110,6 +115,11 @@ class EditProfileActivity : AppCompatActivity() {
         val name = nameET.text.toString()
         val bio = bioET.text.toString()
 
+        var user1 = mapOf(
+            "fullname" to name,
+            "birthday" to Dob,
+            "bio" to bio
+        )
        if(urlAvt != "")
        {
            // upload ảnh lên firebase storage
@@ -121,22 +131,16 @@ class EditProfileActivity : AppCompatActivity() {
            }.addOnSuccessListener { taskSnapshot ->
                imageRef.downloadUrl.addOnSuccessListener { uri ->
                    urlAvt = uri.toString()
+                   user1 = mapOf(
+                       "fullname" to name,
+                       "birthday" to Dob,
+                       "bio" to bio,
+                       "avatar" to "users/${user_id}"
+                   )
                }
               Log.d("TAG", "Upload ảnh thành công")
            }
        }
-
-        val user1 = mapOf(
-            "fullname" to name,
-            "birthday" to Dob,
-            "bio" to bio
-        )
-        if(urlAvt != "")
-        {
-            user1.plus("avatar" to "users/${user_id}")
-        }
-
-
 
         docRef.update(user1)
             .addOnSuccessListener {
@@ -144,17 +148,9 @@ class EditProfileActivity : AppCompatActivity() {
             }
             .addOnFailureListener { e -> Log.w("TAG", "Error updating document", e) }
 
-        if (progressDialog.isShowing) {
-            progressDialog.dismiss()
-        }
    }
 
     private fun viewProfile() {
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Đang tải...")
-        progressDialog.show()
-
-
         name = findViewById(R.id.name_profile)
         name.text = user_current?.fullname ?: ""
 
@@ -197,11 +193,6 @@ class EditProfileActivity : AppCompatActivity() {
         emailET.setText(user_current?.email)
         bioET = findViewById(R.id.editTextBio)
         bioET.setText(user_current?.bio)
-
-        if(progressDialog.isShowing)
-        {
-            progressDialog.dismiss()
-        }
     }
 
     private fun pickImage()
