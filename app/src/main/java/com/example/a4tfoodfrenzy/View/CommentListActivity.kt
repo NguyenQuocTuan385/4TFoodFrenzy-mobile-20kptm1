@@ -29,20 +29,6 @@ class CommentListActivity : AppCompatActivity() {
 
         viewComment()
         event()
-//        var cmtList = ArrayList<RecipeComment>()
-//
-//        cmtList.add(RecipeComment(1, "Đặng Ngọc Tiến", "",
-//            R.drawable.avt,true,
-//            "comrangduabo","Rất ngon và đơn giản", Date()
-//        ))
-//        cmtList.add(RecipeComment(2, "Đặng Ngọc Tiến", "", R.drawable.avt,true, null,"Đẹp quá", Date()))
-//        cmtList.add(RecipeComment(3, "Trương Gia Tiến", "",
-//            R.drawable.avt,true, null,"Món ăn tuyệt vời quá", Date()))
-//        cmtList.add(RecipeComment(4, "Nguyễn Văn Việt", "",
-//            R.drawable.avt,true,
-//            "mitrungxaobo","Sao tôi làm món ăn bò sốt me mà ra mì hải sản vậy ?", Date()))
-
-
     }
 
     private fun viewComment() {
@@ -62,7 +48,7 @@ class CommentListActivity : AppCompatActivity() {
         // lấy ds comment của món ăn
         DBManagement.recipeCommentList.forEach {
             currentFoodRecipe?.recipeCmts?.forEach { cmt ->
-                if (cmt == it.id) {
+                if (cmt == it.id && it.description != "") {
                     comments.add(it)
                 }
             }

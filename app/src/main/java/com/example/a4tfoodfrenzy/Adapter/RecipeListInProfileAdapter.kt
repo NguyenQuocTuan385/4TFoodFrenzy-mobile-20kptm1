@@ -288,17 +288,6 @@ class RecipeListInProfileAdapter(private var context: Context,
 
         }
 
-//        val search_Recipe = holder.listItemView.findViewById<EditText>(R.id.searchRecipe)
-//        search_Recipe.setOnClickListener {
-//            // dùng fitler để tìm kiếm món ăn và cập nhập lại adapter
-//            val filter = recipeRenderArray.filter {
-//                it.key.recipeName.contains(search_Recipe.text.toString())
-//            }
-//            recipeRenderArray.clear()
-//            recipeRenderArray.putAll(filter)
-//            notifyDataSetChanged()
-//        }
-
     }
 }
 

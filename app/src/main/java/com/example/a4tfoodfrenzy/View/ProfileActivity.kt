@@ -54,7 +54,6 @@ class ProfileActivity : AppCompatActivity() {
         db = Firebase.firestore
 
         viewProfile()
-
         tabProfile()
         optionProfile()
         bottomNavigation()
@@ -159,51 +158,4 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-//    override fun onResume()
-//    {
-//        super.onResume()
-//        val user = auth.currentUser
-//        if(user==null)
-//        {
-//            val intent= Intent(this,LogoutActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        }
-//        else
-//        {
-//            progressDialog = ProgressDialog(this)
-//            progressDialog.setTitle("Đang tải dữ liệu...")
-//            progressDialog.show()
-//
-//            db.collection("users")
-//                .document(user.uid)
-//                .get()
-//                .addOnSuccessListener { document ->
-//                    val user = document.toObject(User::class.java)
-//                    val name = findViewById<TextView>(R.id.name_profile)
-//                    name.text = user?.fullname
-//
-//                    val avatar = findViewById<ImageView>(R.id.creatorImage)
-//                    val imageRef = user?.avatar?.let { storageRef.getReference(it) }
-//                    if (imageRef != null) {
-//                        imageRef.getBytes(Long.MAX_VALUE).addOnSuccessListener { bytes ->
-//                            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-//                            avatar.setImageBitmap(bitmap)
-//                        }.addOnFailureListener { exception ->
-//                            // Xử lý ngoại lệ nếu có lỗi xảy ra
-//                        }
-//                    }
-//
-//                    val email = findViewById<TextView>(R.id.email_profile)
-//                    email.text = user?.email
-//                    Log.d("TAG", "DocumentSnapshot data: ${document.data}")
-//
-//                }
-//                .addOnFailureListener { exception ->
-//                    Log.w("hihi", "Error getting documents: ", exception)
-//                }
-//
-//            progressDialog.dismiss()
-//        }
-//    }
 }
