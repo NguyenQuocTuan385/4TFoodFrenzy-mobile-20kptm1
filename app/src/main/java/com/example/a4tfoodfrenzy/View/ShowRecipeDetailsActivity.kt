@@ -26,22 +26,20 @@ import com.example.a4tfoodfrenzy.Adapter.FoodImageAdapter
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R
-import com.google.firebase.annotations.concurrent.Blocking
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.tasks.await
-import java.time.LocalDate
 import java.util.*
 
 
+/**
+ *
+ */
 class ShowRecipeDetailsActivity : AppCompatActivity() {
-    val db = Firebase.firestore
-    private var _commentID : Long = -1
+    val db : FirebaseFirestore = Firebase.firestore
+    private var _commentID: Long = -1
 
     @RequiresApi(Build.VERSION_CODES.Q)
     @SuppressLint("SetTextI18n")
@@ -70,28 +68,38 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         val categoryTextView: TextView = findViewById(R.id.foodCategoryTextView)
         val mainScrollView: ScrollView =
             findViewById(R.id.showRecipeDetailsActivityScrollViewContainer)
+        val saveRecipeButton: ImageButton = findViewById(R.id.saveRecipeButtonImageView)
 
         // other variables
         val storageRef = Firebase.storage
-        val currentFoodRecipe: FoodRecipe? =
-            intent.extras?.getParcelable("foodRecipe")!!
-        val imagePathList = arrayListOf(currentFoodRecipe!!.recipeMainImage)
+        val currentFoodRecipe: FoodRecipe =
+            intent.extras?.getParcelable("foodRecipe") ?: return
+        val imagePathList = arrayListOf(currentFoodRecipe.recipeMainImage)
         var recipeAuthor: User? = null
-        var ingredientString: CharSequence = ""
+        var ingredientString: CharSequence =
+            "" // string for assign to text (charsequence to use spannable)
         var stepString: CharSequence = ""
-        var dietString = ""
-        var cateString = ""
+        var dietString = "" // string for assign to text
+        var cateString = "" // string for assign to text
         val currentUserCommented = isNotExistComment(currentFoodRecipe)
-        var totalComment = 0
+        var totalComment = 0 // count total comment that not nu;;
+        var totalLike = 0 // count total comment that is like
+        var isSavedFood = false // for save button onclicklistener check
 
         // count total comment (non empty description comment in comment list)
         // filter to get comment
-        val filteredCommentList = DBManagement.recipeCommentList.filter { comment -> currentFoodRecipe.recipeCmts.contains(comment.id)  }
+        val filteredCommentList = DBManagement.recipeCommentList.filter { comment ->
+            currentFoodRecipe.recipeCmts.contains(comment.id)
+        }
 
-        for(comment in filteredCommentList){
+        for (comment in filteredCommentList) {
             // comment content is null or empty --> haven't write comment --> no count
-            if(comment.description != "")
+            if (comment.description != "")
                 totalComment++
+
+            // count positive like
+            if (comment.isLike)
+                totalLike++
         }
 
         // generate diet string list from DB
@@ -172,13 +180,25 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                 .into(authorAvatarImageView)
         }?.addOnFailureListener {}
 
-        // hide comments if there is no comment
+        // hide comments of users if there is no comment
         if (currentFoodRecipe.recipeCmts.size == 0)
             commentSection.visibility = View.GONE
 
-        // hide write comment button if not logged in yet
-        if (!isLoggedIn() || !currentUserCommented) {
+        // hide write comment button if current user have already
+        // commented on this recipe
+        if (!currentUserCommented) {
             writeCommentButton.visibility = View.GONE
+        }
+
+
+        // check if user have already saved this recipe to change button state
+        // user saved recipe
+        if (currentFoodRecipe.userSavedRecipes.contains(DBManagement.user_current?.id)) {
+            saveRecipeButton.setImageResource(R.drawable.saved_recipe_button)
+            isSavedFood = true
+        } else {
+            saveRecipeButton.setImageResource(R.drawable.unsave_recipe_button)
+            isSavedFood = false
         }
 
         // set data for view
@@ -193,6 +213,8 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         totalCommentTextView.text = "(${totalComment})"
         dietTextView.text = dietString
         categoryTextView.text = cateString
+        likePercent.text =
+            if (currentFoodRecipe.recipeCmts.isNotEmpty()) "${((totalLike.toDouble() / currentFoodRecipe.recipeCmts.size.toDouble()) * 100).toInt()}% người dùng sẽ nấu lại món này" else "Chưa có người dùng nào thả like cho món ăn này"
 
         // food image horizontal recycler view
         val adapter = FoodImageAdapter(imagePathList, this)
@@ -227,14 +249,23 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             startActivity(myIntent)
         }
 
+        // save button listener
+        saveRecipeButton.setOnClickListener {
+            // current state is saved --> change to unsaved
+            if (isSavedFood) {
+                saveRecipeButton.setImageResource(R.drawable.unsave_recipe_button)
+                isSavedFood = false
+            } else { // current state is un-saved --> change to saved
+                saveRecipeButton.setImageResource(R.drawable.saved_recipe_button)
+                isSavedFood = true
+            }
+
+        }
+
+        // write comment listener
         writeCommentButton.setOnClickListener {
-//            val myIntent = Intent(this, WriteCommentActivity::class.java)
-//            myIntent.putExtra("currentRecipeID", currentFoodRecipe.id)
-//            showText(isNotExistComment(currentFoodRecipe).toString(), this)
-//            startActivity(myIntent)
-
+            // call show popup function
             showLikeDislikePopup(currentFoodRecipe)
-
         }
 
         // back to previous navigation icon on toolbar
@@ -249,7 +280,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         toListComment.setOnClickListener {
             val myIntent = Intent(this, CommentListActivity::class.java)
-
+            myIntent.putExtra("foodComment", currentFoodRecipe)
             startActivity(myIntent)
         }
     }
@@ -271,7 +302,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         if (currentUserCmtList?.size != 0) {
             if (currentUserCmtList != null) {
-                if (currentFoodCmtList.any { it -> it in currentUserCmtList })
+                if (currentFoodCmtList.any { it in currentUserCmtList })
                     return false
             }
         }
@@ -395,7 +426,8 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
             // find user by ID then add new cmt to that user
             db.collection("users")
-                .whereEqualTo("id", DBManagement.user_current!!.id)
+                .whereEqualTo("id", (DBManagement.user_current
+                    ?: return@findSlotIdEmptyInCollection).id)
                 .get()
                 .addOnSuccessListener { document ->
                     if (!document.isEmpty) {

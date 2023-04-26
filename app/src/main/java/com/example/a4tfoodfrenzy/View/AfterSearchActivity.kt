@@ -1,5 +1,6 @@
 package com.example.a4tfoodfrenzy.View
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -40,13 +41,9 @@ class AfterSearchActivity : AppCompatActivity() {
         val typeSearch = intent.getStringExtra("typeSearch")
         val pageSearch = intent.getStringExtra("pageSearch")
         findViewById<ImageView>(R.id.imgBack).setOnClickListener {
-            if (pageSearch.equals("home")){
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            } else {
-                val intent = Intent(this, SearchScreen::class.java)
-                startActivity(intent)
-            }
+            val replyIntent = Intent()
+            setResult(Activity.RESULT_OK, replyIntent)
+            finish()
         }
         findViewById<ImageView>(R.id.imgFilter).setOnClickListener {
             val intent = Intent(this, SortRecipeActivity::class.java)
@@ -71,11 +68,6 @@ class AfterSearchActivity : AppCompatActivity() {
                 val recipeAfterSearch = findRecipeListWithKeyword(keySearch.toString())
                 setRecipeListAdapter(recipeAfterSearch)
             }
-            adapterRecipeAfterSearchRV!!.onItemClick = { foodRecipe, i ->
-                val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
-                intent.putExtra("foodRecipe",foodRecipe)
-                startActivity(intent)
-            }
         }
 
         searchET.setOnEditorActionListener { _, actionId, _ ->
@@ -83,6 +75,9 @@ class AfterSearchActivity : AppCompatActivity() {
                 if (!searchET.text.isNullOrEmpty()) {
                     val recipeAfterSearch = findRecipeListWithKeyword(searchET.text.toString())
                     setRecipeListAdapter(recipeAfterSearch)
+                }
+                else {
+                    setRecipeListAdapter(DBManagement.foodRecipeList)
                 }
             }
             true
@@ -135,6 +130,7 @@ class AfterSearchActivity : AppCompatActivity() {
         recipeAfterSearchRV!!.layoutManager = GridLayoutManager(this, 3)
         adapterRecipeAfterSearchRV!!.onItemClick = { foodRecipe, i ->
             val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
+            intent.putExtra("foodRecipe",foodRecipe)
             startActivity(intent)
         }
     }

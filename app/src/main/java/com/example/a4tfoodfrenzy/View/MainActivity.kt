@@ -1,6 +1,7 @@
 package com.example.a4tfoodfrenzy.View
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -30,11 +31,10 @@ import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
     var adapterCateRecipeRV: RecipeCateListAdapter? = null
-    var adapterRecipeTodayEatRV: RecipeListAdapter? = null
-    var adapterRecipeMostLikesRV: RecipeListAdapter? = null
     val db = Firebase.firestore
     val generateDBModel = GenerateDBModel(this)
     val dbManagement = DBManagement()
+    val REQUEST_CODE_SEARCH = 1111
     @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("pageSearch","home")
                 intent.putExtra("typeSearch","recipeCategory")
             }
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_SEARCH)
         }
 
         if (DBManagement.isInitialized == false) {
@@ -149,14 +149,14 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("keySearch","Hôm nay ăn gì")
             intent.putExtra("pageSearch","home")
             intent.putExtra("typeSearch","recipeTodayEat")
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_SEARCH)
         }
         btnViewMoreMostLikes.setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Các món được yêu thích nhất")
             intent.putExtra("pageSearch","home")
             intent.putExtra("typeSearch","recipeMostLikes")
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_SEARCH)
         }
 
         val menu = bottomNavigationView.menu
@@ -191,6 +191,15 @@ class MainActivity : AppCompatActivity() {
 //        generateDBModel.generateDatabaseRecipeDiets()
 //        generateDBModel.generateDatabaseRecipeFood()
 //        generateDBModel.generateDatabaseUsers()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode === REQUEST_CODE_SEARCH) {
+            if (resultCode === Activity.RESULT_OK) {
+
+            }
+        }
     }
     override fun onDestroy() {
         super.onDestroy()
