@@ -1,5 +1,6 @@
 package com.example.a4tfoodfrenzy.View
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -18,6 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class SearchScreen : AppCompatActivity() {
     var adapterTypeRecipeRV: RecipeCateListAdapter? = null
+    val REQUEST_CODE_SEARCH = 1111
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_screen)
@@ -32,8 +34,8 @@ class SearchScreen : AppCompatActivity() {
         val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
         cateRecipeRV!!.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
         cateRecipeRV!!.adapter = adapterTypeRecipeRV
+        val intent = Intent(this, AfterSearchActivity::class.java)
         adapterTypeRecipeRV!!.onItemClick = { recipeCate, i ->
-            val intent = Intent(this, AfterSearchActivity::class.java)
             if (recipeCate.recipeCateTitle.equals("Đồ uống")) {
                 intent.putExtra("keySearch","Thức uống")
                 intent.putExtra("pageSearch","search")
@@ -63,7 +65,7 @@ class SearchScreen : AppCompatActivity() {
                 intent.putExtra("pageSearch","search")
                 intent.putExtra("typeSearch","recipeCategory")
             }
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_SEARCH)
         }
 
         searchET.setOnEditorActionListener { _, actionId, _ ->
@@ -73,80 +75,70 @@ class SearchScreen : AppCompatActivity() {
                     intent.putExtra("keySearch",searchET.text.toString())
                     intent.putExtra("pageSearch","search")
                     intent.putExtra("typeSearch","recipe")
-                    startActivity(intent)
+                    startActivityForResult(intent, REQUEST_CODE_SEARCH)
                 }
             }
             true
         }
         findViewById<Button>(R.id.btnMore1HCook).setOnClickListener {
-            val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Trên 1 tiếng")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","cookTime")
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_SEARCH)
         }
         findViewById<Button>(R.id.btnLess1HCook).setOnClickListener {
-            val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Dưới 1 tiếng")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","cookTime")
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_SEARCH)
         }
         findViewById<Button>(R.id.btnLess45MCook).setOnClickListener {
-            val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Dưới 45 phút")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","cookTime")
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_SEARCH)
         }
         findViewById<Button>(R.id.btnLess30MCook).setOnClickListener {
-            val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Dưới 30 phút")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","cookTime")
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_SEARCH)
         }
         findViewById<Button>(R.id.btnLess15MCook).setOnClickListener {
-            val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Dưới 15 phút")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","cookTime")
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_SEARCH)
         }
         findViewById<Button>(R.id.btnFastFood).setOnClickListener {
-            val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Ăn vặt")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","recipeCategory")
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_SEARCH)
         }
         findViewById<Button>(R.id.btnDrink).setOnClickListener {
-            val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Thức uống")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","recipeCategory")
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_SEARCH)
         }
         findViewById<Button>(R.id.btnDessert).setOnClickListener {
-            val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Món tráng miệng")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","recipeCategory")
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_SEARCH)
         }
         findViewById<Button>(R.id.btnMainFood).setOnClickListener {
-            val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Món chính")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","recipeCategory")
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_SEARCH)
         }
         findViewById<Button>(R.id.btnAppetizer).setOnClickListener {
-            val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Khai vị")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","recipeCategory")
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_SEARCH)
         }
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
@@ -175,6 +167,14 @@ class SearchScreen : AppCompatActivity() {
                     true
                 }
                 else -> false
+            }
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode === REQUEST_CODE_SEARCH) {
+            if (resultCode === Activity.RESULT_OK) {
+
             }
         }
     }
