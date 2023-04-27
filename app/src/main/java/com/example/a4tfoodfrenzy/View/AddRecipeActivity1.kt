@@ -1,7 +1,9 @@
 package com.example.a4tfoodfrenzy.View
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +26,8 @@ class AddRecipeActivity1 : AppCompatActivity() {
     private lateinit var nameRecipeEdit:EditText
     private var imagePath:Uri?=null
     private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE=123
+    private lateinit var sharedPreferences: SharedPreferences
+
 
     companion object{
         val IMAGE_REQUEST_CODE=100
@@ -43,7 +47,9 @@ class AddRecipeActivity1 : AppCompatActivity() {
     }
 
     private fun setBackToolbar() {
-        toolbarAddRecipe.setNavigationOnClickListener { finish() }
+        toolbarAddRecipe.setNavigationOnClickListener {
+            deleteAllSharePreference()
+            finish() }
     }
 
     private fun setupContinueButton() {
@@ -65,6 +71,13 @@ class AddRecipeActivity1 : AppCompatActivity() {
             startActivity(intent)
         }
     }
+    private fun deleteAllSharePreference()
+    {
+        sharedPreferences = getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
+        val editor=sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+    }
     private fun sendData(intent: Intent)
     {
         val foodRecipe=FoodRecipe()
@@ -76,6 +89,7 @@ class AddRecipeActivity1 : AppCompatActivity() {
         toolbarAddRecipe.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_close -> {
+                    deleteAllSharePreference()
                     startActivity(Intent(this, AddNewRecipe::class.java))
                     true
                 }

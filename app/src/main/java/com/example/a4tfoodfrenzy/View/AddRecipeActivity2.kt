@@ -1,13 +1,15 @@
 package com.example.a4tfoodfrenzy.View
 
+import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.CheckboxAdapter
@@ -15,9 +17,10 @@ import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.RecipeCategory
-import com.example.a4tfoodfrenzy.Model.RecipeDiet
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.common.reflect.TypeToken
+import com.google.gson.Gson
 
 class AddRecipeActivity2 : AppCompatActivity() {
     private lateinit var timedropdown:AutoCompleteTextView
@@ -28,24 +31,30 @@ class AddRecipeActivity2 : AppCompatActivity() {
     private lateinit var dietList:ArrayList<Long>
     private lateinit var ration:EditText
     private lateinit var foodRecipe:FoodRecipe
+    private lateinit var adapter: CheckboxAdapter
+    private lateinit var sharedPreferences: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_recipe2)
-        dietList= arrayListOf()
-        ration=findViewById(R.id.amountServingEdit)
+        initView()
+        setDietCheckbox()
+        restoreData()
         recieveData()
-        initToolbar()
         setCateFoodDropdown()
         setupTimeDropdown()
-        setDietCheckbox()
         setBackToolbar()
         setupContinueButton()
         setCloseToolbar()
     }
 
-    private fun initToolbar()
+    private fun initView()
     {
         toolbarAddRecipe = findViewById(R.id.toolbarAddRecipe)
+        ration=findViewById(R.id.amountServingEdit)
+        timedropdown = findViewById(R.id.dropdown_time)
+        list_checkbox = findViewById(R.id.list_checkbox)
+        cateFoodDropdown=findViewById(R.id.dropdown_typeFood)
     }
     private fun setCateFoodDropdown() {
         var items : ArrayList<String> = ArrayList()
@@ -64,15 +73,17 @@ class AddRecipeActivity2 : AppCompatActivity() {
     }
     private fun setDietCheckbox()
     {
-        list_checkbox = findViewById(R.id.list_checkbox)
-        var adapter=CheckboxAdapter(this,DBManagement.recipeDietList)
+        adapter=CheckboxAdapter(this,DBManagement.recipeDietList)
         list_checkbox.adapter= adapter
         dietList=adapter.getDietList()
         list_checkbox.layoutManager=LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
     }
 
     private fun setBackToolbar() {
-        toolbarAddRecipe.setNavigationOnClickListener { finish() }
+        toolbarAddRecipe.setNavigationOnClickListener {
+           saveData()
+            finish()
+        }
     }
     private fun validateInput():Boolean
     {
@@ -90,12 +101,72 @@ class AddRecipeActivity2 : AppCompatActivity() {
         continueBtn.setOnClickListener {
             if(validateInput()) {
                 val intent = Intent(this, AddRecipeActivity3::class.java)
+                saveData()
                 sendData(intent)
                 startActivity(intent)
             }
 
 
         }
+    }
+    private fun saveData()
+    {
+        val editor = sharedPreferences.edit()
+        val rationText = ration.text.toString()
+        val timeText=timedropdown.text.toString()
+        val cate=cateFoodDropdown.text.toString()
+        if (rationText.isNotBlank()) {
+            editor.putInt("ration", rationText.toInt())
+            editor.apply()
+        }
+        if(timeText.isNotBlank())
+        {
+            editor.putString("time", timeText)
+            editor.apply()
+        }
+        if(cate.isNotBlank())
+        {
+            editor.putString("cate", cate)
+            editor.apply()
+        }
+        val gson = Gson()
+        val json=gson.toJson(dietList)
+        editor.putString("diet", json)
+        editor.apply()
+    }
+    private fun restoreData()
+    {
+        sharedPreferences = getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
+        if(sharedPreferences.contains("ration")) {
+            val username = sharedPreferences.getInt("ration", 0)
+            ration.setText(username.toString())
+        }
+        if(sharedPreferences.contains("time")) {
+            val time= sharedPreferences.getString("time", "")
+            timedropdown.setText(time.toString())
+        }
+        if(sharedPreferences.contains("cate"))
+        {
+            val cate=sharedPreferences.getString("cate","")
+            cateFoodDropdown.setText(cate.toString())
+        }
+        if(sharedPreferences.contains("diet")) {
+            val diet = sharedPreferences.getString("diet", null)
+            val list: ArrayList<Long>? = Gson().fromJson(diet, object : TypeToken<ArrayList<Long>>() {}.type)
+
+            if (list != null) {
+               dietList.clear()
+                dietList.addAll(list)
+                adapter.notifyDataSetChanged()
+            }
+
+        }
+    }
+    private fun deleteAllSharePreference()
+    {
+        val editor=sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
     }
 
     private fun sendData(intent: Intent)
@@ -106,6 +177,7 @@ class AddRecipeActivity2 : AppCompatActivity() {
         foodRecipe.ration=ration.text.toString().toInt()
         foodRecipe.recipeDiets=dietList
         foodRecipe.cookTime=timedropdown.text.toString()
+
 
         //gửi loại món ăn sang màn hình 3
         intent.putExtra("cate",cateFoodDropdown.text.toString())
@@ -123,6 +195,7 @@ class AddRecipeActivity2 : AppCompatActivity() {
         toolbarAddRecipe.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_close -> {
+                    deleteAllSharePreference()
                     startActivity(Intent(this, AddNewRecipe::class.java))
                     true
                 }
@@ -130,5 +203,7 @@ class AddRecipeActivity2 : AppCompatActivity() {
             }
         }
     }
+
+
 
 }

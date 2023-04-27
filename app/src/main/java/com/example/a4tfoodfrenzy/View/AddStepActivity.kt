@@ -54,9 +54,7 @@ class AddStepActivity : AppCompatActivity() {
             {
 
                 uri= Uri.parse(step.image)
-                val inputStream = contentResolver.openInputStream(uri!!)
-                val bitmap = BitmapFactory.decodeStream(inputStream)
-                imageRecipe.setImageBitmap(bitmap)
+                imageRecipe.setImageURI(uri)
             }
 
             descriptionStepEdit.setText(step.description)

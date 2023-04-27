@@ -1,6 +1,8 @@
 package com.example.a4tfoodfrenzy.View
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,12 +15,13 @@ import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.RecipeCookStep
-import com.example.a4tfoodfrenzy.Model.RecipeIngredient
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.common.reflect.TypeToken
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -28,19 +31,25 @@ class AddRecipeActivity4 : AppCompatActivity() {
     private lateinit var addStepBtn:Button
     private lateinit var stepsAdapter:AddStepAdapter
     private lateinit var listStep:ArrayList<RecipeCookStep>
+    private lateinit var listStepRecyclerview:RecyclerView
     private lateinit var cate:String
     private lateinit var foodRecipe: FoodRecipe
+    private lateinit var sharedPreferences:SharedPreferences
 
     private val ADD_REQUEST_CODE=1
     private val EDIT_REQUEST_CODE=2
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_recipe4)
+        initView()
         setupRecyclerView()
-        initToolbar()
+        restoreData()
+
         recieveData()
+
         setOnItemClick()
         setPopupMenu()
+
         setBackToolbar()
         setCloseToolbar()
         setupContinueButton()
@@ -48,20 +57,54 @@ class AddRecipeActivity4 : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        val listStepRecyclerview = findViewById<RecyclerView>(R.id.listStep)
         listStep= arrayListOf<RecipeCookStep>()
         stepsAdapter = AddStepAdapter(this, listStep)
         listStepRecyclerview.adapter = stepsAdapter
         listStepRecyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
-    private fun initToolbar()
+    private fun initView()
     {
         toolbarAddRecipe = findViewById<MaterialToolbar>(R.id.toolbarAddRecipe)
+        listStepRecyclerview = findViewById<RecyclerView>(R.id.listStep)
 
+
+    }
+    private fun saveData()
+    {
+        val editor=sharedPreferences.edit()
+        val gson=Gson()
+        val json=gson.toJson(listStep)
+        editor.putString("listStep", json)
+        editor.apply()
+    }
+    private fun restoreData()
+    {
+        sharedPreferences = getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
+        if(sharedPreferences.contains("listStep"))
+        {
+            val step= sharedPreferences.getString("listStep", null)
+            val list: ArrayList<RecipeCookStep>? = Gson().fromJson(step, object : TypeToken<ArrayList<RecipeCookStep>>() {}.type)
+            if(list!=null)
+            {
+                listStep.clear()
+                listStep.addAll(list)
+                stepsAdapter.notifyDataSetChanged()
+            }
+
+        }
+    }
+    private fun deleteAllSharePreference()
+    {
+        val editor=sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
     }
 
     private fun setBackToolbar() {
-        toolbarAddRecipe.setNavigationOnClickListener { finish() }
+        toolbarAddRecipe.setNavigationOnClickListener {
+            saveData()
+            finish()
+        }
 
     }
     private fun setCloseToolbar()
@@ -69,6 +112,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
         toolbarAddRecipe.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_close -> {
+                    deleteAllSharePreference()
                     val intent = Intent(this, AddNewRecipe::class.java)
                     startActivity(intent)
                     true
@@ -122,30 +166,160 @@ class AddRecipeActivity4 : AppCompatActivity() {
             sendDataToUpdate(step)
         }
     }
+    private fun recieveData()
+    {
+        //nhận đối tượng FoodRecipe từ màn hình 2
+        foodRecipe=intent.getParcelableExtra<FoodRecipe>("foodRecipe") as FoodRecipe
+
+        //nhận dữ liệu loại món ăn
+        cate= intent.getStringExtra("cate").toString()
+
+    }
+
+
+    private fun setupContinueButton() {
+        continueBtn= findViewById<Button>(R.id.continueBtn)
+        continueBtn.setOnClickListener {
+            deleteAllSharePreference()
+            HelperFunctionDB(this).showLoadingAlert()
+            uploadToFirebase()
+        }
+    }
+
+    private fun setupAddStepButton() {
+        addStepBtn = findViewById<Button>(R.id.addStepBtn)
+        addStepBtn.setOnClickListener {
+            val intent = Intent(this, AddStepActivity::class.java)
+            intent.putExtra("stepNumber",(listStep.size+1).toString())
+            intent.putExtra("mode","add")
+            startActivityForResult(intent,ADD_REQUEST_CODE)
+        }
+    }
+    private fun addFoodRecipeToCollection(foodRecipe: FoodRecipe, onSuccess: (String) -> Unit, onFailure:(HelperFunctionDB)-> Unit) {
+        val db = Firebase.firestore
+        db.collection("foodRecipes")
+            .add(foodRecipe)
+            .addOnSuccessListener { documentReference ->
+                onSuccess(documentReference.id) // trả về id của document vừa được tạo
+            }
+            .addOnFailureListener {
+                onFailure(HelperFunctionDB(this))
+            }
+    }
+    private fun addFoodRecipeToUser(foodRecipeId: Long, userId: Long, onSuccess: () -> Unit, onFailure: (HelperFunctionDB)-> Unit) {
+        val db = Firebase.firestore
+        db.collection("users")
+            .whereEqualTo("id",userId)
+            .limit(1)
+            .get()
+            .addOnSuccessListener {documents ->
+               if(documents.size()>0)
+               {
+                   val document=documents.first()
+                   db.collection("users")
+                       .document(document.id)
+                       .update("myFoodRecipes",FieldValue.arrayUnion(foodRecipeId))
+                       .addOnSuccessListener {
+                           onSuccess()
+                       }
+                       .addOnFailureListener {
+                           onFailure(HelperFunctionDB(this))
+                       }
+               }
+            }
+            .addOnFailureListener {
+                onFailure(HelperFunctionDB(this))
+            }
+    }
+    private fun addFoodRecipeToCategory(foodRecipeId: Long, onSuccess: () -> Unit, onFailure: (HelperFunctionDB) ->Unit) {
+        val db = Firebase.firestore
+        db.collection("RecipeCates")
+            .whereEqualTo("recipeCateName", cate)
+            .limit(1) // giới hạn kết quả trả về là 1 document
+            .get()
+            .addOnSuccessListener { documents ->
+                if (documents.size() > 0) {
+                    val document = documents.first() // lấy document đầu tiên
+                    db.collection("RecipeCates")
+                        .document(document.id)
+                        .update("foodRecipes", FieldValue.arrayUnion(foodRecipeId))
+                        .addOnSuccessListener {
+                            onSuccess() // gọi callback onSuccess nếu thêm thành công
+                        }
+                        .addOnFailureListener {
+                            onFailure(HelperFunctionDB(this))
+                        }
+                } else {
+                    onFailure(HelperFunctionDB(this))
+                }
+            }
+            .addOnFailureListener {
+                onFailure(HelperFunctionDB(this))
+            }
+    }
+    private fun addFoodRecipe(foodRecipe: FoodRecipe,userId: Long, onSuccess: (HelperFunctionDB) -> Unit, onFailure: (HelperFunctionDB) -> Unit) {
+        addFoodRecipeToCollection(foodRecipe,
+            { documentId ->
+               addFoodRecipeToCategory(foodRecipe.id,{
+                   addFoodRecipeToUser(foodRecipe.id,userId,{
+                       onSuccess(HelperFunctionDB(this))
+                   },
+                       {
+                           onFailure(HelperFunctionDB(this))
+                       }
+                   )
+
+               },
+                   {
+                       onFailure(HelperFunctionDB(this))
+                   }
+               )
+            },
+            {
+                onFailure(HelperFunctionDB(this))
+            }
+        )
+    }
+
+
     private fun uploadToFirebase()
     {
         val user=DBManagement.user_current
-
         val fullName= user?.fullname
-        val avatar= user?.avatar
         if(listStep.isNullOrEmpty())
         {
             HelperFunctionDB(this).showRemindAlert("Bạn vui lòng thêm bước")
             return
         }
-        //val mainImage= foodRecipe.recipeMainImage?.let { uploadImageToCloudStorage(it) }
+        val mainImage= foodRecipe.recipeMainImage?.let { uploadImageToCloudStorage(it) }
         uploadImageStepToCloudStorage()
 
         HelperFunctionDB(this).findSlotIdEmptyInCollection("RecipeFoods"){idSlot ->
             if (fullName != null) {
                 foodRecipe.id=idSlot
                 foodRecipe.authorName=fullName
+                foodRecipe.recipeMainImage=mainImage
                 foodRecipe.isPublic=true
                 foodRecipe.date=Date()
                 foodRecipe.recipeSteps=listStep
-                writeFoodRecipeToFirebase(foodRecipe)
-                writeIdFoodToUser(user.id,idSlot)
-               writeIdFoodToCategory(idSlot)
+               addFoodRecipe(foodRecipe,user.id, {
+                   HelperFunctionDB(this).showSuccessAlert(
+                       "Thành công",
+                       "Bạn đã thêm món ăn thành công"
+                   ) { confirm ->
+                       if (confirm) {
+                           val intent = Intent(this, MainActivity::class.java)
+                           startActivity(intent)
+                       }
+                   }
+               },{ HelperFunctionDB(this).showErrorAlert(
+                   "Thất bại",
+                   "Bạn đã thêm món ăn thất bại"
+               ) { confirm ->
+                   if (confirm) {
+                       val intent = Intent(this, MainActivity::class.java)
+                       startActivity(intent)
+                   }}})
             }
         }
 
@@ -167,97 +341,6 @@ class AddRecipeActivity4 : AppCompatActivity() {
         HelperFunctionDB(this).uploadImage(uri,imagePath,"foods")
         return "foods/${imagePath}.png"
     }
-    private fun recieveData()
-    {
-        //nhận đối tượng FoodRecipe từ màn hình 2
-        foodRecipe=intent.getParcelableExtra<FoodRecipe>("foodRecipe") as FoodRecipe
-
-        //nhận dữ liệu loại món ăn
-        cate= intent.getStringExtra("cate").toString()
-
-    }
-
-    private fun deleteStep(step:RecipeCookStep)
-    {
-        listStep.remove(step)
-        stepsAdapter.notifyDataSetChanged()
-    }
-
-    private fun setupContinueButton() {
-        continueBtn= findViewById<Button>(R.id.continueBtn)
-        continueBtn.setOnClickListener {
-            val helperFunctionDB=HelperFunctionDB(this)
-            helperFunctionDB.showLoadingAlert()
-            uploadToFirebase()
-            helperFunctionDB.stopLoadingAlert()
-        }
-    }
-    private fun writeIdFoodToUser(userid: Long, id:Long)
-    {
-        val db=Firebase.firestore
-        db.collection("users").get()
-            .addOnSuccessListener {result ->
-                for(document in result)
-                {
-                    if(document.data.get("id")==userid)
-                    {
-                        document.reference.update("myFoodRecipes",FieldValue.arrayUnion(id))
-                    }
-                }
-            }
-    }
-    private fun writeIdFoodToCategory( id:Long)
-    {
-        val db=Firebase.firestore
-        db.collection("RecipeCates").get()
-            .addOnSuccessListener {result ->
-                for(document in result)
-                {
-                    if(document.data.get("recipeCateName").toString().equals(cate))
-                    {
-                        document.reference.update("foodRecipes",FieldValue.arrayUnion(id))
-                        return@addOnSuccessListener
-                    }
-                }
-            }
-    }
-
-    private fun writeFoodRecipeToFirebase(foodRecipe: FoodRecipe) {
-        val db = Firebase.firestore
-        db.collection("RecipeFoods").document().set(foodRecipe)
-            .addOnSuccessListener {
-                HelperFunctionDB(this).showSuccessAlert("Thành công",
-                "Bạn đã thêm món ăn thành công"){ confirm ->
-                    if(confirm)
-                    {
-                        val intent=Intent(this,MainActivity::class.java)
-                        startActivity(intent)
-                    }
-                }
-            }
-            .addOnFailureListener { e ->
-                HelperFunctionDB(this).showErrorAlert("Thất bại",
-                    "Bạn đã thêm món ăn thất bại"){ confirm ->
-                    if(confirm)
-                    {
-                        val intent=Intent(this,MainActivity::class.java)
-                        startActivity(intent)
-                    }
-                }
-
-            }
-    }
-
-
-    private fun setupAddStepButton() {
-        addStepBtn = findViewById<Button>(R.id.addStepBtn)
-        addStepBtn.setOnClickListener {
-            val intent = Intent(this, AddStepActivity::class.java)
-            intent.putExtra("stepNumber",(listStep.size+1).toString())
-            intent.putExtra("mode","add")
-            startActivityForResult(intent,ADD_REQUEST_CODE)
-        }
-    }
     private fun handleAddStep(resultCode: Int,data: Intent?)
     {
         if(resultCode== RESULT_OK)
@@ -278,6 +361,11 @@ class AddRecipeActivity4 : AppCompatActivity() {
             stepsAdapter.notifyDataSetChanged()
         }
 
+    }
+    private fun deleteStep(step:RecipeCookStep)
+    {
+        listStep.remove(step)
+        stepsAdapter.notifyDataSetChanged()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
