@@ -575,7 +575,8 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         // login activity intent
         val loginIntent = Intent(this, LoginRegisterActivity::class.java)
 
+        loginIntent.putExtra("currentFoodIdToLogin", currentFoodRecipe.id)
         startActivity(loginIntent)
-//        this.finish()
+        this.finish()
     }
 }
