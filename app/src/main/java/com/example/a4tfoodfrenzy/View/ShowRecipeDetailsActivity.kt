@@ -40,6 +40,7 @@ import java.util.*
 class ShowRecipeDetailsActivity : AppCompatActivity() {
     val db: FirebaseFirestore = Firebase.firestore
     private var _commentID: Long = -1
+    private lateinit var currentFoodRecipe: FoodRecipe
 
     @RequiresApi(Build.VERSION_CODES.Q)
     @SuppressLint("SetTextI18n")
@@ -72,7 +73,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         // other variables
         val storageRef = Firebase.storage
-        val currentFoodRecipe: FoodRecipe =
+         currentFoodRecipe =
             intent.extras?.getParcelable("foodRecipe") ?: return
         val imagePathList = arrayListOf(currentFoodRecipe.recipeMainImage)
         var recipeAuthor: User? = null
@@ -81,10 +82,9 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         var stepString: CharSequence = ""
         var dietString = "" // string for assign to text
         var cateString = "" // string for assign to text
-        val currentUserCommented = isNotExistComment(currentFoodRecipe)
         var totalComment = 0 // count total comment that not nu;;
         var totalLike = 0 // count total comment that is like
-        var isSavedFood = false // for save button onclicklistener check
+        var isSavedFood : Boolean // for save button onclicklistener check
 
         // count total comment (non empty description comment in comment list)
         // filter to get comment
@@ -186,7 +186,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         // hide write comment button if current user have already
         // commented on this recipe
-        if (!currentUserCommented) {
+        if (isCommented()) {
             writeCommentButton.visibility = View.GONE
         }
 
@@ -257,7 +257,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                 saveRecipeButton.setImageResource(R.drawable.unsave_recipe_button)
 
                 // remove save info from db
-                unsaveRecipeFromDB(currentFoodRecipe)
+                unsaveRecipeFromDB()
 
                 isSavedFood = false
             } else { // current state is un-saved --> change to saved
@@ -265,7 +265,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                 saveRecipeButton.setImageResource(R.drawable.saved_recipe_button)
 
                 // save food into DB
-                saveRecipeIntoDB(currentFoodRecipe)
+                saveRecipeIntoDB()
 
                 isSavedFood = true
             }
@@ -274,8 +274,21 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         // write comment listener
         writeCommentButton.setOnClickListener {
-            // call show popup function
-            showLikeDislikePopup(currentFoodRecipe)
+            if (isNotExistComment()) {
+                // if haven't like / dislike
+                // call show popup function
+                showLikeDislikePopup()
+            } else if(!isCommented()) { // comment exist in DB but description == ""
+                _commentID = getCmtID()
+
+                val intent = Intent(this, WriteCommentActivity::class.java)
+
+                intent.putExtra("commentID", _commentID)
+                intent.putExtra("foodRecipe", currentFoodRecipe)
+
+                startActivity(intent)
+                finish()
+            }
         }
 
         // back to previous navigation icon on toolbar
@@ -303,7 +316,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
     // check if current user commented on the current recipe or not
     // if commented -> false else true
-    private fun isNotExistComment(currentFoodRecipe: FoodRecipe): Boolean {
+    private fun isNotExistComment(): Boolean {
 
         if (!isLoggedIn())
             return false
@@ -321,10 +334,33 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         return true
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun showLikeDislikePopup(currentFood: FoodRecipe) {
-        val currentFoodID = currentFood.id
+    private fun getCmtID(): Long {
+        for (cmt in DBManagement.user_current!!.recipeCmts) {
+            if (currentFoodRecipe.recipeCmts.contains(cmt)) {
+                return cmt
+            }
+        }
+        return -1
+    }
 
+    private fun isCommented(): Boolean {
+        val commentID: Long = getCmtID()
+        val compareValue: Long = -1
+
+        if (commentID == compareValue)
+            return false
+
+        for (cmt in DBManagement.recipeCommentList) {
+            if (cmt.id == commentID) {
+                if (cmt.description == "")
+                    return false
+            }
+        }
+        return true
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun showLikeDislikePopup() {
         // inflate the layout of the popup window
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView: View = inflater.inflate(R.layout.popup_like_dislike, null)
@@ -349,15 +385,15 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         // set listener for button inside popup window
         // dislike button clicked --> pop dislike popup
         dislikeButton.setOnClickListener {
-            addCommentToDB(false, currentFoodID)
-            showNextPopup(false, currentFood)
+            addCommentToDB(false)
+            showNextPopup(false)
             popupWindow.dismiss()
         }
 
         // like button clicked --> pop like popup
         likeButton.setOnClickListener {
-            addCommentToDB(true, currentFoodID)
-            showNextPopup(true, currentFood)
+            addCommentToDB(true)
+            showNextPopup(true)
             popupWindow.dismiss()
         }
 
@@ -367,7 +403,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun showNextPopup(layoutType: Boolean, currentFoodRecipe: FoodRecipe) {
+    private fun showNextPopup(layoutType: Boolean) {
         // inflate the layout of the popup window
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView =
@@ -392,6 +428,10 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         popupWindow.showAtLocation(LinearLayout(this), Gravity.CENTER, 0, 0)
 
         cancelButton.setOnClickListener {
+            // add new cmt id into current food
+            for(food in DBManagement.foodRecipeList)
+                if(food.id == currentFoodRecipe.id)
+                    currentFoodRecipe = food
             popupWindow.dismiss()
         }
 
@@ -408,8 +448,9 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         }
     }
 
+    // new null (empty description) comment into DB
     @RequiresApi(Build.VERSION_CODES.Q)
-    private fun addCommentToDB(isLike: Boolean, currentFoodID: Long) {
+    private fun addCommentToDB(isLike: Boolean) {
         HelperFunctionDB(this).findSlotIdEmptyInCollection("RecipeCmts") { newID ->
             val cmt = RecipeComment(newID, "", "", 0, isLike, null, "", Date())
             _commentID = newID
@@ -425,7 +466,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
             // get current food document ID
             db.collection("RecipeFoods")
-                .whereEqualTo("id", currentFoodID)
+                .whereEqualTo("id", currentFoodRecipe.id)
                 .get()
                 .addOnSuccessListener { document ->
                     if (!document.isEmpty) {
@@ -459,16 +500,15 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
     }
 
 
-
     // add or remove current user's ID into / from current selected recipe food userSavedRecipes field on firestore
-    private fun handleUserToRecipeFoodsCollection(currentFood: FoodRecipe, taskType: Boolean) {
+    private fun handleUserToRecipeFoodsCollection(taskType: Boolean) {
         // check if user had logged in
         if (!isLoggedIn())
             return
 
         // add user id into recipefood table
         db.collection("RecipeFoods")
-            .whereEqualTo("id", currentFood.id)
+            .whereEqualTo("id", currentFoodRecipe.id)
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
@@ -490,7 +530,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
     }
 
     // add or remove selected recipe food's ID into / from current users's foodRecipeSaved field on firestore
-    private fun handleRecipeToUserCollection(currentFoodRecipe: FoodRecipe, taskType: Boolean) {
+    private fun handleRecipeToUserCollection(taskType: Boolean) {
         // check if user had logged in
         if (!isLoggedIn())
             return
@@ -506,8 +546,9 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                     // add userID to RecipeFoods savedArray with document ID
                     db.collection("users")
                         .document(userDocID)
-                        .update("foodRecipeSaved",
-                            if(taskType)
+                        .update(
+                            "foodRecipeSaved",
+                            if (taskType)
                                 FieldValue.arrayUnion(currentFoodRecipe.id)
                             else
                                 FieldValue.arrayRemove(currentFoodRecipe.id)
@@ -517,14 +558,14 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
     }
 
     // remove (unsave) all info from firestore by calling functions
-    private fun unsaveRecipeFromDB(currentFoodRecipe: FoodRecipe) {
-        handleUserToRecipeFoodsCollection(currentFoodRecipe, false)
-        handleRecipeToUserCollection(currentFoodRecipe, false)
+    private fun unsaveRecipeFromDB() {
+        handleUserToRecipeFoodsCollection(false)
+        handleRecipeToUserCollection(false)
     }
 
     // save all needed info into firestore by calling functions
-    private fun saveRecipeIntoDB(currentFoodRecipe: FoodRecipe) {
-        handleUserToRecipeFoodsCollection(currentFoodRecipe, true)
-        handleRecipeToUserCollection(currentFoodRecipe, true)
+    private fun saveRecipeIntoDB() {
+        handleUserToRecipeFoodsCollection(true)
+        handleRecipeToUserCollection( true)
     }
 }

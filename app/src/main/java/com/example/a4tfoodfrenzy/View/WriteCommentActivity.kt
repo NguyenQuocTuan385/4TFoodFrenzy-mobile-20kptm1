@@ -90,9 +90,9 @@ class WriteCommentActivity : AppCompatActivity() {
 
         // cancel writing comment -> return to recipe details
         cancelButton.setOnClickListener {
+            toShowDetailIntent.putExtra("foodRecipe", currentRecipe)
             startActivity(toShowDetailIntent)
 
-            toShowDetailIntent.putExtra("foodRecipe", currentRecipe)
             finish()
         }
     }
@@ -119,16 +119,21 @@ class WriteCommentActivity : AppCompatActivity() {
                     // get doc ID
                     val documentID = document.elementAt(0).id
 
-                    var imageURL = if(imageUri == null) null else "comments/${numberID}"
+                    val imageURL = if(imageUri == null) null else "comments/${numberID}"
+
+                    currentRecipe?.recipeCmts?.add(numberID)
 
                     // write comment desciption to DB
                     db.collection("RecipeCmts").document(documentID)
                         .update("description", description, "date", Date(), "image", imageURL)
                         .addOnSuccessListener {
-                            uploadImage(numberID)
-
-                            currentRecipe?.recipeCmts?.add(numberID)
-                            toShowDetailIntent.putExtra("foodRecipe", currentRecipe)
+                            if(imageURL != null)
+                                uploadImage(numberID)
+                            else{
+                                toShowDetailIntent.putExtra("foodRecipe", currentRecipe)
+                                startActivity(toShowDetailIntent)
+                                finish()
+                            }
                         }
                 }
             }
@@ -142,6 +147,7 @@ class WriteCommentActivity : AppCompatActivity() {
         val uploadTask = imageRef.putFile(imageUri.toString().toUri())
 
         uploadTask.addOnSuccessListener {
+            toShowDetailIntent.putExtra("foodRecipe", currentRecipe)
             startActivity(toShowDetailIntent)
             finish()
         }
