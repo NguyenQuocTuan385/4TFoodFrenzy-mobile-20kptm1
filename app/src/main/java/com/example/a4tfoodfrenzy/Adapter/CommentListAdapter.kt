@@ -92,10 +92,12 @@ class CommentListAdapter(private var context:Context,
         val nameTV = holder.nameTV
         nameTV.text = recipeCommentUserList[cmtRender]?.fullname
         val foodTV = holder.foodTV
-        foodTV.text = if (recipeCommentFoodList[cmtRender]!!.recipeName!!.length > 10) {
-            recipeCommentFoodList[cmtRender]!!.recipeName!!.substring(0, 10) + "..."
-        } else {
-            recipeCommentFoodList[cmtRender]!!.recipeName!!
+        if (isCmtListAdminView == true) {
+            foodTV.text = if (recipeCommentFoodList[cmtRender]!!.recipeName!!.length > 10) {
+                recipeCommentFoodList[cmtRender]!!.recipeName!!.substring(0, 10) + "..."
+            } else {
+                recipeCommentFoodList[cmtRender]!!.recipeName!!
+            }
         }
         val cmtDescripTV = holder.cmtDescripTV
         cmtDescripTV.text = cmtRender.description
