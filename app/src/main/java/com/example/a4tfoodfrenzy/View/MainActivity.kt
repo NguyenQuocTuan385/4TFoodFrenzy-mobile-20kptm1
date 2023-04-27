@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     val generateDBModel = GenerateDBModel(this)
     val dbManagement = DBManagement()
     val REQUEST_CODE_SEARCH = 1111
+    val REQUEST_RECIPE_DETAILS = 2222
     @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -203,6 +204,10 @@ class MainActivity : AppCompatActivity() {
             if (resultCode === Activity.RESULT_OK) {
 
             }
+        } else if (requestCode === REQUEST_RECIPE_DETAILS) {
+            if (resultCode === Activity.RESULT_OK) {
+
+            }
         }
     }
     override fun onDestroy() {
@@ -270,7 +275,7 @@ class MainActivity : AppCompatActivity() {
         adapterRecipeList!!.onItemClick = { foodRecipe, i ->
             val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
             intent.putExtra("foodRecipe",foodRecipe)
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_RECIPE_DETAILS)
         }
     }
 
