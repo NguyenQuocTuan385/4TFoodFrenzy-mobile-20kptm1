@@ -2,6 +2,7 @@ package com.example.a4tfoodfrenzy.Adapter
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,16 +10,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.a4tfoodfrenzy.Model.DBManagement
-import com.example.a4tfoodfrenzy.Model.FoodRecipe
-import com.example.a4tfoodfrenzy.Model.RecipeComment
-import com.example.a4tfoodfrenzy.Model.User
+import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 
 class CommentListAdapter(private var context:Context,
-    private var recipeCommentUserList: HashMap<RecipeComment, User>, private var recipeCommentFoodList: HashMap<RecipeComment, FoodRecipe>,
+    private var recipeCommentUserList: ArrayList<RecipeCommentUserItem>,
     private var isCmtListUserView: Boolean,
     private var isCmtListAdminView: Boolean
 ) : RecyclerView.Adapter<CommentListAdapter.ViewHolder>() {
@@ -39,18 +37,9 @@ class CommentListAdapter(private var context:Context,
         val timeTV = listItemView.findViewById<TextView>(R.id.timeTV)
         init {
             listItemView.setOnClickListener {
-                recipeCommentUserList.get(recipeCommentUserList.keys.elementAt(adapterPosition))
-                    ?.let { it1 ->
-                        recipeCommentFoodList.get(recipeCommentUserList.keys.elementAt(adapterPosition))
-                            ?.let { it2 ->
-                                onItemClick?.invoke(
-                                    recipeCommentUserList.keys.elementAt(adapterPosition),
-                                    it1,
-                                    it2,
-                                    adapterPosition
-                                )
-                            }
-                    }
+                onItemClick?.invoke(recipeCommentUserList.get(adapterPosition).recipeComment, recipeCommentUserList.get(adapterPosition).user,
+                recipeCommentUserList.get(adapterPosition).foodRecipe,
+                adapterPosition)
             }
         }
     }
@@ -87,16 +76,18 @@ class CommentListAdapter(private var context:Context,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // Get the data model based on position
-        val cmtRender: RecipeComment = recipeCommentUserList.keys.elementAt(position)
+        val cmtRender: RecipeComment = recipeCommentUserList.get(position).recipeComment
+        val user: User = recipeCommentUserList.get(position).user
+        val foodRecipe: FoodRecipe = recipeCommentUserList.get(position).foodRecipe
         // Set item views based on your views and data model
         val nameTV = holder.nameTV
-        nameTV.text = recipeCommentUserList[cmtRender]?.fullname
+        nameTV.text = user.fullname
         val foodTV = holder.foodTV
         if (isCmtListAdminView == true) {
-            foodTV.text = if (recipeCommentFoodList[cmtRender]!!.recipeName!!.length > 10) {
-                recipeCommentFoodList[cmtRender]!!.recipeName!!.substring(0, 10) + "..."
+            foodTV.text = if (foodRecipe.recipeName.length > 10) {
+                foodRecipe.recipeName.substring(0, 10) + "..."
             } else {
-                recipeCommentFoodList[cmtRender]!!.recipeName!!
+                foodRecipe.recipeName
             }
         }
         val cmtDescripTV = holder.cmtDescripTV
@@ -106,7 +97,7 @@ class CommentListAdapter(private var context:Context,
         timeTV.text = formatter.format(cmtRender.date)
 
         val avatarIV = holder.avatarIV
-        val imageRef = recipeCommentUserList[cmtRender]?.avatar?.let { storageRef.getReference(it) }
+        val imageRef = user.avatar?.let { storageRef.getReference(it) }
         if (imageRef != null) {
             imageRef.downloadUrl.addOnSuccessListener { uri ->
                 Glide.with(context)

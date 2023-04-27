@@ -206,7 +206,7 @@ class GenerateDBModel(private var context: Context) {
         recipeCate = RecipeCategory(3,"Ăn vặt", arrayListOf(26,27,28,29,30))
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(4,"Ăn chay", arrayListOf(21,22,23,24,25))
+        recipeCate = RecipeCategory(4,"Điểm tâm", arrayListOf())
         recipeCatesList.add(recipeCate)
 
         recipeCate = RecipeCategory(5,"Món tráng miệng", arrayListOf(31,32,33,34,35))
@@ -227,12 +227,12 @@ class GenerateDBModel(private var context: Context) {
 
     fun generateDatabaseRecipeComment() {
         var recipeCmtsList:ArrayList<RecipeComment> = ArrayList()
-        helperFunctionDB.uploadImageToCloudStorage("bosotme","comments")
-        helperFunctionDB.uploadImageToCloudStorage("bokho","comments")
-        helperFunctionDB.uploadImageToCloudStorage("canhcaloc","comments")
-        helperFunctionDB.uploadImageToCloudStorage("comrangduabo","comments")
-        helperFunctionDB.uploadImageToCloudStorage("bo_nuong","comments")
-        helperFunctionDB.uploadImageToCloudStorage("bunbohue","comments")
+//        helperFunctionDB.uploadImageToCloudStorage("bosotme","comments")
+//        helperFunctionDB.uploadImageToCloudStorage("bokho","comments")
+//        helperFunctionDB.uploadImageToCloudStorage("canhcaloc","comments")
+//        helperFunctionDB.uploadImageToCloudStorage("comrangduabo","comments")
+//        helperFunctionDB.uploadImageToCloudStorage("bo_nuong","comments")
+//        helperFunctionDB.uploadImageToCloudStorage("bunbohue","comments")
 
         var recipeCmt = RecipeComment(1, true, "comments/bosotme.png", "Món này nấu ngon lắm, hy vọng bạn ra tiếp công thức mới <3", Date())
         recipeCmtsList.add(recipeCmt)

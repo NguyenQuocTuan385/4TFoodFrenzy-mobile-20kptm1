@@ -11,10 +11,6 @@ class RecipeComment(private var _id:Long, private var _isLike: Boolean,
                     private var _description: String,
                     private var _date: Date) : Parcelable
 {
-    private var _username: String = ""
-    private var _nameRecipe: String = ""
-    private var _avatarUser: Int = 0
-
     constructor():this(0,false,null,"",Date())
     constructor(
         _id: Long,
@@ -26,9 +22,6 @@ class RecipeComment(private var _id:Long, private var _isLike: Boolean,
         _description: String,
         _date: Date
     ) : this(_id,_isLike, _image, _description, _date) {
-    this._username = _username
-    this._nameRecipe = _nameRecipe
-    this._avatarUser = _avatarUser
     this._isLike = _isLike
     this._image = _image
     this._description = _description
@@ -40,24 +33,6 @@ class RecipeComment(private var _id:Long, private var _isLike: Boolean,
         set(value) {
             _id = value
         }
-
-    var username: String
-    get() = _username
-    set(value) {
-        _username = value
-    }
-
-    var nameRecipe: String
-    get() = _nameRecipe
-    set(value) {
-        _nameRecipe = value
-    }
-
-    var avatarUser: Int
-    get() = _avatarUser
-    set(value) {
-        _avatarUser = value
-    }
 
     var isLike: Boolean
     get() = _isLike
@@ -89,11 +64,7 @@ class RecipeComment(private var _id:Long, private var _isLike: Boolean,
         parcel.readString(),
         parcel.readString() ?: "",
         Date(parcel.readLong())
-    ) {
-        _username = parcel.readString() ?: ""
-        _nameRecipe = parcel.readString() ?: ""
-        _avatarUser = parcel.readInt()
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(_id)
@@ -101,9 +72,6 @@ class RecipeComment(private var _id:Long, private var _isLike: Boolean,
         parcel.writeString(_image)
         parcel.writeString(_description)
         parcel.writeLong(_date.time)
-        parcel.writeString(_username)
-        parcel.writeString(_nameRecipe)
-        parcel.writeInt(_avatarUser)
     }
 
     override fun describeContents(): Int {
