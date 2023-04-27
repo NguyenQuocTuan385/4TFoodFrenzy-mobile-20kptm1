@@ -1,6 +1,7 @@
 package com.example.a4tfoodfrenzy.Model
 
 import android.os.Build
+import android.os.Parcel
 import android.os.Parcelable
 import androidx.annotation.RequiresApi
 import java.util.Date
@@ -82,8 +83,7 @@ class RecipeComment(private var _id:Long, private var _isLike: Boolean,
         _date = value
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
-    constructor(parcel: android.os.Parcel) : this(
+    constructor(parcel: Parcel) : this(
         parcel.readLong(),
         parcel.readByte() != 0.toByte(),
         parcel.readString(),
@@ -92,19 +92,18 @@ class RecipeComment(private var _id:Long, private var _isLike: Boolean,
     ) {
         _username = parcel.readString() ?: ""
         _nameRecipe = parcel.readString() ?: ""
-        _avatarUser = parcel.readInt() ?: 0
+        _avatarUser = parcel.readInt()
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
-    override fun writeToParcel(parcel: android.os.Parcel, flags: Int) {
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(_id)
+        parcel.writeByte(if (_isLike) 1 else 0)
+        parcel.writeString(_image)
+        parcel.writeString(_description)
+        parcel.writeLong(_date.time)
         parcel.writeString(_username)
         parcel.writeString(_nameRecipe)
         parcel.writeInt(_avatarUser)
-        parcel.writeString(_image)
-        parcel.writeBoolean(_isLike)
-        parcel.writeString(_description)
-        parcel.writeLong(_date.time)
     }
 
     override fun describeContents(): Int {
@@ -112,8 +111,7 @@ class RecipeComment(private var _id:Long, private var _isLike: Boolean,
     }
 
     companion object CREATOR : Parcelable.Creator<RecipeComment> {
-        @RequiresApi(Build.VERSION_CODES.Q)
-        override fun createFromParcel(parcel: android.os.Parcel): RecipeComment {
+        override fun createFromParcel(parcel: Parcel): RecipeComment {
             return RecipeComment(parcel)
         }
 
@@ -121,7 +119,6 @@ class RecipeComment(private var _id:Long, private var _isLike: Boolean,
             return arrayOfNulls(size)
         }
     }
-
 }
 
 

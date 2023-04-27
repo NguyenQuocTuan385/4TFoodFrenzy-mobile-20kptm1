@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.a4tfoodfrenzy.Model.DBManagement
+import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.RecipeComment
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
@@ -17,7 +18,7 @@ import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 
 class CommentListAdapter(private var context:Context,
-    private var recipeCommentArray: HashMap<RecipeComment, User>,
+    private var recipeCommentUserList: HashMap<RecipeComment, User>, private var recipeCommentFoodList: HashMap<RecipeComment, FoodRecipe>,
     private var isCmtListUserView: Boolean,
     private var isCmtListAdminView: Boolean
 ) : RecyclerView.Adapter<CommentListAdapter.ViewHolder>() {
@@ -27,16 +28,8 @@ class CommentListAdapter(private var context:Context,
     }
     val storageRef = FirebaseStorage.getInstance()
 
-    var onItemClick: ((RecipeComment, Int) -> Unit)? = null
-    fun setCmtListUserView(isCmtListUserView: Boolean) {
-        this.isCmtListUserView = isCmtListUserView
-        notifyDataSetChanged()
-    }
+    var onItemClick: ((RecipeComment, User, FoodRecipe, Int) -> Unit)? = null
 
-    fun setCmtListAdminView(isCmtListAdminView: Boolean) {
-        this.isCmtListAdminView = isCmtListAdminView
-        notifyDataSetChanged()
-    }
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val avatarIV = listItemView.findViewById<ImageView>(R.id.avatarIV)
         val nameTV = listItemView.findViewById<TextView>(R.id.nameTV)
@@ -46,10 +39,18 @@ class CommentListAdapter(private var context:Context,
         val timeTV = listItemView.findViewById<TextView>(R.id.timeTV)
         init {
             listItemView.setOnClickListener {
-                onItemClick?.invoke(
-                    recipeCommentArray.keys.elementAt(adapterPosition),
-                    adapterPosition
-                )
+                recipeCommentUserList.get(recipeCommentUserList.keys.elementAt(adapterPosition))
+                    ?.let { it1 ->
+                        recipeCommentFoodList.get(recipeCommentUserList.keys.elementAt(adapterPosition))
+                            ?.let { it2 ->
+                                onItemClick?.invoke(
+                                    recipeCommentUserList.keys.elementAt(adapterPosition),
+                                    it1,
+                                    it2,
+                                    adapterPosition
+                                )
+                            }
+                    }
             }
         }
     }
@@ -81,17 +82,21 @@ class CommentListAdapter(private var context:Context,
     }
 
     override fun getItemCount(): Int {
-        return recipeCommentArray.size
+        return recipeCommentUserList.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // Get the data model based on position
-        val cmtRender: RecipeComment = recipeCommentArray.keys.elementAt(position)
+        val cmtRender: RecipeComment = recipeCommentUserList.keys.elementAt(position)
         // Set item views based on your views and data model
         val nameTV = holder.nameTV
-        nameTV.text = recipeCommentArray[cmtRender]?.fullname
+        nameTV.text = recipeCommentUserList[cmtRender]?.fullname
         val foodTV = holder.foodTV
-        foodTV.text = cmtRender.nameRecipe
+        foodTV.text = if (recipeCommentFoodList[cmtRender]!!.recipeName!!.length > 10) {
+            recipeCommentFoodList[cmtRender]!!.recipeName!!.substring(0, 10) + "..."
+        } else {
+            recipeCommentFoodList[cmtRender]!!.recipeName!!
+        }
         val cmtDescripTV = holder.cmtDescripTV
         cmtDescripTV.text = cmtRender.description
         val timeTV = holder.timeTV
@@ -99,7 +104,7 @@ class CommentListAdapter(private var context:Context,
         timeTV.text = formatter.format(cmtRender.date)
 
         val avatarIV = holder.avatarIV
-        val imageRef = recipeCommentArray[cmtRender]?.avatar?.let { storageRef.getReference(it) }
+        val imageRef = recipeCommentUserList[cmtRender]?.avatar?.let { storageRef.getReference(it) }
         if (imageRef != null) {
             imageRef.downloadUrl.addOnSuccessListener { uri ->
                 Glide.with(context)
