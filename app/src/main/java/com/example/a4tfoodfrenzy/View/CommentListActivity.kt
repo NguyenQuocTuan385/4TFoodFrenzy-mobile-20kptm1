@@ -8,10 +8,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.CommentListAdapter
-import com.example.a4tfoodfrenzy.Model.DBManagement
-import com.example.a4tfoodfrenzy.Model.FoodRecipe
-import com.example.a4tfoodfrenzy.Model.RecipeComment
-import com.example.a4tfoodfrenzy.Model.User
+import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R
 import java.util.*
 import kotlin.collections.ArrayList
@@ -22,7 +19,7 @@ class CommentListActivity : AppCompatActivity() {
     var cmtAdapter: CommentListAdapter? = null
     private lateinit var backBtn: Toolbar
     private lateinit var cmtRV: RecyclerView
-    private lateinit var cmtList: HashMap<RecipeComment, User>
+    private lateinit var recipeCmtList: ArrayList<RecipeCommentUserItem>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_comment_list)
@@ -32,20 +29,13 @@ class CommentListActivity : AppCompatActivity() {
     }
 
     private fun viewComment() {
-        cmtList = HashMap()
+        recipeCmtList = ArrayList()
         var comments = ArrayList<RecipeComment>()
         val currentFoodRecipe: FoodRecipe? =
             intent.extras?.getParcelable("foodComment")!!
 
-        // test
-//        var test = FoodRecipe()
-//        DBManagement.foodRecipeList.forEach {
-//            if (it.id.toInt() == 2) {
-//                test = it
-//            }
-//        }
 
-        // lấy ds comment của món ăn
+//        // lấy ds comment của món ăn
         DBManagement.recipeCommentList.forEach {
             currentFoodRecipe?.recipeCmts?.forEach { cmt ->
                 if (cmt == it.id && it.description != "") {
@@ -54,12 +44,12 @@ class CommentListActivity : AppCompatActivity() {
             }
         }
 
-        // lấy ds user của comment
+//        // lấy ds user của comment
         DBManagement.userList.forEach { user ->
             comments.forEach { cmt ->
                 user.recipeCmts.forEach { cmtId ->
                     if (cmtId == cmt.id) {
-                        cmtList[cmt] = user
+                        recipeCmtList.add(RecipeCommentUserItem(cmt,user,FoodRecipe()))
                     }
                 }
             }
@@ -67,7 +57,7 @@ class CommentListActivity : AppCompatActivity() {
 
 
 
-        cmtAdapter = CommentListAdapter(this,cmtList, HashMap(),true, false)
+        cmtAdapter = CommentListAdapter(this,recipeCmtList,true, false)
         cmtRV = findViewById(R.id.cmtRV)
         cmtRV.adapter = cmtAdapter
         cmtRV.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)

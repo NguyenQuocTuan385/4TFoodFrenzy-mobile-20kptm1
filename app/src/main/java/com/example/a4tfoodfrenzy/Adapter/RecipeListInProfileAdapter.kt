@@ -214,11 +214,96 @@ class RecipeListInProfileAdapter(private var context: Context,
                 popupMenu.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         0 -> {
+                            // cập nhật lại danh sách món ăn của user
                             val mapUpdate = mapOf(
                                 "myFoodRecipes" to FieldValue.arrayRemove(recipeRender.id)
                             )
                             db.collection("users").document(user_id.toString()).update(mapUpdate)
 
+                            // xóa trong danh sách foodRecipeSaved của user khác
+                            db.collection("users")
+                                .whereArrayContains("foodRecipeSaved", recipeRender.id)
+                                .get()
+                                .addOnSuccessListener { documents ->
+                                    for (document in documents) {
+                                        val mapUpdate = mapOf(
+                                            "foodRecipeSaved" to FieldValue.arrayRemove(recipeRender.id)
+                                        )
+                                        db.collection("users").document(document.id).update(mapUpdate)
+                                    }
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                                }
+
+                            // lấy danh sách comment của món ăn
+                            val recipeCmts = recipeRender.recipeCmts
+                            // xóa comment trong danh sách comment của user khác
+                            for (recipeCmt in recipeCmts) {
+                                db.collection("users")
+                                    .whereArrayContains("recipeCmts", recipeCmt)
+                                    .get()
+                                    .addOnSuccessListener { documents ->
+                                        for (document in documents) {
+                                            val mapUpdate = mapOf(
+                                                "recipeCmts" to FieldValue.arrayRemove(recipeCmt)
+                                            )
+                                            db.collection("users").document(document.id).update(mapUpdate)
+                                        }
+                                    }
+                                    .addOnFailureListener { exception ->
+                                        Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                                    }
+                            }
+
+                            // xóa comment trong bảng comment
+                            for(recipeCmt in recipeCmts){
+                                db.collection("RecipeCmts")
+                                    .whereEqualTo("id", recipeCmt)
+                                    .get()
+                                    .addOnSuccessListener { documents ->
+                                        for (document in documents) {
+                                            db.collection("RecipeCmts").document(document.id).delete()
+                                        }
+                                    }
+                                    .addOnFailureListener { exception ->
+                                        Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                                    }
+                            }
+
+                            // xóa trong danh sách foodRecipes của bảng RecipeCates
+                            db.collection("RecipeCates")
+                                .whereArrayContains("foodRecipes", recipeRender.id)
+                                .get()
+                                .addOnSuccessListener { documents ->
+                                    for (document in documents) {
+                                        val mapUpdate = mapOf(
+                                            "foodRecipes" to FieldValue.arrayRemove(recipeRender.id)
+                                        )
+                                        db.collection("RecipeCates").document(document.id).update(mapUpdate)
+                                    }
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                                }
+
+                            // xóa trong danh sách foodRecipes của bảng RecipeDiets
+                            db.collection("RecipeDiets")
+                                .whereArrayContains("foodRecipes", recipeRender.id)
+                                .get()
+                                .addOnSuccessListener { documents ->
+                                    for (document in documents) {
+                                        val mapUpdate = mapOf(
+                                            "foodRecipes" to FieldValue.arrayRemove(recipeRender.id)
+                                        )
+                                        db.collection("RecipeDiets").document(document.id).update(mapUpdate)
+                                    }
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                                }
+
+                            // xóa Món ăn
                             db.collection("RecipeFoods")
                                 .whereEqualTo("id", recipeRender.id)
                                 .get()
