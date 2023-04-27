@@ -73,7 +73,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         // other variables
         val storageRef = Firebase.storage
-         currentFoodRecipe =
+        currentFoodRecipe =
             intent.extras?.getParcelable("foodRecipe") ?: return
         val imagePathList = arrayListOf(currentFoodRecipe.recipeMainImage)
         var recipeAuthor: User? = null
@@ -84,7 +84,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         var cateString = "" // string for assign to text
         var totalComment = 0 // count total comment that not nu;;
         var totalLike = 0 // count total comment that is like
-        var isSavedFood : Boolean // for save button onclicklistener check
+        var isSavedFood: Boolean // for save button onclicklistener check
 
         // count total comment (non empty description comment in comment list)
         // filter to get comment
@@ -186,7 +186,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         // hide write comment button if current user have already
         // commented on this recipe
-        if (isCommented()) {
+        if (isLoggedIn() && isCommented()) {
             writeCommentButton.visibility = View.GONE
         }
 
@@ -251,6 +251,11 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         // save button listener
         saveRecipeButton.setOnClickListener {
+            if (!isLoggedIn()) {
+                launchLoginActivity()
+                return@setOnClickListener
+            }
+
             // current state is saved --> change to unsaved
             if (isSavedFood) {
                 // change image source to unsave
@@ -274,11 +279,16 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         // write comment listener
         writeCommentButton.setOnClickListener {
+            if (!isLoggedIn()) {
+                launchLoginActivity()
+                return@setOnClickListener
+            }
+
             if (isNotExistComment()) {
                 // if haven't like / dislike
                 // call show popup function
                 showLikeDislikePopup()
-            } else if(!isCommented()) { // comment exist in DB but description == ""
+            } else if (!isCommented()) { // comment exist in DB but description == ""
                 _commentID = getCmtID()
 
                 val intent = Intent(this, WriteCommentActivity::class.java)
@@ -429,8 +439,8 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         cancelButton.setOnClickListener {
             // add new cmt id into current food
-            for(food in DBManagement.foodRecipeList)
-                if(food.id == currentFoodRecipe.id)
+            for (food in DBManagement.foodRecipeList)
+                if (food.id == currentFoodRecipe.id)
                     currentFoodRecipe = food
             popupWindow.dismiss()
         }
@@ -502,10 +512,6 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
     // add or remove current user's ID into / from current selected recipe food userSavedRecipes field on firestore
     private fun handleUserToRecipeFoodsCollection(taskType: Boolean) {
-        // check if user had logged in
-        if (!isLoggedIn())
-            return
-
         // add user id into recipefood table
         db.collection("RecipeFoods")
             .whereEqualTo("id", currentFoodRecipe.id)
@@ -531,10 +537,6 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
     // add or remove selected recipe food's ID into / from current users's foodRecipeSaved field on firestore
     private fun handleRecipeToUserCollection(taskType: Boolean) {
-        // check if user had logged in
-        if (!isLoggedIn())
-            return
-
         // add RecipeFood ID to user table
         db.collection("users")
             .whereEqualTo("id", DBManagement.user_current?.id)
@@ -566,6 +568,14 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
     // save all needed info into firestore by calling functions
     private fun saveRecipeIntoDB() {
         handleUserToRecipeFoodsCollection(true)
-        handleRecipeToUserCollection( true)
+        handleRecipeToUserCollection(true)
+    }
+
+    private fun launchLoginActivity() {
+        // login activity intent
+        val loginIntent = Intent(this, LoginRegisterActivity::class.java)
+
+        startActivity(loginIntent)
+//        this.finish()
     }
 }
