@@ -94,7 +94,6 @@ class MainActivity : AppCompatActivity() {
                     else if (user.isAdmin == true) {
                         val intent= Intent(this, AdminDashboard::class.java)
                         startActivity(intent)
-                        finish()
                     }
                 }
             }

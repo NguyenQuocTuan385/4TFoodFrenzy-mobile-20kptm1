@@ -13,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.R
+import com.example.a4tfoodfrenzy.View.Fragment.AdminCommentManagement
 import com.example.a4tfoodfrenzy.View.Fragment.AdminProfileManagement
 import com.example.a4tfoodfrenzy.View.Fragment.AdminRecipeManagement
 import com.google.android.material.navigation.NavigationView
@@ -69,12 +70,12 @@ class AdminDashboard : AppCompatActivity() {
                         }
                     }
                     R.id.navComment -> {
-//                        if(currentFragment!=FRAGMENT_COMMENT) {
-//                            toolBar.title="Quản lý bình luận"
-//                            navigationView.setCheckedItem(R.id.navUser)
-//                            replaceFragment(AdminCommentManagement())
-//                            currentFragment=FRAGMENT_COMMENT
-//                        }
+                        if(currentFragment!=FRAGMENT_COMMENT) {
+                            toolBar.title="Quản lý bình luận"
+                            navigationView.setCheckedItem(R.id.navUser)
+                            replaceFragment(AdminCommentManagement())
+                            currentFragment=FRAGMENT_COMMENT
+                        }
 
                     }
                     R.id.navRecipe ->{

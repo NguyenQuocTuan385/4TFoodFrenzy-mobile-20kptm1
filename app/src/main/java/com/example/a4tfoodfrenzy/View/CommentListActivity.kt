@@ -67,7 +67,7 @@ class CommentListActivity : AppCompatActivity() {
 
 
 
-        cmtAdapter = CommentListAdapter(this,cmtList, true, false)
+        cmtAdapter = CommentListAdapter(this,cmtList, HashMap(),true, false)
         cmtRV = findViewById(R.id.cmtRV)
         cmtRV.adapter = cmtAdapter
         cmtRV.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)

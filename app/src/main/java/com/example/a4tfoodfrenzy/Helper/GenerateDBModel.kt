@@ -834,7 +834,7 @@ class GenerateDBModel(private var context: Context) {
         var mon_an_10= FoodRecipe(10,"Canh Bò Nấu Dưa Cải Chua","foods/foodrecipe10_4.png",4,"Dưới 1 tiếng",
             Date(),true,
             arrayListOf(1,4,6),listStep,listIngredient,
-            arrayListOf(),
+            arrayListOf(14,15),
             arrayListOf(),"Đặng Ngọc Tiến",
             R.drawable.avt,10)
         result.add(mon_an_10)
