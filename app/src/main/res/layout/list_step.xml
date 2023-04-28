@@ -21,7 +21,7 @@
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/monan"
+        app:srcCompat="@drawable/upload"
         android:background="@drawable/button_outline"
         android:clipToOutline="true"
         android:layout_marginLeft="20dp"

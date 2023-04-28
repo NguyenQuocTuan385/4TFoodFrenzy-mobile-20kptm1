@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,12 +17,15 @@ import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.RecipeCookStep
 import com.example.a4tfoodfrenzy.R
+import com.facebook.internal.Mutable
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.common.reflect.TypeToken
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
+import kotlinx.coroutines.tasks.await
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -35,17 +39,19 @@ class AddRecipeActivity4 : AppCompatActivity() {
     private lateinit var cate:String
     private lateinit var foodRecipe: FoodRecipe
     private lateinit var sharedPreferences:SharedPreferences
+    private lateinit var helperFunctionDB: HelperFunctionDB
 
     private val ADD_REQUEST_CODE=1
     private val EDIT_REQUEST_CODE=2
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_recipe4)
+        sharedPreferences = getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
         initView()
         setupRecyclerView()
-        restoreData()
-
         recieveData()
+
+        restoreData()
 
         setOnItemClick()
         setPopupMenu()
@@ -79,7 +85,6 @@ class AddRecipeActivity4 : AppCompatActivity() {
     }
     private fun restoreData()
     {
-        sharedPreferences = getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
         if(sharedPreferences.contains("listStep"))
         {
             val step= sharedPreferences.getString("listStep", null)
@@ -173,6 +178,12 @@ class AddRecipeActivity4 : AppCompatActivity() {
 
         //nhận dữ liệu loại món ăn
         cate= intent.getStringExtra("cate").toString()
+        if(!foodRecipe.recipeSteps.isEmpty())
+        {
+            listStep.clear()
+            listStep.addAll(foodRecipe.recipeSteps)
+            stepsAdapter.notifyDataSetChanged()
+        }
 
     }
 
@@ -181,7 +192,8 @@ class AddRecipeActivity4 : AppCompatActivity() {
         continueBtn= findViewById<Button>(R.id.continueBtn)
         continueBtn.setOnClickListener {
             deleteAllSharePreference()
-            HelperFunctionDB(this).showLoadingAlert()
+            helperFunctionDB= HelperFunctionDB(this)
+            helperFunctionDB.showLoadingAlert()
             uploadToFirebase()
         }
     }
@@ -195,17 +207,73 @@ class AddRecipeActivity4 : AppCompatActivity() {
             startActivityForResult(intent,ADD_REQUEST_CODE)
         }
     }
-    private fun addFoodRecipeToCollection(foodRecipe: FoodRecipe, onSuccess: (String) -> Unit, onFailure:(HelperFunctionDB)-> Unit) {
-        val db = Firebase.firestore
-        db.collection("foodRecipes")
-            .add(foodRecipe)
-            .addOnSuccessListener { documentReference ->
-                onSuccess(documentReference.id) // trả về id của document vừa được tạo
+    private fun checkUpdateFoodRecipe(onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) {
+        if (foodRecipe.id != 0L) {
+            val db = Firebase.firestore
+            val collection = db.collection("RecipeFoods")
+            val query = collection.whereEqualTo("id", foodRecipe.id)
+            query.get().addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val documentSnapshot = querySnapshot.documents[0]
+                    val documentReference = documentSnapshot.reference
+                    val documentId = documentReference.id
+                    onSuccess(documentId)
+                } else {
+                    onSuccess("")
+                }
+            }.addOnFailureListener { exception ->
+                onFailure(exception)
             }
-            .addOnFailureListener {
-                onFailure(HelperFunctionDB(this))
-            }
+        } else {
+            onSuccess("")
+        }
     }
+
+    private fun addFoodRecipeToCollection(foodRecipe: FoodRecipe, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) {
+        checkUpdateFoodRecipe(
+            onSuccess = { documentId ->
+                val db = Firebase.firestore
+                if (documentId.isNotEmpty()) {
+                    val docRef = db.collection("RecipeFoods").document(documentId)
+                    docRef.get().addOnSuccessListener { document ->
+                        if (document.exists()) {
+                            docRef.set(foodRecipe, SetOptions.merge())
+                                .addOnSuccessListener {
+                                    onSuccess("Thành công")
+                                }
+                                .addOnFailureListener { exception ->
+                                    onFailure(exception)
+                                }
+                        } else {
+                            docRef.set(foodRecipe)
+                                .addOnSuccessListener {
+                                    onSuccess("Thành công")
+                                }
+                                .addOnFailureListener { exception ->
+                                    onFailure(exception)
+                                }
+                        }
+                    }.addOnFailureListener { exception ->
+                        onFailure(exception)
+                    }
+                } else {
+                    db.collection("RecipeFoods")
+                        .add(foodRecipe)
+                        .addOnSuccessListener { documentReference ->
+                            onSuccess("Thành công")
+                        }
+                        .addOnFailureListener { exception ->
+                            onFailure(exception)
+                        }
+                }
+            },
+            onFailure = { exception ->
+                onFailure(exception)
+            }
+        )
+    }
+
+
     private fun addFoodRecipeToUser(foodRecipeId: Long, userId: Long, onSuccess: () -> Unit, onFailure: (HelperFunctionDB)-> Unit) {
         val db = Firebase.firestore
         db.collection("users")
@@ -231,52 +299,99 @@ class AddRecipeActivity4 : AppCompatActivity() {
                 onFailure(HelperFunctionDB(this))
             }
     }
+    private fun addFoodRecipeToDiet(
+        foodRecipeId: Long,
+        onSuccess: () -> Unit,
+        onFailure: (Exception?) -> Unit // Thêm tham số Exception để báo lỗi
+    ) {
+        val db = Firebase.firestore
+        db.collection("RecipeDiets")
+            .whereIn("id", foodRecipe.recipeDiets)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    document.reference.update("foodRecipes", FieldValue.arrayUnion(foodRecipeId))
+                        .addOnSuccessListener {
+                            onSuccess()
+                        }
+                        .addOnFailureListener { exception ->
+                            onFailure(exception) // Truyền mã lỗi đến phương thức onFailure
+                        }
+                }
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception) // Truyền mã lỗi đến phương thức onFailure
+            }
+        db.collection("RecipeDiets")
+            .whereNotIn("id", foodRecipe.recipeDiets)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val foodRecipes = document.get("foodRecipes") as? MutableList<Long>
+                    if (foodRecipes != null) {
+                        if(foodRecipes.remove(foodRecipeId)) {
+                            document.reference.update("foodRecipes", foodRecipes)
+                        }
+                    }
+                }
+                onSuccess()
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception) // Truyền mã lỗi đến phương thức onFailure
+            }
+    }
+
     private fun addFoodRecipeToCategory(foodRecipeId: Long, onSuccess: () -> Unit, onFailure: (HelperFunctionDB) ->Unit) {
         val db = Firebase.firestore
         db.collection("RecipeCates")
-            .whereEqualTo("recipeCateName", cate)
-            .limit(1) // giới hạn kết quả trả về là 1 document
             .get()
             .addOnSuccessListener { documents ->
-                if (documents.size() > 0) {
-                    val document = documents.first() // lấy document đầu tiên
-                    db.collection("RecipeCates")
-                        .document(document.id)
-                        .update("foodRecipes", FieldValue.arrayUnion(foodRecipeId))
-                        .addOnSuccessListener {
-                            onSuccess() // gọi callback onSuccess nếu thêm thành công
+                for(document in documents)
+                {
+                    val foodRecipes = document.get("foodRecipes") as? MutableList<Long>
+                    if (foodRecipes != null) {
+                        if(!document.get("recipeCateName")!!.equals(cate))
+                        {
+                            if(foodRecipes.remove(foodRecipeId)) {
+                                document.reference.update("foodRecipes", foodRecipes)
+                            }
                         }
-                        .addOnFailureListener {
-                            onFailure(HelperFunctionDB(this))
+                        else
+                        {
+                            document.reference.update("foodRecipes",FieldValue.arrayUnion(foodRecipeId))
                         }
-                } else {
-                    onFailure(HelperFunctionDB(this))
+                    }
+
                 }
+                onSuccess()
+
             }
             .addOnFailureListener {
                 onFailure(HelperFunctionDB(this))
             }
     }
-    private fun addFoodRecipe(foodRecipe: FoodRecipe,userId: Long, onSuccess: (HelperFunctionDB) -> Unit, onFailure: (HelperFunctionDB) -> Unit) {
+
+    private fun addFoodRecipe(foodRecipe: FoodRecipe,userId: Long, onSuccess: (HelperFunctionDB) -> Unit, onFailure: () -> Unit) {
         addFoodRecipeToCollection(foodRecipe,
             { documentId ->
                addFoodRecipeToCategory(foodRecipe.id,{
-                   addFoodRecipeToUser(foodRecipe.id,userId,{
-                       onSuccess(HelperFunctionDB(this))
-                   },
-                       {
-                           onFailure(HelperFunctionDB(this))
-                       }
-                   )
-
-               },
-                   {
-                       onFailure(HelperFunctionDB(this))
-                   }
-               )
+                   addFoodRecipeToDiet(foodRecipe.id,{
+                       addFoodRecipeToUser(foodRecipe.id,userId,{
+                           onSuccess(HelperFunctionDB(this))
+                       },
+                           {
+                               onFailure()
+                           }
+                       )
+                   },{
+                       onFailure()
+                   })
+               },{
+                   onFailure()
+               })
             },
             {
-                onFailure(HelperFunctionDB(this))
+                onFailure()
             }
         )
     }
@@ -291,35 +406,72 @@ class AddRecipeActivity4 : AppCompatActivity() {
             HelperFunctionDB(this).showRemindAlert("Bạn vui lòng thêm bước")
             return
         }
-        val mainImage= foodRecipe.recipeMainImage?.let { uploadImageToCloudStorage(it) }
+        if(!foodRecipe.recipeMainImage!!.startsWith("foods/")) {
+           foodRecipe.recipeMainImage = foodRecipe.recipeMainImage?.let { uploadImageToCloudStorage(it) }
+        }
         uploadImageStepToCloudStorage()
+        if(foodRecipe.id==0L) {
 
-        HelperFunctionDB(this).findSlotIdEmptyInCollection("RecipeFoods"){idSlot ->
-            if (fullName != null) {
-                foodRecipe.id=idSlot
-                foodRecipe.authorName=fullName
-                foodRecipe.recipeMainImage=mainImage
-                foodRecipe.isPublic=true
-                foodRecipe.date=Date()
+            HelperFunctionDB(this).findSlotIdEmptyInCollection("RecipeFoods") { idSlot ->
+                if (fullName != null) {
+                    foodRecipe.id = idSlot
+                    foodRecipe.authorName = fullName
+                    foodRecipe.isPublic = true
+                    foodRecipe.date = Date()
+                    foodRecipe.recipeSteps = listStep
+                    addFoodRecipe(foodRecipe, user.id, {
+                        HelperFunctionDB(this).showSuccessAlert(
+                            "Thành công",
+                            "Bạn đã thêm món ăn thành công"
+                        ) { confirm ->
+                            if (confirm) {
+                                val intent = Intent(this, ProfileActivity::class.java)
+                                intent.putExtra("newRecipe","newRecipe")
+                                startActivity(intent)
+                            }
+                        }
+                    }, {
+                        HelperFunctionDB(this).showErrorAlert(
+                            "Thất bại",
+                            "Bạn đã thêm món ăn thất bại"
+                        ) { confirm ->
+                            if (confirm) {
+                                val intent = Intent(this, ProfileActivity::class.java)
+                                startActivity(intent)
+                            }
+                        }
+                    })
+                }
+            }
+        }
+        else
+        {
+            if (user != null) {
                 foodRecipe.recipeSteps=listStep
-               addFoodRecipe(foodRecipe,user.id, {
-                   HelperFunctionDB(this).showSuccessAlert(
-                       "Thành công",
-                       "Bạn đã thêm món ăn thành công"
-                   ) { confirm ->
-                       if (confirm) {
-                           val intent = Intent(this, MainActivity::class.java)
-                           startActivity(intent)
-                       }
-                   }
-               },{ HelperFunctionDB(this).showErrorAlert(
-                   "Thất bại",
-                   "Bạn đã thêm món ăn thất bại"
-               ) { confirm ->
-                   if (confirm) {
-                       val intent = Intent(this, MainActivity::class.java)
-                       startActivity(intent)
-                   }}})
+                addFoodRecipe(foodRecipe, user.id, {
+                    HelperFunctionDB(this).showSuccessAlert(
+                        "Thành công",
+                        "Bạn đã cập nhật món ăn thành công"
+                    ) { confirm ->
+                        if (confirm) {
+                            val intent = Intent(this, ProfileActivity::class.java)
+                            intent.putExtra("newRecipe","newRecipe")
+                            startActivity(intent)
+                            finish()
+                        }
+                    }
+                }, {
+                    HelperFunctionDB(this).showErrorAlert(
+                        "Thất bại",
+                        "Bạn đã thêm món ăn thất bại"
+                    ) { confirm ->
+                        if (confirm) {
+                            val intent = Intent(this, ProfileActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                    }
+                })
             }
         }
 
@@ -328,7 +480,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
     {
         //upload lên db
         for(i in 0 until listStep.size) {
-            if(listStep[i].image.isNullOrEmpty())
+            if(listStep[i].image.isNullOrEmpty()|| listStep[i].image!!.startsWith("foods/") )
                 continue
             else
                 listStep[i].image= listStep[i].image?.let { uploadImageToCloudStorage(it) }
@@ -375,6 +527,11 @@ class AddRecipeActivity4 : AppCompatActivity() {
             ADD_REQUEST_CODE ->handleAddStep(resultCode,data)
             EDIT_REQUEST_CODE ->handleUpdateStep(resultCode,data)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        helperFunctionDB.stopLoadingAlert()
     }
 
 }

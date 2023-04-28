@@ -203,6 +203,13 @@ class AddRecipeActivity3 : AppCompatActivity() {
     {
         foodRecipe=intent.getParcelableExtra<FoodRecipe>("foodRecipe") as FoodRecipe
         cate= intent.getStringExtra("cate").toString()
+
+        if(!foodRecipe.recipeIngres.isEmpty())
+        {
+            listIngredient.clear()
+            listIngredient.addAll(foodRecipe.recipeIngres)
+            listIngredientAdapter.notifyDataSetChanged()
+        }
     }
 
 

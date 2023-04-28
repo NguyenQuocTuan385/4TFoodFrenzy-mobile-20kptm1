@@ -10,6 +10,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.a4tfoodfrenzy.R
 import com.example.a4tfoodfrenzy.View.LoginActivity
@@ -106,12 +107,13 @@ class HelperFunctionDB(private var context: Context) {
         val sweetAlertDialog = SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
         sweetAlertDialog.setTitleText(title)
         sweetAlertDialog.setContentText(message)
+        sweetAlertDialog.setCancelable(false)
+        sweetAlertDialog.show()
         sweetAlertDialog.setConfirmButton("OK") {
             it.dismissWithAnimation()
             callback(true)
         }
-        sweetAlertDialog.setCancelable(false)
-        sweetAlertDialog.show()
+
     }
 
     fun showErrorAlert(
@@ -139,26 +141,20 @@ class HelperFunctionDB(private var context: Context) {
     }
     fun stopLoadingAlert()
     {
-        pDialog.cancel()
+        pDialog.dismiss()
     }
 
     fun uploadImage(uri:Uri,pathName:String,pathStorage: String)
     {
-        val inputStream = context.contentResolver.openInputStream(uri)
-        val bitmap = BitmapFactory.decodeStream(inputStream)
-
-        val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-        val data = outputStream.toByteArray()
 
         val storageRef = storage.reference.child(pathStorage).child("$pathName.png")
-        storageRef.putBytes(data)
-            .addOnSuccessListener { taskSnapshot ->
-                // Tải lên thành công
-            }
-            .addOnFailureListener { exception ->
-                // Xử lý lỗi
-            }
+        val uploadTask = storageRef.putFile(uri)
+        uploadTask.addOnSuccessListener { taskSnapshot ->
+            // Tải lên thành công
+        }
+        .addOnFailureListener { exception ->
+            // Xử lý lỗi
+        }
 
     }
 }

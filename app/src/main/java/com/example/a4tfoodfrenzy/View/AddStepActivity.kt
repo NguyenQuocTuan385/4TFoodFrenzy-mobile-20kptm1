@@ -13,10 +13,12 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import com.bumptech.glide.Glide
 import com.example.a4tfoodfrenzy.Model.RecipeCookStep
 import com.example.a4tfoodfrenzy.Model.RecipeIngredient
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.firebase.storage.FirebaseStorage
 import java.io.InputStream
 
 class AddStepActivity : AppCompatActivity() {
@@ -52,9 +54,23 @@ class AddStepActivity : AppCompatActivity() {
             }
              else
             {
+                 // load từ database
+                if (step.image!!.startsWith("foods/")) {
+                    val storage = FirebaseStorage.getInstance()
+                    val storageRef = storage.reference
+                    val pathReference = storageRef.child(step.image.toString())
+                    pathReference.downloadUrl.addOnSuccessListener { uri ->
+                        Glide.with(this)
+                            .load(uri.toString())
+                            .into(imageRecipe)
+                    }
+                }
+                //load từ điện thoại
+                else {
 
-                uri= Uri.parse(step.image)
-                imageRecipe.setImageURI(uri)
+                    uri = Uri.parse(step.image)
+                    imageRecipe.setImageURI(uri)
+                }
             }
 
             descriptionStepEdit.setText(step.description)

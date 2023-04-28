@@ -3,6 +3,7 @@ package com.example.a4tfoodfrenzy.Adapter
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,11 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.a4tfoodfrenzy.Model.RecipeCookStep
 import com.example.a4tfoodfrenzy.Model.RecipeIngredient
 import com.example.a4tfoodfrenzy.R
+import com.google.firebase.storage.FirebaseStorage
 
 class AddStepAdapter(private val context: Context, private val list:ArrayList<RecipeCookStep>)
     : RecyclerView.Adapter<AddStepAdapter.ViewHolder>() {
@@ -52,8 +55,20 @@ class AddStepAdapter(private val context: Context, private val list:ArrayList<Re
         if(item.image.isNullOrEmpty()) {
             holder.image.setImageResource(R.drawable.upload)
         } else {
-            val uri = Uri.parse(item.image)
-            holder.image.setImageURI(uri)
+            if (item.image!!.startsWith("foods/")) {
+                val storage = FirebaseStorage.getInstance()
+                val storageRef = storage.reference
+                val pathReference = storageRef.child(item.image.toString())
+                pathReference.downloadUrl.addOnSuccessListener { uri ->
+                    Glide.with(context)
+                        .load(uri.toString())
+                        .into(holder.image)
+                }
+            } else {
+                val uri=Uri.parse(item.image)
+                holder.image.setImageURI(uri)
+            }
+
         }
         holder.des.text = item.description
 

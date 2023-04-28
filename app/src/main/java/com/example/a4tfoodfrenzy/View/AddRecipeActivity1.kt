@@ -9,15 +9,18 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.RecipeCategory
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.firebase.storage.FirebaseStorage
 
 class AddRecipeActivity1 : AppCompatActivity() {
     private lateinit var toolbarAddRecipe: MaterialToolbar
@@ -27,6 +30,8 @@ class AddRecipeActivity1 : AppCompatActivity() {
     private var imagePath:Uri?=null
     private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE=123
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var foodRecipe:FoodRecipe
+    private var category:String=""
 
 
     companion object{
@@ -35,15 +40,18 @@ class AddRecipeActivity1 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_recipe1)
-        initToolbar()
+        initView()
+        recieveData()
         pickImage()
         setBackToolbar()
         setupContinueButton()
         setupCloseToolbar()
     }
-    private fun initToolbar()
+    private fun initView()
     {
         toolbarAddRecipe = findViewById(R.id.toolbarAddRecipe)
+        nameRecipeEdit=findViewById(R.id.nameRecipeEdit)
+        imageRecipe=findViewById(R.id.imageRecipe)
     }
 
     private fun setBackToolbar() {
@@ -53,7 +61,7 @@ class AddRecipeActivity1 : AppCompatActivity() {
     }
 
     private fun setupContinueButton() {
-        nameRecipeEdit=findViewById(R.id.nameRecipeEdit)
+
         continueBtn = findViewById(R.id.continueBtn)
         continueBtn.setOnClickListener {
             if(nameRecipeEdit.text.isNullOrBlank()) {
@@ -78,12 +86,37 @@ class AddRecipeActivity1 : AppCompatActivity() {
         editor.clear()
         editor.apply()
     }
+    private fun recieveData()
+    {
+        val temp =intent.getParcelableExtra<FoodRecipe>("foodRecipe")
+        category= intent.getStringExtra("cate").toString()
+        if(temp!=null)
+        {
+            foodRecipe=temp
+            val storage = FirebaseStorage.getInstance()
+            val storageRef = storage.reference
+            imagePath=Uri.parse(foodRecipe.recipeMainImage.toString())
+
+            val pathReference = storageRef.child(foodRecipe.recipeMainImage.toString())
+            pathReference.downloadUrl.addOnSuccessListener { uri ->
+                // Use Glide to load the image from the URL
+                Glide.with(this)
+                    .load(uri.toString())
+                    .into(imageRecipe)
+            }
+            nameRecipeEdit.setText(foodRecipe.recipeName)
+        }
+        else
+        {
+            foodRecipe= FoodRecipe()
+        }
+    }
     private fun sendData(intent: Intent)
     {
-        val foodRecipe=FoodRecipe()
         foodRecipe.recipeName=nameRecipeEdit.text.toString()
         foodRecipe.recipeMainImage=imagePath.toString()
         intent.putExtra("foodRecipe",foodRecipe)
+        intent.putExtra("cate",category)
     }
     private fun setupCloseToolbar() {
         toolbarAddRecipe.setOnMenuItemClickListener { menuItem ->
@@ -124,7 +157,7 @@ class AddRecipeActivity1 : AppCompatActivity() {
         if(requestCode== IMAGE_REQUEST_CODE&&resultCode== RESULT_OK)
         {
             imageRecipe.setImageURI(data?.data)
-            imagePath=data?.data as Uri
+            imagePath=data?.data
         }
     }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -140,7 +173,4 @@ class AddRecipeActivity1 : AppCompatActivity() {
             }
         }
     }
-
-
-
 }

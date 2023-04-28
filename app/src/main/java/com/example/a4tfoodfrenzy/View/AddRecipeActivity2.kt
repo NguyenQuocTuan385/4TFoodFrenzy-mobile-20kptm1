@@ -32,6 +32,7 @@ class AddRecipeActivity2 : AppCompatActivity() {
     private lateinit var ration:EditText
     private lateinit var foodRecipe:FoodRecipe
     private lateinit var adapter: CheckboxAdapter
+    private var category:String?=null
     private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +63,6 @@ class AddRecipeActivity2 : AppCompatActivity() {
             items.add(recipeCateTemp.recipeCateName)
         }
         val adapter = ArrayAdapter(this, R.layout.list_item_dropdown, items)
-        cateFoodDropdown = findViewById(R.id.dropdown_typeFood)
         cateFoodDropdown.setAdapter(adapter)
     }
     private fun setupTimeDropdown() {
@@ -76,6 +76,7 @@ class AddRecipeActivity2 : AppCompatActivity() {
         adapter=CheckboxAdapter(this,DBManagement.recipeDietList)
         list_checkbox.adapter= adapter
         dietList=adapter.getDietList()
+        adapter.setDietList(dietList)
         list_checkbox.layoutManager=LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
     }
 
@@ -177,6 +178,7 @@ class AddRecipeActivity2 : AppCompatActivity() {
         foodRecipe.ration=ration.text.toString().toInt()
         foodRecipe.recipeDiets=dietList
         foodRecipe.cookTime=timedropdown.text.toString()
+        println(foodRecipe.recipeDiets.size)
 
 
         //gửi loại món ăn sang màn hình 3
@@ -188,6 +190,27 @@ class AddRecipeActivity2 : AppCompatActivity() {
     private fun recieveData()
     {
         foodRecipe=intent.getParcelableExtra<FoodRecipe>("foodRecipe") as FoodRecipe
+        category=intent.getStringExtra("cate")
+        if(foodRecipe.ration!=0)
+        {
+            ration.setText(foodRecipe.ration.toString())
+        }
+        if(!foodRecipe.cookTime.isNullOrEmpty())
+        {
+            timedropdown.setText(foodRecipe.cookTime)
+        }
+
+
+        if(!foodRecipe.recipeDiets.isNullOrEmpty())
+        {
+            dietList.clear()
+            dietList.addAll(foodRecipe.recipeDiets)
+            adapter.notifyDataSetChanged()
+        }
+       if(!category.equals("null"))
+       {
+           cateFoodDropdown.setText(category)
+       }
 
     }
 

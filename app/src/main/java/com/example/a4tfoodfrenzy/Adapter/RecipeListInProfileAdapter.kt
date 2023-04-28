@@ -320,8 +320,23 @@ class RecipeListInProfileAdapter(private var context: Context,
                             notifyDataSetChanged()
                         }
                         1 -> {
-                            // chuyển đến trang cập nhật
+                            val current_foodRecipe = recipeRender
+                            Log.d("HIHI",current_foodRecipe.id.toString())
+                            val intent = Intent(context, AddRecipeActivity1::class.java)
+                            intent.putExtra("foodRecipe", current_foodRecipe)
+                            for(k in DBManagement.recipeCateList)
+                            {
+                                for(t in k.foodRecipes)
+                                {
+                                    if(t==current_foodRecipe.id)
+                                    {
+                                        intent.putExtra("cate",k.recipeCateName)
+                                        break
+                                    }
+                                }
 
+                            }
+                            context.startActivity(intent)
                         }
                         2 -> {
                             // chia sẻ

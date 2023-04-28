@@ -186,5 +186,8 @@ class ProfileActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         menu = bottomNavigationView.menu
         menu.findItem(R.id.profile).isChecked = true
+        val changeData = intent.getStringExtra("newRecipe")
+        Log.i("TAG", changeData.toString())
+        tabAdapter.notifyDataSetChanged()
     }
 }

@@ -12,7 +12,6 @@ import com.example.a4tfoodfrenzy.R
 class CheckboxAdapter(private var context: Context, private var list:ArrayList<RecipeDiet>)
     :RecyclerView.Adapter<CheckboxAdapter.ViewHolder>() {
     private var dietList = ArrayList<Long>()
-
     // Phương thức khởi tạo
     init {
         dietList = ArrayList()
@@ -32,6 +31,7 @@ class CheckboxAdapter(private var context: Context, private var list:ArrayList<R
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]
         holder.checkbox.text=item.dietName
+        holder.checkbox.isChecked = dietList.contains(item.id)
         holder.checkbox.setOnClickListener {
             if(holder.checkbox.isChecked)
             {
@@ -51,5 +51,10 @@ class CheckboxAdapter(private var context: Context, private var list:ArrayList<R
     fun getDietList():ArrayList<Long>
     {
         return dietList
+    }
+    fun setDietList(dietList:ArrayList<Long>)
+    {
+        this.dietList=dietList
+        notifyDataSetChanged()
     }
 }
