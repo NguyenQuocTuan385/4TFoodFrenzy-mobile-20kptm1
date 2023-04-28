@@ -144,7 +144,7 @@ class DBManagement {
 
                 // Xử lý dữ liệu khi có thay đổi
                 user_current = value!!.toObject(User::class.java)
-                callback(user_current!!)
+                user_current?.let { callback(it) }
             }
     }
     fun fetchDataUser(callback: (ArrayList<User>) -> Unit) {

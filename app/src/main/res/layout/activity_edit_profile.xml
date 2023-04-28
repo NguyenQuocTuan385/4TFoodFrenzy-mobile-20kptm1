@@ -188,8 +188,7 @@
         android:id="@+id/updateAvt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="27dp"
-        android:layout_marginTop="27dp"
+        android:padding="28dp"
         app:layout_constraintStart_toStartOf="@+id/creatorImage"
         app:layout_constraintTop_toTopOf="@+id/creatorImage"
         app:srcCompat="@drawable/baseline_add_a_photo_24" />
