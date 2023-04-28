@@ -27,44 +27,44 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
                 android:src="@drawable/avt"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/recipeNameManagementTextView" />
 
             <TextView
                 android:id="@+id/authorName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="9dp"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="Đặng Ngọc Tiến"
-                android:textColor="@color/black"
+                android:textColor="@color/SecondaryColor"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/option_item"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toStartOf="@+id/option_saved_recipe"
                 app:layout_constraintStart_toEndOf="@+id/avatarImageView"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/avatarImageView" />
 
             <ImageView
-                android:id="@+id/option_item"
+                android:id="@+id/option_saved_recipe"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recipeNameManagementTextView"
                 app:srcCompat="@drawable/baseline_more_vert_24_black" />
 
             <ImageView
                 android:id="@+id/recipeManagementImageView"
                 android:layout_width="200dp"
                 android:layout_height="140dp"
-                android:layout_marginTop="4dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/avatarImageView"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@drawable/bo_nuong" />
 
             <TextView
@@ -76,10 +76,9 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginEnd="5dp"
-
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="Bò nướng mlem"
+                android:text="Bò nướng Singapore Malaysia Campuchia Vietnam"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"

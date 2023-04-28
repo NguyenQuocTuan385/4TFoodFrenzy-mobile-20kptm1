@@ -8,17 +8,33 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.example.a4tfoodfrenzy.Model.RecipeIngredient
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
+import com.google.firebase.storage.FirebaseStorage
+import org.w3c.dom.Text
 
-class UserAdapter(context: Context, list: ArrayList<User>) :
+class UserAdapter(private var context: Context, private var listItem: ArrayList<User>) :
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {
-    private var listItem = list
-    private val context = context
+    var onButtonClick: ((View, User) -> Unit)? = null
+    var onItemClick: ((User) -> Unit)? = null
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val name: TextView = listItemView.findViewById(R.id.userName)
         val image: ImageView = listItemView.findViewById(R.id.userAvt)
+        val menu: ImageView=listItemView.findViewById(R.id.optionMenu)
+        val email:TextView=listItemView.findViewById(R.id.userEmail)
+
+        init{
+            menu.setOnClickListener {
+                onButtonClick?.invoke(it,listItem[adapterPosition])
+            }
+            itemView.setOnClickListener {
+                onItemClick?.invoke(listItem[adapterPosition])
+            }
+
+        }
 
     }
 
@@ -35,11 +51,29 @@ class UserAdapter(context: Context, list: ArrayList<User>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listItem[position]
-        holder.name.text = item.fullname
-        val resources = context.getResources()
-        val resourceId = resources.getIdentifier(item.avatar, "drawable", context.packageName)
-        val bitmap = BitmapFactory.decodeResource(resources, resourceId)
-        holder.image.setImageBitmap(bitmap)
+        holder.email.text=item.email
+        if(!item.isAdmin) {
+            holder.name.text = item.fullname
+            val storage = FirebaseStorage.getInstance()
+            val storageRef = storage.reference
+            val pathReference = storageRef.child(item.avatar)
+            pathReference.downloadUrl.addOnSuccessListener { uri ->
+                Glide.with(context)
+                    .load(uri.toString())
+                    .into(holder.image)
+            }
+            holder.menu.setOnClickListener {
+                onButtonClick?.invoke(it, item)
+            }
+            holder.itemView.setOnClickListener {
+                onItemClick?.invoke(item)
+            }
+        }
     }
+    fun filterList(filteredList: ArrayList<User>) {
+        listItem = filteredList
+        notifyDataSetChanged()
+    }
+
 
 }

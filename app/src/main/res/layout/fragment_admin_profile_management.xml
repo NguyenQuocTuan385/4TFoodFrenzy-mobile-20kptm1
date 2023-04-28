@@ -6,36 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".View.Fragment.AdminProfileManagement">
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
+    <SearchView
+        android:id="@+id/search"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/border_input"
-        android:orientation="horizontal"
+        android:iconifiedByDefault="false"
+        android:queryHint="Tìm kiếm người dùng"
+        app:queryBackground="@null"
+        android:background="@android:color/transparent"
+        android:inputType="text"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="40dp"
-            android:layout_weight="0.1"
-            android:padding="8dp"
-            android:src="@drawable/search_icon" />
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.6"
-            android:background="@null"
-            android:hint="Tên người dùng"
-            android:padding="8dp" />
-
-    </LinearLayout>
+    </SearchView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_user"
@@ -47,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/search"
         tools:listitem="@layout/list_user" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

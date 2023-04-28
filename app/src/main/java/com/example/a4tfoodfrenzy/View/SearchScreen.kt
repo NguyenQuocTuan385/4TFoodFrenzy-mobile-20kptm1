@@ -47,17 +47,17 @@ class SearchScreen : AppCompatActivity() {
                 intent.putExtra("typeSearch","recipe")
             }
             else if (recipeCate.recipeCateTitle.equals("Nấu nhanh")) {
-                intent.putExtra("keySearch","Nấu nhanh")
+                intent.putExtra("keySearch","Dưới 30 phút")
                 intent.putExtra("pageSearch","search")
-                intent.putExtra("typeSearch","recipeCategory")
+                intent.putExtra("typeSearch","cookTime")
             }
             else if (recipeCate.recipeCateTitle.equals("Đồ ăn vặt")) {
                 intent.putExtra("keySearch","Ăn vặt")
                 intent.putExtra("pageSearch","search")
                 intent.putExtra("typeSearch","recipeCategory")
             }
-            else if (recipeCate.recipeCateTitle.equals("Ăn chay")) {
-                intent.putExtra("keySearch","Ăn chay")
+            else if (recipeCate.recipeCateTitle.equals("Điểm tâm")) {
+                intent.putExtra("keySearch","Điểm tâm")
                 intent.putExtra("pageSearch","search")
                 intent.putExtra("typeSearch","recipeCategory")
             }
@@ -196,7 +196,7 @@ class SearchScreen : AppCompatActivity() {
         cateRecipe = RecipeCategorySuggest("Đồ ăn vặt", R.drawable.fastfood)
         result.add(cateRecipe)
 
-        cateRecipe = RecipeCategorySuggest("Ăn chay", R.drawable.diet)
+        cateRecipe = RecipeCategorySuggest("Điểm tâm", R.drawable.english_breakfast)
         result.add(cateRecipe)
 
         cateRecipe = RecipeCategorySuggest("Món chính", R.drawable.mainfood)

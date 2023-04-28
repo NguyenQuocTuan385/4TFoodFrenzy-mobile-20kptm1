@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -37,6 +38,7 @@ class AdminDashboard : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_dashboard)
         init()
+        setProfile()
         setNavigationview()
         replaceFragment(AdminProfileManagement())
         toolBar.setNavigationOnClickListener {
@@ -54,6 +56,21 @@ class AdminDashboard : AppCompatActivity() {
         navigationView=findViewById(R.id.navigationView)
         drawLayout=findViewById(R.id.drawlayout)
 
+    }
+    private fun setProfile()
+    {
+        val headerView = navigationView.getHeaderView(0)
+        var name=headerView.findViewById<TextView>(R.id.name)
+        val auth=FirebaseAuth.getInstance()
+        var admin=auth.currentUser
+        for(user in DBManagement.userList)
+        {
+            if(user.isAdmin&&admin!!.email.equals(user.email))
+            {
+                name.setText(user.fullname)
+                break
+            }
+        }
     }
     private fun setNavigationview()
     {
