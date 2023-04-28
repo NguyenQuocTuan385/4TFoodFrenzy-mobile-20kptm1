@@ -65,6 +65,7 @@ class AddNewRecipe : AppCompatActivity() {
         addRecipeBtn.setOnClickListener {
             val intent = Intent(this, AddRecipeActivity1::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_up, R.anim.slide_up)
         }
     }
     override fun onNewIntent(intent: Intent) {
