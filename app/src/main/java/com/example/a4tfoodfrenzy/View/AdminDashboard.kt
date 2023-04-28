@@ -89,11 +89,8 @@ class AdminDashboard : AppCompatActivity() {
                     R.id.navLogout->{
                         val auth = Firebase.auth
                         auth.signOut()
+                        DBManagement.user_current = null
                         navigateToLogin()
-
-
-
-
                     }
                 }
                 // Đóng DrawerLayout khi người dùng chọn một mục

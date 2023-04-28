@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -34,9 +35,17 @@ class LogoutActivity: AppCompatActivity() {
                     true
                 }
                 R.id.search -> {
-                    val intent = Intent(this, SearchScreen::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
+                    if (DBManagement.existAfterSearch == false) {
+                        val intent = Intent(this, SearchScreen::class.java)
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
+                        finish()
+                    } else {
+                        val intent = Intent(this, AfterSearchActivity::class.java)
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
+                        finish()
+                    }
                     true
                 }
                 R.id.addRecipe -> {

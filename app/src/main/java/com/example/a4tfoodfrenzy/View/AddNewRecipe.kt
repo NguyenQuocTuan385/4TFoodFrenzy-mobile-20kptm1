@@ -9,8 +9,8 @@ import com.example.a4tfoodfrenzy.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class AddNewRecipe : AppCompatActivity() {
-    private lateinit var addRecipeBtn:Button
-    lateinit var bottomNavigationView:BottomNavigationView
+    private lateinit var addRecipeBtn: Button
+    lateinit var bottomNavigationView: BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_new_recipe)
@@ -25,18 +25,18 @@ class AddNewRecipe : AppCompatActivity() {
                 R.id.home -> {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
-                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
                     true
                 }
                 R.id.search -> {
                     if (DBManagement.existAfterSearch == false) {
                         val intent = Intent(this, SearchScreen::class.java)
                         startActivity(intent)
-                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
                     } else {
                         val intent = Intent(this, AfterSearchActivity::class.java)
                         startActivity(intent)
-                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
                     }
                     true
                 }
@@ -47,11 +47,11 @@ class AddNewRecipe : AppCompatActivity() {
                     if (DBManagement.user_current == null) {
                         val intent = Intent(this, LogoutActivity::class.java)
                         startActivity(intent)
-                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right)
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
                     } else {
                         val intent = Intent(this, ProfileActivity::class.java)
                         startActivity(intent)
-                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right)
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
                     }
                     true
                 }
@@ -59,15 +59,21 @@ class AddNewRecipe : AppCompatActivity() {
             }
         }
     }
-    private fun setContinueBtn()
-    {
-        addRecipeBtn=findViewById(R.id.addRecipeBtn)
+
+    private fun setContinueBtn() {
+        addRecipeBtn = findViewById(R.id.addRecipeBtn)
         addRecipeBtn.setOnClickListener {
-            val intent = Intent(this, AddRecipeActivity1::class.java)
-            startActivity(intent)
-            overridePendingTransition(R.anim.slide_up, R.anim.slide_up)
+            if (DBManagement.user_current == null) {
+                val intent = Intent(this, LogoutActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
+            } else {
+                val intent = Intent(this, AddRecipeActivity1::class.java)
+                startActivity(intent)
+            }
         }
     }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         val menu = bottomNavigationView.menu
