@@ -101,7 +101,6 @@
             android:exported="false" />
         <activity
             android:name=".View.ProfileActivity"
-            android:launchMode="singleInstance"
             android:exported="true" />
         <activity
             android:name=".View.AccountDetailsManagementActivity"

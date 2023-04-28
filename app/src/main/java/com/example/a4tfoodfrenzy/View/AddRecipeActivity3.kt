@@ -16,6 +16,9 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.ListIngredientAdapter
+import com.example.a4tfoodfrenzy.Api.Food
+import com.example.a4tfoodfrenzy.Api.NinjasApiService
+import com.example.a4tfoodfrenzy.Api.TranslateUtil
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.RecipeCookStep
@@ -25,6 +28,10 @@ import com.example.a4tfoodfrenzy.R
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import kotlin.math.roundToInt
 
 class AddRecipeActivity3 : AppCompatActivity() {
     private lateinit var toolbarAddRecipe: MaterialToolbar
@@ -171,6 +178,7 @@ class AddRecipeActivity3 : AppCompatActivity() {
     private fun setupContinueButton() {
         continueBtn = findViewById(R.id.continueBtn)
         continueBtn.setOnClickListener {
+                getCalo(getIngredientAsText())
             if(validateAddIngredient()) {
                 val intent = Intent(this, AddRecipeActivity4::class.java)
                 saveData()
@@ -256,4 +264,58 @@ class AddRecipeActivity3 : AppCompatActivity() {
         }
 
     }
+
+    fun getIngredientAsText():String
+    {
+        var l = ""
+        for (k in listIngredient) {
+            l += "${k.ingreQuantity.roundToInt()}${k.ingreUnit} ${k.ingreName} "
+        }
+        return l
+    }
+    fun getCalo(text:String)
+    {
+        val translateUtil= TranslateUtil()
+        translateUtil.translate(text){translatedText ->
+            getNutritionData(translatedText)
+        }
+    }
+
+    fun getNutritionData(translatedText:String)
+    {
+        val appId = "dc3a5f60"
+        val appKey = "gY+35sz1wCbF8TvCgO0oOA==UomLBEqmDOPJ2vlE"
+        val call =
+            NinjasApiService.create().getNutritionData(appKey, translatedText)
+        call.enqueue(object : Callback<List<Food>> {
+            override fun onResponse(
+                call: Call<List<Food>>,
+                response: Response<List<Food>>
+            ) {
+                if (response.isSuccessful) {
+                    val foods = response.body()
+                    if (foods != null) {
+                        for (i in 0 until foods.size) {
+                           if(translatedText.contains(foods[i].name))
+                           {
+                               listIngredient[i].ingreCalo=foods[i].calories
+                           }
+                        }
+                    }
+                } else {
+                    println("Gọi api không thành công")
+                }
+
+            }
+
+            override fun onFailure(call: Call<List<Food>>, t: Throwable) {
+                // API call failed, handle the error
+                Log.e("TAG", "API call failed: ${t.message}")
+            }
+
+
+        })
+
+    }
+
 }

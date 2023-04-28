@@ -425,9 +425,10 @@ class AddRecipeActivity4 : AppCompatActivity() {
                             "Bạn đã thêm món ăn thành công"
                         ) { confirm ->
                             if (confirm) {
-                                val intent = Intent(this, ProfileActivity::class.java)
-                                intent.putExtra("newRecipe","newRecipe")
+                                val intent = Intent(this, MainActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 startActivity(intent)
+                                finishAffinity()
                             }
                         }
                     }, {
@@ -436,7 +437,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
                             "Bạn đã thêm món ăn thất bại"
                         ) { confirm ->
                             if (confirm) {
-                                val intent = Intent(this, ProfileActivity::class.java)
+                                val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
                             }
                         }
@@ -454,10 +455,10 @@ class AddRecipeActivity4 : AppCompatActivity() {
                         "Bạn đã cập nhật món ăn thành công"
                     ) { confirm ->
                         if (confirm) {
-                            val intent = Intent(this, ProfileActivity::class.java)
-                            intent.putExtra("newRecipe","newRecipe")
+                            val intent = Intent(this, MainActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intent)
-                            finish()
+                            finishAffinity()
                         }
                     }
                 }, {
@@ -466,7 +467,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
                         "Bạn đã thêm món ăn thất bại"
                     ) { confirm ->
                         if (confirm) {
-                            val intent = Intent(this, ProfileActivity::class.java)
+                            val intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)
                             finish()
                         }

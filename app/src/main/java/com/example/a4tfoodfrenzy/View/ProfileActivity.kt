@@ -182,12 +182,4 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
     }
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        menu = bottomNavigationView.menu
-        menu.findItem(R.id.profile).isChecked = true
-        val changeData = intent.getStringExtra("newRecipe")
-        Log.i("TAG", changeData.toString())
-        tabAdapter.notifyDataSetChanged()
-    }
 }

@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.CheckboxAdapter
+import com.example.a4tfoodfrenzy.Api.Food
+import com.example.a4tfoodfrenzy.Api.NinjasApiService
+import com.example.a4tfoodfrenzy.Api.TranslateUtil
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
@@ -21,6 +24,9 @@ import com.example.a4tfoodfrenzy.R
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class AddRecipeActivity2 : AppCompatActivity() {
     private lateinit var timedropdown:AutoCompleteTextView
@@ -226,7 +232,5 @@ class AddRecipeActivity2 : AppCompatActivity() {
             }
         }
     }
-
-
 
 }

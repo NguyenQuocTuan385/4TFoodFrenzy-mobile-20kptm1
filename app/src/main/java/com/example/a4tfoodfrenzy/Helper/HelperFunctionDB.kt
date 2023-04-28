@@ -110,7 +110,7 @@ class HelperFunctionDB(private var context: Context) {
         sweetAlertDialog.setCancelable(false)
         sweetAlertDialog.show()
         sweetAlertDialog.setConfirmButton("OK") {
-            it.dismissWithAnimation()
+            it.dismiss()
             callback(true)
         }
 
@@ -125,7 +125,7 @@ class HelperFunctionDB(private var context: Context) {
         sweetAlertDialog.setTitleText(title)
         sweetAlertDialog.setContentText(message)
         sweetAlertDialog.setConfirmButton("OK") {
-            it.dismissWithAnimation()
+            it.dismiss()
             callback(true)
         }
         sweetAlertDialog.setCancelable(false)
