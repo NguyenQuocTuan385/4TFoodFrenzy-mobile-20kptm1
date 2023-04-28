@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -19,7 +17,6 @@ import com.example.a4tfoodfrenzy.Adapter.TabFoodRecipeSaved
 import com.example.a4tfoodfrenzy.Adapter.TabMyFoodRecipe
 import com.example.a4tfoodfrenzy.Adapter.TabProfileAdapter
 import com.example.a4tfoodfrenzy.Model.DBManagement
-import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
@@ -28,8 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
 import java.util.*
+
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var name_profile: TextView
@@ -144,8 +141,13 @@ class ProfileActivity : AppCompatActivity() {
                     true
                 }
                 R.id.search -> {
-                    val intent = Intent(this, SearchScreen::class.java)
-                    startActivity(intent)
+                    if (DBManagement.existAfterSearch == false) {
+                        val intent = Intent(this, SearchScreen::class.java)
+                        startActivity(intent)
+                    } else {
+                        val intent = Intent(this, AfterSearchActivity::class.java)
+                        startActivity(intent)
+                    }
                     true
                 }
                 R.id.addRecipe -> {
@@ -174,5 +176,9 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
     }
-
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        menu = bottomNavigationView.menu
+        menu.findItem(R.id.profile).isChecked = true
+    }
 }

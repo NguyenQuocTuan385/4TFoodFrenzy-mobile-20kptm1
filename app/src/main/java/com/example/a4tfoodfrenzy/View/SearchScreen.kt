@@ -19,7 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class SearchScreen : AppCompatActivity() {
     var adapterTypeRecipeRV: RecipeCateListAdapter? = null
-    val REQUEST_CODE_SEARCH = 1111
+    lateinit var bottomNavigationView:BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_screen)
@@ -65,7 +65,7 @@ class SearchScreen : AppCompatActivity() {
                 intent.putExtra("pageSearch","search")
                 intent.putExtra("typeSearch","recipeCategory")
             }
-            startActivityForResult(intent, REQUEST_CODE_SEARCH)
+            startActivity(intent)
         }
 
         searchET.setOnEditorActionListener { _, actionId, _ ->
@@ -75,7 +75,7 @@ class SearchScreen : AppCompatActivity() {
                     intent.putExtra("keySearch",searchET.text.toString())
                     intent.putExtra("pageSearch","search")
                     intent.putExtra("typeSearch","recipe")
-                    startActivityForResult(intent, REQUEST_CODE_SEARCH)
+                    startActivity(intent)
                 }
             }
             true
@@ -84,64 +84,64 @@ class SearchScreen : AppCompatActivity() {
             intent.putExtra("keySearch","Trên 1 tiếng")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","cookTime")
-            startActivityForResult(intent, REQUEST_CODE_SEARCH)
+            startActivity(intent)
         }
         findViewById<Button>(R.id.btnLess1HCook).setOnClickListener {
             intent.putExtra("keySearch","Dưới 1 tiếng")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","cookTime")
-            startActivityForResult(intent, REQUEST_CODE_SEARCH)
+            startActivity(intent)
         }
         findViewById<Button>(R.id.btnLess45MCook).setOnClickListener {
             intent.putExtra("keySearch","Dưới 45 phút")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","cookTime")
-            startActivityForResult(intent, REQUEST_CODE_SEARCH)
+            startActivity(intent)
         }
         findViewById<Button>(R.id.btnLess30MCook).setOnClickListener {
             intent.putExtra("keySearch","Dưới 30 phút")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","cookTime")
-            startActivityForResult(intent, REQUEST_CODE_SEARCH)
+            startActivity(intent)
         }
         findViewById<Button>(R.id.btnLess15MCook).setOnClickListener {
             intent.putExtra("keySearch","Dưới 15 phút")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","cookTime")
-            startActivityForResult(intent, REQUEST_CODE_SEARCH)
+            startActivity(intent)
         }
         findViewById<Button>(R.id.btnFastFood).setOnClickListener {
             intent.putExtra("keySearch","Ăn vặt")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","recipeCategory")
-            startActivityForResult(intent, REQUEST_CODE_SEARCH)
+            startActivity(intent)
         }
         findViewById<Button>(R.id.btnDrink).setOnClickListener {
             intent.putExtra("keySearch","Thức uống")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","recipeCategory")
-            startActivityForResult(intent, REQUEST_CODE_SEARCH)
+            startActivity(intent)
         }
         findViewById<Button>(R.id.btnDessert).setOnClickListener {
             intent.putExtra("keySearch","Món tráng miệng")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","recipeCategory")
-            startActivityForResult(intent, REQUEST_CODE_SEARCH)
+            startActivity(intent)
         }
         findViewById<Button>(R.id.btnMainFood).setOnClickListener {
             intent.putExtra("keySearch","Món chính")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","recipeCategory")
-            startActivityForResult(intent, REQUEST_CODE_SEARCH)
+            startActivity(intent)
         }
         findViewById<Button>(R.id.btnAppetizer).setOnClickListener {
             intent.putExtra("keySearch","Khai vị")
             intent.putExtra("pageSearch","search")
             intent.putExtra("typeSearch","recipeCategory")
-            startActivityForResult(intent, REQUEST_CODE_SEARCH)
+            startActivity(intent)
         }
 
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
+        bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
         val menu = bottomNavigationView.menu
 
         menu.findItem(R.id.search).isChecked = true
@@ -170,14 +170,6 @@ class SearchScreen : AppCompatActivity() {
             }
         }
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode === REQUEST_CODE_SEARCH) {
-            if (resultCode === Activity.RESULT_OK) {
-
-            }
-        }
-    }
 
     private fun generateCateRecipeData(): ArrayList<RecipeCategorySuggest> {
         var result = ArrayList<RecipeCategorySuggest>()
@@ -201,5 +193,10 @@ class SearchScreen : AppCompatActivity() {
         result.add(cateRecipe)
 
         return result
+    }
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        val menu = bottomNavigationView.menu
+        menu.findItem(R.id.search).isChecked = true
     }
 }

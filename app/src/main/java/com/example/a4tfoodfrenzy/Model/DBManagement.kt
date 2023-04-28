@@ -23,6 +23,7 @@ class DBManagement {
         var recipeCommentList = ArrayList<RecipeComment>()
         var recipeDietList = ArrayList<RecipeDiet>()
         var isInitialized = false
+        var existAfterSearch = false
     }
     fun addListenerChangeDataUser(callback: (ArrayList<User>) -> Unit) {
         val  userCollection = db.collection("users")
