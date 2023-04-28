@@ -1,29 +1,17 @@
 package com.example.a4tfoodfrenzy.Adapter
 
-import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
-import com.example.a4tfoodfrenzy.View.AddRecipeActivity1
-import com.example.a4tfoodfrenzy.View.ShowRecipeDetailsActivity
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 
 
@@ -49,8 +37,7 @@ class RecipeListInProfileAdapter(private var context: Context,
         val authorAvatarIMG : ImageView = listItemView.findViewById(R.id.avatarImageView)
         val uploadDate : TextView = listItemView.findViewById(R.id.uploadDateTextView)
         val isPublic : TextView = listItemView.findViewById(R.id.isPublicTextView)
-        val optionItem : ImageView = listItemView.findViewById(R.id.option_item)
-
+        val optionItem : ImageView = listItemView.findViewById(R.id.option_saved_recipe)
 
         init {
             listItemView.setOnClickListener {
@@ -144,13 +131,14 @@ class RecipeListInProfileAdapter(private var context: Context,
         val uploadDate = holder.uploadDate
         uploadDate.text = recipeRender.date.toString()
 
-        val optionItem = holder.optionItem
-        optionItem.setOnClickListener{
+
+        holder.optionItem.setOnClickListener{
             onButtonClick?.invoke(
                 it,
                 recipeRender
             )
         }
+
 
     }
 }

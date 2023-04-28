@@ -1,9 +1,7 @@
 package com.example.a4tfoodfrenzy.Adapter
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
-import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +12,6 @@ import com.bumptech.glide.Glide
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
 import com.google.firebase.storage.FirebaseStorage
-import java.util.TreeMap
 
 class RecipeListAdapter(private var context:Context,
     private var recipeRenderArray: LinkedHashMap<FoodRecipe, User>) : RecyclerView.Adapter<RecipeListAdapter.ViewHolder>() {
