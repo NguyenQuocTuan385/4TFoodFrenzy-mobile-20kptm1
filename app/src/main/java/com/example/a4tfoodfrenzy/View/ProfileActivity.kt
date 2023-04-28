@@ -112,6 +112,7 @@ class ProfileActivity : AppCompatActivity() {
                     "Chỉnh sửa thông tin" -> {
                         val intent = Intent(this, EditProfileActivity::class.java)
                         startActivityForResult(intent, 1)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
                         true
                     }
                     "Đăng xuất" -> {
@@ -120,6 +121,7 @@ class ProfileActivity : AppCompatActivity() {
 
                         val intent= Intent(this,MainActivity::class.java)
                         startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
                         finish()
                         true
                     }
@@ -138,21 +140,25 @@ class ProfileActivity : AppCompatActivity() {
                 R.id.home -> {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
                     true
                 }
                 R.id.search -> {
                     if (DBManagement.existAfterSearch == false) {
                         val intent = Intent(this, SearchScreen::class.java)
                         startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
                     } else {
                         val intent = Intent(this, AfterSearchActivity::class.java)
                         startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
                     }
                     true
                 }
                 R.id.addRecipe -> {
                     val intent = Intent(this, AddNewRecipe::class.java)
                     startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
                     true
                 }
                 R.id.profile -> {

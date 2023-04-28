@@ -25,15 +25,18 @@ class AddNewRecipe : AppCompatActivity() {
                 R.id.home -> {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
                     true
                 }
                 R.id.search -> {
                     if (DBManagement.existAfterSearch == false) {
                         val intent = Intent(this, SearchScreen::class.java)
                         startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
                     } else {
                         val intent = Intent(this, AfterSearchActivity::class.java)
                         startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
                     }
                     true
                 }
@@ -41,8 +44,15 @@ class AddNewRecipe : AppCompatActivity() {
                     true
                 }
                 R.id.profile -> {
-                    val intent = Intent(this, ProfileActivity::class.java)
-                    startActivity(intent)
+                    if (DBManagement.user_current == null) {
+                        val intent = Intent(this, LogoutActivity::class.java)
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right)
+                    } else {
+                        val intent = Intent(this, ProfileActivity::class.java)
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right)
+                    }
                     true
                 }
                 else -> false

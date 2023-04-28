@@ -1,5 +1,6 @@
 package com.example.a4tfoodfrenzy.View
 
+import android.animation.Animator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
@@ -146,8 +147,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<LinearLayout>(R.id.searchLL).setOnClickListener {
-            val intent = Intent(this, SearchScreen::class.java)
-            startActivity(intent)
+            if (DBManagement.existAfterSearch == false) {
+                val intent = Intent(this, SearchScreen::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
+            } else {
+                val intent = Intent(this, AfterSearchActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
+            }
         }
         btnViewMoreTodayEat.setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
@@ -155,6 +163,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("pageSearch","home")
             intent.putExtra("typeSearch","recipeTodayEat")
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
         }
         btnViewMoreMostLikes.setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
@@ -162,6 +171,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("pageSearch","home")
             intent.putExtra("typeSearch","recipeMostLikes")
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
         }
 
         val menu = bottomNavigationView.menu
@@ -177,20 +187,30 @@ class MainActivity : AppCompatActivity() {
                     if (DBManagement.existAfterSearch == false) {
                         val intent = Intent(this, SearchScreen::class.java)
                         startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
                     } else {
                         val intent = Intent(this, AfterSearchActivity::class.java)
                         startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
                     }
                     true
                 }
                 R.id.addRecipe -> {
                     val intent = Intent(this, AddNewRecipe::class.java)
                     startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
                     true
                 }
                 R.id.profile -> {
-                    val intent = Intent(this, ProfileActivity::class.java)
-                    startActivity(intent)
+                    if (DBManagement.user_current == null) {
+                        val intent = Intent(this, LogoutActivity::class.java)
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right)
+                    } else {
+                        val intent = Intent(this, ProfileActivity::class.java)
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right)
+                    }
                     true
                 }
                 else -> false
@@ -225,7 +245,6 @@ class MainActivity : AppCompatActivity() {
 
         typeRecipe = RecipeCategorySuggest("Đồ uống", R.drawable.douonghome)
         result.add(typeRecipe)
-
 
         typeRecipe = RecipeCategorySuggest("Món chính", R.drawable.monchinh)
         result.add(typeRecipe)
@@ -277,6 +296,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
             intent.putExtra("foodRecipe",foodRecipe)
             startActivityForResult(intent, REQUEST_RECIPE_DETAILS)
+            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
         }
     }
     override fun onNewIntent(intent: Intent) {

@@ -82,13 +82,9 @@ class CommentListAdapter(private var context:Context,
         // Set item views based on your views and data model
         val nameTV = holder.nameTV
         nameTV.text = user.fullname
-        val foodTV = holder.foodTV
         if (isCmtListAdminView == true) {
-            foodTV.text = if (foodRecipe.recipeName.length > 10) {
-                foodRecipe.recipeName.substring(0, 10) + "..."
-            } else {
-                foodRecipe.recipeName
-            }
+            val foodTV = holder.foodTV
+            foodTV.text =  foodRecipe.recipeName
         }
         val cmtDescripTV = holder.cmtDescripTV
         cmtDescripTV.text = cmtRender.description

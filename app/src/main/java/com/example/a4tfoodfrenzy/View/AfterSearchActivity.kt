@@ -24,19 +24,20 @@ import kotlin.collections.ArrayList
 
 class AfterSearchActivity : AppCompatActivity() {
     var adapterRecipeAfterSearchRV: RecipeListAdapter? = null
-    var recipeAfterSearchRV:RecyclerView? = null
+    var recipeAfterSearchRV: RecyclerView? = null
     val db = Firebase.firestore
     val REQUEST_CODE_FILTER = 1111
     val REQUEST_CODE_BACK_FILTER = 2222
     val REQUEST_CODE_APPLY_FILTER = 3333
     val REQUEST_RECIPE_DETAILS = 4444
-    lateinit var bottomNavigationView:BottomNavigationView
+    lateinit var bottomNavigationView: BottomNavigationView
+    lateinit var searchET: EditText
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_after_search)
 
         bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
-        val searchET = findViewById<EditText>(R.id.searchET)
+        searchET = findViewById<EditText>(R.id.searchET)
         recipeAfterSearchRV = findViewById(R.id.recipeAfterSearchRV)
         DBManagement.existAfterSearch = true
 
@@ -46,44 +47,23 @@ class AfterSearchActivity : AppCompatActivity() {
         findViewById<ImageView>(R.id.imgBack).setOnClickListener {
             val intent = Intent(this, SearchScreen::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
             finish()
         }
         findViewById<ImageView>(R.id.imgFilter).setOnClickListener {
             val intent = Intent(this, SortRecipeActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
         }
 
-        if (adapterRecipeAfterSearchRV == null) {
-            if (typeSearch.toString() == "cookTime") {
-                val recipeAfterSearch = findRecipeListWithCookTime(keySearch.toString())
-                setRecipeListAdapter(recipeAfterSearch)
-                searchET.setHint(keySearch)
-            } else if (typeSearch.toString() == "recipeCategory") {
-                val recipeAfterSearch = findRecipeListWithCategory(keySearch.toString())
-                setRecipeListAdapter(recipeAfterSearch)
-                searchET.setHint(keySearch)
-            } else if (typeSearch.toString() == "recipeTodayEat") {
-                setRecipeListAdapter(DBManagement.foodRecipeList)
-                searchET.setHint(keySearch)
-            }
-            else if (typeSearch.toString() == "recipeMostLikes") {
-                val recipeAfterSearch = generateRecipeMostLikesData(DBManagement.foodRecipeList)
-                setRecipeListAdapter(recipeAfterSearch)
-                searchET.setHint(keySearch)
-            } else {
-                val recipeAfterSearch = findRecipeListWithKeyword(keySearch.toString())
-                setRecipeListAdapter(recipeAfterSearch)
-                searchET.setText(keySearch)
-            }
-        }
+        setRecipeListAdapterWithCondition(keySearch!!, typeSearch!!)
 
         searchET.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 if (!searchET.text.isNullOrEmpty()) {
                     val recipeAfterSearch = findRecipeListWithKeyword(searchET.text.toString())
                     setRecipeListAdapter(recipeAfterSearch)
-                }
-                else {
+                } else {
                     setRecipeListAdapter(DBManagement.foodRecipeList)
                 }
             }
@@ -97,6 +77,7 @@ class AfterSearchActivity : AppCompatActivity() {
                 R.id.home -> {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
                     true
                 }
                 R.id.search -> {
@@ -105,11 +86,19 @@ class AfterSearchActivity : AppCompatActivity() {
                 R.id.addRecipe -> {
                     val intent = Intent(this, AddNewRecipe::class.java)
                     startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
                     true
                 }
                 R.id.profile -> {
-                    val intent = Intent(this, ProfileActivity::class.java)
-                    startActivity(intent)
+                    if (DBManagement.user_current == null) {
+                        val intent = Intent(this, LogoutActivity::class.java)
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right)
+                    } else {
+                        val intent = Intent(this, ProfileActivity::class.java)
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right)
+                    }
                     true
                 }
                 else -> false
@@ -127,17 +116,43 @@ class AfterSearchActivity : AppCompatActivity() {
             }
         }
     }
-    fun setRecipeListAdapter(recipeAfterSearch:ArrayList<FoodRecipe>) {
-        adapterRecipeAfterSearchRV = RecipeListAdapter(this,recipeAfterSearch)
+
+    fun setRecipeListAdapterWithCondition(keySearch: String, typeSearch: String) {
+        if (typeSearch.toString() == "cookTime") {
+            val recipeAfterSearch = findRecipeListWithCookTime(keySearch.toString())
+            setRecipeListAdapter(recipeAfterSearch)
+            searchET.setHint(keySearch)
+        } else if (typeSearch.toString() == "recipeCategory") {
+            val recipeAfterSearch = findRecipeListWithCategory(keySearch.toString())
+            setRecipeListAdapter(recipeAfterSearch)
+            searchET.setHint(keySearch)
+        } else if (typeSearch.toString() == "recipeTodayEat") {
+            setRecipeListAdapter(DBManagement.foodRecipeList)
+            searchET.setHint(keySearch)
+        } else if (typeSearch.toString() == "recipeMostLikes") {
+            val recipeAfterSearch = generateRecipeMostLikesData(DBManagement.foodRecipeList)
+            setRecipeListAdapter(recipeAfterSearch)
+            searchET.setHint(keySearch)
+        } else {
+            val recipeAfterSearch = findRecipeListWithKeyword(keySearch.toString())
+            setRecipeListAdapter(recipeAfterSearch)
+            searchET.setText(keySearch)
+        }
+    }
+
+    fun setRecipeListAdapter(recipeAfterSearch: ArrayList<FoodRecipe>) {
+        adapterRecipeAfterSearchRV = RecipeListAdapter(this, recipeAfterSearch)
         recipeAfterSearchRV!!.adapter = adapterRecipeAfterSearchRV
         recipeAfterSearchRV!!.layoutManager = GridLayoutManager(this, 3)
         adapterRecipeAfterSearchRV!!.onItemClick = { foodRecipe, i ->
             val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
-            intent.putExtra("foodRecipe",foodRecipe)
+            intent.putExtra("foodRecipe", foodRecipe)
             startActivityForResult(intent, REQUEST_RECIPE_DETAILS)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
         }
     }
-    fun findRecipeListWithCookTime(cookTime:String):ArrayList<FoodRecipe> {
+
+    fun findRecipeListWithCookTime(cookTime: String): ArrayList<FoodRecipe> {
         var result = ArrayList<FoodRecipe>()
 
         for (foodRecipe in DBManagement.foodRecipeList) {
@@ -148,15 +163,16 @@ class AfterSearchActivity : AppCompatActivity() {
         return result
     }
 
-    fun findRecipeCategory(recipeCateName : String):RecipeCategory {
+    fun findRecipeCategory(recipeCateName: String): RecipeCategory {
         for (recipeCate in DBManagement.recipeCateList) {
-            if (recipeCate.recipeCateName == recipeCateName ) {
+            if (recipeCate.recipeCateName == recipeCateName) {
                 return recipeCate
             }
         }
         return RecipeCategory()
     }
-    fun findRecipeListWithCategory(recipeCateName : String) : ArrayList<FoodRecipe> {
+
+    fun findRecipeListWithCategory(recipeCateName: String): ArrayList<FoodRecipe> {
         var result = ArrayList<FoodRecipe>()
 
         val recipeCategory = findRecipeCategory(recipeCateName)
@@ -168,18 +184,21 @@ class AfterSearchActivity : AppCompatActivity() {
         }
         return result
     }
-    fun findRecipeListWithKeyword(keySearch: String):ArrayList<FoodRecipe> {
+
+    fun findRecipeListWithKeyword(keySearch: String): ArrayList<FoodRecipe> {
         var result = ArrayList<FoodRecipe>()
 
         for (foodRecipe in DBManagement.foodRecipeList) {
-            if (foodRecipe.recipeName.toLowerCase().contains(keySearch.toLowerCase()) && (foodRecipe.isPublic == true))
-            {
+            if (foodRecipe.recipeName.toLowerCase()
+                    .contains(keySearch.toLowerCase()) && (foodRecipe.isPublic == true)
+            ) {
                 result.add(foodRecipe)
             }
         }
         return result
     }
-    fun generateRecipeMostLikesData(recipeList:ArrayList<FoodRecipe>): ArrayList<FoodRecipe> {
+
+    fun generateRecipeMostLikesData(recipeList: ArrayList<FoodRecipe>): ArrayList<FoodRecipe> {
         var result = ArrayList<FoodRecipe>()
 
         val sortedRecipes = recipeList.sortedByDescending { it.numOfLikes }
@@ -190,15 +209,20 @@ class AfterSearchActivity : AppCompatActivity() {
         }
         return result
     }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         val menu = bottomNavigationView.menu
         menu.findItem(R.id.search).isChecked = true
+        val keySearch = intent.getStringExtra("keySearch")
+        val typeSearch = intent.getStringExtra("typeSearch")
+        if (!keySearch.isNullOrEmpty() && !typeSearch.isNullOrEmpty()) {
+            setRecipeListAdapterWithCondition(keySearch, typeSearch)
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.i("TAG","Hello")
         DBManagement.existAfterSearch = false
     }
 }
