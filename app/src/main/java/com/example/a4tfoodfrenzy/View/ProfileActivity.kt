@@ -166,7 +166,7 @@ class ProfileActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK){
             if(requestCode == 1) {
                 val imageUri = data?.getStringExtra("urlAvt")
-                if (imageUri != null) {
+                if (imageUri != "") {
                     Glide.with(this)
                         .load(imageUri)
                         .into(avatar_profile)

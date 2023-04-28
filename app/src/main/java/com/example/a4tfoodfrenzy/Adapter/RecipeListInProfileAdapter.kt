@@ -105,14 +105,14 @@ class RecipeListInProfileAdapter(private var context: Context,
         val recipeName = holder.recipeName
         recipeName.text = recipeRender.recipeName
 
-        if (recipeName.length() > 16 && isRecipeSavedView) {
-            recipeName.text = recipeName.text.substring(0, 16) + "..."
-        } else if(recipeName.length() > 13 && isRecipeCreatedView) {
-            recipeName.text = recipeName.text.substring(0, 13) + "..."
-        }
-        else{
-            recipeName.text = recipeName.text
-        }
+//        if (recipeName.length() > 16 && isRecipeSavedView) {
+//            recipeName.text = recipeName.text.substring(0, 16) + "..."
+//        } else if(recipeName.length() > 13 && isRecipeCreatedView) {
+//            recipeName.text = recipeName.text.substring(0, 13) + "..."
+//        }
+//        else{
+//            recipeName.text = recipeName.text
+//        }
 
 
         val recipeImg = holder.recipeIMG

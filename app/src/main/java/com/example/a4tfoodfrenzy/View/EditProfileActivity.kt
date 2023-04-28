@@ -137,17 +137,21 @@ class EditProfileActivity : AppCompatActivity() {
                        "bio" to bio,
                        "avatar" to "users/${user_id}"
                    )
+                   docRef.update(user1)
+                       .addOnSuccessListener {
+                           Log.d("TAG", "DocumentSnapshot successfully updated!")
+                       }
+                       .addOnFailureListener { e -> Log.w("TAG", "Error updating document", e) }
                }
               Log.d("TAG", "Upload ảnh thành công")
            }
+       }else{
+           docRef.update(user1)
+               .addOnSuccessListener {
+                   Log.d("TAG", "DocumentSnapshot successfully updated!")
+               }
+               .addOnFailureListener { e -> Log.w("TAG", "Error updating document", e) }
        }
-
-        docRef.update(user1)
-            .addOnSuccessListener {
-                Log.d("TAG", "DocumentSnapshot successfully updated!")
-            }
-            .addOnFailureListener { e -> Log.w("TAG", "Error updating document", e) }
-
    }
 
     private fun viewProfile() {
