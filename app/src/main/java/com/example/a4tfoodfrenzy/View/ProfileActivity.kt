@@ -141,6 +141,7 @@ class ProfileActivity : AppCompatActivity() {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
+                    finish()
                     true
                 }
                 R.id.search -> {
@@ -148,10 +149,12 @@ class ProfileActivity : AppCompatActivity() {
                         val intent = Intent(this, SearchScreen::class.java)
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
+                        finish()
                     } else {
                         val intent = Intent(this, AfterSearchActivity::class.java)
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
+                        finish()
                     }
                     true
                 }
@@ -159,6 +162,7 @@ class ProfileActivity : AppCompatActivity() {
                     val intent = Intent(this, AddNewRecipe::class.java)
                     startActivity(intent)
                     overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
+                    finish()
                     true
                 }
                 R.id.profile -> {
