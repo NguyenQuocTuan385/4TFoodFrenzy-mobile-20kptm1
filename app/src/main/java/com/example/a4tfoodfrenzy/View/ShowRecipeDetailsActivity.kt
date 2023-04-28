@@ -76,7 +76,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         currentFoodRecipe =
             intent.extras?.getParcelable("foodRecipe") ?: return
         val imagePathList = arrayListOf(currentFoodRecipe.recipeMainImage)
-        var recipeAuthor: User? = null
+        var recipeAuthor: User? = intent.extras?.getParcelable("user")
         var ingredientString: CharSequence =
             "" // string for assign to text (charsequence to use spannable)
         var stepString: CharSequence = ""
@@ -152,16 +152,8 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
 
-            // concat step title number with step description then concat those with the main step string
+            // concat step title number withr step description then concat those with the main step string
             stepString = TextUtils.concat(stepString, subtext, "\n${step.description}\n\n")
-        }
-
-        // find user aka author of current recipe in user list
-        for (user in DBManagement.userList) {
-            if (user.myFoodRecipes.contains(currentFoodRecipe.id)) {
-                recipeAuthor = user
-                break
-            }
         }
 
         // add img url to list for recycler view
