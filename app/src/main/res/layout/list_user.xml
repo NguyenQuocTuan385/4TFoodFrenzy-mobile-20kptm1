@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:padding="5dp">
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_centerHorizontal="true"
             android:id="@+id/userAvt"
             android:src="@drawable/avt">
@@ -24,13 +24,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Đặng Ngọc Tiến"
+            android:padding="8dp"
             android:layout_below="@id/userAvt"
             android:layout_centerHorizontal="true"
             android:textColor="@color/black">
         </TextView>
+        <TextView
+            android:id="@+id/userEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="heeh@gmail.com"
+            android:layout_below="@id/userName"
+            android:layout_centerHorizontal="true"
+            >
+        </TextView>
 
         <ImageView
-            android:id="@+id/optionMenuStep"
+            android:id="@+id/optionMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
