@@ -29,20 +29,23 @@ class AfterSearchActivity : AppCompatActivity() {
     val REQUEST_CODE_FILTER = 1111
     val REQUEST_CODE_BACK_FILTER = 2222
     val REQUEST_CODE_APPLY_FILTER = 3333
+    val REQUEST_RECIPE_DETAILS = 4444
+    lateinit var bottomNavigationView:BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_after_search)
 
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
+        bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
         val searchET = findViewById<EditText>(R.id.searchET)
         recipeAfterSearchRV = findViewById(R.id.recipeAfterSearchRV)
+        DBManagement.existAfterSearch = true
 
         val keySearch = intent.getStringExtra("keySearch")
         val typeSearch = intent.getStringExtra("typeSearch")
-        val pageSearch = intent.getStringExtra("pageSearch")
+
         findViewById<ImageView>(R.id.imgBack).setOnClickListener {
-            val replyIntent = Intent()
-            setResult(Activity.RESULT_OK, replyIntent)
+            val intent = Intent(this, SearchScreen::class.java)
+            startActivity(intent)
             finish()
         }
         findViewById<ImageView>(R.id.imgFilter).setOnClickListener {
@@ -50,23 +53,27 @@ class AfterSearchActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        searchET.setText(keySearch)
         if (adapterRecipeAfterSearchRV == null) {
             if (typeSearch.toString() == "cookTime") {
                 val recipeAfterSearch = findRecipeListWithCookTime(keySearch.toString())
                 setRecipeListAdapter(recipeAfterSearch)
+                searchET.setHint(keySearch)
             } else if (typeSearch.toString() == "recipeCategory") {
                 val recipeAfterSearch = findRecipeListWithCategory(keySearch.toString())
                 setRecipeListAdapter(recipeAfterSearch)
+                searchET.setHint(keySearch)
             } else if (typeSearch.toString() == "recipeTodayEat") {
                 setRecipeListAdapter(DBManagement.foodRecipeList)
+                searchET.setHint(keySearch)
             }
             else if (typeSearch.toString() == "recipeMostLikes") {
                 val recipeAfterSearch = generateRecipeMostLikesData(DBManagement.foodRecipeList)
                 setRecipeListAdapter(recipeAfterSearch)
+                searchET.setHint(keySearch)
             } else {
                 val recipeAfterSearch = findRecipeListWithKeyword(keySearch.toString())
                 setRecipeListAdapter(recipeAfterSearch)
+                searchET.setText(keySearch)
             }
         }
 
@@ -84,9 +91,7 @@ class AfterSearchActivity : AppCompatActivity() {
         }
 
         val menu = bottomNavigationView.menu
-
         menu.findItem(R.id.search).isChecked = true
-
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.home -> {
@@ -95,8 +100,6 @@ class AfterSearchActivity : AppCompatActivity() {
                     true
                 }
                 R.id.search -> {
-                    val intent = Intent(this, SearchScreen::class.java)
-                    startActivity(intent)
                     true
                 }
                 R.id.addRecipe -> {
@@ -131,7 +134,7 @@ class AfterSearchActivity : AppCompatActivity() {
         adapterRecipeAfterSearchRV!!.onItemClick = { foodRecipe, i ->
             val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
             intent.putExtra("foodRecipe",foodRecipe)
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_RECIPE_DETAILS)
         }
     }
     fun findRecipeListWithCookTime(cookTime:String):ArrayList<FoodRecipe> {
@@ -186,5 +189,16 @@ class AfterSearchActivity : AppCompatActivity() {
             }
         }
         return result
+    }
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        val menu = bottomNavigationView.menu
+        menu.findItem(R.id.search).isChecked = true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i("TAG","Hello")
+        DBManagement.existAfterSearch = false
     }
 }

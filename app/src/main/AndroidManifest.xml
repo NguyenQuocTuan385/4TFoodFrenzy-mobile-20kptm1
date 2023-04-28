@@ -38,12 +38,14 @@
 
         <activity
             android:name=".View.AddNewRecipe"
+            android:launchMode="singleInstance"
             android:exported="false" />
         <activity
             android:name=".View.ShowRecipeDetailsDescriptionActivity"
             android:exported="false" />
         <activity
             android:name=".View.AfterSearchActivity"
+            android:launchMode="singleInstance"
             android:exported="false" />
         <activity
             android:name=".View.SortRecipeActivity"
@@ -89,6 +91,7 @@
             android:exported="false" />
         <activity
             android:name=".View.SearchScreen"
+            android:launchMode="singleInstance"
             android:exported="false" />
         <activity
             android:name=".View.CommentListActivity"
@@ -98,6 +101,7 @@
             android:exported="false" />
         <activity
             android:name=".View.ProfileActivity"
+            android:launchMode="singleInstance"
             android:exported="true" />
         <activity
             android:name=".View.AccountDetailsManagementActivity"
@@ -113,6 +117,7 @@
             android:exported="false" />
         <activity
             android:name=".View.MainActivity"
+            android:launchMode="singleInstance"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

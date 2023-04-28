@@ -34,8 +34,8 @@ class MainActivity : AppCompatActivity() {
     val db = Firebase.firestore
     val generateDBModel = GenerateDBModel(this)
     val dbManagement = DBManagement()
-    val REQUEST_CODE_SEARCH = 1111
     val REQUEST_RECIPE_DETAILS = 2222
+    lateinit var bottomNavigationView:BottomNavigationView
     @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         val cateRecipeRV = findViewById<RecyclerView>(R.id.cateRecipeRV)
         val recipeTodayEatRV = findViewById<RecyclerView>(R.id.recipeTodayEatRV)
         val recipeMostLikesRV = findViewById<RecyclerView>(R.id.recipeMostLikesRV)
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
+        bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
         val btnViewMoreTodayEat = findViewById<Button>(R.id.btnViewMoreTodayEat)
         val btnViewMoreMostLikes = findViewById<Button>(R.id.btnViewMoreMostLikes)
         var cateRecipeList = generateCateRecipeData() //implemened below
@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("pageSearch","home")
                 intent.putExtra("typeSearch","recipeCategory")
             }
-            startActivityForResult(intent, REQUEST_CODE_SEARCH)
+            startActivity(intent)
         }
 
         if (DBManagement.isInitialized == false) {
@@ -154,14 +154,14 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("keySearch","Hôm nay ăn gì")
             intent.putExtra("pageSearch","home")
             intent.putExtra("typeSearch","recipeTodayEat")
-            startActivityForResult(intent, REQUEST_CODE_SEARCH)
+            startActivity(intent)
         }
         btnViewMoreMostLikes.setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             intent.putExtra("keySearch","Các món được yêu thích nhất")
             intent.putExtra("pageSearch","home")
             intent.putExtra("typeSearch","recipeMostLikes")
-            startActivityForResult(intent, REQUEST_CODE_SEARCH)
+            startActivity(intent)
         }
 
         val menu = bottomNavigationView.menu
@@ -174,8 +174,13 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.search -> {
-                    val intent = Intent(this, SearchScreen::class.java)
-                    startActivity(intent)
+                    if (DBManagement.existAfterSearch == false) {
+                        val intent = Intent(this, SearchScreen::class.java)
+                        startActivity(intent)
+                    } else {
+                        val intent = Intent(this, AfterSearchActivity::class.java)
+                        startActivity(intent)
+                    }
                     true
                 }
                 R.id.addRecipe -> {
@@ -200,11 +205,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode === REQUEST_CODE_SEARCH) {
-            if (resultCode === Activity.RESULT_OK) {
-
-            }
-        } else if (requestCode === REQUEST_RECIPE_DETAILS) {
+        if (requestCode === REQUEST_RECIPE_DETAILS) {
             if (resultCode === Activity.RESULT_OK) {
 
             }
@@ -277,6 +278,11 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("foodRecipe",foodRecipe)
             startActivityForResult(intent, REQUEST_RECIPE_DETAILS)
         }
+    }
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        val menu = bottomNavigationView.menu
+        menu.findItem(R.id.home).isChecked = true
     }
 
 }

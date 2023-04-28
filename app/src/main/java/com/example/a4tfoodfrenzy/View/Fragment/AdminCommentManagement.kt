@@ -189,24 +189,20 @@ class AdminCommentManagement : Fragment() {
         sharedPreferences.edit().putInt("scrollPos", lastPosition).apply()
 
         // Lấy chuỗi ngày tháng năm được chọn từ tvDatePicker
-            // Lấy chuỗi ngày tháng năm được chọn từ tvDatePicker
-            val selectedDateStr = tvDatePicker.text.toString()
+        // Lấy chuỗi ngày tháng năm được chọn từ tvDatePicker
+        val selectedDateStr = tvDatePicker.text.toString()
 
         // Chuyển đổi chuỗi thành đối tượng Date
 
         // Chuyển đổi chuỗi thành đối tượng Date
-            val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-            var selectedDate: Date? = null
-            try {
-                selectedDate = sdf.parse(selectedDateStr)
-            } catch (e: ParseException) {
-                e.printStackTrace()
-            }
-
-        // Lấy giá trị thời gian của đối tượng Date
-
-        // Lấy giá trị thời gian của đối tượng Date
-            val selectedTime = selectedDate!!.time
+        val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        var selectedDate: Date? = null
+        try {
+            selectedDate = sdf.parse(selectedDateStr)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        val selectedTime = selectedDate!!.time
         sharedPreferences.edit().putLong("calender", selectedTime).apply();
     }
 }
