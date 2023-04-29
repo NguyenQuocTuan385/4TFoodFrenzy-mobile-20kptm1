@@ -73,6 +73,7 @@ class EditProfileActivity : AppCompatActivity() {
             val intent = Intent(this, ProfileActivity::class.java)
             // gửi ảnh đến profile
             intent.putExtra("urlAvt", urlAvt)
+            intent.putExtra("name", nameET.text.toString())
             setResult(RESULT_OK, intent)
             finish()
         }
