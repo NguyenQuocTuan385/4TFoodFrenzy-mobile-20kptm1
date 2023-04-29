@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "696798584517",
-    "project_id": "tfoodfrenzy2",
-    "storage_bucket": "tfoodfrenzy2.appspot.com"
+    "project_number": "524554499152",
+    "project_id": "ecommerce-32e00",
+    "storage_bucket": "ecommerce-32e00.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:696798584517:android:7183d9ec47596ab0ac9aac",
+        "mobilesdk_app_id": "1:524554499152:android:1e77f39f90569d5ea5cd55",
         "android_client_info": {
           "package_name": "com.example.a4tfoodfrenzy"
         }
       },
       "oauth_client": [
         {
-          "client_id": "696798584517-tef7r1nigs0v26gno76gj6l957kh54sa.apps.googleusercontent.com",
+          "client_id": "524554499152-abfg9at9blf8imkh0ihrs6o2luoi7n72.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCxxo8pM9vXYsBrpEFy-XKnnt7PlDRd6sU"
+          "current_key": "AIzaSyBI75XjzIwzWA_AGUBn0k-b9tQjrXp6ePw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "696798584517-tef7r1nigs0v26gno76gj6l957kh54sa.apps.googleusercontent.com",
+              "client_id": "524554499152-7l79bgds9ibl11jq4rnocutchdm217fn.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

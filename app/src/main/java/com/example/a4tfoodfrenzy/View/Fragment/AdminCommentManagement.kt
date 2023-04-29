@@ -189,10 +189,7 @@ class AdminCommentManagement : Fragment() {
         sharedPreferences.edit().putInt("scrollPos", lastPosition).apply()
 
         // Lấy chuỗi ngày tháng năm được chọn từ tvDatePicker
-        // Lấy chuỗi ngày tháng năm được chọn từ tvDatePicker
         val selectedDateStr = tvDatePicker.text.toString()
-
-        // Chuyển đổi chuỗi thành đối tượng Date
 
         // Chuyển đổi chuỗi thành đối tượng Date
         val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())

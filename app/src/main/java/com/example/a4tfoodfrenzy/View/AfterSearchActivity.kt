@@ -1,7 +1,10 @@
 package com.example.a4tfoodfrenzy.View
 
 import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.*
 import com.example.a4tfoodfrenzy.Adapter.GridSpacingItemDecoration
 import com.example.a4tfoodfrenzy.Adapter.RecipeListAdapter
+import com.example.a4tfoodfrenzy.BroadcastReceiver.ConstantAction
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.RecipeCategory
@@ -36,17 +40,38 @@ class AfterSearchActivity : AppCompatActivity() {
     private val REQUEST_RECIPE_DETAILS = 4444
     lateinit var bottomNavigationView: BottomNavigationView
     lateinit var searchET: EditText
+    lateinit var keySearch: String
+    lateinit var typeSearch:String
+    private val myBroadcastReceiverSearch = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action.equals(ConstantAction.ADD_MY_RECIPE_ACTION)) {
+                setRecipeListAdapterWithCondition(keySearch, typeSearch)
+            }
+            else if (intent?.action.equals(ConstantAction.UPDATE_MY_RECIPE_ACTION)) {
+                setRecipeListAdapterWithCondition(keySearch, typeSearch)
+            }
+            else if (intent?.action.equals(ConstantAction.DELETE_MY_RECIPE_ACTION)) {
+                setRecipeListAdapterWithCondition(keySearch, typeSearch)
+            }
+            else if (intent?.action.equals(ConstantAction.UNSHARED_RECIPE_ACTION)) {
+                setRecipeListAdapterWithCondition(keySearch, typeSearch)
+            }
+            else if (intent?.action.equals(ConstantAction.SHARE_RECIPE_ACTION)) {
+                setRecipeListAdapterWithCondition(keySearch, typeSearch)
+            }
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_after_search)
 
-        bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
-        searchET = findViewById<EditText>(R.id.searchET)
+        bottomNavigationView = findViewById(R.id.botNavbar)
+        searchET = findViewById(R.id.searchET)
         recipeAfterSearchRV = findViewById(R.id.recipeAfterSearchRV)
-        DBManagement.existAfterSearch = true
 
-        val keySearch = intent.getStringExtra("keySearch")
-        val typeSearch = intent.getStringExtra("typeSearch")
+        DBManagement.existAfterSearch = true
+        keySearch = intent.getStringExtra("keySearch").toString()
+        typeSearch = intent.getStringExtra("typeSearch").toString()
 
         findViewById<ImageView>(R.id.imgBack).setOnClickListener {
             val intent = Intent(this, SearchScreen::class.java)
@@ -61,15 +86,21 @@ class AfterSearchActivity : AppCompatActivity() {
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
         }
 
-        setRecipeListAdapterWithCondition(keySearch!!, typeSearch!!)
+        setRecipeListAdapterWithCondition(keySearch, typeSearch)
+        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
+        recipeAfterSearchRV!!.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
 
         searchET.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 if (!searchET.text.isNullOrEmpty()) {
                     val recipeAfterSearch = findRecipeListWithKeyword(searchET.text.toString())
                     setRecipeListAdapter(recipeAfterSearch)
+                    keySearch = searchET.text.toString()
+                    typeSearch = "recipe"
                 } else {
                     setRecipeListAdapter(generateRecipeDatabase(DBManagement.foodRecipeList))
+                    keySearch = ""
+                    typeSearch = "recipeTodayEat"
                 }
             }
             true
@@ -111,6 +142,26 @@ class AfterSearchActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        var intentFilter1 = IntentFilter(ConstantAction.ADD_MY_RECIPE_ACTION)
+        var intentFilter2 = IntentFilter(ConstantAction.DELETE_MY_RECIPE_ACTION)
+        var intentFilter3 = IntentFilter(ConstantAction.UPDATE_MY_RECIPE_ACTION)
+        var intentFilter4 = IntentFilter(ConstantAction.UNSHARED_RECIPE_ACTION)
+        var intentFilter5 = IntentFilter(ConstantAction.SHARE_RECIPE_ACTION)
+        registerReceiver(myBroadcastReceiverSearch, intentFilter1)
+        registerReceiver(myBroadcastReceiverSearch, intentFilter2)
+        registerReceiver(myBroadcastReceiverSearch, intentFilter3)
+        registerReceiver(myBroadcastReceiverSearch, intentFilter4)
+        registerReceiver(myBroadcastReceiverSearch, intentFilter5)
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        // Hủy đăng ký listener
+        unregisterReceiver(myBroadcastReceiverSearch)
+        DBManagement.existAfterSearch = false
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == REQUEST_CODE_FILTER){
@@ -135,18 +186,18 @@ class AfterSearchActivity : AppCompatActivity() {
         if (typeSearch == "cookTime") {
             val recipeAfterSearch = findRecipeListWithCookTime(keySearch.toString())
             setRecipeListAdapter(recipeAfterSearch)
-            searchET.setHint(keySearch)
+            searchET.hint = keySearch
         } else if (typeSearch == "recipeCategory") {
             val recipeAfterSearch = findRecipeListWithCategory(keySearch.toString())
             setRecipeListAdapter(recipeAfterSearch)
-            searchET.setHint(keySearch)
+            searchET.hint = keySearch
         } else if (typeSearch == "recipeTodayEat") {
             setRecipeListAdapter(generateRecipeDatabase(DBManagement.foodRecipeList))
-            searchET.setHint(keySearch)
+            searchET.hint = keySearch
         } else if (typeSearch == "recipeMostLikes") {
             val recipeAfterSearch = generateRecipeMostLikesData(DBManagement.foodRecipeList)
             setRecipeListAdapter(recipeAfterSearch)
-            searchET.setHint(keySearch)
+            searchET.hint = keySearch
         } else {
             val recipeAfterSearch = findRecipeListWithKeyword(keySearch)
             setRecipeListAdapter(recipeAfterSearch)
@@ -158,8 +209,6 @@ class AfterSearchActivity : AppCompatActivity() {
         adapterRecipeAfterSearchRV = RecipeListAdapter(this, recipeAfterSearch)
         recipeAfterSearchRV!!.adapter = adapterRecipeAfterSearchRV
         recipeAfterSearchRV!!.layoutManager = GridLayoutManager(this, 2)
-        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
-        recipeAfterSearchRV!!.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
         adapterRecipeAfterSearchRV!!.onItemClick = { foodRecipe,user, i ->
             val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
             intent.putExtra("foodRecipe", foodRecipe)
@@ -170,7 +219,7 @@ class AfterSearchActivity : AppCompatActivity() {
     }
 
     fun findRecipeListWithCookTime(cookTime: String): LinkedHashMap<FoodRecipe, User> {
-        var result = LinkedHashMap<FoodRecipe, User>()
+        val result = LinkedHashMap<FoodRecipe, User>()
 
         for (foodRecipe in DBManagement.foodRecipeList) {
             if (foodRecipe.cookTime == cookTime && foodRecipe.isPublic) {
@@ -195,7 +244,7 @@ class AfterSearchActivity : AppCompatActivity() {
     }
 
     fun findRecipeListWithCategory(recipeCateName: String): LinkedHashMap<FoodRecipe, User> {
-        var result = LinkedHashMap<FoodRecipe, User>()
+        val result = LinkedHashMap<FoodRecipe, User>()
 
         val recipeCategory = findRecipeCategory(recipeCateName)
 
@@ -213,7 +262,7 @@ class AfterSearchActivity : AppCompatActivity() {
     }
 
     fun findRecipeListWithKeyword(keySearch: String): LinkedHashMap<FoodRecipe, User> {
-        var result = LinkedHashMap<FoodRecipe, User>()
+        val result = LinkedHashMap<FoodRecipe, User>()
 
         for (foodRecipe in DBManagement.foodRecipeList) {
             if (foodRecipe.recipeName.toLowerCase()
@@ -231,7 +280,7 @@ class AfterSearchActivity : AppCompatActivity() {
     }
 
     fun generateRecipeMostLikesData(recipeList: ArrayList<FoodRecipe>): LinkedHashMap<FoodRecipe, User> {
-        var result = LinkedHashMap<FoodRecipe, User>()
+        val result = LinkedHashMap<FoodRecipe, User>()
 
         val sortedRecipes = recipeList.sortedByDescending { it.numOfLikes }
         for (foodRecipe in sortedRecipes) {
@@ -248,7 +297,7 @@ class AfterSearchActivity : AppCompatActivity() {
     }
 
     fun generateRecipeDatabase(recipeList: ArrayList<FoodRecipe>): LinkedHashMap<FoodRecipe, User> {
-        var result = LinkedHashMap<FoodRecipe, User>()
+        val result = LinkedHashMap<FoodRecipe, User>()
 
         for (foodRecipe in recipeList) {
             if (foodRecipe.isPublic) {
@@ -274,8 +323,4 @@ class AfterSearchActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        DBManagement.existAfterSearch = false
-    }
 }

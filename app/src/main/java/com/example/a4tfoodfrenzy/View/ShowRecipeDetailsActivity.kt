@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bumptech.glide.Glide
 import com.example.a4tfoodfrenzy.Adapter.FoodImageAdapter
+import com.example.a4tfoodfrenzy.BroadcastReceiver.ConstantAction
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R
@@ -256,19 +257,23 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                 saveRecipeButton.setImageResource(R.drawable.unsave_recipe_button)
 
                 // remove save info from db
-                unsaveRecipeFromDB()
+                unsaveRecipeFromDB() {boolean ->
+                    isSavedFood = false
+                    val intent1 = Intent(ConstantAction.ADD_SAVED_RECIPE_ACTION)
+                    sendBroadcast(intent1)
+                }
 
-                isSavedFood = false
             } else { // current state is un-saved --> change to saved
                 // change image source to saved
                 saveRecipeButton.setImageResource(R.drawable.saved_recipe_button)
 
                 // save food into DB
-                saveRecipeIntoDB()
-
-                isSavedFood = true
+                saveRecipeIntoDB() {boolean ->
+                    val intent1 = Intent(ConstantAction.ADD_SAVED_RECIPE_ACTION)
+                    sendBroadcast(intent1)
+                    isSavedFood = true
+                }
             }
-
         }
 
         // write comment listener
@@ -507,7 +512,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
 
     // add or remove current user's ID into / from current selected recipe food userSavedRecipes field on firestore
-    private fun handleUserToRecipeFoodsCollection(taskType: Boolean) {
+    private fun handleUserToRecipeFoodsCollection(taskType: Boolean, callback: (Boolean) -> Unit) {
         // add user id into recipefood table
         db.collection("RecipeFoods")
             .whereEqualTo("id", currentFoodRecipe.id)
@@ -526,13 +531,19 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                             else FieldValue.arrayRemove(
                                 DBManagement.user_current?.id
                             )
-                        )
+                        ).addOnSuccessListener {
+                            callback(true)
+                        }.addOnFailureListener {
+                            callback(false)
+                        }
                 }
+            }.addOnFailureListener {
+                callback(false)
             }
     }
 
     // add or remove selected recipe food's ID into / from current users's foodRecipeSaved field on firestore
-    private fun handleRecipeToUserCollection(taskType: Boolean) {
+    private fun handleRecipeToUserCollection(taskType: Boolean, callback: (Boolean) -> Unit) {
         // add RecipeFood ID to user table
         db.collection("users")
             .whereEqualTo("id", DBManagement.user_current?.id)
@@ -550,21 +561,45 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                                 FieldValue.arrayUnion(currentFoodRecipe.id)
                             else
                                 FieldValue.arrayRemove(currentFoodRecipe.id)
-                        )
+                        ).addOnSuccessListener {
+                            callback(true)
+                        }.addOnFailureListener {
+                            callback(false)
+                        }
                 }
+            }.addOnFailureListener {
+                callback(false)
             }
     }
 
     // remove (unsave) all info from firestore by calling functions
-    private fun unsaveRecipeFromDB() {
-        handleUserToRecipeFoodsCollection(false)
-        handleRecipeToUserCollection(false)
+    private fun unsaveRecipeFromDB(callback: (Boolean) -> Unit) {
+        handleUserToRecipeFoodsCollection(false) {boolean ->
+            if (boolean) {
+                handleRecipeToUserCollection(false) {booleann ->
+                    if (boolean) {
+                        callback(true)
+                    } else {
+                        callback(false)
+                    }
+                }
+            }
+        }
     }
 
     // save all needed info into firestore by calling functions
-    private fun saveRecipeIntoDB() {
-        handleUserToRecipeFoodsCollection(true)
-        handleRecipeToUserCollection(true)
+    private fun saveRecipeIntoDB(callback: (Boolean) -> Unit) {
+        handleUserToRecipeFoodsCollection(true) {boolean ->
+            if (boolean) {
+                handleRecipeToUserCollection(true) {booleann ->
+                    if (boolean) {
+                        callback(true)
+                    } else {
+                        callback(false)
+                    }
+                }
+            }
+        }
     }
 
     private fun launchLoginActivity() {

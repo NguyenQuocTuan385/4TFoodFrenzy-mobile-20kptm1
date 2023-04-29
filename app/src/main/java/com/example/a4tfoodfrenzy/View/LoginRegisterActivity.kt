@@ -12,7 +12,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class LoginRegisterActivity : AppCompatActivity() {
     private lateinit var loginMail:FloatingActionButton
-    private lateinit var registerMail:TextView
+    private lateinit var registerMail:Button
     private lateinit var closeBtn:ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

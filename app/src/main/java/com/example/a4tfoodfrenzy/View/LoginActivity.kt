@@ -4,7 +4,11 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.util.Patterns
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
@@ -50,10 +54,13 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        emailFocusListener()
 
         loginBtn.setOnClickListener {
             val email= emailInput.editText?.text.toString()
             val password= passwordInput.editText?.text.toString()
+            if(email.isEmpty()||password.isEmpty())
+                return@setOnClickListener
             showLoadingAlert()
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
@@ -80,6 +87,38 @@ class LoginActivity : AppCompatActivity() {
 
         }
     }
+    private fun emailFocusListener()
+    {
+        emailInput.editText?.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                emailInput.helperText = validEmail()
+            }
+        }
+
+
+    }
+    private fun checkEmailExistence(email: String): Boolean {
+        for (user in DBManagement.userList) {
+            if (user.email == email) {
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun validEmail():String?{
+        val emailText=emailInput.editText!!.text.toString()
+        if(emailText.isBlank())
+            return null
+        if(!Patterns.EMAIL_ADDRESS.matcher(emailText).matches())
+        {
+            return "Email không hợp lệ"
+        }
+        if (!checkEmailExistence(emailText)) {
+            return "Email không tồn tại"
+        }
+        return null
+    }
     private fun showLoadingAlert()
     {
         pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
@@ -88,6 +127,7 @@ class LoginActivity : AppCompatActivity() {
         pDialog.setCancelable(false)
         pDialog.show()
     }
+
     private fun stopLoadingAlert()
     {
         pDialog.cancel()

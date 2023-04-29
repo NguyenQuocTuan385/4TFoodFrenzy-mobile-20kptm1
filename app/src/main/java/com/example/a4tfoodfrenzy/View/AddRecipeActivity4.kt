@@ -15,6 +15,7 @@ import com.example.a4tfoodfrenzy.Adapter.AddStepAdapter
 import com.example.a4tfoodfrenzy.Api.Food
 import com.example.a4tfoodfrenzy.Api.NinjasApiService
 import com.example.a4tfoodfrenzy.Api.TranslateUtil
+import com.example.a4tfoodfrenzy.BroadcastReceiver.ConstantAction
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
@@ -435,10 +436,12 @@ class AddRecipeActivity4 : AppCompatActivity() {
                             "Bạn đã thêm món ăn thành công"
                         ) { confirm ->
                             if (confirm) {
-                                val intent = Intent(this, MainActivity::class.java)
+                                val intent = Intent(this, ProfileActivity::class.java)
                                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                startActivity(intent)
+                                val intent1 = Intent(ConstantAction.ADD_MY_RECIPE_ACTION)
+                                sendBroadcast(intent1)
                                 finishAffinity()
+                                startActivity(intent)
                             }
                         }
                     }, {
@@ -447,10 +450,10 @@ class AddRecipeActivity4 : AppCompatActivity() {
                             "Bạn đã thêm món ăn thất bại"
                         ) { confirm ->
                             if (confirm) {
-                                val intent = Intent(this, MainActivity::class.java)
+                                val intent = Intent(this, ProfileActivity::class.java)
                                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                startActivity(intent)
                                 finishAffinity()
+                                startActivity(intent)
                             }
                         }
                     })
@@ -467,10 +470,12 @@ class AddRecipeActivity4 : AppCompatActivity() {
                         "Bạn đã cập nhật món ăn thành công"
                     ) { confirm ->
                         if (confirm) {
-                            val intent = Intent(this, MainActivity::class.java)
+                            val intent = Intent(this, ProfileActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivity(intent)
+                            val intent1 = Intent(ConstantAction.UPDATE_MY_RECIPE_ACTION)
+                            sendBroadcast(intent1)
                             finishAffinity()
+                            startActivity(intent)
                         }
                     }
                 }, {
@@ -479,10 +484,10 @@ class AddRecipeActivity4 : AppCompatActivity() {
                         "Bạn đã thêm món ăn thất bại"
                     ) { confirm ->
                         if (confirm) {
-                            val intent = Intent(this, MainActivity::class.java)
+                            val intent = Intent(this, ProfileActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivity(intent)
                             finishAffinity()
+                            startActivity(intent)
                         }
                     }
                 })

@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.ListIngredientAdapter
@@ -150,6 +151,7 @@ class AddRecipeActivity3 : AppCompatActivity() {
                             if(confirm)
                             {
                                 deleteIngredient(ingredient)
+                                Toast.makeText(this,"Bạn đã xóa thành công",Toast.LENGTH_SHORT).show()
                             }
                         }
                         true

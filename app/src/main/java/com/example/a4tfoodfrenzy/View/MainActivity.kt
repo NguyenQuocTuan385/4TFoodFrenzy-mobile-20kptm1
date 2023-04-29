@@ -1,35 +1,33 @@
 package com.example.a4tfoodfrenzy.View
 
-import android.animation.Animator
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.GridSpacingItemDecoration
 import com.example.a4tfoodfrenzy.Adapter.RecipeCateListAdapter
 import com.example.a4tfoodfrenzy.Adapter.RecipeListAdapter
+import com.example.a4tfoodfrenzy.BroadcastReceiver.ConstantAction
 import com.example.a4tfoodfrenzy.Helper.GenerateDBModel
 import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldPath
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import java.io.ByteArrayOutputStream
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class MainActivity : AppCompatActivity() {
     private var adapterCateRecipeRV: RecipeCateListAdapter? = null
@@ -42,54 +40,43 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnViewMoreMostLikes: Button
     private lateinit var recipeMostLikesRV: RecyclerView
     private lateinit var recipeTodayEatRV: RecyclerView
-
+    private lateinit var cateRecipeRV: RecyclerView
+    private val myBroadcastReceiverHome = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action.equals(ConstantAction.ADD_MY_RECIPE_ACTION)) {
+               fetchDatabaseFirebase()
+            }
+            else if (intent?.action.equals(ConstantAction.UPDATE_MY_RECIPE_ACTION)) {
+                fetchDatabaseFirebase()
+            }
+            else if (intent?.action.equals(ConstantAction.DELETE_MY_RECIPE_ACTION)) {
+                fetchDatabaseFirebase()
+            }
+            else if (intent?.action.equals(ConstantAction.UNSHARED_RECIPE_ACTION)) {
+                fetchDatabaseFirebase()
+            }
+            else if (intent?.action.equals(ConstantAction.SHARE_RECIPE_ACTION)) {
+                fetchDatabaseFirebase()
+            }
+        }
+    }
     @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val cateRecipeRV = findViewById<RecyclerView>(R.id.cateRecipeRV)
-        recipeTodayEatRV = findViewById<RecyclerView>(R.id.recipeTodayEatRV)
-        recipeMostLikesRV = findViewById<RecyclerView>(R.id.recipeMostLikesRV)
-        bottomNavigationView = findViewById<BottomNavigationView>(R.id.botNavbar)
-        btnViewMoreTodayEat = findViewById<Button>(R.id.btnViewMoreTodayEat)
-        btnViewMoreMostLikes = findViewById<Button>(R.id.btnViewMoreMostLikes)
-        var cateRecipeList = generateCateRecipeData() //implemened below
+        cateRecipeRV = findViewById(R.id.cateRecipeRV)
+        recipeTodayEatRV = findViewById(R.id.recipeTodayEatRV)
+        recipeMostLikesRV = findViewById(R.id.recipeMostLikesRV)
+        bottomNavigationView = findViewById(R.id.botNavbar)
+        btnViewMoreTodayEat = findViewById(R.id.btnViewMoreTodayEat)
+        btnViewMoreMostLikes = findViewById(R.id.btnViewMoreMostLikes)
 
-        adapterCateRecipeRV = RecipeCateListAdapter(cateRecipeList, true, false)
-        cateRecipeRV!!.adapter = adapterCateRecipeRV
-        cateRecipeRV.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-        adapterCateRecipeRV!!.onItemClick = { recipeCate, i ->
-            val intent = Intent(this, AfterSearchActivity::class.java)
-            if (recipeCate.recipeCateTitle.equals("Đồ uống")) {
-                intent.putExtra("keySearch", "Thức uống")
-                intent.putExtra("pageSearch", "home")
-                intent.putExtra("typeSearch", "recipeCategory")
-            } else if (recipeCate.recipeCateTitle.equals("Nấu nhanh")) {
-                intent.putExtra("keySearch", "Dưới 30 phút")
-                intent.putExtra("pageSearch", "home")
-                intent.putExtra("typeSearch", "cookTime")
-            } else if (recipeCate.recipeCateTitle.equals("Đồ ăn vặt")) {
-                intent.putExtra("keySearch", "Ăn vặt")
-                intent.putExtra("pageSearch", "home")
-                intent.putExtra("typeSearch", "recipeCategory")
-            } else if (recipeCate.recipeCateTitle.equals("Điểm tâm")) {
-                intent.putExtra("keySearch", "Điểm tâm")
-                intent.putExtra("pageSearch", "home")
-                intent.putExtra("typeSearch", "recipeCategory")
-            } else if (recipeCate.recipeCateTitle.equals("Món chính")) {
-                intent.putExtra("keySearch", "Món chính")
-                intent.putExtra("pageSearch", "home")
-                intent.putExtra("typeSearch", "recipeCategory")
-            } else if (recipeCate.recipeCateTitle.equals("Khai vị")) {
-                intent.putExtra("keySearch", "Khai vị")
-                intent.putExtra("pageSearch", "home")
-                intent.putExtra("typeSearch", "recipeCategory")
-            }
-            startActivity(intent)
-        }
-
+        setAdapterRecipeCategory()
         fetchDatabaseFirebase()
+        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
+        recipeTodayEatRV.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
+        recipeMostLikesRV.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
 
         findViewById<LinearLayout>(R.id.searchLL).setOnClickListener {
             if (!DBManagement.existAfterSearch) {
@@ -168,6 +155,20 @@ class MainActivity : AppCompatActivity() {
 //        generateDBModel.generateDatabaseUsers()
     }
 
+    override fun onStart() {
+        super.onStart()
+        var intentFilter1 = IntentFilter(ConstantAction.ADD_MY_RECIPE_ACTION)
+        var intentFilter2 = IntentFilter(ConstantAction.DELETE_MY_RECIPE_ACTION)
+        var intentFilter3 = IntentFilter(ConstantAction.UPDATE_MY_RECIPE_ACTION)
+        var intentFilter4 = IntentFilter(ConstantAction.UNSHARED_RECIPE_ACTION)
+        var intentFilter5 = IntentFilter(ConstantAction.SHARE_RECIPE_ACTION)
+        registerReceiver(myBroadcastReceiverHome, intentFilter1)
+        registerReceiver(myBroadcastReceiverHome, intentFilter2)
+        registerReceiver(myBroadcastReceiverHome, intentFilter3)
+        registerReceiver(myBroadcastReceiverHome, intentFilter4)
+        registerReceiver(myBroadcastReceiverHome, intentFilter5)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode === REQUEST_RECIPE_DETAILS) {
@@ -181,8 +182,44 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         // Hủy đăng ký listener
         dbManagement.destroyListener()
+        unregisterReceiver(myBroadcastReceiverHome)
     }
 
+    fun setAdapterRecipeCategory() {
+        var cateRecipeList = generateCateRecipeData() //implemened below
+        adapterCateRecipeRV = RecipeCateListAdapter(cateRecipeList, true, false)
+        cateRecipeRV!!.adapter = adapterCateRecipeRV
+        cateRecipeRV.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        adapterCateRecipeRV!!.onItemClick = { recipeCate, i ->
+            val intent = Intent(this, AfterSearchActivity::class.java)
+            if (recipeCate.recipeCateTitle.equals("Đồ uống")) {
+                intent.putExtra("keySearch", "Thức uống")
+                intent.putExtra("pageSearch", "home")
+                intent.putExtra("typeSearch", "recipeCategory")
+            } else if (recipeCate.recipeCateTitle.equals("Nấu nhanh")) {
+                intent.putExtra("keySearch", "Dưới 30 phút")
+                intent.putExtra("pageSearch", "home")
+                intent.putExtra("typeSearch", "cookTime")
+            } else if (recipeCate.recipeCateTitle.equals("Đồ ăn vặt")) {
+                intent.putExtra("keySearch", "Ăn vặt")
+                intent.putExtra("pageSearch", "home")
+                intent.putExtra("typeSearch", "recipeCategory")
+            } else if (recipeCate.recipeCateTitle.equals("Điểm tâm")) {
+                intent.putExtra("keySearch", "Điểm tâm")
+                intent.putExtra("pageSearch", "home")
+                intent.putExtra("typeSearch", "recipeCategory")
+            } else if (recipeCate.recipeCateTitle.equals("Món chính")) {
+                intent.putExtra("keySearch", "Món chính")
+                intent.putExtra("pageSearch", "home")
+                intent.putExtra("typeSearch", "recipeCategory")
+            } else if (recipeCate.recipeCateTitle.equals("Khai vị")) {
+                intent.putExtra("keySearch", "Khai vị")
+                intent.putExtra("pageSearch", "home")
+                intent.putExtra("typeSearch", "recipeCategory")
+            }
+            startActivity(intent)
+        }
+    }
     fun fetchDatabaseFirebase() {
         if (!DBManagement.isInitialized) {
             if (FirebaseAuth.getInstance().currentUser != null) {
@@ -346,8 +383,6 @@ class MainActivity : AppCompatActivity() {
     fun setRecipeListAdapter(adapterRecipeList: RecipeListAdapter?, recipeRV: RecyclerView) {
         recipeRV.adapter = adapterRecipeList
         recipeRV.layoutManager = GridLayoutManager(this, 2)
-        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
-        recipeRV.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
         adapterRecipeList!!.onItemClick = { foodRecipe, user, i ->
             val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
             intent.putExtra("foodRecipe", foodRecipe)

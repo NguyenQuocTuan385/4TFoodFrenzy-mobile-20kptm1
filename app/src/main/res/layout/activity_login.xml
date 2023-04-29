@@ -69,6 +69,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:hintEnabled="false"
+                app:helperText=""
+                app:helperTextTextColor="#E01414"
                 app:boxBackgroundMode="none"
                 >
 
