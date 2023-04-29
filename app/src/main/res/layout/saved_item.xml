@@ -10,7 +10,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
-        app:cardElevation="0dp"
+        app:cardElevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardUseCompatPadding="true"
+        app:cardPreventCornerOverlap="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,7 +22,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_outline"
+            android:paddingBottom="10dp"
             android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
