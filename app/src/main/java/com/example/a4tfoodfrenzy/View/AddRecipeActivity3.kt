@@ -122,7 +122,9 @@ class AddRecipeActivity3 : AppCompatActivity() {
                 R.id.action_close -> {
                     deleteAllSharePreference()
                     val intent = Intent(this, AddNewRecipe::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
+                    finishAffinity()
                     true
                 }
                 else -> false
@@ -179,7 +181,10 @@ class AddRecipeActivity3 : AppCompatActivity() {
         continueBtn = findViewById(R.id.continueBtn)
         continueBtn.setOnClickListener {
             if(validateAddIngredient()) {
-                getCalo(getIngredientAsText())
+                val intent = Intent(this, AddRecipeActivity4::class.java)
+                saveData()
+                sendData(intent)
+                startActivity(intent)
             }
         }
     }
@@ -195,7 +200,7 @@ class AddRecipeActivity3 : AppCompatActivity() {
     }
     private fun sendData(intent: Intent)
     {
-//        foodRecipe.recipeIngres=listIngredient
+        foodRecipe.recipeIngres=listIngredient
 
         //gửi loại món ăn sang màn hình 3
         intent.putExtra("cate",cate)
@@ -250,64 +255,6 @@ class AddRecipeActivity3 : AppCompatActivity() {
             }
             listIngredientAdapter.notifyDataSetChanged()
         }
-
-    }
-    private fun getIngredientAsText():String
-    {
-        var l = ""
-        for (k in listIngredient) {
-            l += "${k.ingreQuantity.roundToInt()}${k.ingreUnit} ${k.ingreName} "
-        }
-        return l
-    }
-    private fun getCalo(text:String)
-    {
-        val translateUtil= TranslateUtil()
-        translateUtil.translate(text){translatedText ->
-            getNutritionData(translatedText){list->
-                val intent = Intent(this, AddRecipeActivity4::class.java)
-                saveData()
-                sendData(intent)
-                startActivity(intent)
-            }
-        }
-    }
-
-    private fun getNutritionData(translatedText:String,callBack: (ArrayList<RecipeIngredient>)->Unit)
-    {
-        val appKey = "gY+35sz1wCbF8TvCgO0oOA==UomLBEqmDOPJ2vlE"
-        val call =
-            NinjasApiService.create().getNutritionData(appKey, translatedText)
-        call.enqueue(object : Callback<List<Food>> {
-            override fun onResponse(
-                call: Call<List<Food>>,
-                response: Response<List<Food>>
-            ) {
-                if (response.isSuccessful) {
-                    val foods = response.body()
-                    if (foods != null) {
-                        for (i in 0 until foods.size) {
-                            if(translatedText.contains(foods[i].name))
-                            {
-                                listIngredient[i].ingreCalo=foods[i].calories
-                                Log.d("CALO",listIngredient[i].ingreCalo.toString())
-                            }
-                        }
-                    }
-                    callBack(listIngredient)
-                } else {
-                    println("Gọi api không thành công")
-                }
-
-            }
-
-            override fun onFailure(call: Call<List<Food>>, t: Throwable) {
-                // API call failed, handle the error
-                Log.e("TAG", "API call failed: ${t.message}")
-            }
-
-
-        })
 
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

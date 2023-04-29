@@ -57,6 +57,10 @@ class AddRecipeActivity1 : AppCompatActivity() {
     private fun setBackToolbar() {
         toolbarAddRecipe.setNavigationOnClickListener {
             deleteAllSharePreference()
+            val intent = Intent(this, AddNewRecipe::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finishAffinity()
             finish() }
     }
 
@@ -123,7 +127,10 @@ class AddRecipeActivity1 : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.action_close -> {
                     deleteAllSharePreference()
-                    startActivity(Intent(this, AddNewRecipe::class.java))
+                    val intent = Intent(this, AddNewRecipe::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finishAffinity()
                     true
                 }
                 else -> false

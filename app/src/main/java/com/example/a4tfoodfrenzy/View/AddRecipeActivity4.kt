@@ -12,10 +12,14 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.AddStepAdapter
+import com.example.a4tfoodfrenzy.Api.Food
+import com.example.a4tfoodfrenzy.Api.NinjasApiService
+import com.example.a4tfoodfrenzy.Api.TranslateUtil
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.RecipeCookStep
+import com.example.a4tfoodfrenzy.Model.RecipeIngredient
 import com.example.a4tfoodfrenzy.R
 import com.facebook.internal.Mutable
 import com.google.android.material.appbar.MaterialToolbar
@@ -26,8 +30,12 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import kotlinx.coroutines.tasks.await
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 class AddRecipeActivity4 : AppCompatActivity() {
     private lateinit var continueBtn: Button
@@ -119,7 +127,9 @@ class AddRecipeActivity4 : AppCompatActivity() {
                 R.id.action_close -> {
                     deleteAllSharePreference()
                     val intent = Intent(this, AddNewRecipe::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
+                    finishAffinity()
                     true
                 }
                 else -> false
@@ -194,7 +204,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
             deleteAllSharePreference()
             helperFunctionDB= HelperFunctionDB(this)
             helperFunctionDB.showLoadingAlert()
-            uploadToFirebase()
+            getCalo(getIngredientAsText())
         }
     }
 
@@ -438,7 +448,9 @@ class AddRecipeActivity4 : AppCompatActivity() {
                         ) { confirm ->
                             if (confirm) {
                                 val intent = Intent(this, MainActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 startActivity(intent)
+                                finishAffinity()
                             }
                         }
                     })
@@ -468,8 +480,9 @@ class AddRecipeActivity4 : AppCompatActivity() {
                     ) { confirm ->
                         if (confirm) {
                             val intent = Intent(this, MainActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intent)
-                            finish()
+                            finishAffinity()
                         }
                     }
                 })
@@ -519,6 +532,63 @@ class AddRecipeActivity4 : AppCompatActivity() {
     {
         listStep.remove(step)
         stepsAdapter.notifyDataSetChanged()
+    }
+
+    private fun getIngredientAsText():String
+    {
+        var l = ""
+        for (k in foodRecipe.recipeIngres) {
+            l += "${k.ingreQuantity.roundToInt()}${k.ingreUnit} ${k.ingreName} "
+        }
+        return l
+    }
+    private fun getCalo(text:String)
+    {
+        val translateUtil= TranslateUtil()
+        translateUtil.translate(text){translatedText ->
+            getNutritionData(translatedText){food ->
+                foodRecipe=food
+                uploadToFirebase()
+            }
+        }
+    }
+
+    private fun getNutritionData(translatedText:String,callBack: (FoodRecipe)->Unit)
+    {
+        val appKey = "gY+35sz1wCbF8TvCgO0oOA==UomLBEqmDOPJ2vlE"
+        val call =
+            NinjasApiService.create().getNutritionData(appKey, translatedText)
+        call.enqueue(object : Callback<List<Food>> {
+            override fun onResponse(
+                call: Call<List<Food>>,
+                response: Response<List<Food>>
+            ) {
+                if (response.isSuccessful) {
+                    val foods = response.body()
+                    if (foods != null) {
+                        for (i in 0 until foods.size) {
+                            if(translatedText.contains(foods[i].name))
+                            {
+                               foodRecipe.recipeIngres[i].ingreCalo=foods[i].calories
+                                Log.d("HEHE",foodRecipe.recipeIngres[i].ingreCalo.toString())
+                            }
+                        }
+                    }
+                    callBack(foodRecipe)
+                } else {
+                    println("Gọi api không thành công")
+                }
+
+            }
+
+            override fun onFailure(call: Call<List<Food>>, t: Throwable) {
+                // API call failed, handle the error
+                Log.e("TAG", "API call failed: ${t.message}")
+            }
+
+
+        })
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
