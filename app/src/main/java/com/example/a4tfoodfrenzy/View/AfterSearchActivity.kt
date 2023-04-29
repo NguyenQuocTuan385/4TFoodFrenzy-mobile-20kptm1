@@ -168,16 +168,12 @@ class AfterSearchActivity : AppCompatActivity() {
 //            if (requestCode == REQUEST_CODE_BACK_FILTER) {
 //
 //            } else if (requestCode == REQUEST_CODE_APPLY_FILTER) {
-            val filteredFoodList = data?.extras?.get("filterdFoodRecipe") as ArrayList<FoodRecipe>
-            var finalFilteredFoodList = generateRecipeDatabase(filteredFoodList)
-            setRecipeListAdapter(finalFilteredFoodList)
+            val filteredFoodList = data?.extras?.get("filterdFoodRecipe") as ArrayList<FoodRecipe>?
 
-            Toast.makeText(
-                this,
-                    "${filteredFoodList.size}",
-                    Toast.LENGTH_SHORT
-                ).show()
-//            }
+            if(filteredFoodList != null){
+                val finalFilteredFoodList = generateRecipeDatabase(filteredFoodList)
+                setRecipeListAdapter(finalFilteredFoodList)
+            }
         }
 
     }
