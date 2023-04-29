@@ -3,9 +3,7 @@ package com.example.a4tfoodfrenzy.View
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
-import android.content.ContentValues
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -22,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.example.a4tfoodfrenzy.Adapter.*
+import com.example.a4tfoodfrenzy.BroadcastReceiver.ConstantAction
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
@@ -36,6 +35,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import java.util.*
+import kotlin.collections.HashMap
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -53,8 +53,23 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     val storageRef = FirebaseStorage.getInstance()
+    private lateinit var tabMyFoodRecipe: TabMyFoodRecipe
+    private lateinit var tabFoodRecipeSaved: TabFoodRecipeSaved
     val dbManagement = DBManagement()
     var user_current = DBManagement.user_current
+    private val myBroadcastReceiverProfile = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action.equals(ConstantAction.ADD_MY_RECIPE_ACTION)) {
+                tabMyFoodRecipe.generateRecipeCreated()
+            }
+            else if (intent?.action.equals(ConstantAction.UPDATE_MY_RECIPE_ACTION)) {
+                tabMyFoodRecipe.generateRecipeCreated()
+            }
+            else if (intent?.action.equals(ConstantAction.ADD_SAVED_RECIPE_ACTION)) {
+                tabFoodRecipeSaved.generateRecipeSaved()
+            }
+        }
+    }
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,10 +115,35 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        var intentFilter1 = IntentFilter(ConstantAction.ADD_MY_RECIPE_ACTION)
+        var intentFilter2 = IntentFilter(ConstantAction.DELETE_MY_RECIPE_ACTION)
+        var intentFilter3 = IntentFilter(ConstantAction.UPDATE_MY_RECIPE_ACTION)
+        var intentFilter4 = IntentFilter(ConstantAction.ADD_SAVED_RECIPE_ACTION)
+        registerReceiver(myBroadcastReceiverProfile, intentFilter1)
+        registerReceiver(myBroadcastReceiverProfile, intentFilter2)
+        registerReceiver(myBroadcastReceiverProfile, intentFilter3)
+        registerReceiver(myBroadcastReceiverProfile, intentFilter4)
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        // Hủy đăng ký listener
+        unregisterReceiver(myBroadcastReceiverProfile)
+    }
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        val menu = bottomNavigationView.menu
+        menu.findItem(R.id.profile).isChecked = true
+    }
     private fun tabProfile() {
         tabAdapter = TabProfileAdapter(this, supportFragmentManager)
-        tabAdapter.addFragment(TabFoodRecipeSaved(this, generateRecipeSaved()), "Món đã lưu")
-        tabAdapter.addFragment(TabMyFoodRecipe(this, generateRecipeCreated()), "Món của tôi")
+        tabFoodRecipeSaved = TabFoodRecipeSaved(this, HashMap())
+        setPopupSavedRecipeFoodMenu(tabFoodRecipeSaved)
+        tabAdapter.addFragment(tabFoodRecipeSaved, "Món đã lưu")
+        tabMyFoodRecipe = TabMyFoodRecipe(this, HashMap())
+        setPopupMyRecipeFoodMenu(tabMyFoodRecipe)
+        tabAdapter.addFragment(tabMyFoodRecipe, "Món của tôi")
         view_pager = findViewById(R.id.view_pager)
         view_pager.adapter = tabAdapter
         tabs = findViewById(R.id.tab_layout)
@@ -151,7 +191,6 @@ class ProfileActivity : AppCompatActivity() {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
-                    finish()
                     true
                 }
                 R.id.search -> {
@@ -159,12 +198,10 @@ class ProfileActivity : AppCompatActivity() {
                         val intent = Intent(this, SearchScreen::class.java)
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
-                        finish()
                     } else {
                         val intent = Intent(this, AfterSearchActivity::class.java)
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
-                        finish()
                     }
                     true
                 }
@@ -172,7 +209,6 @@ class ProfileActivity : AppCompatActivity() {
                     val intent = Intent(this, AddNewRecipe::class.java)
                     startActivity(intent)
                     overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right )
-                    finish()
                     true
                 }
                 R.id.profile -> {
@@ -182,108 +218,27 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
     }
-    private fun generateRecipeSaved(): HashMap<FoodRecipe, User> {
-        var HashMap = HashMap<FoodRecipe, User>()
-        var result = ArrayList<FoodRecipe>()
-        val recipeSaved = DBManagement.user_current?.foodRecipeSaved
-        DBManagement.foodRecipeList.forEach {
-            if (recipeSaved?.contains(it.id) == true) {
-                result.add(it)
-                DBManagement.userList.forEach { user ->
-                    if (user.myFoodRecipes?.contains(it.id) == true) {
-                        HashMap[it] = user
-                    }
-                }
-            }
-        }
-
-        return HashMap
-    }
-    private fun generateRecipeCreated(): HashMap<FoodRecipe, User> {
-        var HashMap = HashMap<FoodRecipe, User>()
-        val recipeCreated = DBManagement.user_current?.myFoodRecipes
-
-        DBManagement.foodRecipeList.forEach {
-            if(recipeCreated?.contains(it.id) == true) {
-                HashMap[it] = DBManagement.user_current!!
-            }
-        }
-
-        return HashMap
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK){
-            if(requestCode == 1) {
-                val imageUri = data?.getStringExtra("urlAvt")
-                if (imageUri != "") {
-                    Glide.with(this)
-                        .load(imageUri)
-                        .into(avatar_profile)
-                }
-            }
-        }
-    }
-}
-
-class TabFoodRecipeSaved(private var context: Context,
-                         private var monAn: HashMap<FoodRecipe, User>) : Fragment() {
-    private lateinit var autoComplete_search_Recipe: AutoCompleteTextView
-    private lateinit var recyclerView1: RecyclerView
-    var adapter = context?.let { RecipeListInProfileAdapter(it, monAn, true, false) }
-    private lateinit var auth: FirebaseAuth
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.saved_recipe_in_profile, container, false)
-        recyclerView1 = view.findViewById<RecyclerView>(R.id.gridView1)
-
-        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
-        recyclerView1!!.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
-        recyclerView1!!.adapter = adapter
-        recyclerView1!!.layoutManager = GridLayoutManager(inflater.context, 2)
-        recyclerView1.adapter = adapter
-
-        autoComplete_search_Recipe = view.findViewById(R.id.searchRecipe)
-        autoComplete_search_Recipe.setAdapter(
-            ArrayAdapter(
-                inflater.context,
-                android.R.layout.simple_list_item_1,
-                monAn.keys.toList()
-            )
-        )
-
-
-        setPupupMenu()
-        searchRecipe()
-
-        return view
-    }
-
-    private fun setPupupMenu() {
+    private fun setPopupSavedRecipeFoodMenu(tabUserSavedFoodRecipe: TabFoodRecipeSaved) {
         val list_option = listOf("Xem chi tiết", "Xóa khỏi danh sách")
         val db = Firebase.firestore
         auth = FirebaseAuth.getInstance()
         val user_id = auth.currentUser?.uid
 
-        adapter?.onButtonClick = { view, foodRecipe ->
-            val popup = PopupMenu(context, view)
+        tabUserSavedFoodRecipe.adapter?.onButtonClick = { view, foodRecipe ->
+            val popup = PopupMenu(this, view)
             list_option.forEach {
                 popup.menu.add(it)
             }
             popup.setOnMenuItemClickListener { item ->
                 when (item.title) {
                     "Xem chi tiết" -> {
-                        val intent = Intent(context, ShowRecipeDetailsActivity::class.java)
+                        val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
                         intent.putExtra("foodRecipe", foodRecipe)
                         startActivity(intent)
                         true
                     }
                     "Xóa khỏi danh sách" -> {
-                        var helperFunctionDB= HelperFunctionDB(context)
+                        var helperFunctionDB= HelperFunctionDB(this)
                         helperFunctionDB.showWarningAlert("Xóa món ăn",
                             "Bạn có chắc là sẽ xóa món ăn này?")
                         {confirm ->
@@ -311,8 +266,8 @@ class TabFoodRecipeSaved(private var context: Context,
                                         Log.w("TAG", "Error getting documents: ", exception)
                                     }
 
-                                monAn.remove(foodRecipe)
-                                adapter?.notifyDataSetChanged()
+                                tabUserSavedFoodRecipe.monAn.remove(foodRecipe)
+                                tabUserSavedFoodRecipe.adapter?.notifyDataSetChanged()
                             }
                         }
 
@@ -324,73 +279,15 @@ class TabFoodRecipeSaved(private var context: Context,
             popup.show()
         }
     }
-
-    private fun searchRecipe() {
-        autoComplete_search_Recipe.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                recyclerView1!!.adapter = adapter
-
-            }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.toString() == "") {
-                    recyclerView1!!.adapter = adapter
-                } else {
-                    val result = HashMap<FoodRecipe, User>()
-                    monAn.forEach {
-                        if (it.key.recipeName.toLowerCase().contains(s.toString().toLowerCase())) {
-                            result[it.key] = it.value
-                        }
-                    }
-                    val adapter =
-                        context?.let { RecipeListInProfileAdapter(it, result, true, false) }
-                    recyclerView1!!.adapter = adapter
-                }
-            }
-            override fun afterTextChanged(s: Editable?) {
-            }
-
-        })
-    }
-
-
-}
-
-class TabMyFoodRecipe(private var context: Context,
-                      private var monAn: HashMap<FoodRecipe, User>) : Fragment() {
-    private lateinit var autoComplete_search_Recipe: AutoCompleteTextView
-    private lateinit var recyclerView1: RecyclerView
-    var adapter = context?.let { RecipeListInProfileAdapter(it,monAn, false, true) }
-    private lateinit var auth: FirebaseAuth
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.created_recipe_in_profile, container, false)
-        recyclerView1 = view.findViewById<RecyclerView>(R.id.created_recipe_RV)
-
-        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
-        recyclerView1!!.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
-        recyclerView1!!.adapter = adapter
-        recyclerView1!!.layoutManager = GridLayoutManager(inflater.context, 2)
-        recyclerView1.adapter = adapter
-
-
-
-        autoComplete_search_Recipe = view.findViewById<AutoCompleteTextView>(R.id.searchRecipe)
-        autoComplete_search_Recipe.setAdapter(ArrayAdapter(inflater.context, android.R.layout.simple_list_item_1, monAn.keys.toList()))
-
-        setPupupMenu()
-        searchRecipe()
-
-        return view
-    }
-
-    private fun setPupupMenu() {
+    private fun setPopupMyRecipeFoodMenu(tabUserFoodRecipe: TabMyFoodRecipe) {
         val list_option1 = listOf("Cập nhật", "Xóa", "Chia sẻ")
         val list_option2 = listOf("Cập nhật", "Xóa", "Hủy chia sẻ")
         val db = Firebase.firestore
         auth = FirebaseAuth.getInstance()
         val user_id = auth.currentUser?.uid
 
-        adapter?.onButtonClick = { view, foodRecipe ->
-            val popup = PopupMenu(context, view)
+        tabUserFoodRecipe.adapter?.onButtonClick = { view, foodRecipe ->
+            val popup = PopupMenu(this, view)
             if(foodRecipe.isPublic) {
                 list_option2.forEach {
                     popup.menu.add(it)
@@ -403,7 +300,7 @@ class TabMyFoodRecipe(private var context: Context,
             popup.setOnMenuItemClickListener { item ->
                 when (item.title) {
                     "Cập nhật" -> {
-                        val intent = Intent(context, AddRecipeActivity1::class.java)
+                        val intent = Intent(this, AddRecipeActivity1::class.java)
                         intent.putExtra("foodRecipe", foodRecipe)
                         for(k in DBManagement.recipeCateList)
                         {
@@ -420,7 +317,7 @@ class TabMyFoodRecipe(private var context: Context,
                         true
                     }
                     "Xóa" -> {
-                        var helperFunctionDB = HelperFunctionDB(context)
+                        var helperFunctionDB = HelperFunctionDB(this)
                         helperFunctionDB.showWarningAlert("Xóa món ăn",
                             "Bạn có chắc là sẽ xóa món ăn này?")
                         {confirm ->
@@ -528,8 +425,10 @@ class TabMyFoodRecipe(private var context: Context,
                                         Log.w(ContentValues.TAG, "Error getting documents: ", exception)
                                     }
 
-                                monAn.remove(foodRecipe)
-                                adapter?.notifyDataSetChanged()
+                                tabUserFoodRecipe.monAn.remove(foodRecipe)
+                                tabUserFoodRecipe.adapter?.notifyDataSetChanged()
+                                val intent1 = Intent(ConstantAction.DELETE_MY_RECIPE_ACTION)
+                                sendBroadcast(intent1)
                             }
                         }
 
@@ -537,40 +436,44 @@ class TabMyFoodRecipe(private var context: Context,
                     }
                     "Chia sẻ" -> {
                         val mapUpdate = mapOf(
-                            "shared" to true
+                            "public" to true
                         )
-                        db.collection("foodRecipes")
+                        db.collection("RecipeFoods")
                             .whereEqualTo("id", foodRecipe.id)
                             .get()
                             .addOnSuccessListener { documents ->
                                 for (document in documents) {
-                                    db.collection("foodRecipes").document(document.id).update(mapUpdate)
+                                    db.collection("RecipeFoods").document(document.id).update(mapUpdate)
                                 }
+                                val intent1 = Intent(ConstantAction.SHARE_RECIPE_ACTION)
+                                sendBroadcast(intent1)
                             }
                             .addOnFailureListener{ exception ->
                                 Log.w("TAG", "Error getting documents: ", exception)
                             }
                         foodRecipe.isPublic = true
-                        adapter?.notifyDataSetChanged()
+                        tabUserFoodRecipe.adapter?.notifyDataSetChanged()
                         true
                     }
                     "Hủy chia sẻ" -> {
                         val mapUpdate = mapOf(
-                            "shared" to false
+                            "public" to false
                         )
-                        db.collection("foodRecipes")
+                        db.collection("RecipeFoods")
                             .whereEqualTo("id", foodRecipe.id)
                             .get()
                             .addOnSuccessListener { documents ->
                                 for (document in documents) {
-                                    db.collection("foodRecipes").document(document.id).update(mapUpdate)
+                                    db.collection("RecipeFoods").document(document.id).update(mapUpdate)
                                 }
+                                val intent1 = Intent(ConstantAction.UNSHARED_RECIPE_ACTION)
+                                sendBroadcast(intent1)
                             }
                             .addOnFailureListener{ exception ->
                                 Log.w("TAG", "Error getting documents: ", exception)
                             }
                         foodRecipe.isPublic = false
-                        adapter?.notifyDataSetChanged()
+                        tabUserFoodRecipe.adapter?.notifyDataSetChanged()
                         true
                     }
                     else -> false
@@ -578,36 +481,19 @@ class TabMyFoodRecipe(private var context: Context,
             }
             popup.show()
         }
-
     }
 
-    private fun searchRecipe() {
-        autoComplete_search_Recipe.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                recyclerView1!!.adapter = adapter
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(s.toString() == "") {
-                    recyclerView1!!.adapter = adapter
-                } else {
-                    val result = HashMap<FoodRecipe, User>()
-                    monAn.forEach {
-                        if(it.key.recipeName.toLowerCase().contains(s.toString().toLowerCase())) {
-                            result[it.key] = it.value
-                        }
-                    }
-                    val adapter = context?.let { RecipeListInProfileAdapter(it,result, false, true) }
-                    recyclerView1!!.adapter = adapter
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK){
+            if(requestCode == 1) {
+                val imageUri = data?.getStringExtra("urlAvt")
+                if (imageUri != "") {
+                    Glide.with(this)
+                        .load(imageUri)
+                        .into(avatar_profile)
                 }
             }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-
-        })
+        }
     }
-
-
 }
