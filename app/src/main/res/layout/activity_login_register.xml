@@ -23,7 +23,7 @@
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="100dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
@@ -95,42 +95,45 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="30dp"
         android:backgroundTint="#1877F2"
         android:clickable="true"
         android:contentDescription="dangnhapfacebook"
         android:scaleType="center"
+        android:src="@drawable/facebook"
         app:layout_constraintBottom_toTopOf="@+id/registerMail"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:maxImageSize="45dp"
-        app:tint="@null"
-        android:src="@drawable/facebook" />
+        app:tint="@null" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnMail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginBottom="50dp"
         android:backgroundTint="@color/white"
         android:clickable="true"
         android:contentDescription="dangnhapemail"
-        app:layout_constraintBottom_toTopOf="@+id/registerMail"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:borderWidth="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnFacebook"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:srcCompat="@drawable/mail" />
 
-    <TextView
+    <Button
         android:id="@+id/registerMail"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_outline"
+        android:drawableLeft="@drawable/email"
         android:gravity="center"
         android:text="Đăng ký bằng email"
+        android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="16dp"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toTopOf="@+id/information"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -170,6 +173,7 @@
         android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="?attr/selectableItemBackground"
         app:srcCompat="@drawable/baseline_close_24" />
 
 
