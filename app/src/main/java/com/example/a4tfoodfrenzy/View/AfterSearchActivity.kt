@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.*
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.LinkedHashMap
 
 class AfterSearchActivity : AppCompatActivity() {
     private var adapterRecipeAfterSearchRV: RecipeListAdapter? = null
@@ -54,7 +56,8 @@ class AfterSearchActivity : AppCompatActivity() {
         }
         findViewById<ImageView>(R.id.imgFilter).setOnClickListener {
             val intent = Intent(this, SortRecipeActivity::class.java)
-            startActivity(intent)
+            intent.putExtra("SearchedList", adapterRecipeAfterSearchRV?.getList())
+            startActivityForResult(intent, REQUEST_CODE_FILTER)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
         }
 
@@ -110,13 +113,22 @@ class AfterSearchActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode === REQUEST_CODE_FILTER) {
-            if (requestCode === REQUEST_CODE_BACK_FILTER) {
+        if(requestCode == REQUEST_CODE_FILTER){
+//            if (requestCode == REQUEST_CODE_BACK_FILTER) {
+//
+//            } else if (requestCode == REQUEST_CODE_APPLY_FILTER) {
+            val filteredFoodList = data?.extras?.get("filterdFoodRecipe") as ArrayList<FoodRecipe>
+            var finalFilteredFoodList = generateRecipeDatabase(filteredFoodList)
+            setRecipeListAdapter(finalFilteredFoodList)
 
-            } else if (requestCode === REQUEST_CODE_APPLY_FILTER) {
-
-            }
+            Toast.makeText(
+                this,
+                    "${filteredFoodList.size}",
+                    Toast.LENGTH_SHORT
+                ).show()
+//            }
         }
+
     }
 
     fun setRecipeListAdapterWithCondition(keySearch: String, typeSearch: String) {

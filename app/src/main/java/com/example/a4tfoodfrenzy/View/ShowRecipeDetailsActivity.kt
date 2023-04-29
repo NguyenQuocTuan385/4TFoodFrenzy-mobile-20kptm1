@@ -3,6 +3,8 @@ package com.example.a4tfoodfrenzy.View
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP
+import android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -276,11 +278,13 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (isNotExistComment()) {
+            val tempIsCommented = isCommented()
+
+            if (isNotExistComment() && !tempIsCommented) {
                 // if haven't like / dislike
                 // call show popup function
                 showLikeDislikePopup()
-            } else if (!isCommented()) { // comment exist in DB but description == ""
+            } else if (!tempIsCommented) { // comment exist in DB but description == ""
                 _commentID = getCmtID()
 
                 val intent = Intent(this, WriteCommentActivity::class.java)
@@ -295,8 +299,6 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         // back to previous navigation icon on toolbar
         toolbarBackButton.setOnClickListener {
-//            val myIntent = Intent(this, AfterSearchActivity::class.java)
-//            startActivity(myIntent)
             finish()
         }
 
@@ -339,17 +341,19 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
     private fun getCmtID(): Long {
         for (cmt in DBManagement.user_current!!.recipeCmts) {
             if (currentFoodRecipe.recipeCmts.contains(cmt)) {
+                Toast.makeText(this, "cmt: ${cmt}", Toast.LENGTH_SHORT).show()
                 return cmt
             }
         }
+        Toast.makeText(this, "cmt: -1", Toast.LENGTH_SHORT).show()
+
         return -1
     }
 
     private fun isCommented(): Boolean {
         val commentID: Long = getCmtID()
-        val compareValue: Long = -1
 
-        if (commentID == compareValue)
+        if (commentID == (-1).toLong())
             return false
 
         for (cmt in DBManagement.recipeCommentList) {

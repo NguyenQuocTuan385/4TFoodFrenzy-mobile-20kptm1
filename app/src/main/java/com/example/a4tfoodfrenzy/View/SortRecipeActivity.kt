@@ -15,13 +15,17 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.a4tfoodfrenzy.Api.Food
 import com.example.a4tfoodfrenzy.Model.DBManagement
+import com.example.a4tfoodfrenzy.Model.FoodRecipe
+import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
 
 class SortRecipeActivity : AppCompatActivity() {
     private val selectedCategoryId = arrayListOf<Long>()
     private val selectedDietId = arrayListOf<Long>()
 
+    private var filteredFoodList = arrayListOf<FoodRecipe>()
     companion object{
         var selectedNormalID: Long = -1
     }
@@ -39,6 +43,8 @@ class SortRecipeActivity : AppCompatActivity() {
             "Thời gian nấu",
             "Ngày đăng"
         )
+
+        val searchedList = intent?.extras?.get("SearchedList") as  (HashMap<FoodRecipe, User>)
 
         // back button
         findViewById<ImageView>(R.id.toolbarBackButton).setOnClickListener {
@@ -138,17 +144,76 @@ class SortRecipeActivity : AppCompatActivity() {
         sortRecyclerView.layoutManager = LinearLayoutManager(this)
 
         applySortButton.setOnClickListener {
-            Toast.makeText(
-                this,
-                "$selectedNormalID $selectedCategoryId \n${selectedDietId}",
-                Toast.LENGTH_SHORT
-            ).show()
+            val dietFoodIdList = getFoodIdListByDiet() // contain id of food satisfy all category type conditions
+            val categoryFoodIdList = getFoodIdListByCategory() // contain id of food satisfy all diet type conditions
+            var filteredIdList = arrayListOf<Long>() // contain all filtered ID of food satisfy all filter conditions of all filter / sort type
+
+            // not selected any type of diet, category
+            if(dietFoodIdList == null && categoryFoodIdList == null)
+                return@setOnClickListener
+
+            if(dietFoodIdList != null && categoryFoodIdList == null)
+                filteredIdList = dietFoodIdList
+            else if(dietFoodIdList == null && categoryFoodIdList != null)
+                filteredIdList = categoryFoodIdList
+            else if(dietFoodIdList != null && categoryFoodIdList != null)
+                filteredIdList = dietFoodIdList.filter { id -> categoryFoodIdList.contains(id) } as ArrayList<Long>;
+
+            // filter with filteredIdList to get FoodRecipe
+            if(searchedList.isEmpty())
+                filteredFoodList =  DBManagement.foodRecipeList.filter { food -> filteredIdList.contains(food.id) } as ArrayList<FoodRecipe>
+            else{
+                val tempFoodList = arrayListOf<FoodRecipe>()
+                for(food in searchedList){
+                    tempFoodList.add(food.key)
+                }
+                filteredFoodList =  tempFoodList.filter { food -> filteredIdList.contains(food.id) } as ArrayList<FoodRecipe>
+            }
+
+            val applySortIntent = Intent(this, AfterSearchActivity::class.java)
+
+            applySortIntent.putExtra("filterdFoodRecipe", filteredFoodList)
+            setResult(1111, applySortIntent)
+
+            finish()
+
+//            Toast.makeText(
+//                this,
+//                "${filteredIdList} / ${filteredFoodList.size}",
+//                Toast.LENGTH_SHORT
+//            ).show()
         }
 
         // change normal sort type
         adapter.onNormalSortTypeClick = { normalTypeID ->
             selectedNormalID = normalTypeID
         }
+    }
+
+    private fun getFoodIdListByDiet() : ArrayList<Long>?{
+        if(selectedDietId.size == 0)
+            return null
+
+        var resList = DBManagement.recipeDietList[selectedDietId[0].toInt()].foodRecipes
+
+        for(i in 1 until  selectedDietId.size){
+            resList = DBManagement.recipeDietList[selectedDietId[i].toInt()].foodRecipes.filter { id -> resList.contains(id) } as ArrayList<Long>
+        }
+
+        return resList
+    }
+
+    private fun getFoodIdListByCategory() : ArrayList<Long>? {
+        if(selectedCategoryId.size == 0)
+            return null
+
+        var resList = DBManagement.recipeCateList[selectedCategoryId[0].toInt()].foodRecipes
+
+        for(i in 1 until  selectedCategoryId.size){
+            resList = DBManagement.recipeCateList[selectedCategoryId[i].toInt()].foodRecipes.filter { id -> resList.contains(id) } as ArrayList<Long>
+        }
+
+        return resList
     }
 }
 
@@ -427,3 +492,5 @@ class ExpandRecyclerViewAdapter(
         }
     }
 }
+
+
