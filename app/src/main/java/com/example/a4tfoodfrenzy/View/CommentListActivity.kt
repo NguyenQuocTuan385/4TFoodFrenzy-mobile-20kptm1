@@ -69,10 +69,10 @@ class CommentListActivity : AppCompatActivity() {
             finish()
         }
 
-        cmtRV = findViewById(R.id.cmtRV)
-        findViewById<Button>(R.id.btnAddComment).setOnClickListener {
-            val intent = Intent(this, WriteCommentActivity::class.java)
-            startActivity(intent)
-        }
+//        cmtRV = findViewById(R.id.cmtRV)
+//        findViewById<Button>(R.id.btnAddComment).setOnClickListener {
+//            val intent = Intent(this, WriteCommentActivity::class.java)
+//            startActivity(intent)
+//        }
     }
 }

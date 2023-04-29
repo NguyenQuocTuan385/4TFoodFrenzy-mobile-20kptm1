@@ -270,8 +270,8 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
     private fun setPopupMyRecipeFoodMenu(tabUserFoodRecipe: TabMyFoodRecipe) {
-        val list_option1 = listOf("Cập nhật", "Xóa", "Chia sẻ")
-        val list_option2 = listOf("Cập nhật", "Xóa", "Hủy chia sẻ")
+        val list_option1 = listOf("Xem chi tiết", "Cập nhật", "Xóa", "Chia sẻ")
+        val list_option2 = listOf("Xem chi tiết", "Cập nhật", "Xóa", "Hủy chia sẻ")
         val db = Firebase.firestore
         auth = FirebaseAuth.getInstance()
         val user_id = auth.currentUser?.uid
@@ -289,6 +289,13 @@ class ProfileActivity : AppCompatActivity() {
             }
             popup.setOnMenuItemClickListener { item ->
                 when (item.title) {
+                    "Xem chi tiết" -> {
+                        val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
+                        intent.putExtra("foodRecipe", foodRecipe)
+                        startActivity(intent)
+                        true
+                    }
+
                     "Cập nhật" -> {
                         val intent = Intent(this, AddRecipeActivity1::class.java)
                         intent.putExtra("foodRecipe", foodRecipe)
@@ -483,6 +490,8 @@ class ProfileActivity : AppCompatActivity() {
                         .load(imageUri)
                         .into(avatar_profile)
                 }
+                val name = data?.getStringExtra("name")
+                name_profile.text = name
             }
         }
     }
