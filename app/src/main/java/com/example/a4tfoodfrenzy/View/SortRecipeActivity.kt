@@ -20,13 +20,17 @@ import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class SortRecipeActivity : AppCompatActivity() {
     private val selectedCategoryId = arrayListOf<Long>()
     private val selectedDietId = arrayListOf<Long>()
 
     private var filteredFoodList = arrayListOf<FoodRecipe>()
-    companion object{
+
+    companion object {
         var selectedNormalID: Long = -1
     }
 
@@ -44,16 +48,10 @@ class SortRecipeActivity : AppCompatActivity() {
             "Ngày đăng"
         )
 
-        val searchedList = intent?.extras?.get("SearchedList") as  (HashMap<FoodRecipe, User>)
+        val searchedList = intent?.extras?.get("SearchedList") as (HashMap<FoodRecipe, User>)
 
         // back button
         findViewById<ImageView>(R.id.toolbarBackButton).setOnClickListener {
-            val intent = Intent(this, AfterSearchActivity::class.java)
-            startActivity(intent)
-        }
-
-        // apply sort
-        findViewById<TextView>(R.id.applySortTextView).setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
             startActivity(intent)
         }
@@ -115,7 +113,14 @@ class SortRecipeActivity : AppCompatActivity() {
         val dietType = arrayListOf<SortType>()
 
         for (i in 0 until normalNameTypeList.size)
-            normType.add(SortType(normalNameTypeList[i], 0, normalImageList[i], selectedNormalImageList[i]))
+            normType.add(
+                SortType(
+                    normalNameTypeList[i],
+                    0,
+                    normalImageList[i],
+                    selectedNormalImageList[i]
+                )
+            )
         for ((i, category) in DBManagement.recipeCateList.withIndex())
             categoryType.add(
                 SortType(
@@ -126,7 +131,14 @@ class SortRecipeActivity : AppCompatActivity() {
                 )
             )
         for ((i, diet) in DBManagement.recipeDietList.withIndex())
-            dietType.add(SortType(diet.dietName, diet.id, dietImageList[i], selectedDietImageList[i]))
+            dietType.add(
+                SortType(
+                    diet.dietName,
+                    diet.id,
+                    dietImageList[i],
+                    selectedDietImageList[i]
+                )
+            )
 
         val normalSortList = SortList(normType, 0, "Lọc")
         val categorySortList = SortList(categoryType, 1, "Loại")
@@ -144,31 +156,46 @@ class SortRecipeActivity : AppCompatActivity() {
         sortRecyclerView.layoutManager = LinearLayoutManager(this)
 
         applySortButton.setOnClickListener {
-            val dietFoodIdList = getFoodIdListByDiet() // contain id of food satisfy all category type conditions
-            val categoryFoodIdList = getFoodIdListByCategory() // contain id of food satisfy all diet type conditions
-            var filteredIdList = arrayListOf<Long>() // contain all filtered ID of food satisfy all filter conditions of all filter / sort type
+            val dietFoodIdList =
+                getFoodIdListByDiet() // contain id of food satisfy all category type conditions
+            val categoryFoodIdList =
+                getFoodIdListByCategory() // contain id of food satisfy all diet type conditions
+            var filteredIdList =
+                arrayListOf<Long>() // contain all filtered ID of food satisfy all filter conditions of all filter / sort type
 
-            // not selected any type of diet, category
-            if(dietFoodIdList == null && categoryFoodIdList == null)
-                return@setOnClickListener
+//            // not selected any type of diet, category
+//            if(dietFoodIdList == null && categoryFoodIdList == null)
+//                return@setOnClickListener
 
-            if(dietFoodIdList != null && categoryFoodIdList == null)
+            if (dietFoodIdList != null && categoryFoodIdList == null)
                 filteredIdList = dietFoodIdList
-            else if(dietFoodIdList == null && categoryFoodIdList != null)
+            else if (dietFoodIdList == null && categoryFoodIdList != null)
                 filteredIdList = categoryFoodIdList
-            else if(dietFoodIdList != null && categoryFoodIdList != null)
-                filteredIdList = dietFoodIdList.filter { id -> categoryFoodIdList.contains(id) } as ArrayList<Long>;
+            else if (dietFoodIdList != null && categoryFoodIdList != null)
+                filteredIdList =
+                    dietFoodIdList.filter { id -> categoryFoodIdList.contains(id) } as ArrayList<Long>;
 
             // filter with filteredIdList to get FoodRecipe
-            if(searchedList.isEmpty())
-                filteredFoodList =  DBManagement.foodRecipeList.filter { food -> filteredIdList.contains(food.id) } as ArrayList<FoodRecipe>
-            else{
+            if (searchedList.isEmpty()) {
+                if (dietFoodIdList == null && categoryFoodIdList == null)
+                    filteredFoodList = DBManagement.foodRecipeList
+                else
+                    filteredFoodList =
+                        DBManagement.foodRecipeList.filter { food -> filteredIdList.contains(food.id) } as ArrayList<FoodRecipe>
+            } else {
                 val tempFoodList = arrayListOf<FoodRecipe>()
-                for(food in searchedList){
+                for (food in searchedList) {
                     tempFoodList.add(food.key)
                 }
-                filteredFoodList =  tempFoodList.filter { food -> filteredIdList.contains(food.id) } as ArrayList<FoodRecipe>
+
+                if (dietFoodIdList == null && categoryFoodIdList == null)
+                    filteredFoodList = tempFoodList
+                else
+                    filteredFoodList =
+                        tempFoodList.filter { food -> filteredIdList.contains(food.id) } as ArrayList<FoodRecipe>
             }
+
+            handleNormalSort()
 
             val applySortIntent = Intent(this, AfterSearchActivity::class.java)
 
@@ -190,30 +217,54 @@ class SortRecipeActivity : AppCompatActivity() {
         }
     }
 
-    private fun getFoodIdListByDiet() : ArrayList<Long>?{
-        if(selectedDietId.size == 0)
+    private fun getFoodIdListByDiet(): ArrayList<Long>? {
+        if (selectedDietId.size == 0)
             return null
 
         var resList = DBManagement.recipeDietList[selectedDietId[0].toInt()].foodRecipes
 
-        for(i in 1 until  selectedDietId.size){
-            resList = DBManagement.recipeDietList[selectedDietId[i].toInt()].foodRecipes.filter { id -> resList.contains(id) } as ArrayList<Long>
+        for (i in 1 until selectedDietId.size) {
+            resList =
+                DBManagement.recipeDietList[selectedDietId[i].toInt()].foodRecipes.filter { id ->
+                    resList.contains(id)
+                } as ArrayList<Long>
         }
 
         return resList
     }
 
-    private fun getFoodIdListByCategory() : ArrayList<Long>? {
-        if(selectedCategoryId.size == 0)
+    private fun getFoodIdListByCategory(): ArrayList<Long>? {
+        if (selectedCategoryId.size == 0)
             return null
 
         var resList = DBManagement.recipeCateList[selectedCategoryId[0].toInt()].foodRecipes
 
-        for(i in 1 until  selectedCategoryId.size){
-            resList = DBManagement.recipeCateList[selectedCategoryId[i].toInt()].foodRecipes.filter { id -> resList.contains(id) } as ArrayList<Long>
+        for (i in 1 until selectedCategoryId.size) {
+            resList =
+                DBManagement.recipeCateList[selectedCategoryId[i].toInt()].foodRecipes.filter { id ->
+                    resList.contains(id)
+                } as ArrayList<Long>
         }
 
         return resList
+    }
+
+    private fun handleNormalSort() {
+        if (selectedNormalID == (0).toLong()) { // sort by like
+            filteredFoodList = filteredFoodList.sortedByDescending { it.numOfLikes }.toList() as java.util.ArrayList<FoodRecipe>
+        }
+        else if(selectedNormalID == (1).toLong()){ // sort by calory
+            filteredFoodList = filteredFoodList.sortedByDescending { food -> food.recipeIngres.sumByDouble { it.ingreCalo!! } }.toList() as java.util.ArrayList<FoodRecipe>
+        }
+        else if(selectedNormalID == (2).toLong()){ // sort by comment
+            filteredFoodList = filteredFoodList.sortedByDescending { it.recipeCmts.size }.toList() as java.util.ArrayList<FoodRecipe>
+        }
+        else if(selectedNormalID == (3).toLong()){ // sort by cook time
+            filteredFoodList = filteredFoodList.sortedByDescending {it.cookTime }.toList() as java.util.ArrayList<FoodRecipe>
+        }
+        else if(selectedNormalID == (4).toLong()){ // sort by date
+            filteredFoodList = filteredFoodList.sortedByDescending {it.date }.toList() as java.util.ArrayList<FoodRecipe>
+        }
     }
 }
 
@@ -234,18 +285,20 @@ class NormSortAdapter(
         val cardViewContainer: CardView = listItemView.findViewById(R.id.sortItemCardView)
     }
 
-    inner class SingleChoiceSortViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
+    inner class SingleChoiceSortViewHolder(listItemView: View) :
+        RecyclerView.ViewHolder(listItemView) {
         val sortTypeName: TextView = listItemView.findViewById(R.id.itemSort)
         val sortIconImage: ImageView = listItemView.findViewById(R.id.sortItemIcon)
 //        val containerLayout : ConstraintLayout = listItemView.findViewById(R.id.normalSortConstraintLayoutContainer)
 
         init {
-            listItemView.setOnClickListener{
+            listItemView.setOnClickListener {
                 // unchoose
-                normalSelectedID = if(SortRecipeActivity.selectedNormalID == bindingAdapterPosition.toLong())
-                    (-1).toLong()
-                else
-                    bindingAdapterPosition.toLong()
+                normalSelectedID =
+                    if (SortRecipeActivity.selectedNormalID == bindingAdapterPosition.toLong())
+                        (-1).toLong()
+                    else
+                        bindingAdapterPosition.toLong()
 
                 onSortTypeClick?.invoke(
                     normalSelectedID,
@@ -262,16 +315,22 @@ class NormSortAdapter(
         val inflater = LayoutInflater.from(context)
 
         if (viewType == 1111)
-            return SingleChoiceSortViewHolder(inflater.inflate(R.layout.normal_sort_item, parent, false))
+            return SingleChoiceSortViewHolder(
+                inflater.inflate(
+                    R.layout.normal_sort_item,
+                    parent,
+                    false
+                )
+            )
         else if (viewType == 2222)
             return SquareSortViewHolder(inflater.inflate(R.layout.square_sort_item, parent, false))
         return SquareSortViewHolder(inflater.inflate(R.layout.square_sort_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if(holder.itemViewType == 1111){
+        if (holder.itemViewType == 1111) {
             // view
-            val tempHolder : SingleChoiceSortViewHolder = holder as SingleChoiceSortViewHolder
+            val tempHolder: SingleChoiceSortViewHolder = holder as SingleChoiceSortViewHolder
             val sortType: SortType = sortTypeList[position]
             val sortTypeName = tempHolder.sortTypeName
             val sortIconImage = tempHolder.sortIconImage
@@ -281,17 +340,15 @@ class NormSortAdapter(
             sortIconImage.setImageResource(sortType.normImage)
 
             // change state base on condition
-            if(position.toLong() == SortRecipeActivity.selectedNormalID){
+            if (position.toLong() == SortRecipeActivity.selectedNormalID) {
                 sortIconImage.setImageResource(sortType.selectedImage)
                 sortTypeName.setTextColor(Color.parseColor("#FDBF38"))
-            }
-            else{
+            } else {
                 sortIconImage.setImageResource(sortType.normImage)
                 sortTypeName.setTextColor(Color.BLACK)
             }
-        }
-        else if (holder.itemViewType == 2222 || holder.itemViewType == 3333) {
-            val tempHolder : SquareSortViewHolder = holder as SquareSortViewHolder
+        } else if (holder.itemViewType == 2222 || holder.itemViewType == 3333) {
+            val tempHolder: SquareSortViewHolder = holder as SquareSortViewHolder
             val sortType: SortType = sortTypeList[position]
 
             val sortTypeName = tempHolder.sortTypeName
@@ -317,8 +374,7 @@ class NormSortAdapter(
                     )
 
                     notifyItemChanged(position)
-                }
-                else if (holder.itemViewType == 3333) {
+                } else if (holder.itemViewType == 3333) {
                     // unchoose sort option
                     if (selectedDietId.contains(position.toLong())) {
                         selectedDietId.remove(position.toLong())
@@ -336,8 +392,8 @@ class NormSortAdapter(
 
             }
 
-            if(holder.itemViewType == 3333){
-                if(selectedDietId.contains(position.toLong())){
+            if (holder.itemViewType == 3333) {
+                if (selectedDietId.contains(position.toLong())) {
                     // choose --> inside array
                     sortIconImage.setImageResource(sortType.selectedImage)
                     sortTypeName.setTextColor(Color.parseColor("#FDBF38"))
@@ -347,13 +403,12 @@ class NormSortAdapter(
                 }
             }
 
-            if(holder.itemViewType == 2222){
-                if (selectedCategoryId.contains(position.toLong())){
+            if (holder.itemViewType == 2222) {
+                if (selectedCategoryId.contains(position.toLong())) {
                     // choose --> inside array
                     sortIconImage.setImageResource(sortType.selectedImage)
                     sortTypeName.setTextColor(Color.parseColor("#FDBF38"))
-                }
-                else {
+                } else {
                     sortIconImage.setImageResource(sortType.normImage)
                     sortTypeName.setTextColor(Color.BLACK)
                 }
@@ -462,10 +517,10 @@ class ExpandRecyclerViewAdapter(
                 mainSortType.getExpandViewType()
             )
 
-        tempAdapter.onSortTypeClick = {id, newSelectedArrayOfOneTypeInSelectedIdList ->
+        tempAdapter.onSortTypeClick = { id, newSelectedArrayOfOneTypeInSelectedIdList ->
             if (position == 0) {
                 // unchoose normal sort option
-                if(id != (-2).toLong()){
+                if (id != (-2).toLong()) {
                     onNormalSortTypeClick?.invoke(id)
                 }
             }

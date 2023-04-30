@@ -3,8 +3,6 @@ package com.example.a4tfoodfrenzy.View
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP
-import android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -44,6 +42,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
     val db: FirebaseFirestore = Firebase.firestore
     private var _commentID: Long = -1
     private lateinit var currentFoodRecipe: FoodRecipe
+    var recipeAuthor: User? = null
 
     @RequiresApi(Build.VERSION_CODES.Q)
     @SuppressLint("SetTextI18n")
@@ -79,7 +78,6 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         currentFoodRecipe =
             intent.extras?.getParcelable("foodRecipe") ?: return
         val imagePathList = arrayListOf(currentFoodRecipe.recipeMainImage)
-        var recipeAuthor: User? = intent.extras?.getParcelable("user")
         var ingredientString: CharSequence =
             "" // string for assign to text (charsequence to use spannable)
         var stepString: CharSequence = ""
@@ -87,13 +85,19 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         var cateString = "" // string for assign to text
         var totalComment = 0 // count total comment that not nu;;
         var totalLike = 0 // count total comment that is like
-        var isSavedFood: Boolean // for save button onclicklistener check
+        var isSavedFood = false // for save button onclicklistener check
+        var isNotCurrentUser = false// check if author of the recipe is current user
 
         // count total comment (non empty description comment in comment list)
         // filter to get comment
         val filteredCommentList = DBManagement.recipeCommentList.filter { comment ->
             currentFoodRecipe.recipeCmts.contains(comment.id)
         }
+
+        // get recipe author from previous activity
+        recipeAuthor = intent.extras?.getParcelable("user")
+
+        isNotCurrentUser = recipeAuthor?.id != DBManagement.user_current?.id
 
         for (comment in filteredCommentList) {
             // comment content is null or empty --> haven't write comment --> no count
@@ -181,27 +185,35 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         // hide write comment button if current user have already
         // commented on this recipe
-        if (isLoggedIn() && isCommented()) {
+        if ((isLoggedIn() && isCommented()) || !isNotCurrentUser) {
             writeCommentButton.visibility = View.GONE
+        }
+
+        if(!isNotCurrentUser){ // currenst user is current recipe's author --> hide save button
+            saveRecipeButton.visibility = View.INVISIBLE
         }
 
         // check if user have already saved this recipe to change button state
         // user saved recipe
-        if (currentFoodRecipe.userSavedRecipes.contains(DBManagement.user_current?.id)) {
-            saveRecipeButton.setImageResource(R.drawable.saved_recipe_button)
+        if(isNotCurrentUser){
+            isSavedFood = if (currentFoodRecipe.userSavedRecipes.contains(DBManagement.user_current?.id)) {
+                saveRecipeButton.setImageResource(R.drawable.saved_recipe_button)
 
-            isSavedFood = true
-        } else {
-            saveRecipeButton.setImageResource(R.drawable.unsave_recipe_button)
-            isSavedFood = false
+                true
+            } else {
+                saveRecipeButton.setImageResource(R.drawable.unsave_recipe_button)
+                false
+            }
         }
+
+
 
         // set data for view
         foodNameTextView.text = currentFoodRecipe.recipeName
-        authorBioTextView.text = if (recipeAuthor?.bio == null) "Không có bio" else recipeAuthor.bio
+        authorBioTextView.text = if (recipeAuthor?.bio == null) "Không có bio" else recipeAuthor!!.bio
         authorNameTextView.text = recipeAuthor?.fullname
         authorTotalRecipeTextView.text =
-            if (recipeAuthor?.myFoodRecipes == null) "0" else recipeAuthor.myFoodRecipes.size.toString()
+            if (recipeAuthor?.myFoodRecipes == null) "0" else recipeAuthor!!.myFoodRecipes.size.toString()
         ingredientDetailsTextView.text = ingredientString
         stepsInstructionTextView.text = stepString
         rationTextView.text = currentFoodRecipe.ration.toString() + " người"
@@ -245,33 +257,35 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         }
 
         // save button listener
-        saveRecipeButton.setOnClickListener {
-            if (!isLoggedIn()) {
-                launchLoginActivity()
-                return@setOnClickListener
-            }
-
-            // current state is saved --> change to unsaved
-            if (isSavedFood) {
-                // change image source to unsave
-                saveRecipeButton.setImageResource(R.drawable.unsave_recipe_button)
-
-                // remove save info from db
-                unsaveRecipeFromDB() {boolean ->
-                    isSavedFood = false
-                    val intent1 = Intent(ConstantAction.ADD_SAVED_RECIPE_ACTION)
-                    sendBroadcast(intent1)
+        if(isNotCurrentUser){
+            saveRecipeButton.setOnClickListener {
+                if (!isLoggedIn()) {
+                    launchLoginActivity()
+                    return@setOnClickListener
                 }
 
-            } else { // current state is un-saved --> change to saved
-                // change image source to saved
-                saveRecipeButton.setImageResource(R.drawable.saved_recipe_button)
+                // current state is saved --> change to unsaved
+                if (isSavedFood) {
+                    // change image source to unsave
+                    saveRecipeButton.setImageResource(R.drawable.unsave_recipe_button)
 
-                // save food into DB
-                saveRecipeIntoDB() {boolean ->
-                    val intent1 = Intent(ConstantAction.ADD_SAVED_RECIPE_ACTION)
-                    sendBroadcast(intent1)
-                    isSavedFood = true
+                    // remove save info from db
+                    unsaveRecipeFromDB() {boolean ->
+                        isSavedFood = false
+                        val intent1 = Intent(ConstantAction.ADD_SAVED_RECIPE_ACTION)
+                        sendBroadcast(intent1)
+                    }
+
+                } else { // current state is un-saved --> change to saved
+                    // change image source to saved
+                    saveRecipeButton.setImageResource(R.drawable.saved_recipe_button)
+
+                    // save food into DB
+                    saveRecipeIntoDB() {boolean ->
+                        val intent1 = Intent(ConstantAction.ADD_SAVED_RECIPE_ACTION)
+                        sendBroadcast(intent1)
+                        isSavedFood = true
+                    }
                 }
             }
         }
@@ -451,6 +465,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
             intent.putExtra("commentID", _commentID)
             intent.putExtra("foodRecipe", currentFoodRecipe)
+            intent.putExtra("user", recipeAuthor)
 
             popupWindow.dismiss()
 
@@ -482,9 +497,10 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                 .addOnSuccessListener { document ->
                     if (!document.isEmpty) {
                         // add new cmt ID into food recipe
+                        // increment total like if isLike = true
                         db.collection("RecipeFoods")
                             .document(document.elementAt(0).id)
-                            .update("recipeCmts", FieldValue.arrayUnion(newID))
+                            .update("recipeCmts", FieldValue.arrayUnion(newID), "numOfLikes", if(isLike) FieldValue.increment(1) else FieldValue.increment(0))
                     }
                 }
 

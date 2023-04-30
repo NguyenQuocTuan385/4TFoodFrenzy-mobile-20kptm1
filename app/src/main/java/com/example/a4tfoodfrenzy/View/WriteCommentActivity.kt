@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
+import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
 import com.example.a4tfoodfrenzy.R.layout
 import com.google.firebase.firestore.ktx.firestore
@@ -36,6 +37,7 @@ class WriteCommentActivity : AppCompatActivity() {
     val storageRef = Firebase.storage
     private lateinit var toShowDetailIntent : Intent
     private var currentRecipe : FoodRecipe? = null
+    private var currentAuthor : User? = null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,8 +45,10 @@ class WriteCommentActivity : AppCompatActivity() {
         setContentView(layout.activity_write_comment)
 
         val numberID : Long = intent?.extras?.getLong("commentID") as Long
-        currentRecipe = intent?.extras?.get("foodRecipe") as FoodRecipe
         val cancelButton: TextView = findViewById(R.id.cancelTextViewBtn)
+
+        currentRecipe = intent?.extras?.get("foodRecipe") as FoodRecipe
+        currentAuthor = intent?.extras?.get("user") as User
 
         // assign to intent
         toShowDetailIntent = Intent(this, ShowRecipeDetailsActivity::class.java)
@@ -131,6 +135,8 @@ class WriteCommentActivity : AppCompatActivity() {
                                 uploadImage(numberID)
                             else{
                                 toShowDetailIntent.putExtra("foodRecipe", currentRecipe)
+                                toShowDetailIntent.putExtra("user", currentAuthor)
+
                                 startActivity(toShowDetailIntent)
                                 finish()
                             }
@@ -148,6 +154,8 @@ class WriteCommentActivity : AppCompatActivity() {
 
         uploadTask.addOnSuccessListener {
             toShowDetailIntent.putExtra("foodRecipe", currentRecipe)
+            toShowDetailIntent.putExtra("user", currentAuthor)
+
             startActivity(toShowDetailIntent)
             finish()
         }
