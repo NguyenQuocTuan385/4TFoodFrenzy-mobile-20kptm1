@@ -360,12 +360,9 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
     private fun getCmtID(): Long {
         for (cmt in DBManagement.user_current!!.recipeCmts) {
             if (currentFoodRecipe.recipeCmts.contains(cmt)) {
-                Toast.makeText(this, "cmt: ${cmt}", Toast.LENGTH_SHORT).show()
                 return cmt
             }
         }
-        Toast.makeText(this, "cmt: -1", Toast.LENGTH_SHORT).show()
-
         return -1
     }
 
@@ -410,14 +407,26 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         // set listener for button inside popup window
         // dislike button clicked --> pop dislike popup
         dislikeButton.setOnClickListener {
-            addCommentToDB(false)
+            addCommentToDB(false) {boolean ->
+                if (boolean) {
+                    val intent = Intent(ConstantAction.ADD_CMT_RECIPE_ACTION)
+                    sendBroadcast(intent)
+                    DBManagement.fetchDataUserCurrent {  }
+                }
+            }
             showNextPopup(false)
             popupWindow.dismiss()
         }
 
         // like button clicked --> pop like popup
         likeButton.setOnClickListener {
-            addCommentToDB(true)
+            addCommentToDB(true) {boolean ->
+                if (boolean) {
+                    val intent = Intent(ConstantAction.ADD_CMT_RECIPE_ACTION)
+                    sendBroadcast(intent)
+                    DBManagement.fetchDataUserCurrent {  }
+                }
+            }
             showNextPopup(true)
             popupWindow.dismiss()
         }
@@ -476,7 +485,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
     // new null (empty description) comment into DB
     @RequiresApi(Build.VERSION_CODES.Q)
-    private fun addCommentToDB(isLike: Boolean) {
+    private fun addCommentToDB(isLike: Boolean, callback: (Boolean) -> Unit) {
         HelperFunctionDB(this).findSlotIdEmptyInCollection("RecipeCmts") { newID ->
             val cmt = RecipeComment(newID, "", "", 0, isLike, null, "", Date())
             _commentID = newID
@@ -485,39 +494,45 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                 .add(cmt)
                 .addOnSuccessListener {
                     Log.d("hihi", "DocumentSnapshot successfully written!")
+                    // get current food document ID
+                    db.collection("RecipeFoods")
+                        .whereEqualTo("id", currentFoodRecipe.id)
+                        .get()
+                        .addOnSuccessListener { document ->
+                            if (!document.isEmpty) {
+                                // add new cmt ID into food recipe
+                                // increment total like if isLike = true
+                                db.collection("RecipeFoods")
+                                    .document(document.elementAt(0).id)
+                                    .update("recipeCmts", FieldValue.arrayUnion(newID),
+                                        "numOfLikes", if(isLike) FieldValue.increment(1)
+                                        else FieldValue.increment(0))
+                                    .addOnSuccessListener {
+                                        // find user by ID then add new cmt to that user
+                                        db.collection("users")
+                                            .whereEqualTo(
+                                                "id", (DBManagement.user_current?.id)).get()
+                                            .addOnSuccessListener { document ->
+                                                if (!document.isEmpty) {
+                                                    // add new cmt ID into food recipe
+                                                    db.collection("users")
+                                                        .document(document.elementAt(0).id)
+                                                        .update("recipeCmts", FieldValue.arrayUnion(newID))
+                                                        .addOnSuccessListener {
+                                                            callback(true)
+                                                        }
+                                                        .addOnFailureListener {
+                                                            callback(false)
+                                                        }
+                                                }
+                                            }
+                                    }
+                            }
+                        }
                 }
                 .addOnFailureListener { e ->
                     Log.w("hihi", "Error writing document", e)
-                }
-
-            // get current food document ID
-            db.collection("RecipeFoods")
-                .whereEqualTo("id", currentFoodRecipe.id)
-                .get()
-                .addOnSuccessListener { document ->
-                    if (!document.isEmpty) {
-                        // add new cmt ID into food recipe
-                        // increment total like if isLike = true
-                        db.collection("RecipeFoods")
-                            .document(document.elementAt(0).id)
-                            .update("recipeCmts", FieldValue.arrayUnion(newID), "numOfLikes", if(isLike) FieldValue.increment(1) else FieldValue.increment(0))
-                    }
-                }
-
-            // find user by ID then add new cmt to that user
-            db.collection("users")
-                .whereEqualTo(
-                    "id", (DBManagement.user_current
-                        ?: return@findSlotIdEmptyInCollection).id
-                )
-                .get()
-                .addOnSuccessListener { document ->
-                    if (!document.isEmpty) {
-                        // add new cmt ID into food recipe
-                        db.collection("users")
-                            .document(document.elementAt(0).id)
-                            .update("recipeCmts", FieldValue.arrayUnion(newID))
-                    }
+                    callback(false)
                 }
         }
     }

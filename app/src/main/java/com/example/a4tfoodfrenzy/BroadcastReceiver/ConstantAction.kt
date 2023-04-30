@@ -8,5 +8,6 @@ class ConstantAction {
         val ADD_SAVED_RECIPE_ACTION = "com.4tfoodfrenzy.ADD_SAVED_RECIPE_ACTION"
         val UNSHARED_RECIPE_ACTION = "com.4tfoodfrenzy.UNSHARED_RECIPE_ACTION"
         val SHARE_RECIPE_ACTION = "com.4tfoodfrenzy.SHARE_RECIPE_ACTION"
+        val ADD_CMT_RECIPE_ACTION = "com.4tfoodfrenzy.ADD_CMT_RECIPE_ACTION"
     }
 }

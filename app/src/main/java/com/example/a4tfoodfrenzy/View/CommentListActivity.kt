@@ -30,32 +30,19 @@ class CommentListActivity : AppCompatActivity() {
 
     private fun viewComment() {
         recipeCmtList = ArrayList()
-        var comments = ArrayList<RecipeComment>()
+
         val currentFoodRecipe: FoodRecipe? =
             intent.extras?.getParcelable("foodComment")!!
 
-
-//        // lấy ds comment của món ăn
-        DBManagement.recipeCommentList.forEach {
-            currentFoodRecipe?.recipeCmts?.forEach { cmt ->
-                if (cmt == it.id && it.description != "") {
-                    comments.add(it)
-                }
-            }
-        }
-
-//        // lấy ds user của comment
-        DBManagement.userList.forEach { user ->
-            comments.forEach { cmt ->
-                user.recipeCmts.forEach { cmtId ->
-                    if (cmtId == cmt.id) {
-                        recipeCmtList.add(RecipeCommentUserItem(cmt,user,FoodRecipe()))
+        for (recipeCmt in DBManagement.recipeCommentList) {
+            if (currentFoodRecipe?.recipeCmts?.contains(recipeCmt.id) == true && recipeCmt.description != "") {
+                for (user in DBManagement.userList) {
+                    if (user.recipeCmts.contains(recipeCmt.id)) {
+                        recipeCmtList.add(RecipeCommentUserItem(recipeCmt,user,FoodRecipe()))
                     }
                 }
             }
         }
-
-
 
         cmtAdapter = CommentListAdapter(this,recipeCmtList,true, false)
         cmtRV = findViewById(R.id.cmtRV)
@@ -69,10 +56,5 @@ class CommentListActivity : AppCompatActivity() {
             finish()
         }
 
-//        cmtRV = findViewById(R.id.cmtRV)
-//        findViewById<Button>(R.id.btnAddComment).setOnClickListener {
-//            val intent = Intent(this, WriteCommentActivity::class.java)
-//            startActivity(intent)
-//        }
     }
 }

@@ -59,6 +59,9 @@ class AfterSearchActivity : AppCompatActivity() {
             else if (intent?.action.equals(ConstantAction.SHARE_RECIPE_ACTION)) {
                 setRecipeListAdapterWithCondition(keySearch, typeSearch)
             }
+            else if (intent?.action.equals(ConstantAction.ADD_CMT_RECIPE_ACTION)) {
+                setRecipeListAdapterWithCondition(keySearch, typeSearch)
+            }
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -149,11 +152,13 @@ class AfterSearchActivity : AppCompatActivity() {
         var intentFilter3 = IntentFilter(ConstantAction.UPDATE_MY_RECIPE_ACTION)
         var intentFilter4 = IntentFilter(ConstantAction.UNSHARED_RECIPE_ACTION)
         var intentFilter5 = IntentFilter(ConstantAction.SHARE_RECIPE_ACTION)
+        var intentFilter6 = IntentFilter(ConstantAction.ADD_CMT_RECIPE_ACTION)
         registerReceiver(myBroadcastReceiverSearch, intentFilter1)
         registerReceiver(myBroadcastReceiverSearch, intentFilter2)
         registerReceiver(myBroadcastReceiverSearch, intentFilter3)
         registerReceiver(myBroadcastReceiverSearch, intentFilter4)
         registerReceiver(myBroadcastReceiverSearch, intentFilter5)
+        registerReceiver(myBroadcastReceiverSearch, intentFilter6)
     }
     override fun onDestroy() {
         super.onDestroy()

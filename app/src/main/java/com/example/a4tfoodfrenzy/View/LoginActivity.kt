@@ -67,8 +67,7 @@ class LoginActivity : AppCompatActivity() {
                     stopLoadingAlert()
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        val dbManagement = DBManagement()
-                        dbManagement.addListenerChangeDataUserCurrent { user->
+                        DBManagement.addListenerChangeDataUserCurrent { user->
                             if(user.isAdmin)
                             {
                                 val intent= Intent(this, AdminDashboard::class.java)

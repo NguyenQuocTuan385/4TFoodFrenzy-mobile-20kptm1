@@ -269,6 +269,7 @@ class ProfileActivity : AppCompatActivity() {
             popup.show()
         }
     }
+    @SuppressLint("NotifyDataSetChanged")
     private fun setPopupMyRecipeFoodMenu(tabUserFoodRecipe: TabMyFoodRecipe) {
         val list_option1 = listOf("Xem chi tiết", "Cập nhật", "Xóa", "Chia sẻ")
         val list_option2 = listOf("Xem chi tiết", "Cập nhật", "Xóa", "Hủy chia sẻ")
@@ -417,15 +418,15 @@ class ProfileActivity : AppCompatActivity() {
                                         for (document in documents) {
                                             db.collection("RecipeFoods").document(document.id).delete()
                                         }
+                                        tabUserFoodRecipe.monAn.remove(foodRecipe)
+                                        tabUserFoodRecipe.adapter?.notifyDataSetChanged()
+                                        val intent1 = Intent(ConstantAction.DELETE_MY_RECIPE_ACTION)
+                                        sendBroadcast(intent1)
                                     }
                                     .addOnFailureListener { exception ->
                                         Log.w(ContentValues.TAG, "Error getting documents: ", exception)
                                     }
 
-                                tabUserFoodRecipe.monAn.remove(foodRecipe)
-                                tabUserFoodRecipe.adapter?.notifyDataSetChanged()
-                                val intent1 = Intent(ConstantAction.DELETE_MY_RECIPE_ACTION)
-                                sendBroadcast(intent1)
                             }
                         }
 
@@ -442,14 +443,14 @@ class ProfileActivity : AppCompatActivity() {
                                 for (document in documents) {
                                     db.collection("RecipeFoods").document(document.id).update(mapUpdate)
                                 }
+                                foodRecipe.isPublic = true
+                                tabUserFoodRecipe.adapter?.notifyDataSetChanged()
                                 val intent1 = Intent(ConstantAction.SHARE_RECIPE_ACTION)
                                 sendBroadcast(intent1)
                             }
                             .addOnFailureListener{ exception ->
                                 Log.w("TAG", "Error getting documents: ", exception)
                             }
-                        foodRecipe.isPublic = true
-                        tabUserFoodRecipe.adapter?.notifyDataSetChanged()
                         true
                     }
                     "Hủy chia sẻ" -> {
@@ -463,14 +464,14 @@ class ProfileActivity : AppCompatActivity() {
                                 for (document in documents) {
                                     db.collection("RecipeFoods").document(document.id).update(mapUpdate)
                                 }
+                                foodRecipe.isPublic = false
+                                tabUserFoodRecipe.adapter?.notifyDataSetChanged()
                                 val intent1 = Intent(ConstantAction.UNSHARED_RECIPE_ACTION)
                                 sendBroadcast(intent1)
                             }
                             .addOnFailureListener{ exception ->
                                 Log.w("TAG", "Error getting documents: ", exception)
                             }
-                        foodRecipe.isPublic = false
-                        tabUserFoodRecipe.adapter?.notifyDataSetChanged()
                         true
                     }
                     else -> false

@@ -47,8 +47,8 @@ class WriteCommentActivity : AppCompatActivity() {
         val numberID : Long = intent?.extras?.getLong("commentID") as Long
         val cancelButton: TextView = findViewById(R.id.cancelTextViewBtn)
 
-        currentRecipe = intent?.extras?.get("foodRecipe") as FoodRecipe
-        currentAuthor = intent?.extras?.get("user") as User
+        currentRecipe = intent?.extras?.getParcelable("foodRecipe")
+        currentAuthor = intent?.extras?.getParcelable("user")
 
         // assign to intent
         toShowDetailIntent = Intent(this, ShowRecipeDetailsActivity::class.java)

@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
     private var adapterCateRecipeRV: RecipeCateListAdapter? = null
     val db = Firebase.firestore
     val generateDBModel = GenerateDBModel(this)
-    private val dbManagement = DBManagement()
     private val REQUEST_RECIPE_DETAILS = 2222
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var btnViewMoreTodayEat: Button
@@ -41,25 +40,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recipeMostLikesRV: RecyclerView
     private lateinit var recipeTodayEatRV: RecyclerView
     private lateinit var cateRecipeRV: RecyclerView
-    private val myBroadcastReceiverHome = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action.equals(ConstantAction.ADD_MY_RECIPE_ACTION)) {
-               fetchDatabaseFirebase()
-            }
-            else if (intent?.action.equals(ConstantAction.UPDATE_MY_RECIPE_ACTION)) {
-                fetchDatabaseFirebase()
-            }
-            else if (intent?.action.equals(ConstantAction.DELETE_MY_RECIPE_ACTION)) {
-                fetchDatabaseFirebase()
-            }
-            else if (intent?.action.equals(ConstantAction.UNSHARED_RECIPE_ACTION)) {
-                fetchDatabaseFirebase()
-            }
-            else if (intent?.action.equals(ConstantAction.SHARE_RECIPE_ACTION)) {
-                fetchDatabaseFirebase()
-            }
-        }
-    }
     @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -155,20 +135,6 @@ class MainActivity : AppCompatActivity() {
 //        generateDBModel.generateDatabaseUsers()
     }
 
-    override fun onStart() {
-        super.onStart()
-        var intentFilter1 = IntentFilter(ConstantAction.ADD_MY_RECIPE_ACTION)
-        var intentFilter2 = IntentFilter(ConstantAction.DELETE_MY_RECIPE_ACTION)
-        var intentFilter3 = IntentFilter(ConstantAction.UPDATE_MY_RECIPE_ACTION)
-        var intentFilter4 = IntentFilter(ConstantAction.UNSHARED_RECIPE_ACTION)
-        var intentFilter5 = IntentFilter(ConstantAction.SHARE_RECIPE_ACTION)
-        registerReceiver(myBroadcastReceiverHome, intentFilter1)
-        registerReceiver(myBroadcastReceiverHome, intentFilter2)
-        registerReceiver(myBroadcastReceiverHome, intentFilter3)
-        registerReceiver(myBroadcastReceiverHome, intentFilter4)
-        registerReceiver(myBroadcastReceiverHome, intentFilter5)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode === REQUEST_RECIPE_DETAILS) {
@@ -181,8 +147,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         // Hủy đăng ký listener
-        dbManagement.destroyListener()
-        unregisterReceiver(myBroadcastReceiverHome)
+        DBManagement.destroyListener()
     }
 
     fun setAdapterRecipeCategory() {
@@ -223,19 +188,19 @@ class MainActivity : AppCompatActivity() {
     fun fetchDatabaseFirebase() {
         if (!DBManagement.isInitialized) {
             if (FirebaseAuth.getInstance().currentUser != null) {
-                dbManagement.addListenerChangeDataUserCurrent { user ->
+                DBManagement.addListenerChangeDataUserCurrent { user ->
                     if (user.email.equals("")) {
-                        dbManagement.fetchDataUserCurrent { }
+                        DBManagement.fetchDataUserCurrent { }
                     } else if (user.isAdmin) {
                         val intent = Intent(this, AdminDashboard::class.java)
                         startActivity(intent)
                     }
                 }
             }
-            dbManagement.addListenerChangeDataFoodRecipe { foodRecipes ->
+            DBManagement.addListenerChangeDataFoodRecipe { foodRecipes ->
                 if (foodRecipes.isEmpty()) {
-                    dbManagement.fetchDataFoodRecipe { foodRecipeList ->
-                        dbManagement.addListenerChangeDataUser { users ->
+                    DBManagement.fetchDataFoodRecipe { foodRecipeList ->
+                        DBManagement.addListenerChangeDataUser { users ->
                             setRecipeListAdapter(
                                 RecipeListAdapter(
                                     this,
@@ -254,7 +219,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 } else {
-                    dbManagement.addListenerChangeDataUser { users ->
+                    DBManagement.addListenerChangeDataUser { users ->
                         setRecipeListAdapter(
                             RecipeListAdapter(
                                 this,
@@ -273,38 +238,22 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-            dbManagement.addListenerChangeDataRecipeCategories { recipeCategories ->
+            DBManagement.addListenerChangeDataRecipeCategories { recipeCategories ->
                 if (recipeCategories.isEmpty()) {
-                    dbManagement.fetchDataRecipeCate { }
+                    DBManagement.fetchDataRecipeCate { }
                 }
             }
-            dbManagement.addListenerChangeDataRecipeComment { recipeComments ->
+            DBManagement.addListenerChangeDataRecipeComment { recipeComments ->
                 if (recipeComments.isEmpty()) {
-                    dbManagement.fetchDataRecipeCmt { }
+                    DBManagement.fetchDataRecipeCmt { }
                 }
             }
-            dbManagement.addListenerChangeDataRecipeDiets { recipeDiets ->
+            DBManagement.addListenerChangeDataRecipeDiets { recipeDiets ->
                 if (recipeDiets.isEmpty()) {
-                    dbManagement.fetchDataRecipeDiet { }
+                    DBManagement.fetchDataRecipeDiet { }
                 }
             }
             DBManagement.isInitialized = true
-        } else {
-            setRecipeListAdapter(
-                RecipeListAdapter(
-                    this,
-                    generateRecipeTodayEatData(DBManagement.foodRecipeList, DBManagement.userList)
-                ), recipeTodayEatRV
-            )
-            btnViewMoreTodayEat.visibility = View.VISIBLE
-
-            setRecipeListAdapter(
-                RecipeListAdapter(
-                    this,
-                    generateRecipeMostLikesData(DBManagement.foodRecipeList, DBManagement.userList)
-                ), recipeMostLikesRV
-            )
-            btnViewMoreMostLikes.visibility = View.VISIBLE
         }
     }
 
