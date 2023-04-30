@@ -4,11 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.PopupMenu
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.AddStepAdapter
@@ -20,9 +21,7 @@ import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.RecipeCookStep
-import com.example.a4tfoodfrenzy.Model.RecipeIngredient
 import com.example.a4tfoodfrenzy.R
-import com.facebook.internal.Mutable
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.common.reflect.TypeToken
 import com.google.firebase.firestore.FieldValue
@@ -30,12 +29,10 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
-import kotlinx.coroutines.tasks.await
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 class AddRecipeActivity4 : AppCompatActivity() {
@@ -49,6 +46,8 @@ class AddRecipeActivity4 : AppCompatActivity() {
     private lateinit var foodRecipe: FoodRecipe
     private lateinit var sharedPreferences:SharedPreferences
     private lateinit var helperFunctionDB: HelperFunctionDB
+    private var buttonClicked=false
+
 
     private val ADD_REQUEST_CODE=1
     private val EDIT_REQUEST_CODE=2
@@ -156,6 +155,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
                             if(confirm)
                             {
                                 deleteStep(step)
+                                Toast.makeText(this,"Bạn đã xóa thành công",Toast.LENGTH_SHORT).show()
                             }
                         }
                         true
@@ -202,10 +202,10 @@ class AddRecipeActivity4 : AppCompatActivity() {
     private fun setupContinueButton() {
         continueBtn= findViewById<Button>(R.id.continueBtn)
         continueBtn.setOnClickListener {
-            deleteAllSharePreference()
-            helperFunctionDB= HelperFunctionDB(this)
-            helperFunctionDB.showLoadingAlert()
-            getCalo(getIngredientAsText())
+            if (!buttonClicked) {
+                getCalo(getIngredientAsText())
+                buttonClicked = true
+            }
         }
     }
 
@@ -285,7 +285,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
     }
 
 
-    private fun addFoodRecipeToUser(foodRecipeId: Long, userId: Long, onSuccess: () -> Unit, onFailure: (HelperFunctionDB)-> Unit) {
+    private fun addFoodRecipeToUser(foodRecipeId: Long, userId: Long, onSuccess: () -> Unit, onFailure: ()-> Unit) {
         val db = Firebase.firestore
         db.collection("users")
             .whereEqualTo("id",userId)
@@ -302,12 +302,12 @@ class AddRecipeActivity4 : AppCompatActivity() {
                            onSuccess()
                        }
                        .addOnFailureListener {
-                           onFailure(HelperFunctionDB(this))
+                           onFailure()
                        }
                }
             }
             .addOnFailureListener {
-                onFailure(HelperFunctionDB(this))
+                onFailure()
             }
     }
     private fun addFoodRecipeToDiet(
@@ -352,7 +352,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
             }
     }
 
-    private fun addFoodRecipeToCategory(foodRecipeId: Long, onSuccess: () -> Unit, onFailure: (HelperFunctionDB) ->Unit) {
+    private fun addFoodRecipeToCategory(foodRecipeId: Long, onSuccess: () -> Unit, onFailure: () ->Unit) {
         val db = Firebase.firestore
         db.collection("RecipeCates")
             .get()
@@ -378,17 +378,18 @@ class AddRecipeActivity4 : AppCompatActivity() {
 
             }
             .addOnFailureListener {
-                onFailure(HelperFunctionDB(this))
+                onFailure()
             }
     }
 
-    private fun addFoodRecipe(foodRecipe: FoodRecipe,userId: Long, onSuccess: (HelperFunctionDB) -> Unit, onFailure: () -> Unit) {
+    private fun addFoodRecipe(foodRecipe: FoodRecipe,userId: Long, onSuccess: () -> Unit, onFailure: () -> Unit) {
         addFoodRecipeToCollection(foodRecipe,
             { documentId ->
                addFoodRecipeToCategory(foodRecipe.id,{
                    addFoodRecipeToDiet(foodRecipe.id,{
                        addFoodRecipeToUser(foodRecipe.id,userId,{
-                           onSuccess(HelperFunctionDB(this))
+                           helperFunctionDB.stopLoadingAlert()
+                           onSuccess()
                        },
                            {
                                onFailure()
@@ -415,8 +416,12 @@ class AddRecipeActivity4 : AppCompatActivity() {
         if(listStep.isNullOrEmpty())
         {
             HelperFunctionDB(this).showRemindAlert("Bạn vui lòng thêm bước")
+            buttonClicked=false
             return
         }
+        helperFunctionDB= HelperFunctionDB(this)
+        helperFunctionDB.showLoadingAlert()
+        deleteAllSharePreference()
         if(!foodRecipe.recipeMainImage!!.startsWith("foods/")) {
            foodRecipe.recipeMainImage = foodRecipe.recipeMainImage?.let { uploadImageToCloudStorage(it) }
         }
@@ -431,7 +436,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
                     foodRecipe.date = Date()
                     foodRecipe.recipeSteps = listStep
                     addFoodRecipe(foodRecipe, user.id, {
-                        HelperFunctionDB(this).showSuccessAlert(
+                        helperFunctionDB.showSuccessAlert(
                             "Thành công",
                             "Bạn đã thêm món ăn thành công"
                         ) { confirm ->
@@ -445,7 +450,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
                             }
                         }
                     }, {
-                        HelperFunctionDB(this).showErrorAlert(
+                        helperFunctionDB.showErrorAlert(
                             "Thất bại",
                             "Bạn đã thêm món ăn thất bại"
                         ) { confirm ->
@@ -465,7 +470,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
             if (user != null) {
                 foodRecipe.recipeSteps=listStep
                 addFoodRecipe(foodRecipe, user.id, {
-                    HelperFunctionDB(this).showSuccessAlert(
+                    helperFunctionDB.showSuccessAlert(
                         "Thành công",
                         "Bạn đã cập nhật món ăn thành công"
                     ) { confirm ->
@@ -479,7 +484,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
                         }
                     }
                 }, {
-                    HelperFunctionDB(this).showErrorAlert(
+                    helperFunctionDB.showErrorAlert(
                         "Thất bại",
                         "Bạn đã thêm món ăn thất bại"
                     ) { confirm ->
@@ -604,10 +609,12 @@ class AddRecipeActivity4 : AppCompatActivity() {
             EDIT_REQUEST_CODE ->handleUpdateStep(resultCode,data)
         }
     }
-
     override fun onDestroy() {
         super.onDestroy()
-        helperFunctionDB.stopLoadingAlert()
+        if(HelperFunctionDB.sweetAlertDialog!=null&& HelperFunctionDB.sweetAlertDialog!!.isShowing)
+        {
+            HelperFunctionDB.sweetAlertDialog!!.dismiss()
+        }
     }
 
 }

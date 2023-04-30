@@ -24,6 +24,9 @@ class HelperFunctionDB(private var context: Context) {
     val db = Firebase.firestore
     val storage = FirebaseStorage.getInstance()
     private lateinit var pDialog:SweetAlertDialog
+    companion object{
+        var sweetAlertDialog:SweetAlertDialog?=null
+    }
 
     fun uploadImageToCloudStorage(drawableName: String, pathStorage: String) {
         // Tạo đường dẫn đến tệp tin trên Cloud Storage
@@ -104,15 +107,16 @@ class HelperFunctionDB(private var context: Context) {
         message: String,
         callback: (Boolean) -> Unit
     ) {
-        val sweetAlertDialog = SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
-        sweetAlertDialog.setTitleText(title)
-        sweetAlertDialog.setContentText(message)
-        sweetAlertDialog.setCancelable(false)
-        sweetAlertDialog.show()
-        sweetAlertDialog.setConfirmButton("OK") {
-            it.dismiss()
+        sweetAlertDialog = SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
+        sweetAlertDialog!!.setTitleText(title)
+        sweetAlertDialog!!.setContentText(message)
+        sweetAlertDialog!!.setConfirmButton("OK") {
             callback(true)
+            it.dismiss()
+            it.cancel()
         }
+        sweetAlertDialog!!.setCancelable(false)
+        sweetAlertDialog!!.show()
 
     }
 
@@ -121,15 +125,15 @@ class HelperFunctionDB(private var context: Context) {
         message: String,
         callback: (Boolean) -> Unit
     ) {
-        val sweetAlertDialog = SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
-        sweetAlertDialog.setTitleText(title)
-        sweetAlertDialog.setContentText(message)
-        sweetAlertDialog.setConfirmButton("OK") {
+        sweetAlertDialog = SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+        sweetAlertDialog!!.setTitleText(title)
+        sweetAlertDialog!!.setContentText(message)
+        sweetAlertDialog!!.setConfirmButton("OK") {
             it.dismiss()
             callback(true)
         }
-        sweetAlertDialog.setCancelable(false)
-        sweetAlertDialog.show()
+        sweetAlertDialog!!.setCancelable(false)
+        sweetAlertDialog!!.show()
     }
     fun showLoadingAlert()
     {

@@ -72,7 +72,7 @@ class AddRecipeActivity2 : AppCompatActivity() {
         cateFoodDropdown.setAdapter(adapter)
     }
     private fun setupTimeDropdown() {
-        val items = listOf("Dưới 15 phút", "Dưới 30 phút", "Dưới 45 phút", "Dưới 1 tiếng", "Trên 1 tiếng")
+        val items = listOf("Dưới 15 phút", "Dưới 30 phút", "Dưới 45 phút", "Dưới 60 phút", "Trên 60 phút")
         timedropdown = findViewById(R.id.dropdown_time)
         val adapter = ArrayAdapter(this, R.layout.list_item_dropdown, items)
         timedropdown.setAdapter(adapter)
