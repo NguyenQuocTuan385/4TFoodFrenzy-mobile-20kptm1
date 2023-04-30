@@ -3,6 +3,7 @@ package com.example.a4tfoodfrenzy.View.Fragment
 import android.content.Intent
 import android.media.Image
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,8 @@ import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
 import com.example.a4tfoodfrenzy.View.AccountDetailsManagementActivity
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -78,13 +81,85 @@ class AdminProfileManagement : Fragment() {
                         true
                     }
                     R.id.delete-> {
+                        val db = FirebaseFirestore.getInstance()
                         var helperFunctionDB= HelperFunctionDB(requireContext())
                         helperFunctionDB.showWarningAlert("Xóa người dùng",
                             "Bạn có chắc là sẽ xóa người dùng này?")
                         {confirm ->
                             if(confirm)
                             {
+                                var helperFunctionDB = HelperFunctionDB(requireContext())
 
+                                // lấy danh sách món ăn của user
+                                val myFoodRecipes = DBManagement.foodRecipeList.filter { user.myFoodRecipes.contains(it.id) }
+                                // xóa món ăn của user
+                                val id_my = myFoodRecipes.map { it.id }
+                                Log.d("TAGmyFoodRecipessssss", id_my.toString())
+                                myFoodRecipes.forEach{ foodRecipe ->
+                                    helperFunctionDB.deleteMyRecipe(foodRecipe, user.id.toString())
+                                }
+
+
+                                // xóa trong danh sách user của món đã lưu của bảng RecipeFoods
+                                db.collection("RecipeFoods")
+                                    .whereArrayContains("userSavedRecipes", user.id)
+                                    .get()
+                                    .addOnSuccessListener { documents ->
+                                        for (document in documents) {
+                                            db.collection("RecipeFoods").document(document.id)
+                                                .update("userSavedRecipes", FieldValue.arrayRemove(user.id))
+                                                .addOnSuccessListener {
+                                                    Log.d("TAG", "DocumentSnapshot successfully deleted!")
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    Log.w("TAG", "Error deleting document", e)
+                                                }
+                                        }
+                                    }
+
+
+                                // lấy danh sách bình luận của user
+                                val myComments = user.recipeCmts
+                                // xóa bình luận của user
+                                Log.d("TAGmyCommentssssss", myComments.toString())
+                                myComments.forEach{ comment ->
+                                    db.collection("RecipeCmts").whereEqualTo("id",comment).get()
+                                        .addOnSuccessListener { documents ->
+                                            for (document in documents) {
+                                                db.collection("RecipeCmts").document(document.id).delete()
+                                                    .addOnSuccessListener {
+                                                        Log.d("TAG", "DocumentSnapshot successfully deleted!")
+                                                    }
+                                                    .addOnFailureListener { e ->
+                                                        Log.w("TAG", "Error deleting document", e)
+                                                    }
+                                            }
+                                        }
+                                        .addOnFailureListener { exception ->
+                                            Log.w("TAG", "Error getting documents: ", exception)
+                                        }
+                                }
+
+                                // xóa user trong database
+                                Log.d("TAG", "user: $user")
+                                db.collection("users").whereEqualTo("email",user.email).get()
+                                    .addOnSuccessListener { documents ->
+                                        for (document in documents) {
+                                            db.collection("users").document(document.id).delete()
+                                                .addOnSuccessListener {
+                                                    Toast.makeText(requireContext(),"Xóa thành công",Toast.LENGTH_SHORT).show()
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    Toast.makeText(requireContext(),"Xóa thất bại",Toast.LENGTH_SHORT).show()
+                                                }
+                                        }
+                                    }
+                                    .addOnFailureListener { exception ->
+                                        Log.w("TAG", "Error getting documents: ", exception)
+                                    }
+
+                                listUser.remove(user)
+                                userAdapter.notifyDataSetChanged()
                             }
                         }
                         true
