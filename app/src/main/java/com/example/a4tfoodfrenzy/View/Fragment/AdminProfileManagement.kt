@@ -27,6 +27,14 @@ class AdminProfileManagement : Fragment() {
     private lateinit var userAdapter: UserAdapter
     private lateinit var listUser:ArrayList<User>
     private lateinit var searchView:SearchView
+    private lateinit var optionMenu:ImageView
+    private lateinit var filterOptionTV:TextView
+
+    private val ALL_USER=0
+    private val ONLY_USER=1
+    private val ONLY_ADMIN=2
+
+    private var current=ALL_USER
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,8 +42,11 @@ class AdminProfileManagement : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_admin_profile_management, container, false)
         searchView=view.findViewById(R.id.search)
+        optionMenu = view.findViewById(R.id.userManagementFilterImageView)
+        filterOptionTV = view.findViewById(R.id.userManagementFilterTextView)
         listUser= arrayListOf<User>()
         listUser.addAll(DBManagement.userList)
+        optionFilterMenu()
         filerUsers()
         userAdapter= UserAdapter(requireContext(),listUser)
         optionMenu()
@@ -170,6 +181,75 @@ class AdminProfileManagement : Fragment() {
             popUpMenu.show()
         }
 
+    }
+    private fun optionFilterMenu()
+    {
+        val optionList = arrayListOf("Tất cả", "Người dùng", "Quản trị viên")
+        optionMenu.setOnClickListener{
+            val popUp = PopupMenu(requireContext(), optionMenu)
+
+            // add option string to pop-up
+            for(option in optionList)
+                popUp.menu.add(option)
+
+            popUp.setOnMenuItemClickListener{ item ->
+                when (item.title){
+                    "Tất cả" -> {
+                        if(current!=ALL_USER) {
+                            filterOptionTV.text = item.title
+                            allUser()
+                            current=ALL_USER
+                        }
+                        true
+                    }
+                    "Người dùng" -> {
+                        if(current!=ONLY_USER) {
+                            filterOptionTV.text = item.title
+                            onlyUser()
+                            current=ONLY_USER
+                        }
+                        true
+                    }
+                    "Quản trị viên" -> {
+                        if(current!=ONLY_ADMIN) {
+                            filterOptionTV.text = item.title
+                            onlyAdmin()
+                            current=ONLY_ADMIN
+                        }
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+            popUp.show()
+        }
+    }
+    private fun allUser()
+    {
+        listUser.clear()
+        listUser.addAll(DBManagement.userList)
+        userAdapter.notifyDataSetChanged()
+    }
+    private fun onlyUser()
+    {
+        listUser.clear()
+        for(user in DBManagement.userList)
+        {
+            if(!user.isAdmin)
+                listUser.add(user)
+        }
+        userAdapter.notifyDataSetChanged()
+    }
+    private fun onlyAdmin()
+    {
+        listUser.clear()
+        for(user in DBManagement.userList)
+        {
+            if(user.isAdmin)
+                listUser.add(user)
+        }
+        userAdapter.notifyDataSetChanged()
     }
     private fun setOnClickItem()
     {

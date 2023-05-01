@@ -1,14 +1,19 @@
 package com.example.a4tfoodfrenzy.View
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.UnderlineSpan
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+
 
 class LoginRegisterActivity : AppCompatActivity() {
     private lateinit var loginMail:FloatingActionButton
@@ -26,6 +31,7 @@ class LoginRegisterActivity : AppCompatActivity() {
         closeBtn=findViewById(R.id.closeBtn)
         registerMail=findViewById(R.id.registerMail)
 
+        changeColorText()
         setMailBtn()
         registerByMail()
         setCloseBtn()
@@ -66,5 +72,32 @@ class LoginRegisterActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+    private fun changeColorText()
+    {
+        var textView=findViewById<TextView>(R.id.information)
+        val text =
+            "Khi đăng ký, tức là bạn đồng ý với Điều Khoản Dịch Vụ và Chính Sách Bảo Mật Thông Tin của 4TFoodFrenzy"
+        val spannable: Spannable = SpannableString(text)
+        var startIndex = text.indexOf("Điều Khoản Dịch Vụ")
+        var endIndex = startIndex + "Điều Khoản Dịch Vụ".length
+        spannable.setSpan(
+            ForegroundColorSpan(0xFFFDBF38.toInt()),
+            startIndex,
+            endIndex,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannable.setSpan(UnderlineSpan(), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        startIndex = text.indexOf("Chính Sách Bảo Mật")
+        endIndex = startIndex + "Chính Sách Bảo Mật".length
+        spannable.setSpan(
+            ForegroundColorSpan(0xFFFDBF38.toInt()),
+            startIndex,
+            endIndex,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannable.setSpan(UnderlineSpan(), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        textView.text = spannable
+
     }
 }

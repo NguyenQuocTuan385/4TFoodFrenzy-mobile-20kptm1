@@ -140,13 +140,15 @@
 
     <TextView
         android:id="@+id/information"
-        android:layout_width="305dp"
-        android:layout_height="32dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="15dp"
         android:gravity="center"
         android:text="Khi đăng ký, tức là bạn đồng ý với Điều Khoản Dịch Vụ và Chính Sách Bảo Mật Thông Tin của 4TFoodFrenzy"
         android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
