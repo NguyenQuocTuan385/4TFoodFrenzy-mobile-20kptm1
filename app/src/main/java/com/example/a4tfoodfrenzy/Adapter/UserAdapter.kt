@@ -52,7 +52,6 @@ class UserAdapter(private var context: Context, private var listItem: ArrayList<
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listItem[position]
         holder.email.text=item.email
-        if(!item.isAdmin) {
             holder.name.text = item.fullname
             val storage = FirebaseStorage.getInstance()
             val storageRef = storage.reference
@@ -68,7 +67,6 @@ class UserAdapter(private var context: Context, private var listItem: ArrayList<
             holder.itemView.setOnClickListener {
                 onItemClick?.invoke(item)
             }
-        }
     }
     fun filterList(filteredList: ArrayList<User>) {
         listItem = filteredList

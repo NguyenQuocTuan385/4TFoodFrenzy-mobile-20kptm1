@@ -10,33 +10,62 @@
         android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="20dp"
+        android:background="@drawable/search_bar_background"
         android:iconifiedByDefault="false"
-        android:queryHint="Tìm kiếm người dùng"
-        app:queryBackground="@null"
-        android:background="@android:color/transparent"
         android:inputType="text"
+        android:queryHint="Tìm kiếm người dùng"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:queryBackground="@android:color/transparent"
+        app:queryBackground="@null">
 
     </SearchView>
+
+    <LinearLayout
+        android:id="@+id/filterLinearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/search"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        >
+        <TextView
+            android:id="@+id/userManagementFilterTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tất cả"/>
+
+        <ImageView
+            android:id="@+id/userManagementFilterImageView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:src="@drawable/filter_recipe_management"
+            android:layout_marginStart="10dp"
+            />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_user"
         android:layout_width="0dp"
-        android:layout_height="759dp"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="28dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search"
+        app:layout_constraintTop_toBottomOf="@+id/filterLinearLayout"
+        app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/list_user" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
