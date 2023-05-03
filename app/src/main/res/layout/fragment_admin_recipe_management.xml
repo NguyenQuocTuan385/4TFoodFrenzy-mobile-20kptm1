@@ -67,11 +67,36 @@
         android:layout_marginTop="1dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filterLinearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/loadMoreRecipeButton"
+
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Xem thêm"
+            android:textStyle="bold"
+            android:textSize="17sp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            android:id="@+id/loadMoreRecipeButton"
+            />
+<!--    <ProgressBar-->
+<!--        android:id="@+id/loadingMoreFoodProgressBar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:visibility="gone"-->
+<!--        />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

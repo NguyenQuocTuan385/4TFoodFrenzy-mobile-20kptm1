@@ -131,14 +131,16 @@
 
             <TextView
                 android:id="@+id/recipeNameManagementTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
 
-                android:text="Bò nướng mlem"
+                android:text="Bò nướng mlemmmmmmmmmm"
+                android:lines="1"
 
+                android:ellipsize="end"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
