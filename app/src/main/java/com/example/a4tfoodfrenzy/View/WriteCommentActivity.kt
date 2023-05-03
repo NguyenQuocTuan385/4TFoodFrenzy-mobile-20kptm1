@@ -47,8 +47,8 @@ class WriteCommentActivity : AppCompatActivity() {
         val numberID : Long = intent?.extras?.getLong("commentID") as Long
         val cancelButton: TextView = findViewById(R.id.cancelTextViewBtn)
 
-        currentRecipe = intent?.extras?.getParcelable("foodRecipe")
-        currentAuthor = intent?.extras?.getParcelable("user")
+        currentRecipe = intent?.extras?.getParcelable("foodRecipe") as FoodRecipe?
+        currentAuthor = intent?.extras?.getParcelable("user") as User?
 
         // assign to intent
         toShowDetailIntent = Intent(this, ShowRecipeDetailsActivity::class.java)
@@ -62,15 +62,15 @@ class WriteCommentActivity : AppCompatActivity() {
 
         // handle submit comment (update on database)
         submitCommentButton?.setOnClickListener {
-            val description = commentEditText?.text
+            val description = commentEditText?.text.toString()
 
             // check if content is null
-            if(description == null || description == ""){
+            if(description == ""){
                 Toast.makeText(this, "Nội dung không được để trống", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-
-            updateCommentOnDB(numberID, description.toString())
+            else
+                updateCommentOnDB(numberID, description.toString())
         }
 
         // handle click on add image section, get image from local phone storage
