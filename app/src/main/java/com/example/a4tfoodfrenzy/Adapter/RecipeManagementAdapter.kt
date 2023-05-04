@@ -1,16 +1,19 @@
 package com.example.a4tfoodfrenzy.Adapter
 
 import android.content.Context
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.R
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import de.hdodenhof.circleimageview.CircleImageView
@@ -22,6 +25,7 @@ class RecipeManagementAdapter(
     val storageRef = Firebase.storage
     var start = 0
     var end = 5
+    var onDeleteRecipeClick: ((FoodRecipe) -> Unit)? = null
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val recipeIMG: ImageView = listItemView.findViewById(R.id.recipeManagementImageView)
@@ -30,6 +34,7 @@ class RecipeManagementAdapter(
         val authorName: TextView = listItemView.findViewById(R.id.authorName)
         val authorAvatarIMG: CircleImageView = listItemView.findViewById(R.id.avatarImageView)
         val uploadDate: TextView = listItemView.findViewById(R.id.uploadDateTextView)
+        val optionImageVIew: ImageView = listItemView.findViewById(R.id.optionDotsImageView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -48,6 +53,7 @@ class RecipeManagementAdapter(
         if (position < start || position > end) {
             holder.itemView.visibility = View.GONE
             holder.itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
+
             return
         }
 
@@ -85,6 +91,26 @@ class RecipeManagementAdapter(
                 }.addOnFailureListener {}
                 break
             }
+        }
+
+        // set option for 3 dot
+        holder.optionImageVIew.setOnClickListener {
+            val popUp = PopupMenu(context, holder.optionImageVIew)
+
+            popUp.menu.add("Xóa công thức")
+
+            popUp.setOnMenuItemClickListener { item ->
+                when (item.title) {
+                    "Xóa công thức" -> {
+                        onDeleteRecipeClick?.invoke(currentRecipe)
+
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+            popUp.show()
         }
 
         holder.recipeName.text = currentRecipe.recipeName

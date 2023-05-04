@@ -1,6 +1,9 @@
 package com.example.a4tfoodfrenzy.View.Fragment
 
+import android.content.ContentValues
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,19 +14,26 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.RecipeManagementAdapter
+import com.example.a4tfoodfrenzy.BroadcastReceiver.ConstantAction
+import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.R
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class AdminRecipeManagement : Fragment() {
-    private lateinit var recipeList : ArrayList<FoodRecipe>
+    private lateinit var recipeList: ArrayList<FoodRecipe>
     private var adapter: RecipeManagementAdapter? = null
     private lateinit var recipeManagementRecyclerView: RecyclerView
+    private val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +53,8 @@ class AdminRecipeManagement : Fragment() {
         val loadMoreButton: Button = view.findViewById(R.id.loadMoreRecipeButton)
         val searchEditText: EditText = view.findViewById(R.id.adminSearchRecipeEditText)
 
-        recipeList = DBManagement.foodRecipeList.sortedByDescending { food -> food.date }.toList() as ArrayList<FoodRecipe>
+        recipeList = DBManagement.foodRecipeList.sortedByDescending { food -> food.date }
+            .toList() as ArrayList<FoodRecipe>
 
         val optionList = arrayListOf("Mới nhất", "Phổ biến", "Nhiều lượt thích nhất")
 
@@ -70,7 +81,7 @@ class AdminRecipeManagement : Fragment() {
                         filterOptionTV.text = item.title
 
                         // sort the original list by date
-                        val sortedTempList = recipeList.sortedByDescending { food -> food.date }.toList() as ArrayList<FoodRecipe>
+                        val sortedTempList = recipeList.sortedByDescending { food -> food.date }
 
                         // clear and add sorted list to the original
                         recipeList.clear()
@@ -89,7 +100,8 @@ class AdminRecipeManagement : Fragment() {
                         filterOptionTV.text = item.title
 
                         // sort the original list by num of likes
-                        val sortedTempList = recipeList.sortedByDescending { food -> food.numOfLikes }.toList() as ArrayList<FoodRecipe>
+                        val sortedTempList =
+                            recipeList.sortedByDescending { food -> food.numOfLikes }
 
                         // clear and add sorted list to the original
                         recipeList.clear()
@@ -111,44 +123,186 @@ class AdminRecipeManagement : Fragment() {
         }
 
         // search feature
-        searchEditText.setOnEditorActionListener{_, actionId, _ ->
-            if(actionId == EditorInfo.IME_ACTION_SEARCH){
+        searchEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val searchWord = searchEditText.text.toString()
 
                 // empty
-                if(searchWord == ""){
+                if (searchWord == "") {
                     true
                 }
 
-                val searchedList = DBManagement.foodRecipeList.filter { food -> food.recipeName.contains(searchWord) }
+                val searchedList =
+                    DBManagement.foodRecipeList
+                        .filter { food -> food.recipeName.contains(searchWord) }
+                        .sortedByDescending { food -> food.date }
 
-                if(searchedList.isNotEmpty()){
+                if (searchedList.isNotEmpty()) {
                     recipeList.clear()
-                    recipeList.addAll(searchedList.toList() as ArrayList<FoodRecipe>)
-                }
+                    recipeList.addAll(searchedList)
 
-                adapter!!.notifyItemRangeChanged(0, recipeList.size)
+                    filterOptionTV.text = "Mới nhất"
+
+                    adapter!!.start = 0
+                    adapter!!.end = if(recipeList.size < 6 ) recipeList.size - 1 else 5
+                    adapter!!.notifyItemRangeChanged(0, recipeList.size)
+                }
             }
             true
+        }
+
+        // delete recipe feature
+        adapter!!.onDeleteRecipeClick = { recipeFromRV ->
+            val helperFunctionDB = HelperFunctionDB(requireContext())
+            val recipeID = recipeFromRV.id
+
+            helperFunctionDB.showWarningAlert(
+                "Xóa món ăn",
+                "Bạn có chắc là sẽ xóa món ăn này?"
+            ) { isConfirm ->
+                if (isConfirm) {
+                    // remove recipe in my food of the author
+                    db.collection("users")
+                        .whereArrayContains("myFoodRecipes", recipeID)
+                        .get()
+                        .addOnSuccessListener { document ->
+                            if (document.documents.isNotEmpty()) {
+                                db.collection("users")
+                                    .document(document.documents[0].id)
+                                    .update(
+                                        mapOf(
+                                            "myFoodRecipes" to FieldValue.arrayRemove(recipeID)
+                                        )
+                                    )
+                            }
+                        }
+
+                    // remove recipe from saved list of all the users that had saved the recipe
+                    db.collection("users")
+                        .whereArrayContains("foodRecipeSaved", recipeID)
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            for (document in documents) {
+                                db.collection("users")
+                                    .document(document.id)
+                                    .update(
+                                        mapOf(
+                                            "foodRecipeSaved" to FieldValue.arrayRemove(recipeID)
+                                        )
+                                    )
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                        }
+
+                    // get comment list of the chosen recipe
+                    val recipeCmts = recipeFromRV.recipeCmts
+
+                    // remove comment from comment list of all user that had
+                    // commented on this recipe
+                    for (recipeCmt in recipeCmts) {
+                        db.collection("users")
+                            .whereArrayContains("recipeCmts", recipeCmt)
+                            .get()
+                            .addOnSuccessListener { documents ->
+                                for (document in documents) {
+                                    db.collection("users").document(document.id).update(
+                                        mapOf(
+                                            "recipeCmts" to FieldValue.arrayRemove(recipeCmt)
+                                        )
+                                    )
+                                }
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                            }
+                    }
+
+                    // remove comment from RecipeCmts table
+                    for(recipeCmt in recipeCmts){
+                        db.collection("RecipeCmts")
+                            .whereEqualTo("id", recipeCmt)
+                            .get()
+                            .addOnSuccessListener { documents ->
+                                for (document in documents) {
+                                    db.collection("RecipeCmts").document(document.id).delete()
+                                }
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                            }
+                    }
+
+                    // xóa trong danh sách foodRecipes của bảng RecipeCates
+                    db.collection("RecipeCates")
+                        .whereArrayContains("foodRecipes", recipeID)
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            for (document in documents) {
+                                db.collection("RecipeCates").document(document.id).update(mapOf(
+                                    "foodRecipes" to FieldValue.arrayRemove(recipeID)
+                                ))
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                        }
+
+                    // xóa trong danh sách foodRecipes của bảng RecipeDiets
+                    db.collection("RecipeDiets")
+                        .whereArrayContains("foodRecipes", recipeID)
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            for (document in documents) {
+                                db.collection("RecipeDiets").document(document.id).update(mapOf(
+                                    "foodRecipes" to FieldValue.arrayRemove(recipeID)
+                                ))
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                        }
+
+                    // xóa Món ăn
+                    db.collection("RecipeFoods")
+                        .whereEqualTo("id", recipeID)
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            for (document in documents) {
+                                db.collection("RecipeFoods").document(document.id).delete()
+                            }
+
+                            for((i, recipe) in recipeList.withIndex()){
+                                if(recipeID == recipe.id){
+                                    recipeList.removeAt(i)
+                                    adapter!!.notifyItemRemoved(i)
+                                    break
+                                }
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                        }
+                }
+            }
         }
 
         // view more food
         loadMoreButton.setOnClickListener {
             adapter!!.start += 6
-            adapter!!.end += 6
+            val temp = adapter!!.end
+            adapter!!.end += if(adapter!!.end + 6 > recipeList.size && adapter!!.end != recipeList.size - 1) recipeList.size - 1 - adapter!!.end else 6
 
             if (adapter!!.end >= recipeList.size) {
                 adapter!!.start = 0
-                adapter!!.end = 5
+                adapter!!.end = if(recipeList.size < 6) recipeList.size - 1 else 5
 
                 // notify the whole source list
                 adapter!!.notifyItemRangeChanged(0, recipeList.size)
-            }
-            else
+            } else
                 adapter!!.notifyItemRangeChanged(0, adapter!!.end + 1)
         }
         return view
     }
-
-
 }
