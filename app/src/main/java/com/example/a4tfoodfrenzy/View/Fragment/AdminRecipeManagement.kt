@@ -1,25 +1,17 @@
 package com.example.a4tfoodfrenzy.View.Fragment
 
 import android.content.ContentValues
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.RecipeManagementAdapter
-import com.example.a4tfoodfrenzy.BroadcastReceiver.ConstantAction
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
@@ -27,6 +19,8 @@ import com.example.a4tfoodfrenzy.R
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.takusemba.multisnaprecyclerview.MultiSnapHelper
+import com.takusemba.multisnaprecyclerview.SnapGravity
 
 
 class AdminRecipeManagement : Fragment() {
@@ -50,7 +44,7 @@ class AdminRecipeManagement : Fragment() {
         recipeManagementRecyclerView = view.findViewById(R.id.adminRecipeManagementRecyclerView)
         val optionAdapter: ImageView = view.findViewById(R.id.recipeManagementFilterImageView)
         val filterOptionTV: TextView = view.findViewById(R.id.recipeManagementFilterTextView)
-        val loadMoreButton: Button = view.findViewById(R.id.loadMoreRecipeButton)
+//        val loadMoreButton: Button = view.findViewById(R.id.loadMoreRecipeButton)
         val searchEditText: EditText = view.findViewById(R.id.adminSearchRecipeEditText)
 
         recipeList = DBManagement.foodRecipeList.sortedByDescending { food -> food.date }
@@ -61,10 +55,15 @@ class AdminRecipeManagement : Fragment() {
         // assign recipe recycler view adapter
         adapter = RecipeManagementAdapter(requireContext(), recipeList)
         recipeManagementRecyclerView.adapter = adapter
-        recipeManagementRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
         // remove item change animation
         recipeManagementRecyclerView.itemAnimator = null
+
+        // assign snaphelper for carousel
+        val snapHelper = MultiSnapHelper(SnapGravity.START, 4, 100.0F)
+        snapHelper.attachToRecyclerView(recipeManagementRecyclerView)
+
+        recipeManagementRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
 
         // assign recipe filter pop-up
         optionAdapter.setOnClickListener {
@@ -127,11 +126,6 @@ class AdminRecipeManagement : Fragment() {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val searchWord = searchEditText.text.toString()
 
-                // empty
-                if (searchWord == "") {
-                    true
-                }
-
                 val searchedList =
                     DBManagement.foodRecipeList
                         .filter { food -> food.recipeName.contains(searchWord) }
@@ -142,10 +136,10 @@ class AdminRecipeManagement : Fragment() {
                     recipeList.addAll(searchedList)
 
                     filterOptionTV.text = "Mới nhất"
-
-                    adapter!!.start = 0
-                    adapter!!.end = if(recipeList.size < 6 ) recipeList.size - 1 else 5
-                    adapter!!.notifyItemRangeChanged(0, recipeList.size)
+//
+//                    adapter!!.start = 0
+//                    adapter!!.end = if(recipeList.size < 6 ) recipeList.size - 1 else 5
+//                    adapter!!.notifyItemRangeChanged(0, recipeList.size)
                 }
             }
             true
@@ -288,21 +282,21 @@ class AdminRecipeManagement : Fragment() {
             }
         }
 
-        // view more food
-        loadMoreButton.setOnClickListener {
-            adapter!!.start += 6
-            val temp = adapter!!.end
-            adapter!!.end += if(adapter!!.end + 6 > recipeList.size && adapter!!.end != recipeList.size - 1) recipeList.size - 1 - adapter!!.end else 6
-
-            if (adapter!!.end >= recipeList.size) {
-                adapter!!.start = 0
-                adapter!!.end = if(recipeList.size < 6) recipeList.size - 1 else 5
-
-                // notify the whole source list
-                adapter!!.notifyItemRangeChanged(0, recipeList.size)
-            } else
-                adapter!!.notifyItemRangeChanged(0, adapter!!.end + 1)
-        }
+//        // view more food
+//        loadMoreButton.setOnClickListener {
+//            adapter!!.start += 6
+//            val temp = adapter!!.end
+//            adapter!!.end += if(adapter!!.end + 6 > recipeList.size && adapter!!.end != recipeList.size - 1) recipeList.size - 1 - adapter!!.end else 6
+//
+//            if (adapter!!.end >= recipeList.size) {
+//                adapter!!.start = 0
+//                adapter!!.end = if(recipeList.size < 6) recipeList.size - 1 else 5
+//
+//                // notify the whole source list
+//                adapter!!.notifyItemRangeChanged(0, recipeList.size)
+//            } else
+//                adapter!!.notifyItemRangeChanged(0, adapter!!.end + 1)
+//        }
         return view
     }
 }

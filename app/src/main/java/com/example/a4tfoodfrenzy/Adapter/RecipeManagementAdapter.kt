@@ -50,20 +50,20 @@ class RecipeManagementAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // not in pagination item range --> hide
-        if (position < start || position > end) {
-            holder.itemView.visibility = View.GONE
-            holder.itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
-
-            return
-        }
-
-        // visible when in pagination range
-        holder.itemView.visibility = View.VISIBLE
-        holder.itemView.layoutParams =
-            RecyclerView.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
+//        if (position < start || position > end) {
+//            holder.itemView.visibility = View.GONE
+//            holder.itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
+//
+//            return
+//        }
+//
+//        // visible when in pagination range
+//        holder.itemView.visibility = View.VISIBLE
+//        holder.itemView.layoutParams =
+//            RecyclerView.LayoutParams(
+//                ViewGroup.LayoutParams.WRAP_CONTENT,
+//                ViewGroup.LayoutParams.MATCH_PARENT
+//            )
 
         val currentRecipe = recipeList[position]
         val uploadDateString =
