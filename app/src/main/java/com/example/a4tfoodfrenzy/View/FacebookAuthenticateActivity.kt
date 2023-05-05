@@ -2,11 +2,12 @@ package com.example.a4tfoodfrenzy.View
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
+import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.User
-import com.example.a4tfoodfrenzy.R
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -19,17 +20,21 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
+
 
 class FacebookAuthenticateActivity : AppCompatActivity() {
     private lateinit var callbackManager: CallbackManager
-
     private lateinit var auth: FirebaseAuth
+    private val storageRef = Firebase.storage
 
     // ...
 // Initialize Firebase Auth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_facebook_authenticate)
 
         auth = Firebase.auth
 
@@ -64,8 +69,6 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
     private fun handleFacebookAccessToken(token: AccessToken) {
         val credential = FacebookAuthProvider.getCredential(token.token)
 
-
-
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -76,6 +79,9 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                     val userEmail = user?.email
                     val db = Firebase.firestore
 
+                    Log.v("My FB access Token", "Token::${token.token}");
+
+                    // check email exist in firestore users collection
                     db.collection("users")
                         .whereEqualTo("email", userEmail)
                         .get()
@@ -85,18 +91,30 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                                 // get user name from google's database
                                 val userFullName = user?.displayName
                                 val helperFunctionDB = HelperFunctionDB(this)
-                                helperFunctionDB.findSlotIdEmptyInCollection("users") {idSlot ->
+
+                                helperFunctionDB.findSlotIdEmptyInCollection("users") { idSlot ->
+                                    // generate url for user avatar getting from facebook
+                                    val fbAvatar = "fb_${idSlot}"
+                                    val avtImageUrl = "${auth.currentUser?.photoUrl}?access_token=${token.token}"
+
                                     val profile = User(
                                         idSlot,
                                         userEmail!!,
                                         userFullName!!,
                                         null,
                                         "",
-                                        "users/defaultavt.png",
+                                        "users/${fbAvatar}",
                                         arrayListOf(),
                                         arrayListOf(),
                                         arrayListOf(), false
                                     )
+
+                                    // async --> run on another thread except main thread
+                                    Thread {
+                                        UploadAvatarImageToStorage(avtImageUrl, fbAvatar)
+                                        runOnUiThread {
+                                        }
+                                    }.start()
 
                                     // add new user to db
                                     db.collection("users").document(user.uid)
@@ -107,6 +125,10 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                                                 "Đăng ký bằng Facebook thành công",
                                                 Toast.LENGTH_SHORT
                                             ).show()
+
+                                            // assign current user with the new facebook login user
+                                            DBManagement.user_current =
+                                                DBManagement.userList.filter { u -> u.id == idSlot }[0]
                                         }
                                         .addOnFailureListener {
                                             Toast.makeText(
@@ -116,11 +138,14 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                                             ).show()
                                         }
                                 }
+                            } else { // user exist
+                                DBManagement.user_current = DBManagement.userList.filter { u ->
+                                    u.id == it.documents[0].get("id")
+                                }[0]
                             }
                             // user exist in DB --> do nothing
                         }
-                        .addOnFailureListener { exception ->
-                        }
+                        .addOnFailureListener { exception -> }
 
                     // display success message
                     Toast.makeText(
@@ -147,7 +172,7 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                     if (task.exception is FirebaseAuthUserCollisionException)
                         Toast.makeText(
                             baseContext,
-                            "Vui lòng đăng nhập bằng Google",
+                            "Vui lòng đăng nhập bằng Google với địa chỉ email đã đăng ký Facebook",
                             Toast.LENGTH_LONG
                         ).show()
 
@@ -162,5 +187,40 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
             }
     }
 
-    private fun isSignUp() {}
+    private fun UploadAvatarImageToStorage(path: String?, avtName: String){
+        var inStream: InputStream? = null
+        var responseCode = -1
+        var res : InputStream? = null
+
+        try {
+            val url = URL(path)
+            val con: HttpURLConnection = url.openConnection() as HttpURLConnection
+
+            con.doInput = true
+            con.connect()
+            responseCode = con.responseCode
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                //download
+                inStream = con.inputStream
+
+                val imageRef = storageRef.reference.child("users/${avtName}")
+
+                val uploadTask =  imageRef.putStream(inStream)
+
+                uploadTask
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "HIHIHIHI", Toast.LENGTH_LONG).show()
+                        inStream.close()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(this, "hahaha", Toast.LENGTH_LONG).show()
+                        inStream.close()
+                    }
+
+            }
+        } catch (ex: Exception) {
+            Log.e("Exception", ex.toString())
+        }
+    }
 }
