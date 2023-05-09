@@ -28,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var emailInput: TextInputLayout
     private lateinit var passwordInput: TextInputLayout
     private lateinit var pDialog:SweetAlertDialog
+    private var error:String?=null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,8 +60,16 @@ class LoginActivity : AppCompatActivity() {
         loginBtn.setOnClickListener {
             val email= emailInput.editText?.text.toString()
             val password= passwordInput.editText?.text.toString()
-            if(email.isEmpty()||password.isEmpty())
+            if(email.isEmpty()||password.isEmpty()) {
+                showErrorAlert("Bạn chưa nhập email hoặc mật khẩu")
                 return@setOnClickListener
+            }
+            if(!error.isNullOrEmpty())
+            {
+                showErrorAlert(error!!)
+                error=null
+                return@setOnClickListener
+            }
             showLoadingAlert()
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
@@ -74,14 +83,21 @@ class LoginActivity : AppCompatActivity() {
                                 startActivity(intent)
                                 finish()
                             } else {
-                                val intent= Intent(this, MainActivity::class.java)
-                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                startActivity(intent)
-                                finish()
+                                if(auth.currentUser!!.isEmailVerified) {
+                                    val intent = Intent(this, MainActivity::class.java)
+                                    intent.flags =
+                                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    startActivity(intent)
+                                    finish()
+                                }
+                                else
+                                {
+                                    showErrorAlert("Bạn chưa xác thực email")
+                                }
                             }
                         }
                     } else {
-                      showErrorAlert()
+                      showErrorAlert("Thất bại")
                     }
                 }
 
@@ -91,7 +107,8 @@ class LoginActivity : AppCompatActivity() {
     {
         emailInput.editText?.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
-                emailInput.helperText = validEmail()
+                error=validEmail()
+                emailInput.helperText = error
             }
         }
 
@@ -132,9 +149,9 @@ class LoginActivity : AppCompatActivity() {
     {
         pDialog.cancel()
     }
-    private fun showErrorAlert() {
+    private fun showErrorAlert(title:String) {
         val sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-        sweetAlertDialog.setTitleText("Thất bại")
+        sweetAlertDialog.setTitleText(title)
         sweetAlertDialog.setContentText("Bạn vui lòng đăng nhập lại")
         sweetAlertDialog.setConfirmButton("OK") {
             it.dismissWithAnimation()

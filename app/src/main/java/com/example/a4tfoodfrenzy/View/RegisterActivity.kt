@@ -95,12 +95,22 @@ class RegisterActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    val helperFunctionDB = HelperFunctionDB(this)
-                    helperFunctionDB.findSlotIdEmptyInCollection("users") {idSlot ->
-                        val profile = User(idSlot, email, name, null, "", "users/defaultavt.png", arrayListOf(), arrayListOf(), arrayListOf(), false)
-                        if (user != null) {
-                            writeUserProfileToFirestore(user.uid, profile)
+                    user?.sendEmailVerification()?.addOnCompleteListener {action ->
+                        if(action.isSuccessful)
+                        {
+                            val helperFunctionDB = HelperFunctionDB(this)
+                            helperFunctionDB.findSlotIdEmptyInCollection("users") {idSlot ->
+                                val profile = User(idSlot, email, name, null, "", "users/defaultavt.png", arrayListOf(), arrayListOf(), arrayListOf(), false)
+                                if (user != null) {
+                                    writeUserProfileToFirestore(user.uid, profile)
+                                }
+                            }
                         }
+                        else {
+                            stopLoadingAlert()
+                            showErrorAlert()
+                        }
+
                     }
 
                 } else {
@@ -191,7 +201,7 @@ class RegisterActivity : AppCompatActivity() {
 
 
     private fun showSuccessAlert() {
-        HelperFunctionDB(this).showSuccessAlert("Thành công","Bạn đã đăng ký thành công"){confirm ->
+        HelperFunctionDB(this).showSuccessAlert("Thành công","Bạn vui lòng xác thực email của bạn"){confirm ->
             if(confirm)
             {
                 val intent=Intent(this,LoginActivity::class.java)
