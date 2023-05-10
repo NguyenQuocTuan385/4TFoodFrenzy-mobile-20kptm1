@@ -138,6 +138,10 @@ class ProfileActivity : AppCompatActivity() {
         view_pager.adapter = tabAdapter
         tabs = findViewById(R.id.tab_layout)
         tabs.setupWithViewPager(view_pager)
+        val selectedTab = intent.getIntExtra("selectedTab", 0)
+        tabs.post {
+            tabs.getTabAt(selectedTab)?.select()
+        }
     }
     private fun optionProfile() {
         option_adapter = findViewById(R.id.option_profile)
