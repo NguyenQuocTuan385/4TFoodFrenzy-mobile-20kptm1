@@ -1,17 +1,20 @@
 package com.example.a4tfoodfrenzy.View
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.PopupMenu
-import android.widget.Toast
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.a4tfoodfrenzy.Adapter.AddStepAdapter
 import com.example.a4tfoodfrenzy.Api.Food
 import com.example.a4tfoodfrenzy.Api.NinjasApiService
@@ -28,6 +31,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -46,6 +50,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
     private lateinit var foodRecipe: FoodRecipe
     private lateinit var sharedPreferences:SharedPreferences
     private lateinit var helperFunctionDB: HelperFunctionDB
+    private lateinit var mainImage:String
     private var buttonClicked=false
 
 
@@ -382,14 +387,14 @@ class AddRecipeActivity4 : AppCompatActivity() {
             }
     }
 
-    private fun addFoodRecipe(foodRecipe: FoodRecipe,userId: Long, onSuccess: () -> Unit, onFailure: () -> Unit) {
+    private fun addFoodRecipe(foodRecipe: FoodRecipe,userId: Long, onSuccess: (Boolean) -> Unit, onFailure: () -> Unit) {
         addFoodRecipeToCollection(foodRecipe,
             { documentId ->
                addFoodRecipeToCategory(foodRecipe.id,{
                    addFoodRecipeToDiet(foodRecipe.id,{
                        addFoodRecipeToUser(foodRecipe.id,userId,{
                            helperFunctionDB.stopLoadingAlert()
-                           onSuccess()
+                           onSuccess(true)
                        },
                            {
                                onFailure()
@@ -422,6 +427,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
         helperFunctionDB= HelperFunctionDB(this)
         helperFunctionDB.showLoadingAlert()
         deleteAllSharePreference()
+        mainImage=foodRecipe.recipeMainImage.toString()
         if(!foodRecipe.recipeMainImage!!.startsWith("foods/")) {
            foodRecipe.recipeMainImage = foodRecipe.recipeMainImage?.let { uploadImageToCloudStorage(it) }
         }
@@ -432,22 +438,13 @@ class AddRecipeActivity4 : AppCompatActivity() {
                 if (fullName != null) {
                     foodRecipe.id = idSlot
                     foodRecipe.authorName = fullName
-                    foodRecipe.isPublic = true
+                    foodRecipe.isPublic = false
                     foodRecipe.date = Date()
                     foodRecipe.recipeSteps = listStep
-                    addFoodRecipe(foodRecipe, user.id, {
-                        helperFunctionDB.showSuccessAlert(
-                            "Thành công",
-                            "Bạn đã thêm món ăn thành công"
-                        ) { confirm ->
-                            if (confirm) {
-                                val intent = Intent(this, ProfileActivity::class.java)
-                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                val intent1 = Intent(ConstantAction.ADD_MY_RECIPE_ACTION)
-                                sendBroadcast(intent1)
-                                finishAffinity()
-                                startActivity(intent)
-                            }
+                    addFoodRecipe(foodRecipe, user.id, {confirm ->
+                        if(confirm)
+                        {
+                            showPopup()
                         }
                     }, {
                         helperFunctionDB.showErrorAlert(
@@ -599,6 +596,69 @@ class AddRecipeActivity4 : AppCompatActivity() {
 
         })
 
+    }
+    private fun shareRecipe(share:(Boolean)->Unit)
+    {
+        val db=Firebase.firestore
+        db.collection("RecipeFoods")
+            .whereEqualTo("id",foodRecipe.id)
+            .limit(1)
+            .get()
+            .addOnSuccessListener {documents->
+                if(documents.size()>0)
+                {
+                    val document=documents.first()
+                    document.reference.update("public",true)
+                }
+                share(true)
+            }
+            .addOnFailureListener {
+                share(false)
+            }
+    }
+    private fun showPopup()
+    {
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView: View = inflater.inflate(R.layout.custompopup, null)
+
+        // create the popup window
+        val popupWindow = PopupWindow(
+            popupView,
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            true
+        )
+        val imagePopup=popupView.findViewById<ImageView>(R.id.imagePopup)
+        val nameRecipePopup=popupView.findViewById<TextView>(R.id.nameRecipePopup)
+        val shareRecipeBtn=popupView.findViewById<Button>(R.id.shareRecipeBtn)
+        val laterBtn=popupView.findViewById<Button>(R.id.laterBtn)
+        popupWindow.showAtLocation(LinearLayout(this), Gravity.CENTER, 0, 0)
+        nameRecipePopup.setText(foodRecipe.recipeName)
+        val uri=Uri.parse(mainImage)
+        imagePopup.setImageURI(uri)
+
+        shareRecipeBtn.setOnClickListener {
+            shareRecipe { share ->
+                val intent = Intent(this, ProfileActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                intent.putExtra("selectedTab", 1) // chọn tab thứ hai
+                val intent1 = Intent(ConstantAction.UPDATE_MY_RECIPE_ACTION)
+                sendBroadcast(intent1)
+                finishAffinity()
+                popupWindow.dismiss()
+                startActivity(intent)
+            }
+        }
+        laterBtn.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intent.putExtra("selectedTab", 1) // chọn tab thứ hai
+            val intent1 = Intent(ConstantAction.UPDATE_MY_RECIPE_ACTION)
+            sendBroadcast(intent1)
+            finishAffinity()
+            popupWindow.dismiss()
+            startActivity(intent)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
