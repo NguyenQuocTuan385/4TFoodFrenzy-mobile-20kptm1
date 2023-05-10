@@ -79,7 +79,6 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                     val userEmail = user?.email
                     val db = Firebase.firestore
 
-                    Log.v("My FB access Token", "Token::${token.token}");
 
                     // check email exist in firestore users collection
                     db.collection("users")
@@ -111,6 +110,7 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
 
                                     // async --> run on another thread except main thread
                                     Thread {
+                                        // upload facebook avatar to storage on first time login
                                         UploadAvatarImageToStorage(avtImageUrl, fbAvatar)
                                         runOnUiThread {
                                         }
@@ -126,9 +126,9 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                                                 Toast.LENGTH_SHORT
                                             ).show()
 
-                                            // assign current user with the new facebook login user
-                                            DBManagement.user_current =
-                                                DBManagement.userList.filter { u -> u.id == idSlot }[0]
+//                                            // assign current user with the new facebook login user
+//                                            DBManagement.user_current =
+//                                                DBManagement.userList.filter { u -> u.id == idSlot }[0]
                                         }
                                         .addOnFailureListener {
                                             Toast.makeText(
@@ -138,10 +138,11 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                                             ).show()
                                         }
                                 }
-                            } else { // user exist
-                                DBManagement.user_current = DBManagement.userList.filter { u ->
-                                    u.id == it.documents[0].get("id")
-                                }[0]
+                            } else {
+//                                // user exist => find user in userlist and assign to current user
+//                                DBManagement.user_current = DBManagement.userList.filter { u ->
+//                                    u.id == it.documents[0].get("id")
+//                                }[0]
                             }
                             // user exist in DB --> do nothing
                         }
@@ -192,6 +193,7 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
         var responseCode = -1
         var res : InputStream? = null
 
+        // download image from url provided by access token of Facebook
         try {
             val url = URL(path)
             val con: HttpURLConnection = url.openConnection() as HttpURLConnection
@@ -201,20 +203,18 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
             responseCode = con.responseCode
 
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                //download
+                // download
                 inStream = con.inputStream
 
+                // upload downloaded image to firebase storage
                 val imageRef = storageRef.reference.child("users/${avtName}")
-
                 val uploadTask =  imageRef.putStream(inStream)
 
                 uploadTask
                     .addOnSuccessListener {
-                        Toast.makeText(this, "HIHIHIHI", Toast.LENGTH_LONG).show()
                         inStream.close()
                     }
                     .addOnFailureListener {
-                        Toast.makeText(this, "hahaha", Toast.LENGTH_LONG).show()
                         inStream.close()
                     }
 

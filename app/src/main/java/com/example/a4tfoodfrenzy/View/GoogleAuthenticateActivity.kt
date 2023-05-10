@@ -140,13 +140,14 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
 //                                                    })
 
                                                 helperFunctionDB.findSlotIdEmptyInCollection("users") {idSlot ->
+                                                    val ggAvatar = "gg_${idSlot}"
+
                                                     val profile = User(
                                                         idSlot, userEmail!!,
                                                         userFullName!!,
                                                         null,
                                                         "",
-//                                                        "users/$user_id",
-                                                        "users/defaultavt.png",
+                                                        "users/${ggAvatar}",
                                                         arrayListOf(),
                                                         arrayListOf(),
                                                         arrayListOf(), false

@@ -175,9 +175,12 @@ class AfterSearchActivity : AppCompatActivity() {
 //            } else if (requestCode == REQUEST_CODE_APPLY_FILTER) {
             val filteredFoodList = data?.extras?.get("filterdFoodRecipe") as ArrayList<FoodRecipe>?
 
-            if(filteredFoodList != null){
+            if(filteredFoodList != null && filteredFoodList.isNotEmpty()){
                 val finalFilteredFoodList = generateRecipeDatabase(filteredFoodList)
                 setRecipeListAdapter(finalFilteredFoodList)
+            }
+            else {
+                Toast.makeText(this, "Không có món nào phù hợp với yêu cầu lọc", Toast.LENGTH_LONG).show()
             }
         }
 

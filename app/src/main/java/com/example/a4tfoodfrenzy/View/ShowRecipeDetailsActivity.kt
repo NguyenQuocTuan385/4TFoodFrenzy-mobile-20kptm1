@@ -94,8 +94,8 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             currentFoodRecipe.recipeCmts.contains(comment.id)
         }
 
-        // get recipe author from previous activity
-        recipeAuthor = intent.extras?.getParcelable("user")
+        // get recipe author from DBmanagement list
+        recipeAuthor = DBManagement.userList.filter { user -> user.myFoodRecipes.contains(currentFoodRecipe.id) }[0]
 
         isNotCurrentUser = recipeAuthor?.id != DBManagement.user_current?.id
 
