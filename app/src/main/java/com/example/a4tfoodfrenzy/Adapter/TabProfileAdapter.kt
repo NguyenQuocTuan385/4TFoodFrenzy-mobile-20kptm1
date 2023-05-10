@@ -1,12 +1,9 @@
 package com.example.a4tfoodfrenzy.Adapter
 
-import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,20 +13,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.a4tfoodfrenzy.Adapter.GridSpacingItemDecoration
-import com.example.a4tfoodfrenzy.Adapter.RecipeListInProfileAdapter
-import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
-import com.example.a4tfoodfrenzy.View.AddRecipeActivity1
-import com.example.a4tfoodfrenzy.View.ShowRecipeDetailsActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.AddRecipeActivity4">
+    tools:context=".Controller.Activity.AddRecipeActivity4">
 
 
     <androidx.constraintlayout.widget.Guideline

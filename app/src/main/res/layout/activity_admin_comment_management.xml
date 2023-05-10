@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".View.Admin_Comment_Management">
+    tools:context=".Controller.Admin_Comment_Management">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

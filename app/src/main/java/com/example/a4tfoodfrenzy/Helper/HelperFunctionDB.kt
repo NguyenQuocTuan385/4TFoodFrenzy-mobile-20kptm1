@@ -2,20 +2,14 @@ package com.example.a4tfoodfrenzy.Helper
 
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.R
-import com.example.a4tfoodfrenzy.View.LoginActivity
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore

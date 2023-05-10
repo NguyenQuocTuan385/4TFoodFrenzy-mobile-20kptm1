@@ -1,22 +1,14 @@
 package com.example.a4tfoodfrenzy.Adapter
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.PopupMenu
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Model.RecipeIngredient
 import com.example.a4tfoodfrenzy.R
-import com.example.a4tfoodfrenzy.View.AddIngredient
-import com.example.a4tfoodfrenzy.View.AddRecipeActivity3
-import kotlin.math.roundToInt
 
 class ListIngredientAdapter(private var context: Context, private var list:ArrayList<RecipeIngredient>)
     : RecyclerView.Adapter<ListIngredientAdapter.ViewHolder>() {

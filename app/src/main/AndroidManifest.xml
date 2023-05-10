@@ -21,13 +21,13 @@
         android:theme="@style/Theme.4TFoodFrenzy"
         tools:targetApi="31">
         <activity
-            android:name=".View.AdminDashboard"
+            android:name=".Controller.Activity.AdminDashboard"
             android:exported="false" />
         <activity
-            android:name=".View.GoogleAuthenticateActivity"
+            android:name=".Controller.Activity.GoogleAuthenticateActivity"
             android:exported="false" />
         <activity
-            android:name=".View.FacebookAuthenticateActivity"
+            android:name=".Controller.Activity.FacebookAuthenticateActivity"
             android:exported="false" />
 
         <meta-data
@@ -38,87 +38,87 @@
             android:value="@string/facebook_client_token" />
 
         <activity
-            android:name=".View.AddNewRecipe"
+            android:name=".Controller.Activity.AddNewRecipe"
             android:launchMode="singleInstance"
             android:exported="false" />
         <activity
-            android:name=".View.ShowRecipeDetailsDescriptionActivity"
+            android:name=".Controller.Activity.ShowRecipeDetailsDescriptionActivity"
             android:exported="false" />
         <activity
-            android:name=".View.AfterSearchActivity"
+            android:name=".Controller.Activity.AfterSearchActivity"
             android:launchMode="singleInstance"
             android:exported="false" />
         <activity
-            android:name=".View.SortRecipeActivity"
+            android:name=".Controller.Activity.SortRecipeActivity"
             android:exported="false" />
         <activity
-            android:name=".View.NewPasswordActivity"
+            android:name=".Controller.NewPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".View.VerificationCodeActivity"
+            android:name=".Controller.VerificationCodeActivity"
             android:exported="false" />
         <activity
-            android:name=".View.ForgotPasswordActivity"
+            android:name=".Controller.Activity.ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".View.RegisterActivity"
+            android:name=".Controller.Activity.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".View.LoginActivity"
+            android:name=".Controller.Activity.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".View.ShowRecipeDetailsActivity"
+            android:name=".Controller.Activity.ShowRecipeDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".View.AddRecipeActivity1"
+            android:name=".Controller.Activity.AddRecipeActivity1"
             android:exported="false" />
         <activity
-            android:name=".View.AddRecipeActivity2"
+            android:name=".Controller.Activity.AddRecipeActivity2"
             android:exported="false" />
         <activity
-            android:name=".View.AddRecipeActivity3"
+            android:name=".Controller.Activity.AddRecipeActivity3"
             android:exported="false" />
         <activity
-            android:name=".View.AddRecipeActivity4"
+            android:name=".Controller.Activity.AddRecipeActivity4"
             android:exported="false" />
         <activity
-            android:name=".View.AddStepActivity"
+            android:name=".Controller.Activity.AddStepActivity"
             android:exported="false" />
         <activity
-            android:name=".View.AddIngredient"
+            android:name=".Controller.Activity.AddIngredient"
             android:exported="false" />
         <activity
-            android:name=".View.WriteCommentActivity"
+            android:name=".Controller.Activity.WriteCommentActivity"
             android:exported="false" />
         <activity
-            android:name=".View.SearchScreen"
+            android:name=".Controller.Activity.SearchScreen"
             android:launchMode="singleInstance"
             android:exported="false" />
         <activity
-            android:name=".View.CommentListActivity"
+            android:name=".Controller.Activity.CommentListActivity"
             android:exported="false" />
         <activity
-            android:name=".View.EditProfileActivity"
+            android:name=".Controller.Activity.EditProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".View.ProfileActivity"
+            android:name=".Controller.Activity.ProfileActivity"
             android:launchMode="singleInstance"
             android:exported="true" />
         <activity
-            android:name=".View.AccountDetailsManagementActivity"
+            android:name=".Controller.Activity.AccountDetailsManagementActivity"
             android:exported="false" />
         <activity
-            android:name=".View.CommentDetailsManagementActivity"
+            android:name=".Controller.Activity.CommentDetailsManagementActivity"
             android:exported="true" />
         <activity
-            android:name=".View.LoginRegisterActivity"
+            android:name=".Controller.Activity.LoginRegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".View.LogoutActivity"
+            android:name=".Controller.Activity.LogoutActivity"
             android:launchMode="singleInstance"
             android:exported="false" />
         <activity
-            android:name=".View.MainActivity"
+            android:name=".Controller.Activity.MainActivity"
             android:launchMode="singleInstance"
             android:exported="true">
             <intent-filter>

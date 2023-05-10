@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.R
-import com.example.a4tfoodfrenzy.View.SortRecipeActivity
+import com.example.a4tfoodfrenzy.Controller.Activity.SortRecipeActivity
 import com.example.a4tfoodfrenzy.Model.SortType
 
 class NormSortAdapter(
