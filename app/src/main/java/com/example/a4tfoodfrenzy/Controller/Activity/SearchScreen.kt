@@ -9,7 +9,7 @@ import android.widget.EditText
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.GridSpacingItemDecoration
-import com.example.a4tfoodfrenzy.Adapter.RecipeCateListAdapter
+import com.example.a4tfoodfrenzy.Adapter.RecipeCateAdapter.RecipeCateListAdapter
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.RecipeCategorySuggest
 import com.example.a4tfoodfrenzy.R

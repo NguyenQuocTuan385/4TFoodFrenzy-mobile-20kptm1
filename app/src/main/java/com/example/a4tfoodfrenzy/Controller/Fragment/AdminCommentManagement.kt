@@ -13,7 +13,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.a4tfoodfrenzy.Adapter.CommentListAdapter
+import com.example.a4tfoodfrenzy.Adapter.CommentAdapter.CommentListAdapter
 import com.example.a4tfoodfrenzy.Adapter.GridSpacingItemDecoration
 import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R

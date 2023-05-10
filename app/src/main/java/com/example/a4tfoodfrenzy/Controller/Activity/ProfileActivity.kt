@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.example.a4tfoodfrenzy.Adapter.*
+import com.example.a4tfoodfrenzy.Adapter.UserAdapter.TabFoodRecipeSaved
+import com.example.a4tfoodfrenzy.Adapter.UserAdapter.TabMyFoodRecipe
+import com.example.a4tfoodfrenzy.Adapter.UserAdapter.TabProfileAdapter
 import com.example.a4tfoodfrenzy.BroadcastReceiver.ConstantAction
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement

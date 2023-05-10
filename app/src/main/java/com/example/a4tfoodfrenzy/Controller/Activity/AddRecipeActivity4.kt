@@ -13,7 +13,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.a4tfoodfrenzy.Adapter.AddStepAdapter
+import com.example.a4tfoodfrenzy.Adapter.AddRecipeAdapter.AddStepAdapter
 import com.example.a4tfoodfrenzy.Api.Food
 import com.example.a4tfoodfrenzy.Api.NinjasApiService
 import com.example.a4tfoodfrenzy.Api.TranslateUtil
@@ -40,7 +40,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
     private lateinit var continueBtn: Button
     private lateinit var toolbarAddRecipe: MaterialToolbar
     private lateinit var addStepBtn:Button
-    private lateinit var stepsAdapter:AddStepAdapter
+    private lateinit var stepsAdapter: AddStepAdapter
     private lateinit var listStep:ArrayList<RecipeCookStep>
     private lateinit var listStepRecyclerview:RecyclerView
     private lateinit var cate:String

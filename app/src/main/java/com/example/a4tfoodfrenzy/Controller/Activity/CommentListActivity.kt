@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.a4tfoodfrenzy.Adapter.CommentListAdapter
+import com.example.a4tfoodfrenzy.Adapter.CommentAdapter.CommentListAdapter
 import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R
 import kotlin.collections.ArrayList

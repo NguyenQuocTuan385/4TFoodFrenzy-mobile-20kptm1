@@ -11,7 +11,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.a4tfoodfrenzy.Adapter.CheckboxAdapter
+import com.example.a4tfoodfrenzy.Adapter.AddRecipeAdapter.CheckboxAdapter
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
@@ -72,7 +72,7 @@ class AddRecipeActivity2 : AppCompatActivity() {
     }
     private fun setDietCheckbox()
     {
-        adapter=CheckboxAdapter(this,DBManagement.recipeDietList)
+        adapter= CheckboxAdapter(this,DBManagement.recipeDietList)
         list_checkbox.adapter= adapter
         dietList=adapter.getDietList()
         adapter.setDietList(dietList)

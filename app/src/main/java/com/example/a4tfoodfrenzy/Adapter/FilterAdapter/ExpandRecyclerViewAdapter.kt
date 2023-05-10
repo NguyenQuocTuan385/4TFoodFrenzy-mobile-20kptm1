@@ -1,4 +1,4 @@
-package com.example.a4tfoodfrenzy.Adapter
+package com.example.a4tfoodfrenzy.Adapter.FilterAdapter
 
 import android.annotation.SuppressLint
 import android.content.Context

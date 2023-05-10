@@ -1,4 +1,4 @@
-package com.example.a4tfoodfrenzy.Adapter
+package com.example.a4tfoodfrenzy.Adapter.AddRecipeAdapter
 
 import android.content.Context
 import android.view.LayoutInflater

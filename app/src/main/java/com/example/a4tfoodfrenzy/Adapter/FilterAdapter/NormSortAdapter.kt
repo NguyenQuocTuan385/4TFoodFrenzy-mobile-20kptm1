@@ -1,4 +1,4 @@
-package com.example.a4tfoodfrenzy.Adapter
+package com.example.a4tfoodfrenzy.Adapter.FilterAdapter
 
 import android.graphics.Color
 import android.view.LayoutInflater

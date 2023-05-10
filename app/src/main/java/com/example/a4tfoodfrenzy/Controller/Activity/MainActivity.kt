@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.GridSpacingItemDecoration
-import com.example.a4tfoodfrenzy.Adapter.RecipeCateListAdapter
-import com.example.a4tfoodfrenzy.Adapter.RecipeListAdapter
+import com.example.a4tfoodfrenzy.Adapter.RecipeCateAdapter.RecipeCateListAdapter
+import com.example.a4tfoodfrenzy.Adapter.FoodRecipeAdapter.RecipeListAdapter
 import com.example.a4tfoodfrenzy.Helper.GenerateDBModel
 import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R

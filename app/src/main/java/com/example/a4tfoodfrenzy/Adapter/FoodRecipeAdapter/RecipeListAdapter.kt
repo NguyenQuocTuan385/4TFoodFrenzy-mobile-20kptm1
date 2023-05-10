@@ -1,4 +1,4 @@
-package com.example.a4tfoodfrenzy.Adapter
+package com.example.a4tfoodfrenzy.Adapter.FoodRecipeAdapter
 
 import android.content.Context
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
@@ -37,7 +37,7 @@ class RecipeListAdapter(private var context:Context,
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): RecipeListAdapter.ViewHolder {
+    ): ViewHolder {
         val context = parent.context
         val inflater = LayoutInflater.from(context)
         // Inflate the custom layout

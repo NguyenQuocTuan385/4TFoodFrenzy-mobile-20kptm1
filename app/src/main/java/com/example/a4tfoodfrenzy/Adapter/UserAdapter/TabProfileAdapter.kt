@@ -1,4 +1,4 @@
-package com.example.a4tfoodfrenzy.Adapter
+package com.example.a4tfoodfrenzy.Adapter.UserAdapter
 
 import android.content.Context
 import android.os.Bundle
@@ -13,6 +13,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.a4tfoodfrenzy.Adapter.GridSpacingItemDecoration
+import com.example.a4tfoodfrenzy.Adapter.FoodRecipeAdapter.RecipeListInProfileAdapter
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.User

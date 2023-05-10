@@ -1,7 +1,6 @@
-package com.example.a4tfoodfrenzy.Adapter
+package com.example.a4tfoodfrenzy.Adapter.UserAdapter
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,11 +8,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.example.a4tfoodfrenzy.Model.RecipeIngredient
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
 import com.google.firebase.storage.FirebaseStorage
-import org.w3c.dom.Text
 
 class UserAdapter(private var context: Context, private var listItem: ArrayList<User>) :
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {

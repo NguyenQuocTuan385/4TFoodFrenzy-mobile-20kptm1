@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.a4tfoodfrenzy.Adapter.ExpandRecyclerViewAdapter
+import com.example.a4tfoodfrenzy.Adapter.FilterAdapter.ExpandRecyclerViewAdapter
 import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R
 

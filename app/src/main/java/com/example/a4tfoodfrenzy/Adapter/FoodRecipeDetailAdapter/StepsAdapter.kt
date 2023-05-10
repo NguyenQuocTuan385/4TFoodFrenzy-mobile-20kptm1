@@ -1,4 +1,4 @@
-package com.example.a4tfoodfrenzy.Adapter
+package com.example.a4tfoodfrenzy.Adapter.FoodRecipeDetailAdapter
 
 import android.app.Activity
 import android.content.Context
