@@ -1,14 +1,17 @@
 package com.example.a4tfoodfrenzy.Controller.Activity
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.R
 import com.example.a4tfoodfrenzy.Controller.Fragment.AdminCommentManagement
@@ -18,6 +21,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 
 class AdminDashboard : AppCompatActivity() {
 
@@ -58,6 +62,7 @@ class AdminDashboard : AppCompatActivity() {
     {
         val headerView = navigationView.getHeaderView(0)
         var name=headerView.findViewById<TextView>(R.id.name)
+        var imageAdmin=headerView.findViewById<ImageView>(R.id.imageAdmin)
         val auth=FirebaseAuth.getInstance()
         var admin=auth.currentUser
         for(user in DBManagement.userList)
@@ -65,6 +70,14 @@ class AdminDashboard : AppCompatActivity() {
             if(user.isAdmin&&admin!!.email.equals(user.email))
             {
                 name.setText(user.fullname)
+                val storage = FirebaseStorage.getInstance()
+                val storageRef = storage.reference
+                val pathReference = storageRef.child(user.avatar)
+                pathReference.downloadUrl.addOnSuccessListener { uri ->
+                    Glide.with(this)
+                        .load(uri.toString())
+                        .into(imageAdmin)
+                }
                 break
             }
         }

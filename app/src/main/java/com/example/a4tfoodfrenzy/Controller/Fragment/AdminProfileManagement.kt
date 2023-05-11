@@ -228,7 +228,7 @@ class AdminProfileManagement : Fragment() {
     {
         listUser.clear()
         listUser.addAll(DBManagement.userList)
-        userAdapter.notifyDataSetChanged()
+        userAdapter.filterList(listUser)
     }
     private fun onlyUser()
     {
@@ -238,7 +238,7 @@ class AdminProfileManagement : Fragment() {
             if(!user.isAdmin)
                 listUser.add(user)
         }
-        userAdapter.notifyDataSetChanged()
+        userAdapter.filterList(listUser)
     }
     private fun onlyAdmin()
     {
@@ -248,7 +248,7 @@ class AdminProfileManagement : Fragment() {
             if(user.isAdmin)
                 listUser.add(user)
         }
-        userAdapter.notifyDataSetChanged()
+        userAdapter.filterList(listUser)
     }
     private fun setOnClickItem()
     {

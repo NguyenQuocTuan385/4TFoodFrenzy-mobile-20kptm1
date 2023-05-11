@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
@@ -22,6 +23,7 @@ class UserAdapter(private var context: Context, private var listItem: ArrayList<
         val image: ImageView = listItemView.findViewById(R.id.userAvt)
         val menu: ImageView=listItemView.findViewById(R.id.optionMenu)
         val email:TextView=listItemView.findViewById(R.id.userEmail)
+        val icon:ImageView=listItemView.findViewById(R.id.icon)
 
         init{
             menu.setOnClickListener {
@@ -49,21 +51,26 @@ class UserAdapter(private var context: Context, private var listItem: ArrayList<
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listItem[position]
         holder.email.text=item.email
-            holder.name.text = item.fullname
-            val storage = FirebaseStorage.getInstance()
-            val storageRef = storage.reference
-            val pathReference = storageRef.child(item.avatar)
-            pathReference.downloadUrl.addOnSuccessListener { uri ->
-                Glide.with(context)
-                    .load(uri.toString())
-                    .into(holder.image)
-            }
-            holder.menu.setOnClickListener {
-                onButtonClick?.invoke(it, item)
-            }
-            holder.itemView.setOnClickListener {
-                onItemClick?.invoke(item)
-            }
+        holder.name.text = item.fullname
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
+        val pathReference = storageRef.child(item.avatar)
+        pathReference.downloadUrl.addOnSuccessListener { uri ->
+            Glide.with(context)
+                .load(uri.toString())
+                .into(holder.image)
+        }
+        holder.menu.setOnClickListener {
+            onButtonClick?.invoke(it, item)
+        }
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(item)
+        }
+        if (!item.isAdmin) {
+            holder.icon.visibility = View.GONE
+        } else {
+            holder.icon.visibility = View.VISIBLE
+        }
     }
     fun filterList(filteredList: ArrayList<User>) {
         listItem = filteredList
