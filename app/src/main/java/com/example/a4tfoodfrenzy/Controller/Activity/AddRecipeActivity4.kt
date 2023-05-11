@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.a4tfoodfrenzy.Adapter.AddRecipeAdapter.AddStepAdapter
 import com.example.a4tfoodfrenzy.Api.Food
 import com.example.a4tfoodfrenzy.Api.NinjasApiService
@@ -629,11 +630,12 @@ class AddRecipeActivity4 : AppCompatActivity() {
         val nameRecipePopup=popupView.findViewById<TextView>(R.id.nameRecipePopup)
         val shareRecipeBtn=popupView.findViewById<Button>(R.id.shareRecipeBtn)
         val laterBtn=popupView.findViewById<Button>(R.id.laterBtn)
+        val anim=popupView.findViewById<LottieAnimationView>(R.id.animationView)
         popupWindow.showAtLocation(LinearLayout(this), Gravity.CENTER, 0, 0)
         nameRecipePopup.setText(foodRecipe.recipeName)
         val uri=Uri.parse(mainImage)
         imagePopup.setImageURI(uri)
-
+        anim.playAnimation()
         shareRecipeBtn.setOnClickListener {
             shareRecipe { share ->
                 val intent = Intent(this, ProfileActivity::class.java)
