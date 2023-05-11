@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
@@ -12,9 +13,11 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.a4tfoodfrenzy.*
 import com.example.a4tfoodfrenzy.Adapter.GridSpacingItemDecoration
 import com.example.a4tfoodfrenzy.Adapter.FoodRecipeAdapter.RecipeListAdapter
+import com.example.a4tfoodfrenzy.Api.Food
 import com.example.a4tfoodfrenzy.BroadcastReceiver.ConstantAction
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
@@ -38,6 +41,8 @@ class AfterSearchActivity : AppCompatActivity() {
     lateinit var searchET: EditText
     lateinit var keySearch: String
     lateinit var typeSearch:String
+    var prevFoodList : HashMap<FoodRecipe, User>? = null
+
     private val myBroadcastReceiverSearch = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action.equals(ConstantAction.ADD_MY_RECIPE_ACTION)) {
@@ -78,9 +83,14 @@ class AfterSearchActivity : AppCompatActivity() {
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
             finish()
         }
+
         findViewById<ImageView>(R.id.imgFilter).setOnClickListener {
+            if(prevFoodList == null){
+                prevFoodList = adapterRecipeAfterSearchRV?.getList()
+            }
+
             val intent = Intent(this, SortRecipeActivity::class.java)
-            intent.putExtra("SearchedList", adapterRecipeAfterSearchRV?.getList())
+            intent.putExtra("SearchedList", prevFoodList)
             startActivityForResult(intent, REQUEST_CODE_FILTER)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
         }
@@ -96,6 +106,7 @@ class AfterSearchActivity : AppCompatActivity() {
                     setRecipeListAdapter(recipeAfterSearch)
                     keySearch = searchET.text.toString()
                     typeSearch = "recipe"
+                    prevFoodList = null
                 } else {
                     setRecipeListAdapter(generateRecipeDatabase(DBManagement.foodRecipeList))
                     keySearch = ""
@@ -175,8 +186,17 @@ class AfterSearchActivity : AppCompatActivity() {
                 val finalFilteredFoodList = generateRecipeDatabase(filteredFoodList)
                 setRecipeListAdapter(finalFilteredFoodList)
             }
-            else {
-                Toast.makeText(this, "Không có món nào phù hợp với yêu cầu lọc", Toast.LENGTH_LONG).show()
+            else{
+                val isBack = data?.extras?.get("isBackToPrevious")
+
+                if(isBack != null){
+                    val noSortDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                    noSortDialog.progressHelper.barColor = Color.parseColor("#FFB200")
+                    noSortDialog.titleText = "Không có công thức nào thỏa mãn điều kiện lọc"
+
+                    noSortDialog.show()
+                    noSortDialog.setCancelable(false)
+                }
             }
         }
 

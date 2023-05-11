@@ -1,12 +1,15 @@
 package com.example.a4tfoodfrenzy.Controller.Activity
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.a4tfoodfrenzy.Adapter.FilterAdapter.ExpandRecyclerViewAdapter
 import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R
@@ -39,8 +42,7 @@ class SortRecipeActivity : AppCompatActivity() {
 
         // back button
         findViewById<ImageView>(R.id.toolbarBackButton).setOnClickListener {
-            val intent = Intent(this, AfterSearchActivity::class.java)
-            startActivity(intent)
+            this.finish()
         }
 
         val normalImageList = arrayListOf(
@@ -143,33 +145,33 @@ class SortRecipeActivity : AppCompatActivity() {
         sortRecyclerView.layoutManager = LinearLayoutManager(this)
 
         applySortButton.setOnClickListener {
-            val dietFoodIdList =
+            var dietFoodIdList =
                 getFoodIdListByDiet() // contain id of food satisfy all category type conditions
-            val categoryFoodIdList =
+            var categoryFoodIdList =
                 getFoodIdListByCategory() // contain id of food satisfy all diet type conditions
             var filteredIdList =
                 arrayListOf<Long>() // contain all filtered ID of food satisfy all filter conditions of all filter / sort type
-
-//            // not selected any type of diet, category
-//            if(dietFoodIdList == null && categoryFoodIdList == null)
-//                return@setOnClickListener
 
             if (dietFoodIdList != null && categoryFoodIdList == null)
                 filteredIdList = dietFoodIdList
             else if (dietFoodIdList == null && categoryFoodIdList != null)
                 filteredIdList = categoryFoodIdList
-            else if (dietFoodIdList != null && categoryFoodIdList != null)
+            else if (dietFoodIdList != null && categoryFoodIdList != null){
+                // categoryId contains dietId (intersection)
                 filteredIdList =
-                    dietFoodIdList.filter { id -> categoryFoodIdList.contains(id) } as ArrayList<Long>
+                    dietFoodIdList.filter { id -> categoryFoodIdList!!.contains(id) } as ArrayList<Long>
+            }
 
             // filter with filteredIdList to get FoodRecipe
-            if (searchedList.isEmpty()) {
+            if (searchedList.isEmpty()) { // not searching --> filter all food in DB
+                // Haven't choose any category type and diet type
                 if (dietFoodIdList == null && categoryFoodIdList == null)
                     filteredFoodList = DBManagement.foodRecipeList
                 else
                     filteredFoodList =
                         DBManagement.foodRecipeList.filter { food -> filteredIdList.contains(food.id) } as ArrayList<FoodRecipe>
-            } else {
+            }
+            else {
                 val tempFoodList = arrayListOf<FoodRecipe>()
                 for (food in searchedList) {
                     tempFoodList.add(food.key)
@@ -184,9 +186,15 @@ class SortRecipeActivity : AppCompatActivity() {
 
             handleNormalSort()
 
+
+            dietFoodIdList = null
+            categoryFoodIdList = null
+            selectedNormalID = -1
+
             val applySortIntent = Intent(this, AfterSearchActivity::class.java)
 
             applySortIntent.putExtra("filterdFoodRecipe", filteredFoodList)
+            applySortIntent.putExtra("isBackToPrevious", false)
             setResult(1111, applySortIntent)
 
             finish()
@@ -204,6 +212,7 @@ class SortRecipeActivity : AppCompatActivity() {
 
         var resList = DBManagement.recipeDietList[selectedDietId[0].toInt()].foodRecipes
 
+        // from 1 because 0 already assigned to reslist
         for (i in 1 until selectedDietId.size) {
             resList =
                 DBManagement.recipeDietList[selectedDietId[i].toInt()].foodRecipes.filter { id ->
@@ -220,6 +229,7 @@ class SortRecipeActivity : AppCompatActivity() {
 
         var resList = DBManagement.recipeCateList[selectedCategoryId[0].toInt()].foodRecipes
 
+        // from 1 because 0 already assigned to reslist
         for (i in 1 until selectedCategoryId.size) {
             resList =
                 DBManagement.recipeCateList[selectedCategoryId[i].toInt()].foodRecipes.filter { id ->
@@ -232,19 +242,19 @@ class SortRecipeActivity : AppCompatActivity() {
 
     private fun handleNormalSort() {
         if (selectedNormalID == (0).toLong() && filteredFoodList.isNotEmpty()) { // sort by like
-            filteredFoodList = filteredFoodList.sortedByDescending { it.numOfLikes }.toList() as java.util.ArrayList<FoodRecipe>
+            filteredFoodList = filteredFoodList.sortedByDescending { it.numOfLikes }.toList() as ArrayList<FoodRecipe>
         }
         else if(selectedNormalID == (1).toLong() && filteredFoodList.isNotEmpty()){ // sort by calory
-            filteredFoodList = filteredFoodList.sortedByDescending { food -> food.recipeIngres.sumByDouble { it.ingreCalo!! } }.toList() as java.util.ArrayList<FoodRecipe>
+            filteredFoodList = filteredFoodList.sortedByDescending { food -> food.recipeIngres.sumByDouble { it.ingreCalo!! } }.toList() as ArrayList<FoodRecipe>
         }
         else if(selectedNormalID == (2).toLong() && filteredFoodList.isNotEmpty()){ // sort by comment
-            filteredFoodList = filteredFoodList.sortedByDescending { it.recipeCmts.size }.toList() as java.util.ArrayList<FoodRecipe>
+            filteredFoodList = filteredFoodList.sortedByDescending { it.recipeCmts.size }.toList() as ArrayList<FoodRecipe>
         }
         else if(selectedNormalID == (3).toLong() && filteredFoodList.isNotEmpty()){ // sort by cook time
-            filteredFoodList = filteredFoodList.sortedByDescending {it.cookTime }.toList() as java.util.ArrayList<FoodRecipe>
+            filteredFoodList = filteredFoodList.sortedByDescending {it.cookTime }.toList() as ArrayList<FoodRecipe>
         }
         else if(selectedNormalID == (4).toLong() && filteredFoodList.isNotEmpty()){ // sort by date
-            filteredFoodList = filteredFoodList.sortedByDescending {it.date }.toList() as java.util.ArrayList<FoodRecipe>
+            filteredFoodList = filteredFoodList.sortedByDescending {it.date }.toList() as ArrayList<FoodRecipe>
         }
     }
 }

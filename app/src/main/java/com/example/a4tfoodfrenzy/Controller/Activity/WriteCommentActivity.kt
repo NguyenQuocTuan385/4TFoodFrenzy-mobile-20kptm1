@@ -24,8 +24,8 @@ import java.util.*
 
 class WriteCommentActivity : AppCompatActivity() {
 
-    var imageUri: Uri? = null
-    var imgView: ImageView? = null
+    private var imageUri: Uri? = null
+    private var imgView: ImageView? = null
     private var removeImageConstraintLayout: ConstraintLayout? = null
     private var removeImgButton: LinearLayout? = null
     private var haveChosenImage = false
@@ -68,7 +68,7 @@ class WriteCommentActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             else
-                updateCommentOnDB(numberID, description.toString())
+                updateCommentOnDB(numberID, description)
         }
 
         // handle click on add image section, get image from local phone storage
