@@ -64,6 +64,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         val ingredientDetailsTextView: TextView = findViewById(R.id.ingredientDetailsTextView)
         val stepsInstructionTextView: TextView = findViewById(R.id.stepsInstructionTextView)
         val likePercent: TextView = findViewById(R.id.percentRecookTextView)
+        val totalCalo : TextView = findViewById(R.id.totalCaloTextView)
         val totalCommentTextView: TextView = findViewById(R.id.totalCommentTextView)
         val commentSection: ConstraintLayout = findViewById(R.id.commentSectionConstraintLayout)
         val rationTextView: TextView = findViewById(R.id.foodRationTextView)
@@ -127,9 +128,13 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             cateString = cateString.substring(0, cateString.length - 2)
 
         // generate ingredient text
-        for ((i, ingredient) in currentFoodRecipe.recipeIngres.withIndex()) {
+        var ingreIndex = 0
+        for (ingredient in currentFoodRecipe.recipeIngres) {
+            if(ingredient.ingreQuantity == 0.0 || ingredient.ingreUnit == "")
+                continue
+
             val ingredientQuantityAndUnitString =
-                SpannableString("${ingredient.ingreQuantity.toInt()} ${ingredient.ingreUnit}")
+                SpannableString("${ingredient.ingreQuantity.toInt()} ${ingredient.ingreUnit} (${ingredient.ingreCalo} calo)")
 
             ingredientQuantityAndUnitString.setSpan(
                 StyleSpan(Typeface.BOLD),
@@ -140,10 +145,12 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
             ingredientString = TextUtils.concat(
                 ingredientString,
-                "${i + 1}. ${ingredient.ingreName} ",
+                "${ingreIndex + 1}. ${ingredient.ingreName} | ",
                 ingredientQuantityAndUnitString,
                 "\n\n"
             )
+
+            ++ingreIndex
         }
 
         // generate step string
@@ -206,8 +213,6 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             }
         }
 
-
-
         // set data for view
         foodNameTextView.text = currentFoodRecipe.recipeName
         authorBioTextView.text = if (recipeAuthor?.bio == null) "Không có bio" else recipeAuthor!!.bio
@@ -222,6 +227,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         categoryTextView.text = cateString
         likePercent.text =
             if (currentFoodRecipe.recipeCmts.isNotEmpty()) "${((totalLike.toDouble() / currentFoodRecipe.recipeCmts.size.toDouble()) * 100).toInt()}% người dùng sẽ nấu lại món này" else "Chưa có người dùng nào thả like cho món ăn này"
+        totalCalo.text = currentFoodRecipe.recipeIngres.sumByDouble { ingredient -> ingredient.ingreCalo!! }.toString()
 
         // food image horizontal recycler view
         val adapter = FoodImageAdapter(imagePathList, this)
@@ -466,11 +472,16 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             for (food in DBManagement.foodRecipeList)
                 if (food.id == currentFoodRecipe.id)
                     currentFoodRecipe = food
+
             popupWindow.dismiss()
         }
 
         yesButton.setOnClickListener {
             val intent = Intent(this, WriteCommentActivity::class.java)
+
+            for (food in DBManagement.foodRecipeList)
+                if (food.id == currentFoodRecipe.id)
+                    currentFoodRecipe = food
 
             intent.putExtra("commentID", _commentID)
             intent.putExtra("foodRecipe", currentFoodRecipe)
@@ -479,6 +490,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             popupWindow.dismiss()
 
             startActivity(intent)
+            recreate()
             finish()
         }
     }

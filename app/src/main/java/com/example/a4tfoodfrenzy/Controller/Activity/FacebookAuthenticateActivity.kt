@@ -78,90 +78,99 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                     val userEmail = user?.email
                     val db = Firebase.firestore
 
+                    // email exist (authenticated email with facebook)
+                    if (userEmail == null) {
+                        Toast.makeText(
+                            baseContext, "Đăng nhập bằng Facebook thất bại, vui lòng đăng nhập thông qua Google hoặc email",
+                            Toast.LENGTH_SHORT
+                        ).show()
 
-                    // check email exist in firestore users collection
-                    db.collection("users")
-                        .whereEqualTo("email", userEmail)
-                        .get()
-                        .addOnSuccessListener {
-                            // user not exist in DB --> add user
-                            if (it.isEmpty) {
-                                // get user name from google's database
-                                val userFullName = user?.displayName
-                                val helperFunctionDB = HelperFunctionDB(this)
+                        // failed --> back to sign in
+                        val toLoginPage = Intent(this, LoginRegisterActivity::class.java)
 
-                                helperFunctionDB.findSlotIdEmptyInCollection("users") { idSlot ->
-                                    // generate url for user avatar getting from facebook
-                                    val fbAvatar = "fb_${idSlot}"
-                                    val avtImageUrl = "${auth.currentUser?.photoUrl}?access_token=${token.token}"
+                        // remove all previous intent (activity)
+                        toLoginPage.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(toLoginPage)
+                    }
+                    else {
+                        // check email exist in firestore users collection
+                        db.collection("users")
+                            .whereEqualTo("email", userEmail)
+                            .get()
+                            .addOnSuccessListener {
+                                // user not exist in DB --> add user
+                                if (it.isEmpty) {
+                                    // get user name from google's database
+                                    val userFullName = user?.displayName
+                                    val helperFunctionDB = HelperFunctionDB(this)
 
-                                    val profile = User(
-                                        idSlot,
-                                        userEmail!!,
-                                        userFullName!!,
-                                        null,
-                                        "",
-                                        "users/${fbAvatar}",
-                                        arrayListOf(),
-                                        arrayListOf(),
-                                        arrayListOf(), false
-                                    )
+                                    helperFunctionDB.findSlotIdEmptyInCollection("users") { idSlot ->
+                                        // generate url for user avatar getting from facebook
+                                        val fbAvatar = "fb_${idSlot}"
+                                        val avtImageUrl =
+                                            "${auth.currentUser?.photoUrl}?access_token=${token.token}"
 
-                                    // async --> run on another thread except main thread
-                                    Thread {
-                                        // upload facebook avatar to storage on first time login
-                                        UploadAvatarImageToStorage(avtImageUrl, fbAvatar)
-                                        runOnUiThread {
-                                        }
-                                    }.start()
+                                        val profile = User(
+                                            idSlot,
+                                            userEmail,
+                                            userFullName!!,
+                                            null,
+                                            "",
+                                            "users/${fbAvatar}",
+                                            arrayListOf(),
+                                            arrayListOf(),
+                                            arrayListOf(), false
+                                        )
 
-                                    // add new user to db
-                                    db.collection("users").document(user.uid)
-                                        .set(profile)
-                                        .addOnSuccessListener {
-                                            Toast.makeText(
-                                                this,
-                                                "Đăng ký bằng Facebook thành công",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                        // async --> run on another thread except main thread
+                                        Thread {
+                                            // upload facebook avatar to storage on first time login
+                                            UploadAvatarImageToStorage(avtImageUrl, fbAvatar)
+                                            runOnUiThread {
+                                            }
+                                        }.start()
 
-//                                            // assign current user with the new facebook login user
-//                                            DBManagement.user_current =
-//                                                DBManagement.userList.filter { u -> u.id == idSlot }[0]
-                                        }
-                                        .addOnFailureListener {
-                                            Toast.makeText(
-                                                this,
-                                                "Đăng ký bằng Facebook không thành công",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
+                                        // add new user to db
+                                        db.collection("users").document(user.uid)
+                                            .set(profile)
+                                            .addOnSuccessListener {
+                                                Toast.makeText(
+                                                    this,
+                                                    "Đăng ký bằng Facebook thành công",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                            .addOnFailureListener {
+                                                Toast.makeText(
+                                                    this,
+                                                    "Đăng ký bằng Facebook không thành công",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                    }
                                 }
-                            } else {
-//                                // user exist => find user in userlist and assign to current user
-//                                DBManagement.user_current = DBManagement.userList.filter { u ->
-//                                    u.id == it.documents[0].get("id")
-//                                }[0]
+
+                                // user exist in DB --> do nothing
                             }
-                            // user exist in DB --> do nothing
-                        }
-                        .addOnFailureListener { exception -> }
+                            .addOnFailureListener { exception -> }
 
-                    // display success message
-                    Toast.makeText(
-                        baseContext, "Đăng nhập bằng Facebook thành công",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        // display success message
+                        Toast.makeText(
+                            baseContext, "Đăng nhập bằng Facebook thành công",
+                            Toast.LENGTH_SHORT
+                        ).show()
 
-                    // success --> to home
-                    val toHomeIntent = Intent(this, MainActivity::class.java)
+                        // success --> to home
+                        val toHomeIntent = Intent(this, MainActivity::class.java)
 
-                    // remove all previous intent (activity)
-                    toHomeIntent.flags =
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(toHomeIntent)
-
-                } else {
+                        // remove all previous intent (activity)
+                        toHomeIntent.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(toHomeIntent)
+                    }
+                }
+                else {
                     // If sign in fails, display a message to the user.
                     Toast.makeText(
                         baseContext, "Đăng nhập bằng Facebook thất bại",
@@ -187,10 +196,10 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
             }
     }
 
-    private fun UploadAvatarImageToStorage(path: String?, avtName: String){
+    private fun UploadAvatarImageToStorage(path: String?, avtName: String) {
         var inStream: InputStream? = null
         var responseCode = -1
-        var res : InputStream? = null
+        var res: InputStream? = null
 
         // download image from url provided by access token of Facebook
         try {
@@ -207,7 +216,7 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
 
                 // upload downloaded image to firebase storage
                 val imageRef = storageRef.reference.child("users/${avtName}")
-                val uploadTask =  imageRef.putStream(inStream)
+                val uploadTask = imageRef.putStream(inStream)
 
                 uploadTask
                     .addOnSuccessListener {

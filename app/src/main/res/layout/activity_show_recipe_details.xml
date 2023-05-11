@@ -100,13 +100,14 @@
                 android:layout_width="100dp"
                 android:layout_height="30dp"
 
-                android:background="@null"
-                android:scaleType="fitXY"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="20dp"
+                android:background="@null"
+                android:scaleType="fitXY"
                 android:src="@drawable/unsave_recipe_button"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
@@ -329,6 +330,31 @@
                             />
                     </LinearLayout>
 
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:text="Lượng Calo"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:id="@+id/totalCaloTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="500"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+
+                            />
+                    </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -495,15 +521,6 @@
                 >
 
                 <TextView
-                    android:id="@+id/bestCommentTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="Bình luận hay nhất"
-                    app:layout_constraintStart_toEndOf="@+id/bestCommentAvatarCardView"
-                    app:layout_constraintTop_toTopOf="@+id/bestCommentAvatarCardView" />
-
-                <TextView
                     android:id="@+id/bestCommentFullname"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -513,9 +530,13 @@
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold"
+
+                    android:layout_marginStart="5dp"
+
+                    app:layout_constraintBottom_toBottomOf="@+id/bestCommentAvatarCardView"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/bestCommentTextView"
-                    app:layout_constraintTop_toBottomOf="@+id/bestCommentTextView" />
+                    app:layout_constraintStart_toEndOf="@+id/bestCommentAvatarCardView"
+                    app:layout_constraintTop_toTopOf="@+id/bestCommentAvatarCardView" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/bestCommentAvatarCardView"
