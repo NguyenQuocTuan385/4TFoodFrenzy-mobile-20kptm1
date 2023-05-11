@@ -147,6 +147,8 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                         }
                         .addOnFailureListener { exception -> }
 
+
+
                     // display success message
                     Toast.makeText(
                         baseContext, "Đăng nhập bằng Facebook thành công",
