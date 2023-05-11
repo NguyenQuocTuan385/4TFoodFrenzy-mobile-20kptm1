@@ -75,4 +75,6 @@ dependencies {
 
     implementation 'com.github.takusemba:multisnaprecyclerview:2.0.4'
 
+    implementation 'com.airbnb.android:lottie:6.0.0'
+
 }
