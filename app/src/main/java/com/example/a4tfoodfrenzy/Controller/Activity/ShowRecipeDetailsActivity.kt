@@ -31,7 +31,9 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -42,7 +44,10 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
     val db: FirebaseFirestore = Firebase.firestore
     private var _commentID: Long = -1
     private lateinit var currentFoodRecipe: FoodRecipe
-    var recipeAuthor: User? = null
+    private var recipeAuthor: User? = null
+    private var cmtContent : String? = null
+    private var cmtDate : Date? = null
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
 
     @RequiresApi(Build.VERSION_CODES.Q)
     @SuppressLint("SetTextI18n")
@@ -73,6 +78,10 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         val mainScrollView: ScrollView =
             findViewById(R.id.showRecipeDetailsActivityScrollViewContainer)
         val saveRecipeButton: ImageButton = findViewById(R.id.saveRecipeButtonImageView)
+        val topCommentTextView : TextView = findViewById(R.id.bestCommentCommentTextView)
+        val topCommentFullNameTextView : TextView = findViewById(R.id.bestCommentFullname)
+        val topCommentDateTextView : TextView = findViewById(R.id.bestCommentDateTextView)
+        val topCommentAvt : ImageView = findViewById(R.id.bestCommentAvatarImageView)
 
         // other variables
         val storageRef = Firebase.storage
@@ -134,7 +143,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                 continue
 
             val ingredientQuantityAndUnitString =
-                SpannableString("${ingredient.ingreQuantity.toInt()} ${ingredient.ingreUnit} (${ingredient.ingreCalo} calo)")
+                SpannableString("${ingredient.ingreQuantity.toInt()} ${ingredient.ingreUnit} (${if(ingredient.ingreCalo?.rem(1) == 0.0) ingredient.ingreCalo?.toInt() else ingredient.ingreCalo} calo)")
 
             ingredientQuantityAndUnitString.setSpan(
                 StyleSpan(Typeface.BOLD),
@@ -180,20 +189,40 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         // assign user avatar image
         val authorImgRef = recipeAuthor?.avatar?.let { storageRef.getReference(it) }
 
-        authorImgRef?.downloadUrl?.addOnSuccessListener { uri ->
-            Glide.with(this)
-                .load(uri)
-                .into(authorAvatarImageView)
-        }?.addOnFailureListener {}
+        loadImageFromStorageToImageView(authorImgRef, authorAvatarImageView)
 
         // hide comments of users if there is no comment
-        if (currentFoodRecipe.recipeCmts.size == 0)
+        if (totalComment == 0)
             commentSection.visibility = View.GONE
 
         // hide write comment button if current user have already
         // commented on this recipe
         if ((isLoggedIn() && isCommented()) || !isNotCurrentUser) {
             writeCommentButton.visibility = View.GONE
+
+            topCommentTextView.text = cmtContent
+            topCommentFullNameTextView.text = DBManagement.user_current?.fullname
+            topCommentDateTextView.text = cmtDate?.let { dateFormat.format(it) }
+
+            // load top cmt's author's avatar
+            val cmtAuthorAvtRef = DBManagement.user_current?.avatar?.let { storageRef.getReference(it) }
+
+            loadImageFromStorageToImageView(cmtAuthorAvtRef, topCommentAvt)
+        }
+        else{ // haven't comment --> show latest comment of this recipe
+            val latestComment = DBManagement.recipeCommentList.sortedByDescending { comment -> comment.date }[0]
+
+            // find user with the latest comment
+            val userOfLatestComment = DBManagement.userList.find { user -> user.recipeCmts.contains(latestComment.id) }
+
+            topCommentTextView.text = latestComment.description
+            topCommentFullNameTextView.text = userOfLatestComment?.fullname
+            topCommentDateTextView.text = dateFormat.format(latestComment.date)
+
+            // load top cmt's author's avatar
+            val cmtAuthorAvtRef = userOfLatestComment?.avatar?.let { storageRef.getReference(it) }
+
+            loadImageFromStorageToImageView(cmtAuthorAvtRef, topCommentAvt)
         }
 
         if(!isNotCurrentUser){ // currenst user is current recipe's author --> hide save button
@@ -227,7 +256,12 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         categoryTextView.text = cateString
         likePercent.text =
             if (currentFoodRecipe.recipeCmts.isNotEmpty()) "${((totalLike.toDouble() / currentFoodRecipe.recipeCmts.size.toDouble()) * 100).toInt()}% người dùng sẽ nấu lại món này" else "Chưa có người dùng nào thả like cho món ăn này"
-        totalCalo.text = currentFoodRecipe.recipeIngres.sumByDouble { ingredient -> ingredient.ingreCalo!! }.toString()
+
+        // calculate total calo by sum of all calo of ingredients
+        val totalCaloNum = currentFoodRecipe.recipeIngres.sumOf { ingredient -> ingredient.ingreCalo!! }
+
+        //
+        totalCalo.text = if(totalCaloNum.rem(1) == 0.0) totalCaloNum.toInt().toString() else totalCalo.toString()
 
         // food image horizontal recycler view
         val adapter = FoodImageAdapter(imagePathList, this)
@@ -236,16 +270,11 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         rv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         (rv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
-
         // set first main image
         val mainImgRef = currentFoodRecipe.recipeMainImage?.let { storageRef.getReference(it) }
-        mainImgRef?.downloadUrl?.addOnSuccessListener { uri ->
-            Glide.with(this)
-                .load(uri)
-                .into(mainIMG)
-        }?.addOnFailureListener {
-            // Xử lý lỗi
-        }
+
+        loadImageFromStorageToImageView(mainImgRef, mainIMG)
+
 
         // set on image recycler view item click listener
         adapter.onImageClick = { imgView, _ ->
@@ -382,6 +411,12 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             if (cmt.id == commentID) {
                 if (cmt.description == "")
                     return false
+
+                if(cmtContent == null){
+                    cmtContent = cmt.description
+                    cmtDate = cmt.date
+                }
+                break
             }
         }
         return true
@@ -652,5 +687,17 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         loginIntent.putExtra("currentFoodIdToLogin", currentFoodRecipe.id)
         startActivity(loginIntent)
         this.finish()
+    }
+
+    // load image from storage into imageview
+    private fun loadImageFromStorageToImageView(ref : StorageReference?, imgView : ImageView){
+        // set first main image
+        ref?.downloadUrl?.addOnSuccessListener { uri ->
+            Glide.with(this)
+                .load(uri)
+                .into(imgView)
+        }?.addOnFailureListener {
+            // Xử lý lỗi
+        }
     }
 }
