@@ -40,6 +40,8 @@ class CommentListActivity : AppCompatActivity() {
             }
         }
 
+        recipeCmtList.sortBy { it.recipeComment.date }
+
         cmtAdapter = CommentListAdapter(this,recipeCmtList,true, false)
         cmtRV = findViewById(R.id.cmtRV)
         cmtRV.adapter = cmtAdapter

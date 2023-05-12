@@ -16,6 +16,7 @@ class LogoutActivity: AppCompatActivity() {
         val btnLogout = findViewById<Button>(R.id.backToLogin)
         btnLogout.setOnClickListener {
             val intent = Intent(this, LoginRegisterActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
         }
 
