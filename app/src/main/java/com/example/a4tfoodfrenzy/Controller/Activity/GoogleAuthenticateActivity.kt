@@ -2,10 +2,12 @@ package com.example.a4tfoodfrenzy.Controller.Activity
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
@@ -32,10 +34,13 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
     lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var firebaseAuth: FirebaseAuth
     val storageRef = FirebaseStorage.getInstance()
+    private var pDialog: SweetAlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_google_authenticate)
+
+        showLoadingAlert()
 
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(com.firebase.ui.auth.R.string.default_web_client_id))
@@ -130,7 +135,9 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
                                                                         "uploadAvatar",
                                                                         "Upload avatar success"
                                                                     )
-                                                                    helperFunctionDB.findSlotIdEmptyInCollection("users") {idSlot ->
+                                                                    helperFunctionDB.findSlotIdEmptyInCollection(
+                                                                        "users"
+                                                                    ) { idSlot ->
                                                                         val profile = User(
                                                                             idSlot, userEmail!!,
                                                                             userFullName!!,
@@ -167,7 +174,9 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
                                                                         "uploadAvatar",
                                                                         "Upload avatar failed"
                                                                     )
-                                                                    helperFunctionDB.findSlotIdEmptyInCollection("users") {idSlot ->
+                                                                    helperFunctionDB.findSlotIdEmptyInCollection(
+                                                                        "users"
+                                                                    ) { idSlot ->
                                                                         val profile = User(
                                                                             idSlot, userEmail!!,
                                                                             userFullName!!,
@@ -208,8 +217,7 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
                                         }
 
                                     DBManagement.addListenerChangeDataUserCurrent { user ->
-                                        if(user.isAdmin)
-                                        {
+                                        if (user.isAdmin) {
                                             // Display Toast
                                             Toast.makeText(
                                                 this,
@@ -217,11 +225,10 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
                                                 Toast.LENGTH_SHORT
                                             ).show()
 
-                                            val intent= Intent(this, AdminDashboard::class.java)
+                                            val intent = Intent(this, AdminDashboard::class.java)
                                             startActivity(intent)
                                             finish()
-                                        }
-                                        else{
+                                        } else {
                                             // When task is successful redirect to profile activity
                                             // Display Toast
                                             Toast.makeText(
@@ -231,7 +238,8 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
                                             ).show()
 
                                             // success --> load home
-                                            val toHomeIntent = Intent(this, MainActivity::class.java)
+                                            val toHomeIntent =
+                                                Intent(this, MainActivity::class.java)
 
                                             // remove all previous intent (activity)
                                             toHomeIntent.flags =
@@ -272,4 +280,14 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun showLoadingAlert() {
+        pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+        pDialog!!.progressHelper.barColor = Color.parseColor("#FFB200")
+        pDialog!!.titleText = "Vui lòng đợi..."
+        pDialog!!.setCancelable(false)
+        pDialog!!.show()
+    }
+
+
 }

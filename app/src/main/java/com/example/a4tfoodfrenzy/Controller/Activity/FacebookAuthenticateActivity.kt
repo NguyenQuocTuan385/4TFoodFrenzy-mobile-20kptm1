@@ -1,11 +1,14 @@
 package com.example.a4tfoodfrenzy.Controller.Activity
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
+import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.User
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
@@ -36,23 +39,23 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         auth = Firebase.auth
+        callbackManager = CallbackManager.Factory.create()
 
-        callbackManager = CallbackManager.Factory.create();
-
+        showLoadingAlert()
 
         LoginManager.getInstance()
             .logInWithReadPermissions(this, arrayListOf("email", "public_profile"))
         LoginManager.getInstance().registerCallback(callbackManager,
             object : FacebookCallback<LoginResult> {
-                override fun onSuccess(loginResult: LoginResult) {
-                    handleFacebookAccessToken(loginResult.accessToken)
+                override fun onSuccess(result: LoginResult) {
+                    handleFacebookAccessToken(result.accessToken)
                 }
 
                 override fun onCancel() {
                     // App code
                 }
 
-                override fun onError(exception: FacebookException) {
+                override fun onError(error: FacebookException) {
                     // App code
                 }
             })
@@ -78,20 +81,10 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                     val userEmail = user?.email
                     val db = Firebase.firestore
 
-                    // email exist (authenticated email with facebook)
+                    // authenticated  with facebook but have no email
                     if (userEmail == null) {
-                        Toast.makeText(
-                            baseContext, "Đăng nhập bằng Facebook thất bại, vui lòng đăng nhập thông qua Google hoặc email",
-                            Toast.LENGTH_SHORT
-                        ).show()
-
-                        // failed --> back to sign in
-                        val toLoginPage = Intent(this, LoginRegisterActivity::class.java)
-
-                        // remove all previous intent (activity)
-                        toLoginPage.flags =
-                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                        startActivity(toLoginPage)
+                        showFailedAlert("Đăng nhập bằng Facebook thất bại, vui lòng đăng nhập thông qua Google hoặc email")
+                        auth.signOut()
                     }
                     else {
                         // check email exist in firestore users collection
@@ -102,7 +95,7 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                                 // user not exist in DB --> add user
                                 if (it.isEmpty) {
                                     // get user name from google's database
-                                    val userFullName = user?.displayName
+                                    val userFullName = user.displayName
                                     val helperFunctionDB = HelperFunctionDB(this)
 
                                     helperFunctionDB.findSlotIdEmptyInCollection("users") { idSlot ->
@@ -126,7 +119,7 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                                         // async --> run on another thread except main thread
                                         Thread {
                                             // upload facebook avatar to storage on first time login
-                                            UploadAvatarImageToStorage(avtImageUrl, fbAvatar)
+                                            uploadAvatarImageToStorage(avtImageUrl, fbAvatar)
                                             runOnUiThread {
                                             }
                                         }.start()
@@ -142,16 +135,19 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                                                 ).show()
                                             }
                                             .addOnFailureListener {
-                                                Toast.makeText(
-                                                    this,
-                                                    "Đăng ký bằng Facebook không thành công",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
+                                                showFailedAlert("Đăng nhập bằng Facebook thất bại, vui lòng đăng nhập thông qua Google hoặc email")
                                             }
-                                    }
-                                }
 
-                                // user exist in DB --> do nothing
+                                        // assign current user with the new facebook login user
+                                        DBManagement.user_current =
+                                            DBManagement.userList.find { user -> user.id == idSlot }
+                                    }
+
+                                }
+                                else{
+                                    // user exist => find user in userlist and assign to current user
+                                    DBManagement.user_current = DBManagement.userList.find { user -> user.id == it.documents[0].get("id") }
+                                }
                             }
                             .addOnFailureListener { exception -> }
 
@@ -171,35 +167,20 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                     }
                 }
                 else {
-                    // If sign in fails, display a message to the user.
-                    Toast.makeText(
-                        baseContext, "Đăng nhập bằng Facebook thất bại",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
                     // email registered with a different provider
-                    if (task.exception is FirebaseAuthUserCollisionException)
-                        Toast.makeText(
-                            baseContext,
-                            "Vui lòng đăng nhập bằng Google với địa chỉ email đã đăng ký Facebook",
-                            Toast.LENGTH_LONG
-                        ).show()
-
-                    // failed --> back to sign in
-                    val toLoginPage = Intent(this, LoginRegisterActivity::class.java)
-
-                    // remove all previous intent (activity)
-                    toLoginPage.flags =
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(toLoginPage)
+                    if (task.exception is FirebaseAuthUserCollisionException){
+                        showFailedAlert("Vui lòng đăng nhập bằng Google với địa chỉ email đã đăng ký Facebook")
+                    }
+                    else{
+                        toLoginPageIntent()
+                    }
                 }
             }
     }
 
-    private fun UploadAvatarImageToStorage(path: String?, avtName: String) {
+    private fun uploadAvatarImageToStorage(path: String?, avtName: String) {
         var inStream: InputStream? = null
         var responseCode = -1
-        var res: InputStream? = null
 
         // download image from url provided by access token of Facebook
         try {
@@ -230,5 +211,35 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
         } catch (ex: Exception) {
             Log.e("Exception", ex.toString())
         }
+    }
+
+    private fun showLoadingAlert() {
+        val pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+        pDialog.progressHelper.barColor = Color.parseColor("#FFB200")
+        pDialog.titleText = "Vui lòng đợi..."
+        pDialog.setCancelable(false)
+        pDialog.show()
+    }
+
+    private fun showFailedAlert(message : String){
+        val pDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+        pDialog.progressHelper.barColor = Color.parseColor("#FFB200")
+        pDialog.titleText = message
+        pDialog.setCancelable(false)
+        pDialog.show()
+
+        // login with facebook failed -> back to sign in
+        pDialog.setConfirmClickListener {
+            toLoginPageIntent()
+        }
+    }
+
+    private fun toLoginPageIntent(){
+        val toLoginPage = Intent(this, LoginRegisterActivity::class.java)
+
+        // remove all previous intent (activity)
+        toLoginPage.flags =
+            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(toLoginPage)
     }
 }
