@@ -49,17 +49,18 @@ class AdminCommentManagement : Fragment() {
         val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val scrollPos = sharedPreferences.getInt("scrollPos", 0)
 
-        val calendarValue = sharedPreferences.getLong("calender", 0)
-        val calendar = Calendar.getInstance()
-        if (calendarValue != 0L) {
-            calendar.timeInMillis = calendarValue
-            tvDatePicker.setText(sdf.format(calendar.time))
-            updateLable(calendar)
-        } else {
-            tvDatePicker.setText(sdf.format(myCalendar.time))
-            updateLable(myCalendar)
-        }
+//        val calendarValue = sharedPreferences.getLong("calender", 0)
+//        val calendar = Calendar.getInstance()
+//        if (calendarValue != 0L) {
+//            calendar.timeInMillis = calendarValue
+//            tvDatePicker.setText(sdf.format(calendar.time))
+//            updateLable(calendar)
+//        } else {
+//            tvDatePicker.setText(sdf.format(myCalendar.time))
+//
+//        }
 
+        updateLable(myCalendar, false)
         adapterCmtRV = CommentListAdapter(
             requireContext(),
             recipeCommentUserList,
@@ -91,7 +92,7 @@ class AdminCommentManagement : Fragment() {
             myCalendar.set(Calendar.YEAR, year)
             myCalendar.set(Calendar.MONTH, month)
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            updateLable(myCalendar)
+            updateLable(myCalendar, true)
             adapterCmtRV.notifyDataSetChanged()
         }
         btnDatePicker.setOnClickListener {
@@ -128,15 +129,16 @@ class AdminCommentManagement : Fragment() {
         }
     }
 
-    private fun updateLable(myCalendar: Calendar) {
+    private fun updateLable(myCalendar: Calendar, isViewByDay: Boolean) {
         val myFormat = "dd-MM-yyyy"
         val sdf = SimpleDateFormat(myFormat, Locale.UK)
-        tvDatePicker.setText(sdf.format(myCalendar.time))
+        if (isViewByDay)
+            tvDatePicker.setText(sdf.format(myCalendar.time))
 
         recipeCommentUserList.clear()
 
         for (recipeCmt in DBManagement.recipeCommentList) {
-            if (compate2Date(recipeCmt.date, myCalendar.time)) {
+            if (compate2Date(recipeCmt.date, myCalendar.time) || isViewByDay == false) {
                 if (recipeCmt.description != "") {
                     var userItem = User()
                     var foodItem = FoodRecipe()
@@ -183,22 +185,22 @@ class AdminCommentManagement : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
 
-        val sharedPreferences =
-            requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-        sharedPreferences.edit().putInt("scrollPos", lastPosition).apply()
-
-        // Lấy chuỗi ngày tháng năm được chọn từ tvDatePicker
-        val selectedDateStr = tvDatePicker.text.toString()
-
-        // Chuyển đổi chuỗi thành đối tượng Date
-        val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-        var selectedDate: Date? = null
-        try {
-            selectedDate = sdf.parse(selectedDateStr)
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-        val selectedTime = selectedDate!!.time
-        sharedPreferences.edit().putLong("calender", selectedTime).apply();
+//        val sharedPreferences =
+//            requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+//        sharedPreferences.edit().putInt("scrollPos", lastPosition).apply()
+//
+//        // Lấy chuỗi ngày tháng năm được chọn từ tvDatePicker
+//        val selectedDateStr = tvDatePicker.text.toString()
+//
+//        // Chuyển đổi chuỗi thành đối tượng Date
+//        val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+//        var selectedDate: Date? = null
+//        try {
+//            selectedDate = sdf.parse(selectedDateStr)
+//        } catch (e: ParseException) {
+//            e.printStackTrace()
+//        }
+//        val selectedTime = selectedDate!!.time
+//        sharedPreferences.edit().putLong("calender", selectedTime).apply();
     }
 }
