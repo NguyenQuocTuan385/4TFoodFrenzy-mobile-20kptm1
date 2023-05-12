@@ -32,6 +32,7 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
     private lateinit var callbackManager: CallbackManager
     private lateinit var auth: FirebaseAuth
     private val storageRef = Firebase.storage
+    private var pDialog : SweetAlertDialog? = null
 
     // ...
 // Initialize Firebase Auth
@@ -73,7 +74,10 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
 
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
+                endLoadingAlert()
+
                 if (task.isSuccessful) {
+
                     // Sign in success, update UI with the signed-in user's information
                     val user = auth.currentUser
 
@@ -214,11 +218,15 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
     }
 
     private fun showLoadingAlert() {
-        val pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
-        pDialog.progressHelper.barColor = Color.parseColor("#FFB200")
-        pDialog.titleText = "Vui lòng đợi..."
-        pDialog.setCancelable(false)
-        pDialog.show()
+        pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+        pDialog!!.progressHelper.barColor = Color.parseColor("#FFB200")
+        pDialog!!.titleText = "Vui lòng đợi..."
+        pDialog!!.setCancelable(false)
+        pDialog!!.show()
+    }
+
+    private fun endLoadingAlert(){
+        pDialog!!.dismiss()
     }
 
     private fun showFailedAlert(message : String){
@@ -230,9 +238,11 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
 
         // login with facebook failed -> back to sign in
         pDialog.setConfirmClickListener {
+            pDialog.dismiss()
             toLoginPageIntent()
         }
     }
+
 
     private fun toLoginPageIntent(){
         val toLoginPage = Intent(this, LoginRegisterActivity::class.java)

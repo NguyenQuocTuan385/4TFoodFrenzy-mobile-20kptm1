@@ -15,15 +15,17 @@ import com.example.a4tfoodfrenzy.R
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import de.hdodenhof.circleimageview.CircleImageView
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class RecipeManagementAdapter(
     private var context: Context,
     private var recipeList: ArrayList<FoodRecipe>
 ) : RecyclerView.Adapter<RecipeManagementAdapter.ViewHolder>() {
     val storageRef = Firebase.storage
-    var start = 0
-    var end = 5
     var onDeleteRecipeClick: ((FoodRecipe) -> Unit)? = null
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val recipeIMG: ImageView = listItemView.findViewById(R.id.recipeManagementImageView)
@@ -47,25 +49,9 @@ class RecipeManagementAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // not in pagination item range --> hide
-//        if (position < start || position > end) {
-//            holder.itemView.visibility = View.GONE
-//            holder.itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
-//
-//            return
-//        }
-//
-//        // visible when in pagination range
-//        holder.itemView.visibility = View.VISIBLE
-//        holder.itemView.layoutParams =
-//            RecyclerView.LayoutParams(
-//                ViewGroup.LayoutParams.WRAP_CONTENT,
-//                ViewGroup.LayoutParams.MATCH_PARENT
-//            )
-
         val currentRecipe = recipeList[position]
-        val uploadDateString =
-            "${currentRecipe.date.date}/${currentRecipe.date.month}/${currentRecipe.date.year}"
+        val uploadDateString = dateFormat.format(currentRecipe.date)
+//            "${currentRecipe.date.date}/${currentRecipe.date.month}/${currentRecipe.date.year}"
 
         // assign main food image
         val foodImageRef = currentRecipe.recipeMainImage?.let { storageRef.getReference(it) }

@@ -210,19 +210,21 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             loadImageFromStorageToImageView(cmtAuthorAvtRef, topCommentAvt)
         }
         else{ // haven't comment --> show latest comment of this recipe
-            val latestComment = DBManagement.recipeCommentList.sortedByDescending { comment -> comment.date }[0]
+            if(totalComment != 0){
+                val latestComment = DBManagement.recipeCommentList.sortedByDescending { comment -> comment.date}.filter { comment -> currentFoodRecipe.recipeCmts.contains(comment.id) && comment.description != ""}[0]
 
-            // find user with the latest comment
-            val userOfLatestComment = DBManagement.userList.find { user -> user.recipeCmts.contains(latestComment.id) }
+                // find user with the latest comment
+                val userOfLatestComment = DBManagement.userList.find { user -> user.recipeCmts.contains(latestComment.id) }
 
-            topCommentTextView.text = latestComment.description
-            topCommentFullNameTextView.text = userOfLatestComment?.fullname
-            topCommentDateTextView.text = dateFormat.format(latestComment.date)
+                topCommentTextView.text = latestComment.description
+                topCommentFullNameTextView.text = userOfLatestComment?.fullname
+                topCommentDateTextView.text = dateFormat.format(latestComment.date)
 
-            // load top cmt's author's avatar
-            val cmtAuthorAvtRef = userOfLatestComment?.avatar?.let { storageRef.getReference(it) }
+                // load top cmt's author's avatar
+                val cmtAuthorAvtRef = userOfLatestComment?.avatar?.let { storageRef.getReference(it) }
 
-            loadImageFromStorageToImageView(cmtAuthorAvtRef, topCommentAvt)
+                loadImageFromStorageToImageView(cmtAuthorAvtRef, topCommentAvt)
+            }
         }
 
         if(!isNotCurrentUser){ // currenst user is current recipe's author --> hide save button
@@ -431,8 +433,8 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         // create the popup window
         val popupWindow = PopupWindow(
             popupView,
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT,
             true
         )
 
@@ -487,8 +489,8 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         // create the popup window
         val popupWindow = PopupWindow(
             popupView,
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT,
             true
         )
 
