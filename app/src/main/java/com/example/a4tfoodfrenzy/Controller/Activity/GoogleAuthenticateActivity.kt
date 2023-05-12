@@ -84,6 +84,8 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
                             .addOnCompleteListener(this) { task ->
                                 // Check condition
                                 if (task.isSuccessful) {
+                                    endLoadingAlert()
+
                                     // get current user's email
                                     val userEmail = firebaseAuth.currentUser?.email
                                     val db = Firebase.firestore
@@ -289,5 +291,7 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
         pDialog!!.show()
     }
 
-
+    private fun endLoadingAlert(){
+        pDialog!!.dismiss()
+    }
 }

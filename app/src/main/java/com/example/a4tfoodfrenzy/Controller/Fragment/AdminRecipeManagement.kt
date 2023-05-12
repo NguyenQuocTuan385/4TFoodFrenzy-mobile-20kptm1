@@ -50,7 +50,7 @@ class AdminRecipeManagement : Fragment() {
         recipeList = DBManagement.foodRecipeList.sortedByDescending { food -> food.date }
             .toList() as ArrayList<FoodRecipe>
 
-        val optionList = arrayListOf("Mới nhất", "Phổ biến", "Nhiều lượt thích nhất")
+        val optionList = arrayListOf("Mới nhất", "Nhiều lượt thích nhất")
 
         // assign recipe recycler view adapter
         adapter = RecipeManagementAdapter(requireContext(), recipeList)
@@ -91,10 +91,6 @@ class AdminRecipeManagement : Fragment() {
 
                         true
                     }
-                    "Phổ biến" -> {
-                        filterOptionTV.text = item.title
-                        true
-                    }
                     "Nhiều lượt thích nhất" -> {
                         filterOptionTV.text = item.title
 
@@ -108,9 +104,6 @@ class AdminRecipeManagement : Fragment() {
 
                         // notify the adapter
                         adapter!!.notifyItemRangeChanged(0, recipeList.size)
-
-//                        adapter = RecipeManagementAdapter(requireContext(), recipeList)
-//                        recipeManagementRecyclerView.adapter = adapter
 
                         true
                     }
@@ -136,10 +129,6 @@ class AdminRecipeManagement : Fragment() {
                     recipeList.addAll(searchedList)
 
                     filterOptionTV.text = "Mới nhất"
-//
-//                    adapter!!.start = 0
-//                    adapter!!.end = if(recipeList.size < 6 ) recipeList.size - 1 else 5
-//                    adapter!!.notifyItemRangeChanged(0, recipeList.size)
                 }
             }
             true
@@ -282,21 +271,6 @@ class AdminRecipeManagement : Fragment() {
             }
         }
 
-//        // view more food
-//        loadMoreButton.setOnClickListener {
-//            adapter!!.start += 6
-//            val temp = adapter!!.end
-//            adapter!!.end += if(adapter!!.end + 6 > recipeList.size && adapter!!.end != recipeList.size - 1) recipeList.size - 1 - adapter!!.end else 6
-//
-//            if (adapter!!.end >= recipeList.size) {
-//                adapter!!.start = 0
-//                adapter!!.end = if(recipeList.size < 6) recipeList.size - 1 else 5
-//
-//                // notify the whole source list
-//                adapter!!.notifyItemRangeChanged(0, recipeList.size)
-//            } else
-//                adapter!!.notifyItemRangeChanged(0, adapter!!.end + 1)
-//        }
         return view
     }
 }
