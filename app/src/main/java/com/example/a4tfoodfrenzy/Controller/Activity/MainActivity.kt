@@ -185,10 +185,11 @@ class MainActivity : AppCompatActivity() {
             DBManagement.addListenerChangeDataUserCurrent { user ->
                 if (user.email.equals("")) {
                     DBManagement.fetchDataUserCurrent { }
-                } else if (user.isAdmin) {
-                    val intent = Intent(this, AdminDashboard::class.java)
-                    startActivity(intent)
                 }
+//                else if (user.isAdmin) {
+//                    val intent = Intent(this, AdminDashboard::class.java)
+//                    startActivity(intent)
+//                }
             }
         }
         DBManagement.addListenerChangeDataFoodRecipe { foodRecipes ->
