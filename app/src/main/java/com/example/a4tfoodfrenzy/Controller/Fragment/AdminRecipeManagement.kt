@@ -1,12 +1,15 @@
 package com.example.a4tfoodfrenzy.Controller.Fragment
 
+import android.app.Activity
 import android.content.ContentValues
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -117,6 +120,8 @@ class AdminRecipeManagement : Fragment() {
         // search feature
         searchEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                hideKeyboard()
+
                 val searchWord = searchEditText.text.toString()
 
                 val searchedList =
@@ -124,11 +129,22 @@ class AdminRecipeManagement : Fragment() {
                         .filter { food -> food.recipeName.contains(searchWord) }
                         .sortedByDescending { food -> food.date }
 
-                if (searchedList.isNotEmpty()) {
+
+                if (searchedList.size > 1) {
                     recipeList.clear()
                     recipeList.addAll(searchedList)
 
                     filterOptionTV.text = "Mới nhất"
+
+                    adapter!!.notifyDataSetChanged()
+                }
+                else if (searchedList.size == 1){
+                    recipeList.clear()
+                    recipeList.add(searchedList[0])
+
+                    filterOptionTV.text = "Mới nhất"
+
+                    adapter!!.notifyDataSetChanged()
                 }
             }
             true
@@ -272,5 +288,14 @@ class AdminRecipeManagement : Fragment() {
         }
 
         return view
+    }
+
+    private fun Fragment.hideKeyboard() {
+        view?.let { activity?.hideKeyboard(it) }
+    }
+
+    private fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
