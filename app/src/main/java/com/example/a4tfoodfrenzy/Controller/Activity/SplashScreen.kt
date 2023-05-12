@@ -18,10 +18,6 @@ import java.util.ArrayList
 import java.util.LinkedHashMap
 
 class SplashScreen : AppCompatActivity() {
-    private lateinit var btnViewMoreTodayEat: Button
-    private lateinit var btnViewMoreMostLikes: Button
-    private lateinit var recipeMostLikesRV: RecyclerView
-    private lateinit var recipeTodayEatRV: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
@@ -32,26 +28,37 @@ class SplashScreen : AppCompatActivity() {
     fun fetchDatabaseFirebase() {
         if (FirebaseAuth.getInstance().currentUser != null) {
             DBManagement.addListenerChangeDataUserCurrent { user ->
-                if (!user.isAdmin) {
+                if (user.email.equals("")) {
+                    DBManagement.fetchDataUserCurrent { }
                     Handler().postDelayed({
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                         finish()
-                    },2000)
-
+                    },3000)
                 }
                 else if (user.isAdmin) {
                     Handler().postDelayed({
                         val intent = Intent(this, AdminDashboard::class.java)
                         startActivity(intent)
                         finish()
-                    },2000)
+                    },3000)
+                }
+                else{
+                    Handler().postDelayed({
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    },3000)
                 }
             }
         }
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            DBManagement.addListenerChangeDataUserCurrent { user ->
-            }
+        else
+        {
+            Handler().postDelayed({
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            },3000)
         }
         DBManagement.addListenerChangeDataFoodRecipe { foodRecipes ->
             if (foodRecipes.isEmpty()) {

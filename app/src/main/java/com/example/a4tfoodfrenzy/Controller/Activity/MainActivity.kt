@@ -181,73 +181,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
     fun fetchDatabaseFirebase() {
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            DBManagement.addListenerChangeDataUserCurrent { user ->
-                if (user.email.equals("")) {
-                    DBManagement.fetchDataUserCurrent { }
-                }
-//                else if (user.isAdmin) {
-//                    val intent = Intent(this, AdminDashboard::class.java)
-//                    startActivity(intent)
-//                }
-            }
-        }
-        DBManagement.addListenerChangeDataFoodRecipe { foodRecipes ->
-            if (foodRecipes.isEmpty()) {
-                DBManagement.fetchDataFoodRecipe { foodRecipeList ->
-                    DBManagement.addListenerChangeDataUser { users ->
-                        setRecipeListAdapter(
-                            RecipeListAdapter(
-                                this,
-                                generateRecipeTodayEatData(foodRecipeList, users)
-                            ), recipeTodayEatRV
-                        )
-                        btnViewMoreTodayEat.visibility = View.VISIBLE
 
-                        setRecipeListAdapter(
-                            RecipeListAdapter(
-                                this,
-                                generateRecipeMostLikesData(foodRecipeList, users)
-                            ), recipeMostLikesRV
-                        )
-                        btnViewMoreMostLikes.visibility = View.VISIBLE
-                    }
-                }
-            } else {
-                DBManagement.addListenerChangeDataUser { users ->
-                    setRecipeListAdapter(
-                        RecipeListAdapter(
-                            this,
-                            generateRecipeTodayEatData(foodRecipes, users)
-                        ), recipeTodayEatRV
-                    )
-                    btnViewMoreTodayEat.visibility = View.VISIBLE
-
-                    setRecipeListAdapter(
-                        RecipeListAdapter(
-                            this,
-                            generateRecipeMostLikesData(foodRecipes, users)
-                        ), recipeMostLikesRV
-                    )
-                    btnViewMoreMostLikes.visibility = View.VISIBLE
-                }
-            }
-        }
-        DBManagement.addListenerChangeDataRecipeCategories { recipeCategories ->
-            if (recipeCategories.isEmpty()) {
-                DBManagement.fetchDataRecipeCate { }
-            }
-        }
-        DBManagement.addListenerChangeDataRecipeComment { recipeComments ->
-            if (recipeComments.isEmpty()) {
-                DBManagement.fetchDataRecipeCmt { }
-            }
-        }
-        DBManagement.addListenerChangeDataRecipeDiets { recipeDiets ->
-            if (recipeDiets.isEmpty()) {
-                DBManagement.fetchDataRecipeDiet { }
-            }
-        }
+        setRecipeListAdapter(
+            RecipeListAdapter(
+                this,
+                generateRecipeTodayEatData(DBManagement.foodRecipeList, DBManagement.userList)
+            ), recipeTodayEatRV
+        )
+        btnViewMoreTodayEat.visibility = View.VISIBLE
+        setRecipeListAdapter(
+            RecipeListAdapter(
+                this,
+                generateRecipeMostLikesData(DBManagement.foodRecipeList, DBManagement.userList)
+            ), recipeMostLikesRV
+        )
+        btnViewMoreMostLikes.visibility = View.VISIBLE
     }
 
     fun generateCateRecipeData(): ArrayList<RecipeCategorySuggest> {

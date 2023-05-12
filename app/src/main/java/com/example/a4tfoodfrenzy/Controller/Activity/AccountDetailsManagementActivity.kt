@@ -11,6 +11,7 @@ import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.example.a4tfoodfrenzy.Controller.Fragment.UserFragment
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R

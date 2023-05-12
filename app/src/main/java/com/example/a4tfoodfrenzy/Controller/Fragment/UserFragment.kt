@@ -190,7 +190,7 @@ class UserFragment(private var isAdmin:Boolean) : Fragment() {
     {
         val intent= Intent(requireContext(), AccountDetailsManagementActivity::class.java)
         intent.putExtra("user",user)
-        startActivity(intent)
+        startActivityForResult(intent,1)
     }
 
 }
