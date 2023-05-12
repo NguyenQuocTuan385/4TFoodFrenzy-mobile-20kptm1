@@ -122,11 +122,12 @@ class AdminRecipeManagement : Fragment() {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 hideKeyboard()
 
-                val searchWord = searchEditText.text.toString()
+                var searchWord = searchEditText.text.toString()
+                searchWord = searchWord.lowercase()
 
                 val searchedList =
                     DBManagement.foodRecipeList
-                        .filter { food -> food.recipeName.contains(searchWord) }
+                        .filter { food -> food.recipeName.lowercase().contains(searchWord) }
                         .sortedByDescending { food -> food.date }
 
 

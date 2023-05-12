@@ -53,6 +53,9 @@ class MainActivity : AppCompatActivity() {
         recipeTodayEatRV.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
         recipeMostLikesRV.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
 
+        recipeTodayEatRV.isNestedScrollingEnabled = false
+        recipeMostLikesRV.isNestedScrollingEnabled = false
+
         findViewById<LinearLayout>(R.id.searchLL).setOnClickListener {
             if (!DBManagement.existAfterSearch) {
                 val intent = Intent(this, SearchScreen::class.java)
