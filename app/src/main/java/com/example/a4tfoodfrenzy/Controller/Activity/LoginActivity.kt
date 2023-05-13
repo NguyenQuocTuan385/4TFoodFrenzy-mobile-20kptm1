@@ -64,15 +64,20 @@ class LoginActivity : AppCompatActivity() {
     }
     private fun loginByFacebook()
     {
-        val intent=Intent(this,FacebookAuthenticateActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
-        startActivity(intent)
+        btnFacebook.setOnClickListener {
+            val intent=Intent(this,FacebookAuthenticateActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+            startActivity(intent)
+        }
+
     }
     private fun loginByGoogle()
     {
-        val intent = Intent(this, GoogleAuthenticateActivity::class.java)
+        btnGoogle.setOnClickListener {
+            val intent = Intent(this, GoogleAuthenticateActivity::class.java)
+            startActivity(intent)
+        }
 
-        startActivity(intent)
     }
     private fun loginByEmail() {
         loginBtn.setOnClickListener {
