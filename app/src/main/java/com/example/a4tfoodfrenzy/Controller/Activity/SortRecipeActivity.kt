@@ -62,38 +62,38 @@ class SortRecipeActivity : AppCompatActivity() {
         )
 
         val categoryImageList = arrayListOf(
-            R.drawable.norm_category_0,
-            R.drawable.norm_category_1,
-            R.drawable.norm_category_2,
-            R.drawable.norm_category_3,
+            R.drawable.norm_category_5,
             R.drawable.norm_category_4,
-            R.drawable.norm_category_5
+            R.drawable.norm_category_0,
+            R.drawable.norm_category_3,
+            R.drawable.norm_category_2,
+            R.drawable.norm_category_1
         )
 
         val selectedCategoryImageList = arrayListOf(
-            R.drawable.selected_category_0,
-            R.drawable.selected_category_1,
-            R.drawable.selected_category_2,
-            R.drawable.selected_category_3,
+            R.drawable.selected_category_5,
             R.drawable.selected_category_4,
-            R.drawable.selected_category_5
+            R.drawable.selected_category_0,
+            R.drawable.selected_category_3,
+            R.drawable.selected_category_2,
+            R.drawable.selected_category_1
         )
 
         val dietImageList = arrayListOf(
-            R.drawable.no_gluten_icon,
-            R.drawable.pure_veg_icon,
             R.drawable.no_sugar_icon,
-            R.drawable.no_alcohol_icon,
+            R.drawable.no_gluten_icon,
             R.drawable.no_meat_icon,
+            R.drawable.pure_veg_icon,
+            R.drawable.no_alcohol_icon,
             R.drawable.veg_icon,
         )
 
         val selectedDietImageList = arrayListOf(
-            R.drawable.selected_diet_0,
-            R.drawable.selected_diet_1,
             R.drawable.selected_diet_2,
-            R.drawable.selected_diet_3,
+            R.drawable.selected_diet_0,
             R.drawable.selected_diet_4,
+            R.drawable.selected_diet_1,
+            R.drawable.selected_diet_3,
             R.drawable.selected_diet_5
         )
 
@@ -110,7 +110,7 @@ class SortRecipeActivity : AppCompatActivity() {
                     selectedNormalImageList[i]
                 )
             )
-        for ((i, category) in DBManagement.recipeCateList.withIndex())
+        for ((i, category) in DBManagement.recipeCateList.sortedBy { cate -> cate.id }.withIndex())
             categoryType.add(
                 SortType(
                     category.recipeCateName,
@@ -119,7 +119,7 @@ class SortRecipeActivity : AppCompatActivity() {
                     selectedCategoryImageList[i]
                 )
             )
-        for ((i, diet) in DBManagement.recipeDietList.withIndex())
+        for ((i, diet) in DBManagement.recipeDietList.sortedBy { diet -> diet.id }.withIndex())
             dietType.add(
                 SortType(
                     diet.dietName,
@@ -210,12 +210,13 @@ class SortRecipeActivity : AppCompatActivity() {
         if (selectedDietId.size == 0)
             return null
 
-        var resList = DBManagement.recipeDietList[selectedDietId[0].toInt()].foodRecipes
+        val filteringDietList = DBManagement.recipeDietList.sortedBy { diet -> diet.id }
+        var resList = filteringDietList[selectedDietId[0].toInt()].foodRecipes
 
         // from 1 because 0 already assigned to reslist
         for (i in 1 until selectedDietId.size) {
             resList =
-                DBManagement.recipeDietList[selectedDietId[i].toInt()].foodRecipes.filter { id ->
+                filteringDietList[selectedDietId[i].toInt()].foodRecipes.filter { id ->
                     resList.contains(id)
                 } as ArrayList<Long>
         }
@@ -227,12 +228,13 @@ class SortRecipeActivity : AppCompatActivity() {
         if (selectedCategoryId.size == 0)
             return null
 
-        var resList = DBManagement.recipeCateList[selectedCategoryId[0].toInt()].foodRecipes
+        val filteringDietList = DBManagement.recipeCateList.sortedBy { cate -> cate.id }
+        var resList = filteringDietList[selectedCategoryId[0].toInt()].foodRecipes
 
         // from 1 because 0 already assigned to reslist
         for (i in 1 until selectedCategoryId.size) {
             resList =
-                DBManagement.recipeCateList[selectedCategoryId[i].toInt()].foodRecipes.filter { id ->
+                filteringDietList[selectedCategoryId[i].toInt()].foodRecipes.filter { id ->
                     resList.contains(id)
                 } as ArrayList<Long>
         }
