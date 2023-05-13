@@ -17,47 +17,10 @@ class FoodRecipe(
     private var _recipeIngres: ArrayList<RecipeIngredient>,
     private var _recipeCmts: ArrayList<Long>,
     private var _userSavedRecipes: ArrayList<Long>,
+    private var _numOfLikes: Int
 ) : Parcelable{
-    private var _authorName: String? = null
-    private var _authorAvatar: Int? = null
-    private var _numOfLikes: Int? = null
 
-    constructor():this(0,"",null,0,"",Date(),false, arrayListOf(), arrayListOf(), arrayListOf(), arrayListOf(), arrayListOf())
-    // constructor if there is author, likes, date
-    constructor(
-        id: Long,
-        recipeName: String,
-        recipeImage: String?,
-        ration: Int,
-        cookTime: String,
-        date: Date,
-        isPublic: Boolean,
-        _recipeDiets: ArrayList<Long>,
-        _recipeSteps: ArrayList<RecipeCookStep>,
-        _recipeIngres: ArrayList<RecipeIngredient>,
-        _recipeCmts: ArrayList<Long>,
-        _userSavedRecipes: ArrayList<Long>,
-        name: String,
-        avatar: Int,
-        likes: Int,
-    ) : this(
-        id,
-        recipeName,
-        recipeImage,
-        ration,
-        cookTime,
-        date,
-        isPublic,
-        _recipeDiets,
-        _recipeSteps,
-        _recipeIngres,
-        _recipeCmts,
-        _userSavedRecipes
-    ) {
-        _authorName = name
-        _numOfLikes = likes
-        _authorAvatar = avatar
-    }
+    constructor():this(0,"",null,0,"",Date(),false, arrayListOf(), arrayListOf(), arrayListOf(), arrayListOf(), arrayListOf(),0)
 
     var id: Long
         get() = _id
@@ -130,23 +93,12 @@ class FoodRecipe(
             _userSavedRecipes = value
         }
 
-    var authorName: String?
-        get() = _authorName
-        set(value) {
-            _authorName = value
-        }
-
-    var authorAvatar: Int?
-        get() = _authorAvatar
-        set(value) {
-            _authorAvatar = value
-        }
-
-    var numOfLikes: Int?
+    var numOfLikes: Int
         get() = _numOfLikes
         set(value) {
             _numOfLikes = value
         }
+
 
     // implement methods of Parcelable
     override fun describeContents(): Int {
@@ -166,9 +118,7 @@ class FoodRecipe(
         dest.writeList(_recipeIngres)
         dest.writeList(_recipeCmts)
         dest.writeList(_userSavedRecipes)
-        dest.writeString(_authorName)
-        dest.writeValue(_authorAvatar)
-        dest.writeValue(_numOfLikes)
+        dest.writeInt(_numOfLikes);
     }
     private constructor(parcel: Parcel) : this(
         parcel.readLong(),
@@ -183,10 +133,8 @@ class FoodRecipe(
         ArrayList<RecipeIngredient>().apply { parcel.readList(this, RecipeIngredient::class.java.classLoader) },
         ArrayList<Long>().apply { parcel.readList(this, Long::class.java.classLoader) },
         ArrayList<Long>().apply { parcel.readList(this, Long::class.java.classLoader) },
+        parcel.readInt(),
     ) {
-        _authorName = parcel.readString()
-        _authorAvatar = parcel.readValue(Int::class.java.classLoader) as? Int
-        _numOfLikes = parcel.readValue(Int::class.java.classLoader) as? Int
     }
 
     companion object {
