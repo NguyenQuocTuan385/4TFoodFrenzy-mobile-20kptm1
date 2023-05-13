@@ -67,6 +67,8 @@ class RecipeManagementAdapter(
             if (user.myFoodRecipes.contains(currentRecipe.id)) {
                 val authorAvtRef = user.avatar.let { storageRef.getReference(it) }
 
+                holder.authorName.text = user.fullname
+
                 // assign author avatar
                 authorAvtRef.downloadUrl.addOnSuccessListener { uri ->
                     Glide.with(context)
@@ -100,7 +102,7 @@ class RecipeManagementAdapter(
         holder.recipeName.text = currentRecipe.recipeName
         holder.numOfLike.text =
             if (currentRecipe.numOfLikes != null) currentRecipe.numOfLikes.toString() else "0"
-        holder.authorName.text = currentRecipe.authorName
+
         holder.uploadDate.text = uploadDateString
     }
 }
