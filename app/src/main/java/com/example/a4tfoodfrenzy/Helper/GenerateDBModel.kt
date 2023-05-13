@@ -1526,6 +1526,185 @@ class GenerateDBModel(private var context: Context) {
         result.add(mon_an_35)
 
 
+
+
+
+        // 5 món diểm tâm
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe36_1","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe36_2","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe36_3","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe36_4","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe36_5","foods")
+
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe37_1","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe37_2","foods")
+
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe38_1","foods")
+
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe39_1","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe39_2","foods")
+
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe40_1","foods")
+        helperFunctionDB.uploadImageToCloudStorage("foodrecipe40_2","foods")
+
+
+
+        listIngredient= ArrayList()
+        listIngredient.add(  RecipeIngredient(1.0, "bánh Sandwich", "miếng", 50.0))
+        listIngredient.add(  RecipeIngredient(1.0, "trứng gà", "quả",40.0))
+        listIngredient.add(  RecipeIngredient(5.0, "muối", "g", 5.0))
+        listIngredient.add(  RecipeIngredient(5.0, "đường", "g", 10.0))
+
+
+        listStep= ArrayList()
+        listStep.add(
+            RecipeCookStep(
+                "Đập trứng vào một cái bát con có lót màng bọc thực phẩm!\n" +
+                        "Sau đó cuộn trứng lại",
+                "foods/foodrecipe36_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Nhúng nước sôi khoảng 3-4’",
+                "foods/foodrecipe36_2.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Giữ nguyên chiếc chảo, áp chảo bánh mì sandwich nhà nào có máy nướng bỏ vào máy cũng được",
+                "foods/foodrecipe36_3.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Cho trứng lên mặt bánh, rắc xíu muối và tiêu",
+                "foods/foodrecipe36_4.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Cắt đôi trứng cho lòng đào tan chảy ngấm vào bánh và thưởng thức liền! So good cả nhà ơi",
+                "foods/foodrecipe36_5.png"
+            )
+        )
+
+        var mon_an_36 = FoodRecipe(36,"Bữa sáng với trứng trần siêu ngon","foods/foodrecipe36_5.png", 1, "Dưới 15 phút",
+            Date(),true,arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),0)
+        result.add(mon_an_36)
+
+
+        listIngredient= ArrayList()
+        listIngredient.add(  RecipeIngredient(2.0, "ngũ cốc Granola", "muỗng", 30.0))
+        listIngredient.add(  RecipeIngredient(1.0, "sữa chua không đường", "hộp",40.0))
+        listIngredient.add(  RecipeIngredient(2.0, "mật ong", "muỗng", 15.0))
+        listIngredient.add(  RecipeIngredient(1.0, "chuối", "quả", 40.0))
+
+
+        listStep= ArrayList()
+        listStep.add(
+            RecipeCookStep(
+                "Cho sữa chua vào bát. Sau đó, cho 2 muỗng ngũ cốc vào thêm",
+                "foods/foodrecipe37_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Cắt chuối vừa ăn cho vào đĩa. Sau đó rưới thêm mật ong và thưởng thức. Bữa sáng tốt cho sức khỏe đơn giản mà dễ làm. Chúc cả nhà ăn ngon miệng ạ",
+                "foods/foodrecipe37_2.png"
+            )
+        )
+
+        var mon_an_37 = FoodRecipe(37,"Ngũ cốc Granola mix sữa chua bữa sáng giảm cân","foods/foodrecipe37_2.png", 1, "Dưới 15 phút",
+            Date(),true,arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),0)
+        result.add(mon_an_37)
+
+
+        listIngredient= ArrayList()
+        listIngredient.add(  RecipeIngredient(2.0, "sandwich ngũ cốc", "lát", 50.0))
+        listIngredient.add(  RecipeIngredient(1.0, "bơ lạc", "thỏi",20.0))
+        listIngredient.add(  RecipeIngredient(2.0, "chuối", "quả", 30.0))
+        listIngredient.add(  RecipeIngredient(1.0, "bơ", "quả", 40.0))
+
+
+        listStep= ArrayList()
+        listStep.add(
+            RecipeCookStep(
+                "Nướng sandwich lại cho giòn. Sau đó cắt bơ, chuối cho ra đĩa cùng nửa viên bơ lạt. Thưởng thức thôi nào",
+                "foods/foodrecipe38_1.png"
+            )
+        )
+
+        var mon_an_38 = FoodRecipe(38,"Sandwich ngũ cốc + Bơ - chuối","foods/foodrecipe38_1.png", 2, "Dưới 15 phút",
+            Date(),true,arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),0)
+        result.add(mon_an_38)
+
+        listIngredient= ArrayList()
+        listIngredient.add(  RecipeIngredient(2.0, "bacon", "lát", 50.0))
+        listIngredient.add(  RecipeIngredient(1.0, "trứng gà", "trái",15.0))
+        listIngredient.add(  RecipeIngredient(4.0, "măng Tây", "cây", 30.0))
+        listIngredient.add(  RecipeIngredient(3.0, "cà chua bi", "trái", 40.0))
+        listIngredient.add(  RecipeIngredient(0.5, "trái dưa chuột", "trái", 20.0))
+
+
+
+        listStep= ArrayList()
+        listStep.add(
+            RecipeCookStep(
+                "Áp chảo bacon trước, để mỡ từ bacon chảy ra, dùng để áp chảo măng tây nha mọi người.",
+                "foods/foodrecipe39_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Dưa leo cắt nhỏ, và bày các nguyên liệu ra đĩa và thưởng thức ạ",
+                "foods/foodrecipe39_2.png"
+            )
+        )
+
+        var mon_an_39 = FoodRecipe(39,"Sandwich ngũ cốc + Bơ - chuối","foods/foodrecipe39_2.png", 2, "Dưới 15 phút",
+            Date(),true,arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),0)
+        result.add(mon_an_39)
+
+
+        listIngredient= ArrayList()
+        listIngredient.add(  RecipeIngredient(1.0, "thanh long trắng", "trái", 50.0))
+        listIngredient.add(  RecipeIngredient(1.0, "ngũ cốc", "chén",25.0))
+        listIngredient.add(  RecipeIngredient(200.0, "sữa tươi không đường", "ml", 80.0))
+        listIngredient.add(  RecipeIngredient(3.0, "cà chua bi", "trái", 40.0))
+        listIngredient.add(  RecipeIngredient(4.0, "hạnh nhân", "hạt", 20.0))
+
+        listStep= ArrayList()
+        listStep.add(
+            RecipeCookStep(
+                "Thanh long cắt ô cờ, cho vào tô cùng ngũ cốc",
+                "foods/foodrecipe40_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Đổ sữa tươi vào, và trang trí bằng vài hạt hạnh nhân trên top.\n" +
+                        "Lưu ý món này sẽ ngon hơn khi sữa và thanh long đều lạnh nghen. Ăn sáng sảng khoải lắm luôn ạ",
+                "foods/foodrecipe40_2.png"
+            )
+        )
+
+        var mon_an_40 = FoodRecipe(40," Bữa Sáng Ngũ Cốc, Sữa Tươi, Thanh Long ","foods/foodrecipe40_2.png", 2, "Dưới 15 phút",
+            Date(),true,arrayListOf(),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),0)
+        result.add(mon_an_40)
+
+
+
         // thêm vào firebase
         for(recipefood in result) {
             db.collection("RecipeFoods").add(recipefood).addOnSuccessListener { documentReference ->
