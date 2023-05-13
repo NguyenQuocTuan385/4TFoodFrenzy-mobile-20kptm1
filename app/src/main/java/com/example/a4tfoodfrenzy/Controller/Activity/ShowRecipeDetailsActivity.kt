@@ -264,7 +264,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         val totalCaloNum = currentFoodRecipe.recipeIngres.sumOf { ingredient -> ingredient.ingreCalo!! }
 
         //
-        totalCalo.text = if(totalCaloNum.rem(1) == 0.0) totalCaloNum.toInt().toString() else totalCalo.toString()
+        totalCalo.text = if(totalCaloNum.rem(1) == 0.0) totalCaloNum.toInt().toString() else totalCaloNum.toString()
 
         // food image horizontal recycler view
         val adapter = FoodImageAdapter(imagePathList, this)
