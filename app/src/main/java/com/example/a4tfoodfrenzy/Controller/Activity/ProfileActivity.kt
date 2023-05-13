@@ -42,17 +42,15 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var list_option: List<String>
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var menu: Menu
-    private lateinit var progressDialog: ProgressDialog
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     val storageRef = FirebaseStorage.getInstance()
     private lateinit var tabMyFoodRecipe: TabMyFoodRecipe
     private lateinit var tabFoodRecipeSaved: TabFoodRecipeSaved
-    val dbManagement = DBManagement()
     var user_current = DBManagement.user_current
     private val myBroadcastReceiverProfile = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-             if (intent?.action.equals(ConstantAction.ADD_SAVED_RECIPE_ACTION)) {
+            if (intent?.action.equals(ConstantAction.ADD_SAVED_RECIPE_ACTION)) {
                 tabFoodRecipeSaved.generateRecipeSaved()
             }
         }
@@ -104,10 +102,10 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        var intentFilter2 = IntentFilter(ConstantAction.DELETE_MY_RECIPE_ACTION)
-        var intentFilter4 = IntentFilter(ConstantAction.ADD_SAVED_RECIPE_ACTION)
+        var intentFilter1 = IntentFilter(ConstantAction.DELETE_MY_RECIPE_ACTION)
+        var intentFilter2 = IntentFilter(ConstantAction.ADD_SAVED_RECIPE_ACTION)
+        registerReceiver(myBroadcastReceiverProfile, intentFilter1)
         registerReceiver(myBroadcastReceiverProfile, intentFilter2)
-        registerReceiver(myBroadcastReceiverProfile, intentFilter4)
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -221,7 +219,7 @@ class ProfileActivity : AppCompatActivity() {
                     "Xem chi tiết" -> {
                         val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
                         intent.putExtra("foodRecipe", foodRecipe)
-                        startActivity(intent)
+                        startActivityForResult(intent,2)
                         true
                     }
                     "Xóa khỏi danh sách" -> {
@@ -290,7 +288,7 @@ class ProfileActivity : AppCompatActivity() {
                     "Xem chi tiết" -> {
                         val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
                         intent.putExtra("foodRecipe", foodRecipe)
-                        startActivity(intent)
+                        startActivityForResult(intent,1)
                         true
                     }
 

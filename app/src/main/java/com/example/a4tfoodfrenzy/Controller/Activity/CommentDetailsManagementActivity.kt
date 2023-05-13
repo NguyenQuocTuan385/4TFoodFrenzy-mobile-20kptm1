@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.RecipeComment
 import com.example.a4tfoodfrenzy.Model.User
@@ -80,40 +81,47 @@ class CommentDetailsManagementActivity : AppCompatActivity() {
             finish()
         }
         deleteTV.setOnClickListener {
-            val collectionRecipeCmt = db.collection("RecipeCmts").whereEqualTo("id",recipeCmt.id)
-            val collectionFoodRecipe = db.collection("RecipeFoods").whereEqualTo("id",foodRecipe.id)
-            val collectionUser = db.collection("users").whereEqualTo("id",user.id)
+            val helperFunction:HelperFunctionDB = HelperFunctionDB(this)
 
-            collectionRecipeCmt.get().addOnSuccessListener {documents ->
-                for (document in documents) {
-                    document.reference.delete()
+            helperFunction.showWarningAlert("Xóa bình luận", "Bạn có chắc muốn xóa bình luận này không ?") {
+                    isConfirm->
+                if (isConfirm) {
+                    val collectionRecipeCmt = db.collection("RecipeCmts").whereEqualTo("id",recipeCmt.id)
+                    val collectionFoodRecipe = db.collection("RecipeFoods").whereEqualTo("id",foodRecipe.id)
+                    val collectionUser = db.collection("users").whereEqualTo("id",user.id)
+
+                    collectionRecipeCmt.get().addOnSuccessListener {documents ->
+                        for (document in documents) {
+                            document.reference.delete()
+                        }
+                    }.addOnFailureListener { exception ->
+                        Log.e("TAG", "Error deleting documents", exception)
+                    }
+
+                    foodRecipe.recipeCmts.remove(recipeCmt.id)
+                    user.recipeCmts.remove(recipeCmt.id)
+
+                    collectionFoodRecipe.get().addOnSuccessListener {documents ->
+                        for (document in documents) {
+                            document.reference.update("recipeCmts", foodRecipe.recipeCmts)
+                        }
+                    }.addOnFailureListener { exception ->
+                        Log.e("TAG", "Error deleting documents", exception)
+                    }
+
+                    collectionUser.get().addOnSuccessListener {documents ->
+                        for (document in documents) {
+                            document.reference.update("recipeCmts",user.recipeCmts )
+                        }
+                    }.addOnFailureListener { exception ->
+                        Log.e("TAG", "Error deleting documents", exception)
+                    }
+                    val replyIntent = Intent()
+                    replyIntent.putExtra("recipeCmt",recipeCmt)
+                    setResult(1111, replyIntent)
+                    finish()
                 }
-            }.addOnFailureListener { exception ->
-                Log.e("TAG", "Error deleting documents", exception)
             }
-
-            foodRecipe.recipeCmts.remove(recipeCmt.id)
-            user.recipeCmts.remove(recipeCmt.id)
-
-            collectionFoodRecipe.get().addOnSuccessListener {documents ->
-                for (document in documents) {
-                    document.reference.update("recipeCmts", foodRecipe.recipeCmts)
-                }
-            }.addOnFailureListener { exception ->
-                Log.e("TAG", "Error deleting documents", exception)
-            }
-
-            collectionUser.get().addOnSuccessListener {documents ->
-                for (document in documents) {
-                    document.reference.update("recipeCmts",user.recipeCmts )
-                }
-            }.addOnFailureListener { exception ->
-                Log.e("TAG", "Error deleting documents", exception)
-            }
-            val replyIntent = Intent()
-            replyIntent.putExtra("recipeCmt",recipeCmt)
-            setResult(1111, replyIntent)
-            finish()
         }
     }
 }
