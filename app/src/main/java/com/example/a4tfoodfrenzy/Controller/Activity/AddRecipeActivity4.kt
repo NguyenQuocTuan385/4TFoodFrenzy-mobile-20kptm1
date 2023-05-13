@@ -49,7 +49,6 @@ class AddRecipeActivity4 : AppCompatActivity() {
     private lateinit var sharedPreferences:SharedPreferences
     private lateinit var helperFunctionDB: HelperFunctionDB
     private lateinit var mainImage:String
-    private var buttonClicked=false
 
 
     private val ADD_REQUEST_CODE=1
@@ -205,10 +204,15 @@ class AddRecipeActivity4 : AppCompatActivity() {
     private fun setupContinueButton() {
         continueBtn= findViewById<Button>(R.id.continueBtn)
         continueBtn.setOnClickListener {
-            if (!buttonClicked) {
-                getCalo(getIngredientAsText())
-                buttonClicked = true
+            if(listStep.isNullOrEmpty())
+            {
+                HelperFunctionDB(this).showRemindAlert("Bạn vui lòng thêm bước")
+                return@setOnClickListener
             }
+            helperFunctionDB= HelperFunctionDB(this)
+            helperFunctionDB.showLoadingAlert()
+            getCalo(getIngredientAsText())
+            deleteAllSharePreference()
         }
     }
 
@@ -416,15 +420,6 @@ class AddRecipeActivity4 : AppCompatActivity() {
     {
         val user=DBManagement.user_current
         val fullName= user?.fullname
-        if(listStep.isNullOrEmpty())
-        {
-            HelperFunctionDB(this).showRemindAlert("Bạn vui lòng thêm bước")
-            buttonClicked=false
-            return
-        }
-        helperFunctionDB= HelperFunctionDB(this)
-        helperFunctionDB.showLoadingAlert()
-        deleteAllSharePreference()
         mainImage=foodRecipe.recipeMainImage.toString()
         if(!foodRecipe.recipeMainImage!!.startsWith("foods/")) {
            foodRecipe.recipeMainImage = foodRecipe.recipeMainImage?.let { uploadImageToCloudStorage(it) }
