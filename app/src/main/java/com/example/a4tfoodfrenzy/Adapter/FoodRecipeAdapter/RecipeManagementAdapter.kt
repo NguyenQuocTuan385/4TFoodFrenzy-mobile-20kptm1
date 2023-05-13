@@ -100,6 +100,7 @@ class RecipeManagementAdapter(
         holder.recipeName.text = currentRecipe.recipeName
         holder.numOfLike.text =
             if (currentRecipe.numOfLikes != null) currentRecipe.numOfLikes.toString() else "0"
+        holder.authorName.text = currentRecipe.authorName
         holder.uploadDate.text = uploadDateString
     }
 }

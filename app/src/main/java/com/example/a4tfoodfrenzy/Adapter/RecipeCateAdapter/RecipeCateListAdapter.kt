@@ -1,29 +1,24 @@
 package com.example.a4tfoodfrenzy.Adapter.RecipeCateAdapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.a4tfoodfrenzy.Model.RecipeCategory
+import com.example.a4tfoodfrenzy.Model.RecipeCategorySuggest
 import com.example.a4tfoodfrenzy.R
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 
-class RecipeCateListAdapter(private var context: Context,
-                            private var recipeRenderArray: ArrayList<RecipeCategory>,
-                            private var isCateRecipeHomeView: Boolean, private var isCateRecipeSearchView: Boolean
+class RecipeCateListAdapter(
+    private var recipeRenderArray: ArrayList<RecipeCategorySuggest>,
+    private var isCateRecipeHomeView: Boolean, private var isCateRecipeSearchView: Boolean
 ) : RecyclerView.Adapter<RecipeCateListAdapter.ViewHolder>() {
-    val storageRef = FirebaseStorage.getInstance()
     companion object {
         private const val CATE_RECIPE_HOME_VIEW = 1
         private const val CATE_RECIPE_SEARCH_VIEW = 2
     }
 
-    var onItemClick: ((RecipeCategory, Int) -> Unit)? = null
+    var onItemClick: ((RecipeCategorySuggest, Int) -> Unit)? = null
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val titleRecipeTV = listItemView.findViewById<TextView>(R.id.titleRecipe)
         val recipeIV = listItemView.findViewById<ImageView>(R.id.recipeIV)
@@ -68,25 +63,11 @@ class RecipeCateListAdapter(private var context: Context,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // Get the data model based on position
-        val recipeCate: RecipeCategory = recipeRenderArray.get(position)
+        val recipeCate: RecipeCategorySuggest = recipeRenderArray.get(position)
         // Set item views based on your views and data model
         val titleRecipeTV = holder.titleRecipeTV
-        titleRecipeTV.text = recipeCate.recipeCateName
+        titleRecipeTV.text = recipeCate.recipeCateTitle
         val recipeImg = holder.recipeIV
-        var imageUserRef:StorageReference
-        if (isCateRecipeHomeView) {
-            imageUserRef = recipeCate.recipeCateImgHome.let { storageRef.getReference(it) }
-        } else {
-            imageUserRef = recipeCate.recipeCateImgSearch.let { storageRef.getReference(it) }
-        }
-        if (imageUserRef != null) {
-            imageUserRef.downloadUrl.addOnSuccessListener { uri ->
-                Glide.with(context)
-                    .load(uri)
-                    .into(recipeImg)
-            }.addOnFailureListener { exception ->
-                // Xử lý lỗi
-            }
-        }
+        recipeCate.recipeCateImg?.let { recipeImg.setImageResource(it) }
     }
 }
