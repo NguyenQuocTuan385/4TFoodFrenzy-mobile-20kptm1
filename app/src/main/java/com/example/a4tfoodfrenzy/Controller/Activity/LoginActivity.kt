@@ -26,6 +26,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var passwordInput: TextInputLayout
     private lateinit var pDialog:SweetAlertDialog
     private var error:String?=null
+    private lateinit var btnGoogle:Button
+    private lateinit var btnFacebook:Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,12 +36,14 @@ class LoginActivity : AppCompatActivity() {
 
         //init
         auth = Firebase.auth
-        toolbarLogin=findViewById(R.id.toolbarLogin)
-        forgotPasswordText=findViewById(R.id.forgotPasswordText)
-        loginBtn=findViewById(R.id.loginBtn)
-        emailInput=findViewById(R.id.emailInput)
-        passwordInput=findViewById(R.id.passwordInput)
-        pDialog=  SweetAlertDialog(this,SweetAlertDialog.PROGRESS_TYPE)
+        toolbarLogin = findViewById(R.id.toolbarLogin)
+        forgotPasswordText = findViewById(R.id.forgotPasswordText)
+        loginBtn = findViewById(R.id.loginBtn)
+        emailInput = findViewById(R.id.emailInput)
+        passwordInput = findViewById(R.id.passwordInput)
+        pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+        btnGoogle = findViewById(R.id.btnGoogle)
+        btnFacebook = findViewById(R.id.btnFacebook)
 
 
 
@@ -48,23 +52,39 @@ class LoginActivity : AppCompatActivity() {
         }
 
         forgotPasswordText.setOnClickListener {
-            val intent= Intent(this, ForgotPasswordActivity::class.java)
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
             startActivity(intent)
             finish()
         }
         emailFocusListener()
+        loginByEmail()
+        loginByFacebook()
+        loginByGoogle()
 
+    }
+    private fun loginByFacebook()
+    {
+        val intent=Intent(this,FacebookAuthenticateActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+        startActivity(intent)
+    }
+    private fun loginByGoogle()
+    {
+        val intent = Intent(this, GoogleAuthenticateActivity::class.java)
+
+        startActivity(intent)
+    }
+    private fun loginByEmail() {
         loginBtn.setOnClickListener {
-            val email= emailInput.editText?.text.toString()
-            val password= passwordInput.editText?.text.toString()
-            if(email.isEmpty()||password.isEmpty()) {
+            val email = emailInput.editText?.text.toString()
+            val password = passwordInput.editText?.text.toString()
+            if (email.isEmpty() || password.isEmpty()) {
                 showErrorAlert("Bạn chưa nhập email hoặc mật khẩu")
                 return@setOnClickListener
             }
-            if(!error.isNullOrEmpty())
-            {
+            if (!error.isNullOrEmpty()) {
                 showErrorAlert(error!!)
-                error=null
+                error = null
                 return@setOnClickListener
             }
             showLoadingAlert()
@@ -73,28 +93,25 @@ class LoginActivity : AppCompatActivity() {
                     stopLoadingAlert()
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        DBManagement.addListenerChangeDataUserCurrent { user->
-                            if(user.isAdmin)
-                            {
-                                val intent= Intent(this, AdminDashboard::class.java)
+                        DBManagement.addListenerChangeDataUserCurrent { user ->
+                            if (user.isAdmin) {
+                                val intent = Intent(this, AdminDashboard::class.java)
                                 startActivity(intent)
                                 finish()
                             } else {
-                                if(auth.currentUser!!.isEmailVerified) {
+                                if (auth.currentUser!!.isEmailVerified) {
                                     val intent = Intent(this, MainActivity::class.java)
                                     intent.flags =
                                         Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     startActivity(intent)
                                     finish()
-                                }
-                                else
-                                {
+                                } else {
                                     showErrorAlert("Bạn chưa xác thực email")
                                 }
                             }
                         }
                     } else {
-                      showErrorAlert("Thất bại")
+                        showErrorAlert("Thất bại")
                     }
                 }
 

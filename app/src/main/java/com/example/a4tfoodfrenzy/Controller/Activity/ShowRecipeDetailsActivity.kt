@@ -374,7 +374,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         val authorInfoCardView:ConstraintLayout=findViewById(R.id.authorInfoCardView)
 
         authorInfoCardView.setOnClickListener {
-            if(recipeAuthor!!.id==DBManagement.user_current!!.id)
+            if(recipeAuthor?.id==DBManagement.user_current?.id)
             {
                 val intent = Intent(this, ProfileActivity::class.java)
                 intent.putExtra("selectedTab", 1) // chọn tab thứ hai
