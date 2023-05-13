@@ -196,23 +196,42 @@ class GenerateDBModel(private var context: Context) {
 
     fun generateDatabaseRecipeFoodCate() {
         var recipeCatesList:ArrayList<RecipeCategory> = ArrayList()
+        helperFunctionDB.uploadImageToCloudStorage("douonghome","categories")
+        helperFunctionDB.uploadImageToCloudStorage("montrangmienghome","categories")
+        helperFunctionDB.uploadImageToCloudStorage("monchinh","categories")
+        helperFunctionDB.uploadImageToCloudStorage("doanvathome","categories")
+        helperFunctionDB.uploadImageToCloudStorage("banhmihome","categories")
+        helperFunctionDB.uploadImageToCloudStorage("khaivihome","categories")
 
-        var recipeCate = RecipeCategory(1,"Khai vị", arrayListOf(16,17,18,19,20))
+        helperFunctionDB.uploadImageToCloudStorage("drink","categories")
+        helperFunctionDB.uploadImageToCloudStorage("fastfood","categories")
+        helperFunctionDB.uploadImageToCloudStorage("english_breakfast","categories")
+        helperFunctionDB.uploadImageToCloudStorage("mainfood","categories")
+        helperFunctionDB.uploadImageToCloudStorage("dessert_search","categories")
+        helperFunctionDB.uploadImageToCloudStorage("appetizer_search","categories")
+
+        var recipeCate = RecipeCategory(1,"Khai vị", "categories/khaivihome.png",
+            "categories/appetizer_search.png",arrayListOf(16,17,18,19,20))
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(2,"Món chính", arrayListOf(1,2,4,5,6,7,8,9,10))
+        recipeCate = RecipeCategory(2,"Món chính", "categories/monchinh.png",
+            "categories/mainfood.png",arrayListOf(1,2,4,5,6,7,8,9,10))
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(3,"Ăn vặt", arrayListOf(26,27,28,29,30))
+        recipeCate = RecipeCategory(3,"Ăn vặt", "categories/doanvathome.png",
+            "categories/fastfood.png",arrayListOf(26,27,28,29,30))
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(4,"Điểm tâm", arrayListOf())
+        recipeCate = RecipeCategory(4,"Điểm tâm", "categories/banhmihome.png",
+            "categories/english_breakfast.png", arrayListOf())
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(5,"Món tráng miệng", arrayListOf(31,32,33,34,35))
+        recipeCate = RecipeCategory(5,"Món tráng miệng","categories/montrangmienghome.png",
+            "categories/dessert_search.png",arrayListOf(31,32,33,34,35))
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(6,"Thức uống", arrayListOf(11,12,13,14,15))
+        recipeCate = RecipeCategory(6,"Thức uống", "categories/douonghome.png",
+            "categories/drink.png", arrayListOf(11,12,13,14,15))
         recipeCatesList.add(recipeCate)
 
         for(recipecate in recipeCatesList) {
