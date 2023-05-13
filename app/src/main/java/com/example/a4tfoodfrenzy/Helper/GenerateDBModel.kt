@@ -196,42 +196,23 @@ class GenerateDBModel(private var context: Context) {
 
     fun generateDatabaseRecipeFoodCate() {
         var recipeCatesList:ArrayList<RecipeCategory> = ArrayList()
-        helperFunctionDB.uploadImageToCloudStorage("douonghome","categories")
-        helperFunctionDB.uploadImageToCloudStorage("montrangmienghome","categories")
-        helperFunctionDB.uploadImageToCloudStorage("monchinh","categories")
-        helperFunctionDB.uploadImageToCloudStorage("doanvathome","categories")
-        helperFunctionDB.uploadImageToCloudStorage("banhmihome","categories")
-        helperFunctionDB.uploadImageToCloudStorage("khaivihome","categories")
 
-        helperFunctionDB.uploadImageToCloudStorage("drink","categories")
-        helperFunctionDB.uploadImageToCloudStorage("fastfood","categories")
-        helperFunctionDB.uploadImageToCloudStorage("english_breakfast","categories")
-        helperFunctionDB.uploadImageToCloudStorage("mainfood","categories")
-        helperFunctionDB.uploadImageToCloudStorage("dessert_search","categories")
-        helperFunctionDB.uploadImageToCloudStorage("appetizer_search","categories")
-
-        var recipeCate = RecipeCategory(1,"Khai vị", "categories/khaivihome.png",
-            "categories/appetizer_search.png",arrayListOf(16,17,18,19,20))
+        var recipeCate = RecipeCategory(1,"Khai vị", arrayListOf(16,17,18,19,20))
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(2,"Món chính", "categories/monchinh.png",
-            "categories/mainfood.png",arrayListOf(1,2,4,5,6,7,8,9,10))
+        recipeCate = RecipeCategory(2,"Món chính", arrayListOf(1,2,4,5,6,7,8,9,10))
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(3,"Ăn vặt", "categories/doanvathome.png",
-            "categories/fastfood.png",arrayListOf(26,27,28,29,30))
+        recipeCate = RecipeCategory(3,"Ăn vặt", arrayListOf(26,27,28,29,30))
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(4,"Điểm tâm", "categories/banhmihome.png",
-            "categories/english_breakfast.png", arrayListOf())
+        recipeCate = RecipeCategory(4,"Điểm tâm", arrayListOf())
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(5,"Món tráng miệng","categories/montrangmienghome.png",
-            "categories/dessert_search.png",arrayListOf(31,32,33,34,35))
+        recipeCate = RecipeCategory(5,"Món tráng miệng", arrayListOf(31,32,33,34,35))
         recipeCatesList.add(recipeCate)
 
-        recipeCate = RecipeCategory(6,"Thức uống", "categories/douonghome.png",
-            "categories/drink.png", arrayListOf(11,12,13,14,15))
+        recipeCate = RecipeCategory(6,"Thức uống", arrayListOf(11,12,13,14,15))
         recipeCatesList.add(recipeCate)
 
         for(recipecate in recipeCatesList) {
@@ -465,7 +446,7 @@ class GenerateDBModel(private var context: Context) {
             FoodRecipe(1,"Cá ngừ chiên sốt gà","foods/foodrecipe1_3.png",2,"Dưới 30 phút", Date(),true,
                 arrayListOf(1,3),listStep,listIngredient,
                 arrayListOf(1,2),
-                arrayListOf(1,2,5,10), 1)
+                arrayListOf(1,2,5,10),"Hiền Phương", R.drawable.defaultavt,15)
 
         result.add(mon_an_1)
 
@@ -510,7 +491,11 @@ class GenerateDBModel(private var context: Context) {
             listStep,
             listIngredient,
             arrayListOf(),
-            arrayListOf(1,2,10),0)
+            arrayListOf(1,2,10),
+            "Đặng Ngọc Tiến",
+            R.drawable.avt,
+            10
+        )
         result.add(mon_an_2)
 
 
@@ -546,7 +531,7 @@ class GenerateDBModel(private var context: Context) {
             FoodRecipe(3,"Mọc Viên Xốt Cà","foods/foodrecipe3_3.png",2,"Dưới 30 phút", Date(),true,
                 arrayListOf(2,3,4,6),listStep,listIngredient,
                 arrayListOf(),
-                arrayListOf(1,2,5,6,10),0)
+                arrayListOf(1,2,5,6,10),"Đặng Ngọc Tiến", R.drawable.avt,8)
         result.add(mon_an_3)
 
         listIngredient = ArrayList<RecipeIngredient>()
@@ -595,7 +580,10 @@ class GenerateDBModel(private var context: Context) {
             listStep,
             listIngredient,
             arrayListOf(3,4),
-            arrayListOf(5), 2
+            arrayListOf(5),
+            "Nguyễn Văn Việt",
+            R.drawable.defaultavt,
+            21
         )
         result.add(mon_an_4)
 
@@ -641,7 +629,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(2,3,4,6),listStep,listIngredient,
             arrayListOf(5,6,7),
-            arrayListOf(3,4,6),2)
+            arrayListOf(3,4,6),"Bùi Hoàng Vũ",
+            R.drawable.defaultavt,100)
         result.add(mon_an_5)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -687,7 +676,10 @@ class GenerateDBModel(private var context: Context) {
             listStep,
             listIngredient,
             arrayListOf(8,9,10),
-            arrayListOf(4),3
+            arrayListOf(4),
+            "Dương Chí Thông",
+            R.drawable.defaultavt,
+            20
         )
         result.add(mon_an_6)
 
@@ -727,7 +719,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(2,3,4,6),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(4),0)
+            arrayListOf(4),"Trần Thị Ngọc Nhi",
+            R.drawable.defaultavt,10)
         result.add(mon_an_7)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -765,7 +758,7 @@ class GenerateDBModel(private var context: Context) {
             FoodRecipe(8,"Vịt Kho Gừng","foods/foodrecipe8_3.png",2,"Dưới 30 phút", Date(),true,
                 arrayListOf(1,4,6),listStep,listIngredient,
                 arrayListOf(11,12,13),
-                arrayListOf(6),1)
+                arrayListOf(6),"Ngọc Thư", R.drawable.defaultavt,5)
         result.add(mon_an_8)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -794,7 +787,7 @@ class GenerateDBModel(private var context: Context) {
             FoodRecipe(9,"Cơm Bò Xào Bông Cải","foods/foodrecipe9_2.png",2,"Dưới 30 phút", Date(),true,
                 arrayListOf(1,4,6),listStep,listIngredient,
                 arrayListOf(),
-                arrayListOf(14,15),0)
+                arrayListOf(14,15),"Ngọc Thư", R.drawable.defaultavt,5)
         result.add(mon_an_9)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -842,7 +835,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(1,4,6),listStep,listIngredient,
             arrayListOf(14,15),
-            arrayListOf(),0)
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,10)
         result.add(mon_an_10)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -895,7 +889,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(1,4),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,0)
         result.add(mon_an_11)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -945,7 +940,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(2,4,6),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,0)
         result.add(mon_an_12)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -995,7 +991,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(1,4,6),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,0)
         result.add(mon_an_13)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -1038,7 +1035,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(1),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,0)
         result.add(mon_an_14)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -1064,7 +1062,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(1),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,0)
         result.add(mon_an_15)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -1102,7 +1101,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(1),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,0)
         result.add(mon_an_16)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -1140,7 +1140,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(2),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,0)
         result.add(mon_an_17)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -1168,7 +1169,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(1),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,0)
         result.add(mon_an_18)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -1198,7 +1200,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(1),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,0)
         result.add(mon_an_19)
 
         listIngredient=ArrayList<RecipeIngredient>()
@@ -1226,7 +1229,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(1),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,0)
         result.add(mon_an_20)
 
         // Snack - tgt
@@ -1254,7 +1258,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(2,5),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Trương Gia Tiến",
+            R.drawable.avt,0)
         result.add(mon_an_26)
 
         // 27
@@ -1274,7 +1279,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(2,5),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Trương Gia Tiến",
+            R.drawable.avt,0)
         result.add(mon_an_27)
 
         // 28
@@ -1300,7 +1306,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(2,5),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Trương Gia Tiến",
+            R.drawable.avt,0)
         result.add(mon_an_28)
 
         // 29
@@ -1324,7 +1331,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(2,5),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Trương Gia Tiến",
+            R.drawable.avt,0)
         result.add(mon_an_29)
 
         // 30
@@ -1345,7 +1353,8 @@ class GenerateDBModel(private var context: Context) {
             Date(),true,
             arrayListOf(2,5),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Trương Gia Tiến",
+            R.drawable.avt,0)
         result.add(mon_an_30)
 
         // món tráng miệng
@@ -1392,7 +1401,8 @@ class GenerateDBModel(private var context: Context) {
         var mon_an_31 = FoodRecipe(31,"Chè đậu xanh lá dữa","foods/foodrecipe31_5.png", 2, "Dưới 30 phút",
             Date(),true,arrayListOf(),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,10)
         result.add(mon_an_31)
 
 
@@ -1429,7 +1439,8 @@ class GenerateDBModel(private var context: Context) {
         var mon_an_32 = FoodRecipe(32,"Bánh nếp mía","foods/foodrecipe32_4.png", 2, "Dưới 2 tiếng",
             Date(),true,arrayListOf(),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,10)
         result.add(mon_an_32)
 
 
@@ -1455,7 +1466,8 @@ class GenerateDBModel(private var context: Context) {
         var mon_an_33 = FoodRecipe(33,"Bánh bò bông","foods/foodrecipe33_2.png", 2, "Dưới 2 tiếng",
             Date(),true,arrayListOf(),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,10)
         result.add(mon_an_33)
 
 
@@ -1504,7 +1516,8 @@ class GenerateDBModel(private var context: Context) {
         var mon_an_34 = FoodRecipe(34,"Mứt chùm ruột","foods/foodrecipe34_6.png", 2, "Dưới 3 tiếng",
             Date(),true,arrayListOf(),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,10)
         result.add(mon_an_34)
 
         listIngredient= ArrayList()
@@ -1541,7 +1554,8 @@ class GenerateDBModel(private var context: Context) {
         var mon_an_35 = FoodRecipe(35,"Khoai tây chiên","foods/foodrecipe35_4.png", 2, "Dưới 30 phút",
             Date(),true,arrayListOf(),listStep,listIngredient,
             arrayListOf(),
-            arrayListOf(),0)
+            arrayListOf(),"Đặng Ngọc Tiến",
+            R.drawable.avt,10)
         result.add(mon_an_35)
 
 

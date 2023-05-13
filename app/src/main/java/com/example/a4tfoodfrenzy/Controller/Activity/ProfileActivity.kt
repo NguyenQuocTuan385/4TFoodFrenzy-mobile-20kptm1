@@ -221,7 +221,7 @@ class ProfileActivity : AppCompatActivity() {
                     "Xem chi tiết" -> {
                         val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
                         intent.putExtra("foodRecipe", foodRecipe)
-                        startActivityForResult(intent,1)
+                        startActivity(intent)
                         true
                     }
                     "Xóa khỏi danh sách" -> {
@@ -290,7 +290,7 @@ class ProfileActivity : AppCompatActivity() {
                     "Xem chi tiết" -> {
                         val intent = Intent(this, ShowRecipeDetailsActivity::class.java)
                         intent.putExtra("foodRecipe", foodRecipe)
-                        startActivityForResult(intent,2)
+                        startActivity(intent)
                         true
                     }
 

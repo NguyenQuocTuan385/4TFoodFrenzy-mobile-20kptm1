@@ -435,6 +435,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
             HelperFunctionDB(this).findSlotIdEmptyInCollection("RecipeFoods") { idSlot ->
                 if (fullName != null) {
                     foodRecipe.id = idSlot
+                    foodRecipe.authorName = fullName
                     foodRecipe.isPublic = false
                     foodRecipe.date = Date()
                     foodRecipe.recipeSteps = listStep

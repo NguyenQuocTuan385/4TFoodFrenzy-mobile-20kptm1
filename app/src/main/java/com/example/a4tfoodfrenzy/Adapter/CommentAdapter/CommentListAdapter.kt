@@ -22,7 +22,7 @@ class CommentListAdapter(private var context:Context,
         private const val CMT_LIST_USER_VIEW = 1
         private const val CMT_LIST_ADMIN_VIEW = 2
     }
-    val storageRef = FirebaseStorage.getInstance()
+    val storageRef = FirebaseStorage.getInstance().reference
 
     var onItemClick: ((RecipeComment, User, FoodRecipe, Int) -> Unit)? = null
 
@@ -91,15 +91,13 @@ class CommentListAdapter(private var context:Context,
         timeTV.text = formatter.format(cmtRender.date)
 
         val avatarIV = holder.avatarIV
-        val imageRef = user.avatar?.let { storageRef.getReference(it) }
-        if (imageRef != null) {
-            imageRef.downloadUrl.addOnSuccessListener { uri ->
-                Glide.with(context)
-                    .load(uri)
-                    .into(avatarIV)
-            }.addOnFailureListener { exception ->
-                // Xử lý lỗi
-            }
+        var imageRef = storageRef.child(user.avatar)
+        imageRef.downloadUrl.addOnSuccessListener { uri ->
+            Glide.with(context)
+                .load(uri)
+                .into(avatarIV)
+        }.addOnFailureListener { exception ->
+            // Xử lý lỗi
         }
         val foodIV = holder.foodIV
         if (cmtRender.image == null) {
@@ -107,7 +105,7 @@ class CommentListAdapter(private var context:Context,
         }
         else {
             foodIV.visibility = View.VISIBLE
-            val imageRef = cmtRender.image?.let { storageRef.getReference(it) }
+            imageRef = storageRef.child(cmtRender.image!!)
             if (imageRef != null) {
                 imageRef.downloadUrl.addOnSuccessListener { uri ->
                     Glide.with(context)
