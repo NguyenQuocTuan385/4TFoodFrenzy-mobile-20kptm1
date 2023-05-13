@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Adapter.GridSpacingItemDecoration
 import com.example.a4tfoodfrenzy.Adapter.RecipeCateAdapter.RecipeCateListAdapter
 import com.example.a4tfoodfrenzy.Model.DBManagement
-import com.example.a4tfoodfrenzy.Model.RecipeCategorySuggest
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -26,8 +25,7 @@ class SearchScreen : AppCompatActivity() {
         val cateRecipeRV = findViewById<RecyclerView>(R.id.cateRecipeRV)
         var searchET = findViewById<EditText>(R.id.searchET)
 
-        var cateRecipeList = generateCateRecipeData() //implemened below
-        adapterTypeRecipeRV = RecipeCateListAdapter(cateRecipeList, false, true)
+        adapterTypeRecipeRV = RecipeCateListAdapter(this, DBManagement.recipeCateList, false, true)
         cateRecipeRV!!.layoutManager = GridLayoutManager(this, 3)
 
         val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
@@ -35,32 +33,33 @@ class SearchScreen : AppCompatActivity() {
         cateRecipeRV!!.adapter = adapterTypeRecipeRV
         val intent = Intent(this, AfterSearchActivity::class.java)
         adapterTypeRecipeRV!!.onItemClick = { recipeCate, i ->
-            if (recipeCate.recipeCateTitle.equals("Đồ uống")) {
+            if (recipeCate.recipeCateName.equals("Thức uống")) {
                 intent.putExtra("keySearch","Thức uống")
                 intent.putExtra("pageSearch","search")
                 intent.putExtra("typeSearch","recipeCategory")
-            } else if (recipeCate.recipeCateTitle.equals("Món gà")) {
-                intent.putExtra("keySearch","Gà")
-                intent.putExtra("pageSearch","search")
-                intent.putExtra("typeSearch","recipe")
             }
-            else if (recipeCate.recipeCateTitle.equals("Nấu nhanh")) {
-                intent.putExtra("keySearch","Dưới 30 phút")
-                intent.putExtra("pageSearch","search")
-                intent.putExtra("typeSearch","cookTime")
-            }
-            else if (recipeCate.recipeCateTitle.equals("Đồ ăn vặt")) {
+            else if (recipeCate.recipeCateName.equals("Ăn vặt")) {
                 intent.putExtra("keySearch","Ăn vặt")
                 intent.putExtra("pageSearch","search")
                 intent.putExtra("typeSearch","recipeCategory")
             }
-            else if (recipeCate.recipeCateTitle.equals("Điểm tâm")) {
+            else if (recipeCate.recipeCateName.equals("Điểm tâm")) {
                 intent.putExtra("keySearch","Điểm tâm")
                 intent.putExtra("pageSearch","search")
                 intent.putExtra("typeSearch","recipeCategory")
             }
-            else if (recipeCate.recipeCateTitle.equals("Món chính")) {
+            else if (recipeCate.recipeCateName.equals("Món chính")) {
                 intent.putExtra("keySearch","Món chính")
+                intent.putExtra("pageSearch","search")
+                intent.putExtra("typeSearch","recipeCategory")
+            }
+            else if (recipeCate.recipeCateName.equals("Khai vị")) {
+                intent.putExtra("keySearch","Khai vị")
+                intent.putExtra("pageSearch","search")
+                intent.putExtra("typeSearch","recipeCategory")
+            }
+            else if (recipeCate.recipeCateName.equals("Món tráng miệng")) {
+                intent.putExtra("keySearch","Món tráng miệng")
                 intent.putExtra("pageSearch","search")
                 intent.putExtra("typeSearch","recipeCategory")
             }
@@ -179,29 +178,6 @@ class SearchScreen : AppCompatActivity() {
         }
     }
 
-    private fun generateCateRecipeData(): ArrayList<RecipeCategorySuggest> {
-        var result = ArrayList<RecipeCategorySuggest>()
-
-        var cateRecipe = RecipeCategorySuggest("Đồ uống", R.drawable.drink)
-        result.add(cateRecipe)
-
-        cateRecipe = RecipeCategorySuggest("Món gà", R.drawable.chicken)
-        result.add(cateRecipe)
-
-        cateRecipe = RecipeCategorySuggest("Nấu nhanh", R.drawable.time)
-        result.add(cateRecipe)
-
-        cateRecipe = RecipeCategorySuggest("Đồ ăn vặt", R.drawable.fastfood)
-        result.add(cateRecipe)
-
-        cateRecipe = RecipeCategorySuggest("Điểm tâm", R.drawable.english_breakfast)
-        result.add(cateRecipe)
-
-        cateRecipe = RecipeCategorySuggest("Món chính", R.drawable.mainfood)
-        result.add(cateRecipe)
-
-        return result
-    }
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         val menu = bottomNavigationView.menu

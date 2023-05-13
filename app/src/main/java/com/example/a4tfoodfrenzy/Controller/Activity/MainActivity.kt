@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -47,7 +48,6 @@ class MainActivity : AppCompatActivity() {
         btnViewMoreTodayEat = findViewById(R.id.btnViewMoreTodayEat)
         btnViewMoreMostLikes = findViewById(R.id.btnViewMoreMostLikes)
 
-        setAdapterRecipeCategory()
         fetchDatabaseFirebase()
         val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
         recipeTodayEatRV.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
@@ -148,35 +148,38 @@ class MainActivity : AppCompatActivity() {
         DBManagement.destroyListener()
     }
 
-    fun setAdapterRecipeCategory() {
-        var cateRecipeList = generateCateRecipeData() //implemened below
-        adapterCateRecipeRV = RecipeCateListAdapter(cateRecipeList, true, false)
+    fun setAdapterRecipeCategory(cateRecipeList: ArrayList<RecipeCategory>) {
+//        var cateRecipeList = generateCateRecipeData(recipeCateArr) //implemened below
+
+        adapterCateRecipeRV = RecipeCateListAdapter(this, cateRecipeList, true, false)
         cateRecipeRV!!.adapter = adapterCateRecipeRV
         cateRecipeRV.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         adapterCateRecipeRV!!.onItemClick = { recipeCate, i ->
             val intent = Intent(this, AfterSearchActivity::class.java)
-            if (recipeCate.recipeCateTitle.equals("Đồ uống")) {
+            if (recipeCate.recipeCateName.equals("Thức uống")) {
                 intent.putExtra("keySearch", "Thức uống")
                 intent.putExtra("pageSearch", "home")
                 intent.putExtra("typeSearch", "recipeCategory")
-            } else if (recipeCate.recipeCateTitle.equals("Nấu nhanh")) {
-                intent.putExtra("keySearch", "Dưới 30 phút")
-                intent.putExtra("pageSearch", "home")
-                intent.putExtra("typeSearch", "cookTime")
-            } else if (recipeCate.recipeCateTitle.equals("Đồ ăn vặt")) {
+            }
+            else if (recipeCate.recipeCateName.equals("Ăn vặt")) {
                 intent.putExtra("keySearch", "Ăn vặt")
                 intent.putExtra("pageSearch", "home")
                 intent.putExtra("typeSearch", "recipeCategory")
-            } else if (recipeCate.recipeCateTitle.equals("Điểm tâm")) {
+            } else if (recipeCate.recipeCateName.equals("Điểm tâm")) {
                 intent.putExtra("keySearch", "Điểm tâm")
                 intent.putExtra("pageSearch", "home")
                 intent.putExtra("typeSearch", "recipeCategory")
-            } else if (recipeCate.recipeCateTitle.equals("Món chính")) {
+            } else if (recipeCate.recipeCateName.equals("Món chính")) {
                 intent.putExtra("keySearch", "Món chính")
                 intent.putExtra("pageSearch", "home")
                 intent.putExtra("typeSearch", "recipeCategory")
-            } else if (recipeCate.recipeCateTitle.equals("Khai vị")) {
+            } else if (recipeCate.recipeCateName.equals("Khai vị")) {
                 intent.putExtra("keySearch", "Khai vị")
+                intent.putExtra("pageSearch", "home")
+                intent.putExtra("typeSearch", "recipeCategory")
+            }
+            else if (recipeCate.recipeCateName.equals("Món tráng miệng")) {
+                intent.putExtra("keySearch", "Món tráng miệng")
                 intent.putExtra("pageSearch", "home")
                 intent.putExtra("typeSearch", "recipeCategory")
             }
@@ -236,8 +239,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         DBManagement.addListenerChangeDataRecipeCategories { recipeCategories ->
+            setAdapterRecipeCategory(recipeCategories)
             if (recipeCategories.isEmpty()) {
-                DBManagement.fetchDataRecipeCate { }
+                DBManagement.fetchDataRecipeCate { recipeCategoriess ->
+                    setAdapterRecipeCategory(recipeCategoriess)
+                }
             }
         }
         DBManagement.addListenerChangeDataRecipeComment { recipeComments ->
@@ -250,32 +256,6 @@ class MainActivity : AppCompatActivity() {
                 DBManagement.fetchDataRecipeDiet { }
             }
         }
-    }
-
-    fun generateCateRecipeData(): ArrayList<RecipeCategorySuggest> {
-        var result = ArrayList<RecipeCategorySuggest>()
-        var typeRecipe = RecipeCategorySuggest(
-            "Nấu nhanh",
-            R.drawable.donghonaunhanh
-        )
-        result.add(typeRecipe)
-
-        typeRecipe = RecipeCategorySuggest("Đồ uống", R.drawable.douonghome)
-        result.add(typeRecipe)
-
-        typeRecipe = RecipeCategorySuggest("Món chính", R.drawable.monchinh)
-        result.add(typeRecipe)
-
-        typeRecipe = RecipeCategorySuggest("Đồ ăn vặt", R.drawable.doanvathome)
-        result.add(typeRecipe)
-
-        typeRecipe = RecipeCategorySuggest("Điểm tâm", R.drawable.banhmihome)
-        result.add(typeRecipe)
-
-        typeRecipe = RecipeCategorySuggest("Khai vị", R.drawable.khaivihome)
-        result.add(typeRecipe)
-
-        return result
     }
 
     fun generateRecipeTodayEatData(
