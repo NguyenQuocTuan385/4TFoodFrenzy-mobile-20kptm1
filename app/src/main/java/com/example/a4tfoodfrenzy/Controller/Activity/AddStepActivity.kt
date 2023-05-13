@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -128,9 +129,16 @@ class AddStepActivity : AppCompatActivity() {
             )
             return
         }
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        intent.type = "image/*"
-        startActivityForResult(intent, IMAGE_REQUEST_CODE)
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+            intent.type = "image/*"
+            startActivityForResult(intent, IMAGE_REQUEST_CODE)
+        } else {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            intent.type = "image/*"
+            startActivityForResult(intent, IMAGE_REQUEST_CODE)
+        }
+
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
