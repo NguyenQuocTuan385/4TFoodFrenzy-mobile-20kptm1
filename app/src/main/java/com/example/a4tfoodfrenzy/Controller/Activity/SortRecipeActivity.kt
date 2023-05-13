@@ -3,6 +3,7 @@ package com.example.a4tfoodfrenzy.Controller.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -19,6 +20,8 @@ class SortRecipeActivity : AppCompatActivity() {
     private val selectedDietId = arrayListOf<Long>()
 
     private var filteredFoodList = arrayListOf<FoodRecipe>()
+    private var dietFoodIdList : ArrayList<Long>? = null
+    private var categoryFoodIdList : ArrayList<Long>? = null
 
     companion object {
         var selectedNormalID: Long = -1
@@ -44,6 +47,8 @@ class SortRecipeActivity : AppCompatActivity() {
         findViewById<ImageView>(R.id.toolbarBackButton).setOnClickListener {
             this.finish()
         }
+
+        filteredFoodList.clear()
 
         val normalImageList = arrayListOf(
             R.drawable.thumb_up_icon,
@@ -145,21 +150,21 @@ class SortRecipeActivity : AppCompatActivity() {
         sortRecyclerView.layoutManager = LinearLayoutManager(this)
 
         applySortButton.setOnClickListener {
-            var dietFoodIdList =
+             dietFoodIdList =
                 getFoodIdListByDiet() // contain id of food satisfy all category type conditions
-            var categoryFoodIdList =
+             categoryFoodIdList =
                 getFoodIdListByCategory() // contain id of food satisfy all diet type conditions
             var filteredIdList =
                 arrayListOf<Long>() // contain all filtered ID of food satisfy all filter conditions of all filter / sort type
 
             if (dietFoodIdList != null && categoryFoodIdList == null)
-                filteredIdList = dietFoodIdList
+                filteredIdList = dietFoodIdList as ArrayList<Long>
             else if (dietFoodIdList == null && categoryFoodIdList != null)
-                filteredIdList = categoryFoodIdList
+                filteredIdList = categoryFoodIdList as ArrayList<Long>
             else if (dietFoodIdList != null && categoryFoodIdList != null){
                 // categoryId contains dietId (intersection)
                 filteredIdList =
-                    dietFoodIdList.filter { id -> categoryFoodIdList!!.contains(id) } as ArrayList<Long>
+                    dietFoodIdList?.filter { id -> categoryFoodIdList!!.contains(id) } as ArrayList<Long>
             }
 
             // filter with filteredIdList to get FoodRecipe
@@ -186,10 +191,11 @@ class SortRecipeActivity : AppCompatActivity() {
 
             handleNormalSort()
 
-
             dietFoodIdList = null
             categoryFoodIdList = null
             selectedNormalID = -1
+            selectedCategoryId.clear()
+            selectedDietId.clear()
 
             val applySortIntent = Intent(this, AfterSearchActivity::class.java)
 
@@ -206,39 +212,41 @@ class SortRecipeActivity : AppCompatActivity() {
         }
     }
 
+    // diet sort
     private fun getFoodIdListByDiet(): ArrayList<Long>? {
         if (selectedDietId.size == 0)
             return null
 
-        val filteringDietList = DBManagement.recipeDietList.sortedBy { diet -> diet.id }
-        var resList = filteringDietList[selectedDietId[0].toInt()].foodRecipes
+        var filteringDietList = DBManagement.recipeDietList.sortedBy { diet -> diet.id }
+        val resList = arrayListOf<Long>()
 
-        // from 1 because 0 already assigned to reslist
-        for (i in 1 until selectedDietId.size) {
-            resList =
+        for (i in 0 until selectedDietId.size) {
+            resList.addAll(
                 filteringDietList[selectedDietId[i].toInt()].foodRecipes.filter { id ->
-                    resList.contains(id)
-                } as ArrayList<Long>
+                    !resList.contains(id)
+                } as ArrayList<Long>)
         }
 
+        filteringDietList = arrayListOf()
         return resList
     }
 
+    // category sort
     private fun getFoodIdListByCategory(): ArrayList<Long>? {
         if (selectedCategoryId.size == 0)
             return null
 
-        val filteringDietList = DBManagement.recipeCateList.sortedBy { cate -> cate.id }
-        var resList = filteringDietList[selectedCategoryId[0].toInt()].foodRecipes
+        var filteringCateList = DBManagement.recipeCateList.sortedBy { cate -> cate.id }
+        val resList = arrayListOf<Long>()
 
-        // from 1 because 0 already assigned to reslist
-        for (i in 1 until selectedCategoryId.size) {
-            resList =
-                filteringDietList[selectedCategoryId[i].toInt()].foodRecipes.filter { id ->
-                    resList.contains(id)
-                } as ArrayList<Long>
+        for (i in 0 until selectedCategoryId.size) {
+            resList.addAll(
+                filteringCateList[selectedCategoryId[i].toInt()].foodRecipes.filter { id ->
+                    !resList.contains(id)
+                } as ArrayList<Long>)
         }
 
+        filteringCateList = arrayListOf()
         return resList
     }
 
