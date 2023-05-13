@@ -86,7 +86,7 @@ class RecipeListAdapter(private var context:Context,
         }
     }
 
-    public fun getList() : LinkedHashMap<FoodRecipe, User>{
+    fun getList() : LinkedHashMap<FoodRecipe, User>{
         return recipeRenderArray
     }
 }

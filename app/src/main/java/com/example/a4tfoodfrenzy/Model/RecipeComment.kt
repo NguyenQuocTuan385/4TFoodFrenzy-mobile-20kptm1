@@ -12,21 +12,7 @@ class RecipeComment(private var _id:Long, private var _isLike: Boolean,
                     private var _date: Date) : Parcelable
 {
     constructor():this(0,false,null,"",Date())
-    constructor(
-        _id: Long,
-        _username: String,
-        _nameRecipe: String,
-        _avatarUser: Int,
-        _isLike: Boolean,
-        _image: String?,
-        _description: String,
-        _date: Date
-    ) : this(_id,_isLike, _image, _description, _date) {
-    this._isLike = _isLike
-    this._image = _image
-    this._description = _description
-    this._date = _date
-}
+
 
     var id: Long
         get() = _id

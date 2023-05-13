@@ -536,7 +536,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun addCommentToDB(isLike: Boolean, callback: (Boolean) -> Unit) {
         HelperFunctionDB(this).findSlotIdEmptyInCollection("RecipeCmts") { newID ->
-            val cmt = RecipeComment(newID, "", "", 0, isLike, null, "", Date())
+            val cmt = RecipeComment(newID, isLike, null, "", Date())
             _commentID = newID
 
             db.collection("RecipeCmts")
