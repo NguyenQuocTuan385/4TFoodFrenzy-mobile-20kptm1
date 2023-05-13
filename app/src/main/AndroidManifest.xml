@@ -5,11 +5,11 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         android:maxSdkVersion="30"
-        tools:ignore="ScopedStorage"/>
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
 
     <application
         android:allowBackup="true"
@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.4TFoodFrenzy"
         tools:targetApi="31">
+        <activity
+            android:name=".Controller.Activity.ShowProfileActivity"
+            android:exported="false" />
         <activity
             android:name=".Controller.Activity.AdminDashboard"
             android:exported="false" />
@@ -39,15 +42,15 @@
 
         <activity
             android:name=".Controller.Activity.AddNewRecipe"
-            android:launchMode="singleInstance"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleInstance" />
         <activity
             android:name=".Controller.Activity.ShowRecipeDetailsDescriptionActivity"
             android:exported="false" />
         <activity
             android:name=".Controller.Activity.AfterSearchActivity"
-            android:launchMode="singleInstance"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleInstance" />
         <activity
             android:name=".Controller.Activity.SortRecipeActivity"
             android:exported="false" />
@@ -86,8 +89,8 @@
             android:exported="false" />
         <activity
             android:name=".Controller.Activity.SearchScreen"
-            android:launchMode="singleInstance"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleInstance" />
         <activity
             android:name=".Controller.Activity.CommentListActivity"
             android:exported="false" />
@@ -96,8 +99,8 @@
             android:exported="false" />
         <activity
             android:name=".Controller.Activity.ProfileActivity"
-            android:launchMode="singleInstance"
-            android:exported="true" />
+            android:exported="true"
+            android:launchMode="singleInstance" />
         <activity
             android:name=".Controller.Activity.AccountDetailsManagementActivity"
             android:exported="false" />
@@ -109,12 +112,12 @@
             android:exported="false" />
         <activity
             android:name=".Controller.Activity.LogoutActivity"
-            android:launchMode="singleInstance"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleInstance" />
         <activity
             android:name=".Controller.Activity.MainActivity"
-            android:launchMode="singleInstance"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

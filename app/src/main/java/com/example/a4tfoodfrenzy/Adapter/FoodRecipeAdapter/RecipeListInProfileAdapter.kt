@@ -23,6 +23,8 @@ class RecipeListInProfileAdapter(private var context: Context,
     companion object {
         private const val RECIPE_SAVED_VIEW = 1
         private const val RECIPE_CREATED_VIEW = 2
+        private const val RECIPE_OTHER_VIEW = 3
+
     }
 
     var onButtonClick : ((View, FoodRecipe) -> Unit)? = null
@@ -54,6 +56,8 @@ class RecipeListInProfileAdapter(private var context: Context,
         } else if ( isRecipeCreatedView) {
             return RECIPE_CREATED_VIEW
         }
+        else
+            return RECIPE_OTHER_VIEW
         return super.getItemViewType(position)
     }
 
@@ -64,10 +68,10 @@ class RecipeListInProfileAdapter(private var context: Context,
         val context = parent.context
         val inflater = LayoutInflater.from(context)
         // Inflate the custom layout
-        val layoutResult = if (viewType == RECIPE_SAVED_VIEW) {
-            R.layout.saved_item
-        } else {
-            R.layout.created_item
+        val layoutResult = when(viewType){
+            RECIPE_SAVED_VIEW -> R.layout.saved_item
+            RECIPE_CREATED_VIEW -> R.layout.created_item
+            else -> R.layout.recipe_profile
         }
         val recipeProfileView = inflater.inflate(layoutResult, parent, false)
 
