@@ -50,7 +50,7 @@ class ProfileActivity : AppCompatActivity() {
     var user_current = DBManagement.user_current
     private val myBroadcastReceiverProfile = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action.equals(ConstantAction.ADD_SAVED_RECIPE_ACTION)) {
+            if (intent?.action.equals(ConstantAction.ADD_SAVED_RECIPE_ACTION) || intent?.action.equals(ConstantAction.ADD_CMT_RECIPE_ACTION)) {
                 tabFoodRecipeSaved.generateRecipeSaved()
             }
         }
@@ -104,8 +104,10 @@ class ProfileActivity : AppCompatActivity() {
         super.onStart()
         var intentFilter1 = IntentFilter(ConstantAction.DELETE_MY_RECIPE_ACTION)
         var intentFilter2 = IntentFilter(ConstantAction.ADD_SAVED_RECIPE_ACTION)
+        var intentFilter3 = IntentFilter(ConstantAction.ADD_CMT_RECIPE_ACTION)
         registerReceiver(myBroadcastReceiverProfile, intentFilter1)
         registerReceiver(myBroadcastReceiverProfile, intentFilter2)
+        registerReceiver(myBroadcastReceiverProfile, intentFilter3)
     }
     override fun onDestroy() {
         super.onDestroy()
