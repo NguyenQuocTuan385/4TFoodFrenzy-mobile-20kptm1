@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
+import com.example.a4tfoodfrenzy.BroadcastReceiver.ConstantAction
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
@@ -155,6 +156,8 @@ class WriteCommentActivity : AppCompatActivity() {
             toShowDetailIntent.putExtra("user", currentAuthor)
 
             startActivity(toShowDetailIntent)
+            val intent1 = Intent(ConstantAction.ADD_CMT_RECIPE_ACTION)
+            sendBroadcast(intent1)
             finish()
         }
             .addOnFailureListener{}

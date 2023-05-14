@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         }
         btnViewMoreTodayEat.setOnClickListener {
             val intent = Intent(this, AfterSearchActivity::class.java)
-            intent.putExtra("keySearch", "Hôm nay ăn gì")
+            intent.putExtra("keySearch", "Chào bạn món mới")
             intent.putExtra("pageSearch", "home")
             intent.putExtra("typeSearch", "recipeTodayEat")
             startActivity(intent)
@@ -191,6 +191,19 @@ class MainActivity : AppCompatActivity() {
             if (foodRecipes.isEmpty()) {
                 DBManagement.fetchDataFoodRecipe { foodRecipeList ->
                     DBManagement.addListenerChangeDataUser { users ->
+                        if (FirebaseAuth.getInstance().currentUser != null) {
+                            DBManagement.addListenerChangeDataUserCurrent { user ->
+                                if (DBManagement.isInitialized == false) {
+                                    if (user.email.equals("")) {
+                                        DBManagement.fetchDataUserCurrent { }
+                                    } else if (user.isAdmin) {
+                                        val intent = Intent(this, AdminDashboard::class.java)
+                                        startActivity(intent)
+                                    }
+                                    DBManagement.isInitialized = true
+                                }
+                            }
+                        }
                         setRecipeListAdapter(
                             RecipeListAdapter(
                                 this,
