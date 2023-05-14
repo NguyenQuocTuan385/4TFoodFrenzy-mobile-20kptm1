@@ -187,16 +187,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
     fun fetchDatabaseFirebase() {
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            DBManagement.addListenerChangeDataUserCurrent { user ->
-                if (user.email.equals("")) {
-                    DBManagement.fetchDataUserCurrent { }
-                } else if (user.isAdmin) {
-                    val intent = Intent(this, AdminDashboard::class.java)
-                    startActivity(intent)
-                }
-            }
-        }
         DBManagement.addListenerChangeDataFoodRecipe { foodRecipes ->
             if (foodRecipes.isEmpty()) {
                 DBManagement.fetchDataFoodRecipe { foodRecipeList ->
@@ -220,6 +210,19 @@ class MainActivity : AppCompatActivity() {
                 }
             } else {
                 DBManagement.addListenerChangeDataUser { users ->
+                        if (FirebaseAuth.getInstance().currentUser != null) {
+                            DBManagement.addListenerChangeDataUserCurrent { user ->
+                                if (DBManagement.isInitialized == false) {
+                                    if (user.email.equals("")) {
+                                        DBManagement.fetchDataUserCurrent { }
+                                    } else if (user.isAdmin) {
+                                        val intent = Intent(this, AdminDashboard::class.java)
+                                        startActivity(intent)
+                                    }
+                                    DBManagement.isInitialized = true
+                                }
+                            }
+                        }
                     setRecipeListAdapter(
                         RecipeListAdapter(
                             this,
