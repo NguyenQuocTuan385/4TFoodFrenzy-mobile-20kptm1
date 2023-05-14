@@ -16,8 +16,8 @@ import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R
 
 class SortRecipeActivity : AppCompatActivity() {
-    private val selectedCategoryId = arrayListOf<Long>()
-    private val selectedDietId = arrayListOf<Long>()
+    private var selectedCategoryId = arrayListOf<Long>()
+    private var selectedDietId = arrayListOf<Long>()
 
     private var filteredFoodList = arrayListOf<FoodRecipe>()
     private var dietFoodIdList : ArrayList<Long>? = null
@@ -191,11 +191,11 @@ class SortRecipeActivity : AppCompatActivity() {
 
             handleNormalSort()
 
-            dietFoodIdList = null
-            categoryFoodIdList = null
+            dietFoodIdList = arrayListOf()
+            categoryFoodIdList = arrayListOf()
             selectedNormalID = -1
-            selectedCategoryId.clear()
-            selectedDietId.clear()
+            selectedCategoryId = arrayListOf()
+            selectedDietId = arrayListOf()
 
             val applySortIntent = Intent(this, AfterSearchActivity::class.java)
 

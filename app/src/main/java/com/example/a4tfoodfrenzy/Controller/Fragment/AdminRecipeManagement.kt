@@ -14,6 +14,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.a4tfoodfrenzy.Adapter.FoodRecipeAdapter.RecipeManagementAdapter
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
@@ -66,7 +67,8 @@ class AdminRecipeManagement : Fragment() {
         val snapHelper = MultiSnapHelper(SnapGravity.START, 4, 100.0F)
         snapHelper.attachToRecyclerView(recipeManagementRecyclerView)
 
-        recipeManagementRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
+        recipeManagementRecyclerView.layoutManager =
+            GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
 
         // assign recipe filter pop-up
         optionAdapter.setOnClickListener {
@@ -131,6 +133,7 @@ class AdminRecipeManagement : Fragment() {
                         .sortedByDescending { food -> food.date }
 
 
+
                 if (searchedList.size > 1) {
                     recipeList.clear()
                     recipeList.addAll(searchedList)
@@ -138,14 +141,22 @@ class AdminRecipeManagement : Fragment() {
                     filterOptionTV.text = "Mới nhất"
 
                     adapter!!.notifyDataSetChanged()
-                }
-                else if (searchedList.size == 1){
+                } else if (searchedList.size == 1) {
                     recipeList.clear()
                     recipeList.add(searchedList[0])
 
                     filterOptionTV.text = "Mới nhất"
 
                     adapter!!.notifyDataSetChanged()
+                } else {
+                    val pDialog = SweetAlertDialog(requireContext(), SweetAlertDialog.ERROR_TYPE)
+                    pDialog.titleText = "Không tìm thấy công thức với các từ khóa đã nhập"
+                    pDialog.setCancelable(false)
+                    pDialog.show()
+
+                    pDialog.setConfirmClickListener {
+                        pDialog.dismiss()
+                    }
                 }
             }
             true
@@ -220,7 +231,7 @@ class AdminRecipeManagement : Fragment() {
                     }
 
                     // remove comment from RecipeCmts table
-                    for(recipeCmt in recipeCmts){
+                    for (recipeCmt in recipeCmts) {
                         db.collection("RecipeCmts")
                             .whereEqualTo("id", recipeCmt)
                             .get()
@@ -240,9 +251,11 @@ class AdminRecipeManagement : Fragment() {
                         .get()
                         .addOnSuccessListener { documents ->
                             for (document in documents) {
-                                db.collection("RecipeCates").document(document.id).update(mapOf(
-                                    "foodRecipes" to FieldValue.arrayRemove(recipeID)
-                                ))
+                                db.collection("RecipeCates").document(document.id).update(
+                                    mapOf(
+                                        "foodRecipes" to FieldValue.arrayRemove(recipeID)
+                                    )
+                                )
                             }
                         }
                         .addOnFailureListener { exception ->
@@ -255,9 +268,11 @@ class AdminRecipeManagement : Fragment() {
                         .get()
                         .addOnSuccessListener { documents ->
                             for (document in documents) {
-                                db.collection("RecipeDiets").document(document.id).update(mapOf(
-                                    "foodRecipes" to FieldValue.arrayRemove(recipeID)
-                                ))
+                                db.collection("RecipeDiets").document(document.id).update(
+                                    mapOf(
+                                        "foodRecipes" to FieldValue.arrayRemove(recipeID)
+                                    )
+                                )
                             }
                         }
                         .addOnFailureListener { exception ->
@@ -273,8 +288,8 @@ class AdminRecipeManagement : Fragment() {
                                 db.collection("RecipeFoods").document(document.id).delete()
                             }
 
-                            for((i, recipe) in recipeList.withIndex()){
-                                if(recipeID == recipe.id){
+                            for ((i, recipe) in recipeList.withIndex()) {
+                                if (recipeID == recipe.id) {
                                     recipeList.removeAt(i)
                                     adapter!!.notifyItemRemoved(i)
                                     break
@@ -296,7 +311,8 @@ class AdminRecipeManagement : Fragment() {
     }
 
     private fun Context.hideKeyboard(view: View) {
-        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
