@@ -47,6 +47,7 @@
                     android:layout_width="10dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.1"
+                    android:foreground="?attr/selectableItemBackground"
                     android:src="@drawable/back" />
 
                 <TextView
@@ -102,6 +103,7 @@
                 android:layout_width="35dp"
                 android:layout_weight="0.2"
                 android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground"
                 android:src="@drawable/filter" />
         </LinearLayout>
         </LinearLayout>

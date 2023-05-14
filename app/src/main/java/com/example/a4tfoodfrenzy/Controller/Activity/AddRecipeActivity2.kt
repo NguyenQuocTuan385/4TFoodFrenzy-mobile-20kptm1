@@ -104,6 +104,8 @@ class AddRecipeActivity2 : AppCompatActivity() {
                 saveData()
                 sendData(intent)
                 startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
+
             }
 
 
@@ -221,6 +223,7 @@ class AddRecipeActivity2 : AppCompatActivity() {
                     val intent = Intent(this, AddNewRecipe::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
                     finishAffinity()
                     true
                 }
