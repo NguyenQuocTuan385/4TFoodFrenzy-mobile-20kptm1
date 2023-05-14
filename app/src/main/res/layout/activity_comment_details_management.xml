@@ -25,6 +25,7 @@
             android:textColor="@color/SecondaryColor"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:foreground="?attr/selectableItemBackground"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,6 +39,7 @@
             android:textColor="#E91E63"
             android:textSize="18dp"
             android:textStyle="bold"
+            android:foreground="?attr/selectableItemBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

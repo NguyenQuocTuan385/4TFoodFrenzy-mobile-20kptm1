@@ -79,6 +79,8 @@ class AddRecipeActivity1 : AppCompatActivity() {
             val intent=Intent(this, AddRecipeActivity2::class.java)
             sendData(intent)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
+
         }
     }
     private fun deleteAllSharePreference()

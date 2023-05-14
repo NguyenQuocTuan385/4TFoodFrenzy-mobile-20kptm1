@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
+import android.widget.SearchView
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class ShowProfileActivity : AppCompatActivity() {
     private lateinit var toolbarProfile:MaterialToolbar
@@ -30,6 +34,7 @@ class ShowProfileActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: RecipeListInProfileAdapter
     private lateinit var recipeRenderArray: HashMap<FoodRecipe, User>
+    private lateinit var filterRecipe:SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +43,7 @@ class ShowProfileActivity : AppCompatActivity() {
         initView()
         initAdapter()
         setView()
+        setupRecipeFilter()
         backBtnToolbar()
         showRecipeDetail()
 
@@ -48,6 +54,7 @@ class ShowProfileActivity : AppCompatActivity() {
         avatarProfile=findViewById(R.id.avatarProfile)
         name=findViewById(R.id.name)
         bio=findViewById(R.id.bio)
+        filterRecipe=findViewById(R.id.search)
         recyclerView=findViewById(R.id.recyclerView)
         recipeRenderArray= hashMapOf()
     }
@@ -57,6 +64,31 @@ class ShowProfileActivity : AppCompatActivity() {
             finish()
         }
     }
+    private fun setupRecipeFilter()
+    {
+        filterRecipe.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // Handle submit event if needed
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    val filterList= hashMapOf<FoodRecipe,User>()
+                    for (food in recipeRenderArray) {
+                        val recipe=food.key
+                        if (recipe.recipeName.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT)))
+                        {
+                            filterList[recipe] = food.value
+                        }
+                    }
+                    adapter.filterList(filterList)
+                }
+                return true
+            }
+        })
+    }
+
     private fun setView()
     {
         val profile=intent.getParcelableExtra<User>("profile")!!

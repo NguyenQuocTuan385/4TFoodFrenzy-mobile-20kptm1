@@ -108,7 +108,7 @@ class GenerateDBModel(private var context: Context) {
             "Tôi yêu thích việc sáng tạo các món ăn mới và khám phá văn hóa ẩm thực của các nước khác nhau. Tôi tin rằng món ăn không chỉ là thứ để ăn uống, mà nó còn là một phần không thể thiếu trong cuộc sống của mỗi người.",
             "users/defaultavt.png",
             arrayListOf(9,10),
-            arrayListOf(19,20,26,27,28,29,30),
+            arrayListOf(19,20,21,26,27,28,29,30),
             arrayListOf(), false
         )
         users.add(user7)
@@ -121,7 +121,7 @@ class GenerateDBModel(private var context: Context) {
             "Tôi rất háo hức khi được hỗ trợ và giúp đỡ những người mới bắt đầu trong lĩnh vực nấu ăn. Tôi sẽ chia sẻ những kiến thức và kinh nghiệm của mình để giúp mọi người trở thành những đầu bếp tài ba.",
             "users/defaultavt.png",
             arrayListOf(11,12),
-            arrayListOf(31,32,33),
+            arrayListOf(22,31,32,33),
             arrayListOf(), false
         )
         users.add(user8)
@@ -134,7 +134,7 @@ class GenerateDBModel(private var context: Context) {
             "Không chỉ là một đầu bếp trực tuyến, tôi còn là một người đam mê giảng dạy nấu ăn. Tôi tin rằng mỗi người đều có thể học và phát triển kỹ năng nấu ăn của mình, và tôi luôn sẵn sàng chia sẻ kiến thức và kinh nghiệm của mình để giúp mọi người.",
             "users/defaultavt.png",
             arrayListOf(13),
-            arrayListOf(34),
+            arrayListOf(24,23, 34),
             arrayListOf(), false
         )
         users.add(user9)
@@ -147,7 +147,7 @@ class GenerateDBModel(private var context: Context) {
             "Tôi đã có cơ hội làm việc tại nhiều nhà hàng và khách sạn nổi tiếng ở nhiều quốc gia khác nhau, từ đó tôi đã học được rất nhiều kiến thức và kinh nghiệm về ẩm thực.",
             "users/defaultavt.png",
             arrayListOf(14,15),
-            arrayListOf(35),
+            arrayListOf(25,35),
             arrayListOf(1, 2, 3), false
         )
         users.add(user10)
@@ -166,7 +166,7 @@ class GenerateDBModel(private var context: Context) {
     fun generateDatabaseRecipeDiets() {
         var recipeDietsList:ArrayList<RecipeDiet> = ArrayList()
 
-        var recipeDiet = RecipeDiet(1,"Không đường", arrayListOf(1,2,6,8,9,10,11,13,14,15,16,18,19,20))
+        var recipeDiet = RecipeDiet(1,"Không đường", arrayListOf(1,2,6,8,9,10,11,13,14,15,16,18,19,20,21,22,23,24,25))
         recipeDietsList.add(recipeDiet)
 
         recipeDiet = RecipeDiet(2,"Không Gluten", arrayListOf(3,5,7,12,17,26,27,28,29,30))
@@ -178,7 +178,7 @@ class GenerateDBModel(private var context: Context) {
         recipeDiet = RecipeDiet(4,"Món thuần chay", arrayListOf(3,4,5,6,7,8,9,10,11,12,13))
         recipeDietsList.add(recipeDiet)
 
-        recipeDiet = RecipeDiet(5,"Không cồn", arrayListOf(26,27,28,29,30,31,32,33,34,35))
+        recipeDiet = RecipeDiet(5,"Không cồn", arrayListOf(21,22,23,24,25,26,27,28,29,30,31,32,33,34,35))
         recipeDietsList.add(recipeDiet)
 
         recipeDiet = RecipeDiet(6,"Món chay", arrayListOf(3,4,5,7,8,9,10,12,13))
@@ -196,19 +196,19 @@ class GenerateDBModel(private var context: Context) {
 
     fun generateDatabaseRecipeFoodCate() {
         var recipeCatesList:ArrayList<RecipeCategory> = ArrayList()
-        helperFunctionDB.uploadImageToCloudStorage("douonghome","categories")
-        helperFunctionDB.uploadImageToCloudStorage("montrangmienghome","categories")
-        helperFunctionDB.uploadImageToCloudStorage("monchinh","categories")
-        helperFunctionDB.uploadImageToCloudStorage("doanvathome","categories")
-        helperFunctionDB.uploadImageToCloudStorage("banhmihome","categories")
-        helperFunctionDB.uploadImageToCloudStorage("khaivihome","categories")
-
-        helperFunctionDB.uploadImageToCloudStorage("drink","categories")
-        helperFunctionDB.uploadImageToCloudStorage("fastfood","categories")
-        helperFunctionDB.uploadImageToCloudStorage("english_breakfast","categories")
-        helperFunctionDB.uploadImageToCloudStorage("mainfood","categories")
-        helperFunctionDB.uploadImageToCloudStorage("dessert_search","categories")
-        helperFunctionDB.uploadImageToCloudStorage("appetizer_search","categories")
+//        helperFunctionDB.uploadImageToCloudStorage("douonghome","categories")
+//        helperFunctionDB.uploadImageToCloudStorage("montrangmienghome","categories")
+//        helperFunctionDB.uploadImageToCloudStorage("monchinh","categories")
+//        helperFunctionDB.uploadImageToCloudStorage("doanvathome","categories")
+//        helperFunctionDB.uploadImageToCloudStorage("banhmihome","categories")
+//        helperFunctionDB.uploadImageToCloudStorage("khaivihome","categories")
+//
+//        helperFunctionDB.uploadImageToCloudStorage("drink","categories")
+//        helperFunctionDB.uploadImageToCloudStorage("fastfood","categories")
+//        helperFunctionDB.uploadImageToCloudStorage("english_breakfast","categories")
+//        helperFunctionDB.uploadImageToCloudStorage("mainfood","categories")
+//        helperFunctionDB.uploadImageToCloudStorage("dessert_search","categories")
+//        helperFunctionDB.uploadImageToCloudStorage("appetizer_search","categories")
 
         var recipeCate = RecipeCategory(1,"Khai vị", "categories/khaivihome.png",
             "categories/appetizer_search.png",arrayListOf(16,17,18,19,20))
@@ -223,7 +223,7 @@ class GenerateDBModel(private var context: Context) {
         recipeCatesList.add(recipeCate)
 
         recipeCate = RecipeCategory(4,"Điểm tâm", "categories/banhmihome.png",
-            "categories/english_breakfast.png", arrayListOf())
+            "categories/english_breakfast.png", arrayListOf(21,22,23,24,25))
         recipeCatesList.add(recipeCate)
 
         recipeCate = RecipeCategory(5,"Món tráng miệng","categories/montrangmienghome.png",
@@ -318,11 +318,6 @@ class GenerateDBModel(private var context: Context) {
     fun generateDatabaseRecipeFood(){
         var result = ArrayList<FoodRecipe>()
 
-        var listIngredient=ArrayList<RecipeIngredient>()
-        listIngredient.add(RecipeIngredient(150.5,"Xốt cà chua","g",50.0))
-        listIngredient.add(RecipeIngredient(300.5,"Cá ngừ sạch","g",100.0))
-
-        var listStep=ArrayList<RecipeCookStep>()
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe1_1","foods")
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe1_2","foods")
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe1_3","foods")
@@ -437,6 +432,30 @@ class GenerateDBModel(private var context: Context) {
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe35_2","foods")
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe35_3","foods")
 //        helperFunctionDB.uploadImageToCloudStorage("foodrecipe35_4","foods")
+
+        // 5 món diểm tâm
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe36_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe36_2","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe36_3","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe36_4","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe36_5","foods")
+//
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe37_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe37_2","foods")
+//
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe38_1","foods")
+//
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe39_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe39_2","foods")
+//
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe40_1","foods")
+//        helperFunctionDB.uploadImageToCloudStorage("foodrecipe40_2","foods")
+
+        var listIngredient=ArrayList<RecipeIngredient>()
+        listIngredient.add(RecipeIngredient(150.5,"Xốt cà chua","g",50.0))
+        listIngredient.add(RecipeIngredient(300.5,"Cá ngừ sạch","g",100.0))
+
+        var listStep=ArrayList<RecipeCookStep>()
 
         listStep.add(
             RecipeCookStep(
@@ -1229,6 +1248,120 @@ class GenerateDBModel(private var context: Context) {
             arrayListOf(),0)
         result.add(mon_an_20)
 
+        var mon_an_21 = FoodRecipe(21,"Bữa sáng với trứng trần siêu ngon","foods/foodrecipe36_5.png", 1, "Dưới 15 phút",
+            Date(),true,arrayListOf(1, 5),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),0)
+        result.add(mon_an_21)
+
+
+        listIngredient= ArrayList()
+        listIngredient.add(  RecipeIngredient(2.0, "ngũ cốc Granola", "muỗng", 30.0))
+        listIngredient.add(  RecipeIngredient(1.0, "sữa chua không đường", "hộp",40.0))
+        listIngredient.add(  RecipeIngredient(2.0, "mật ong", "muỗng", 15.0))
+        listIngredient.add(  RecipeIngredient(1.0, "chuối", "quả", 40.0))
+
+
+        listStep= ArrayList()
+        listStep.add(
+            RecipeCookStep(
+                "Cho sữa chua vào bát. Sau đó, cho 2 muỗng ngũ cốc vào thêm",
+                "foods/foodrecipe37_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Cắt chuối vừa ăn cho vào đĩa. Sau đó rưới thêm mật ong và thưởng thức. Bữa sáng tốt cho sức khỏe đơn giản mà dễ làm. Chúc cả nhà ăn ngon miệng ạ",
+                "foods/foodrecipe37_2.png"
+            )
+        )
+
+        var mon_an_22 = FoodRecipe(22,"Ngũ cốc Granola mix sữa chua bữa sáng giảm cân","foods/foodrecipe37_2.png", 1, "Dưới 15 phút",
+            Date(),true,arrayListOf(1, 5),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),0)
+        result.add(mon_an_22)
+
+
+        listIngredient= ArrayList()
+        listIngredient.add(  RecipeIngredient(2.0, "sandwich ngũ cốc", "lát", 50.0))
+        listIngredient.add(  RecipeIngredient(1.0, "bơ lạc", "thỏi",20.0))
+        listIngredient.add(  RecipeIngredient(2.0, "chuối", "quả", 30.0))
+        listIngredient.add(  RecipeIngredient(1.0, "bơ", "quả", 40.0))
+
+
+        listStep= ArrayList()
+        listStep.add(
+            RecipeCookStep(
+                "Nướng sandwich lại cho giòn. Sau đó cắt bơ, chuối cho ra đĩa cùng nửa viên bơ lạt. Thưởng thức thôi nào",
+                "foods/foodrecipe38_1.png"
+            )
+        )
+
+        var mon_an_23 = FoodRecipe(23,"Sandwich ngũ cốc + Bơ - chuối","foods/foodrecipe38_1.png", 2, "Dưới 15 phút",
+            Date(),true,arrayListOf(1, 5),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),0)
+        result.add(mon_an_23)
+
+        listIngredient= ArrayList()
+        listIngredient.add(  RecipeIngredient(2.0, "bacon", "lát", 50.0))
+        listIngredient.add(  RecipeIngredient(1.0, "trứng gà", "trái",15.0))
+        listIngredient.add(  RecipeIngredient(4.0, "măng Tây", "cây", 30.0))
+        listIngredient.add(  RecipeIngredient(3.0, "cà chua bi", "trái", 40.0))
+        listIngredient.add(  RecipeIngredient(0.5, "trái dưa chuột", "trái", 20.0))
+
+
+
+        listStep= ArrayList()
+        listStep.add(
+            RecipeCookStep(
+                "Áp chảo bacon trước, để mỡ từ bacon chảy ra, dùng để áp chảo măng tây nha mọi người.",
+                "foods/foodrecipe39_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Dưa leo cắt nhỏ, và bày các nguyên liệu ra đĩa và thưởng thức ạ",
+                "foods/foodrecipe39_2.png"
+            )
+        )
+
+        var mon_an_24 = FoodRecipe(24,"Sandwich ngũ cốc + Bơ - chuối","foods/foodrecipe39_2.png", 2, "Dưới 15 phút",
+            Date(),true,arrayListOf(1, 5),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),0)
+        result.add(mon_an_24)
+
+
+        listIngredient= ArrayList()
+        listIngredient.add(  RecipeIngredient(1.0, "thanh long trắng", "trái", 50.0))
+        listIngredient.add(  RecipeIngredient(1.0, "ngũ cốc", "chén",25.0))
+        listIngredient.add(  RecipeIngredient(200.0, "sữa tươi không đường", "ml", 80.0))
+        listIngredient.add(  RecipeIngredient(3.0, "cà chua bi", "trái", 40.0))
+        listIngredient.add(  RecipeIngredient(4.0, "hạnh nhân", "hạt", 20.0))
+
+        listStep= ArrayList()
+        listStep.add(
+            RecipeCookStep(
+                "Thanh long cắt ô cờ, cho vào tô cùng ngũ cốc",
+                "foods/foodrecipe40_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Đổ sữa tươi vào, và trang trí bằng vài hạt hạnh nhân trên top.\n" +
+                        "Lưu ý món này sẽ ngon hơn khi sữa và thanh long đều lạnh nghen. Ăn sáng sảng khoải lắm luôn ạ",
+                "foods/foodrecipe40_2.png"
+            )
+        )
+
+        var mon_an_25 = FoodRecipe(25," Bữa Sáng Ngũ Cốc, Sữa Tươi, Thanh Long ","foods/foodrecipe40_2.png", 2, "Dưới 15 phút",
+            Date(),true,arrayListOf(1, 5),listStep,listIngredient,
+            arrayListOf(),
+            arrayListOf(),0)
+        result.add(mon_an_25)
+
         // Snack - tgt
         // 26
         listStep = arrayListOf()
@@ -1390,7 +1523,7 @@ class GenerateDBModel(private var context: Context) {
         )
 
         var mon_an_31 = FoodRecipe(31,"Chè đậu xanh lá dữa","foods/foodrecipe31_5.png", 2, "Dưới 30 phút",
-            Date(),true,arrayListOf(),listStep,listIngredient,
+            Date(),true,arrayListOf(3,5),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),0)
         result.add(mon_an_31)
@@ -1427,7 +1560,7 @@ class GenerateDBModel(private var context: Context) {
         )
 
         var mon_an_32 = FoodRecipe(32,"Bánh nếp mía","foods/foodrecipe32_4.png", 2, "Dưới 2 tiếng",
-            Date(),true,arrayListOf(),listStep,listIngredient,
+            Date(),true,arrayListOf(3,5),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),0)
         result.add(mon_an_32)
@@ -1453,7 +1586,7 @@ class GenerateDBModel(private var context: Context) {
         )
 
         var mon_an_33 = FoodRecipe(33,"Bánh bò bông","foods/foodrecipe33_2.png", 2, "Dưới 2 tiếng",
-            Date(),true,arrayListOf(),listStep,listIngredient,
+            Date(),true,arrayListOf(3,5),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),0)
         result.add(mon_an_33)
@@ -1502,7 +1635,7 @@ class GenerateDBModel(private var context: Context) {
         )
 
         var mon_an_34 = FoodRecipe(34,"Mứt chùm ruột","foods/foodrecipe34_6.png", 2, "Dưới 3 tiếng",
-            Date(),true,arrayListOf(),listStep,listIngredient,
+            Date(),true,arrayListOf(3,5),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),0)
         result.add(mon_an_34)
@@ -1539,11 +1672,52 @@ class GenerateDBModel(private var context: Context) {
         )
 
         var mon_an_35 = FoodRecipe(35,"Khoai tây chiên","foods/foodrecipe35_4.png", 2, "Dưới 30 phút",
-            Date(),true,arrayListOf(),listStep,listIngredient,
+            Date(),true,arrayListOf(3,5),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),0)
         result.add(mon_an_35)
 
+
+
+        listIngredient= ArrayList()
+        listIngredient.add(  RecipeIngredient(1.0, "bánh Sandwich", "miếng", 50.0))
+        listIngredient.add(  RecipeIngredient(1.0, "trứng gà", "quả",40.0))
+        listIngredient.add(  RecipeIngredient(5.0, "muối", "g", 5.0))
+        listIngredient.add(  RecipeIngredient(5.0, "đường", "g", 10.0))
+
+
+        listStep= ArrayList()
+        listStep.add(
+            RecipeCookStep(
+                "Đập trứng vào một cái bát con có lót màng bọc thực phẩm!\n" +
+                        "Sau đó cuộn trứng lại",
+                "foods/foodrecipe36_1.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Nhúng nước sôi khoảng 3-4’",
+                "foods/foodrecipe36_2.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Giữ nguyên chiếc chảo, áp chảo bánh mì sandwich nhà nào có máy nướng bỏ vào máy cũng được",
+                "foods/foodrecipe36_3.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Cho trứng lên mặt bánh, rắc xíu muối và tiêu",
+                "foods/foodrecipe36_4.png"
+            )
+        )
+        listStep.add(
+            RecipeCookStep(
+                "Cắt đôi trứng cho lòng đào tan chảy ngấm vào bánh và thưởng thức liền! So good cả nhà ơi",
+                "foods/foodrecipe36_5.png"
+            )
+        )
 
         // thêm vào firebase
         for(recipefood in result) {

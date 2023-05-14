@@ -110,6 +110,7 @@ class AddRecipeActivity3 : AppCompatActivity() {
                     val intent = Intent(this, AddNewRecipe::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
                     finishAffinity()
                     true
                 }
@@ -172,6 +173,7 @@ class AddRecipeActivity3 : AppCompatActivity() {
                 saveData()
                 sendData(intent)
                 startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
             }
         }
     }
@@ -181,7 +183,6 @@ class AddRecipeActivity3 : AppCompatActivity() {
         {
             HelperFunctionDB(this).showRemindAlert("Bạn vui lòng thêm nguyên liệu")
             return false
-
         }
         return true
     }
@@ -215,6 +216,7 @@ class AddRecipeActivity3 : AppCompatActivity() {
             val intent = Intent(this, AddIngredient::class.java)
             intent.putExtra("mode", "add")
             startActivityForResult(intent, ADD_INGREDIENT_REQUEST_CODE)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
         }
     }
 

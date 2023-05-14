@@ -187,16 +187,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
     fun fetchDatabaseFirebase() {
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            DBManagement.addListenerChangeDataUserCurrent { user ->
-                if (user.email.equals("")) {
-                    DBManagement.fetchDataUserCurrent { }
-                } else if (user.isAdmin) {
-                    val intent = Intent(this, AdminDashboard::class.java)
-                    startActivity(intent)
-                }
-            }
-        }
         DBManagement.addListenerChangeDataFoodRecipe { foodRecipes ->
             if (foodRecipes.isEmpty()) {
                 DBManagement.fetchDataFoodRecipe { foodRecipeList ->
@@ -204,7 +194,7 @@ class MainActivity : AppCompatActivity() {
                         setRecipeListAdapter(
                             RecipeListAdapter(
                                 this,
-                                generateRecipeTodayEatData(foodRecipeList, users)
+                                generateRecipeNewData(foodRecipeList, users)
                             ), recipeTodayEatRV
                         )
                         btnViewMoreTodayEat.visibility = View.VISIBLE
@@ -220,10 +210,23 @@ class MainActivity : AppCompatActivity() {
                 }
             } else {
                 DBManagement.addListenerChangeDataUser { users ->
+                        if (FirebaseAuth.getInstance().currentUser != null) {
+                            DBManagement.addListenerChangeDataUserCurrent { user ->
+                                if (DBManagement.isInitialized == false) {
+                                    if (user.email.equals("")) {
+                                        DBManagement.fetchDataUserCurrent { }
+                                    } else if (user.isAdmin) {
+                                        val intent = Intent(this, AdminDashboard::class.java)
+                                        startActivity(intent)
+                                    }
+                                    DBManagement.isInitialized = true
+                                }
+                            }
+                        }
                     setRecipeListAdapter(
                         RecipeListAdapter(
                             this,
-                            generateRecipeTodayEatData(foodRecipes, users)
+                            generateRecipeNewData(foodRecipes, users)
                         ), recipeTodayEatRV
                     )
                     btnViewMoreTodayEat.visibility = View.VISIBLE
@@ -258,24 +261,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun generateRecipeTodayEatData(
+    fun generateRecipeNewData(
         recipeList: ArrayList<FoodRecipe>,
         userList: ArrayList<User>
     ): LinkedHashMap<FoodRecipe, User> {
         val result = LinkedHashMap<FoodRecipe, User>()
-        val randomIndexSet = mutableSetOf<Int>()
 
-        while (randomIndexSet.size != 6) {
-            val randomIndex = (0 until recipeList.size).random()
-            if (!randomIndexSet.contains(randomIndex) && recipeList[randomIndex].isPublic) {
-                randomIndexSet.add(randomIndex)
+        val sortedRecipes = recipeList.sortedByDescending { it.date }
+        var index = 0
+        var numberRecipe = 0
+        while (numberRecipe != 6) {
+            if (sortedRecipes[index].isPublic) {
                 for (user in userList) {
-                    if (user.myFoodRecipes.contains(recipeList[randomIndex].id)) {
-                        result[recipeList[randomIndex]] = user
+                    if (user.myFoodRecipes.contains(sortedRecipes[index].id)) {
+                        result.put(sortedRecipes[index], user)
                         break
                     }
                 }
+                numberRecipe++
             }
+            index++
         }
         return result
     }
