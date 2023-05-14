@@ -145,5 +145,10 @@ class RecipeListInProfileAdapter(private var context: Context,
 
 
     }
+    fun filterList(temp:HashMap<FoodRecipe,User>)
+    {
+        recipeRenderArray=temp
+        notifyDataSetChanged()
+    }
 }
 
