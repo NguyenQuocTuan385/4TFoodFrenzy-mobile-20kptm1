@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextUtils
+import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.util.Log
 import android.view.Gravity
@@ -163,6 +164,19 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             ++ingreIndex
         }
 
+        val cookTimeString = SpannableString("Thời gian nấu: ${currentFoodRecipe.cookTime}")
+
+        // set bold for cook time title
+        cookTimeString.setSpan(StyleSpan(Typeface.BOLD),
+            0,
+            13,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        // set new size for cook time string
+        cookTimeString.setSpan(RelativeSizeSpan(1.5f), 0, cookTimeString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        ingredientString = TextUtils.concat(ingredientString, "\n", cookTimeString, "\n")
+
         // generate step string
         for ((i, step) in currentFoodRecipe.recipeSteps.withIndex()) {
             // sub text is step title number
@@ -176,7 +190,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
 
-            // concat step title number withr step description then concat those with the main step string
+            // concat step title number with step description then concat those with the main step string
             stepString = TextUtils.concat(stepString, subtext, "\n${step.description}\n\n")
         }
 
