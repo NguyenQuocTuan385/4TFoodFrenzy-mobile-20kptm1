@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.RecipeCookStep
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.appbar.MaterialToolbar
@@ -72,20 +73,20 @@ class AddStepActivity : AppCompatActivity() {
 
             descriptionStepEdit.setText(step.description)
         }
-        setBackToobar()
-        setCloseToobar()
+        setBackToolbar()
+        setSaveToolbar()
     }
     private fun initToolbar()
     {
         toolbarAddStep=findViewById(R.id.toolbarAddStep)
     }
-    private fun setBackToobar()
+    private fun setBackToolbar()
     {
         toolbarAddStep.setNavigationOnClickListener {
             finish()
         }
     }
-    private fun setCloseToobar()
+    private fun setSaveToolbar()
     {
         toolbarAddStep.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
@@ -100,7 +101,13 @@ class AddStepActivity : AppCompatActivity() {
     }
     private fun saveStep()
     {
+        val helperFunctionDB= HelperFunctionDB(this)
         val des=descriptionStepEdit.text.toString()
+        if(des.isEmpty())
+        {
+            helperFunctionDB.showRemindAlert("Bạn chưa nhập mô tả cho bước này")
+            return
+        }
         val recipeCookStep=RecipeCookStep(des,uri?.toString())
         val intent=Intent()
         intent.putExtra("step",recipeCookStep)
