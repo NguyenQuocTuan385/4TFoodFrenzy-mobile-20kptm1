@@ -29,6 +29,7 @@ class AddRecipeActivity3 : AppCompatActivity() {
     private lateinit var cate:String
     private lateinit var foodRecipe:FoodRecipe
     private lateinit var sharedPreferences: SharedPreferences
+    private var check=-1
 
 
 
@@ -107,8 +108,9 @@ class AddRecipeActivity3 : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.action_close -> {
                     deleteAllSharePreference()
-                    val intent = Intent(this, AddNewRecipe::class.java)
+                    val intent = Intent(this,if(check==1) ProfileActivity::class.java else AddNewRecipe::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    intent.putExtra("selectedTab", 1) // chọn tab thứ hai
                     startActivity(intent)
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
                     finishAffinity()
@@ -195,12 +197,13 @@ class AddRecipeActivity3 : AppCompatActivity() {
 
         //gửi đối tượng FoodRecipe
         intent.putExtra("foodRecipe",foodRecipe)
+        intent.putExtra("check",check)
     }
     private fun recieveData()
     {
         foodRecipe=intent.getParcelableExtra<FoodRecipe>("foodRecipe") as FoodRecipe
         cate= intent.getStringExtra("cate").toString()
-
+        check=intent.getIntExtra("check",-1)
         if(!foodRecipe.recipeIngres.isEmpty())
         {
             listIngredient.clear()

@@ -33,6 +33,7 @@ class AddRecipeActivity2 : AppCompatActivity() {
     private lateinit var adapter: CheckboxAdapter
     private var category:String?=null
     private lateinit var sharedPreferences: SharedPreferences
+    private var check=-1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -179,7 +180,6 @@ class AddRecipeActivity2 : AppCompatActivity() {
         foodRecipe.ration=ration.text.toString().toInt()
         foodRecipe.recipeDiets=dietList
         foodRecipe.cookTime=timedropdown.text.toString()
-        println(foodRecipe.recipeDiets.size)
 
 
         //gửi loại món ăn sang màn hình 3
@@ -187,11 +187,13 @@ class AddRecipeActivity2 : AppCompatActivity() {
 
         //gửi đối tượng FoodRecipe
         intent.putExtra("foodRecipe",foodRecipe)
+        intent.putExtra("check",check)
     }
     private fun recieveData()
     {
         foodRecipe=intent.getParcelableExtra<FoodRecipe>("foodRecipe") as FoodRecipe
         category=intent.getStringExtra("cate")
+        check=intent.getIntExtra("check",-1)
         if(foodRecipe.ration!=0)
         {
             ration.setText(foodRecipe.ration.toString())
@@ -220,8 +222,9 @@ class AddRecipeActivity2 : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.action_close -> {
                     deleteAllSharePreference()
-                    val intent = Intent(this, AddNewRecipe::class.java)
+                    val intent = Intent(this,if(check==1) ProfileActivity::class.java else AddNewRecipe::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    intent.putExtra("selectedTab", 1) // chọn tab thứ hai
                     startActivity(intent)
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
                     finishAffinity()

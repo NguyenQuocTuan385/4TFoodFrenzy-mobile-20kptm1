@@ -49,6 +49,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
     private lateinit var sharedPreferences:SharedPreferences
     private lateinit var helperFunctionDB: HelperFunctionDB
     private lateinit var mainImage:String
+    private var check=-1
 
 
     private val ADD_REQUEST_CODE=1
@@ -128,9 +129,11 @@ class AddRecipeActivity4 : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.action_close -> {
                     deleteAllSharePreference()
-                    val intent = Intent(this, AddNewRecipe::class.java)
+                    val intent = Intent(this,if(check==1) ProfileActivity::class.java else AddNewRecipe::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    intent.putExtra("selectedTab", 1) // chọn tab thứ hai
                     startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
                     finishAffinity()
                     true
                 }
@@ -197,6 +200,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
             listStep.addAll(foodRecipe.recipeSteps)
             stepsAdapter.notifyDataSetChanged()
         }
+        check=intent.getIntExtra("check",-1)
 
     }
 
@@ -447,6 +451,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
                                 val intent = Intent(this, ProfileActivity::class.java)
                                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 finishAffinity()
+                                intent.putExtra("selectedTab", 1) // chọn tab thứ hai
                                 startActivity(intent)
                             }
                         }
@@ -469,6 +474,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
                             val intent1 = Intent(ConstantAction.UPDATE_MY_RECIPE_ACTION)
                             sendBroadcast(intent1)
                             finishAffinity()
+                            intent.putExtra("selectedTab", 1) // chọn tab thứ hai
                             startActivity(intent)
                         }
                     }
@@ -481,6 +487,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
                             val intent = Intent(this, ProfileActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             finishAffinity()
+                            intent.putExtra("selectedTab", 1) // chọn tab thứ hai
                             startActivity(intent)
                         }
                     }
@@ -537,7 +544,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
     {
         var l = ""
         for (k in foodRecipe.recipeIngres) {
-            l += "${k.ingreQuantity.roundToInt()}${k.ingreUnit} ${k.ingreName} "
+            l += k.ingreName+","
         }
         return l
     }
@@ -554,9 +561,18 @@ class AddRecipeActivity4 : AppCompatActivity() {
 
     private fun getNutritionData(translatedText:String,callBack: (FoodRecipe)->Unit)
     {
+
+        var temp=translatedText.trim().replace(" ", "").split(",")
+        var hashMap= hashMapOf<String,String>()
+        var string=""
+        for(i in foodRecipe.recipeIngres.indices)
+        {
+            string+="${foodRecipe.recipeIngres[i].ingreQuantity.roundToInt()}${foodRecipe.recipeIngres[i].ingreUnit} ${temp[i]} "
+            hashMap.put(temp[i].toLowerCase(Locale.ROOT),foodRecipe.recipeIngres[i].ingreName)
+        }
         val appKey = "gY+35sz1wCbF8TvCgO0oOA==UomLBEqmDOPJ2vlE"
         val call =
-            NinjasApiService.create().getNutritionData(appKey, translatedText)
+            NinjasApiService.create().getNutritionData(appKey, string)
         call.enqueue(object : Callback<List<Food>> {
             override fun onResponse(
                 call: Call<List<Food>>,
@@ -565,11 +581,23 @@ class AddRecipeActivity4 : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val foods = response.body()
                     if (foods != null) {
-                        for (i in 0 until foods.size) {
-                            if(translatedText.contains(foods[i].name))
+                        if(foodRecipe.recipeIngres.size==foods.size)
+                            callBack(foodRecipe)
+                        for ((index,food) in foods.withIndex())
+                        {
+                            Log.d("HEHE",food.name+" "+food.calories)
+                            if(food.name in hashMap)
                             {
-                               foodRecipe.recipeIngres[i].ingreCalo=foods[i].calories
-                                Log.d("HEHE",foodRecipe.recipeIngres[i].ingreCalo.toString())
+                                val ingreName=hashMap[food.name]
+                                for(k in foodRecipe.recipeIngres.indices)
+                                {
+                                    if(foodRecipe.recipeIngres[k].ingreName.equals(ingreName))
+                                    {
+                                        foodRecipe.recipeIngres[k].ingreCalo=food.calories
+                                        break
+                                    }
+                                }
+
                             }
                         }
                     }
