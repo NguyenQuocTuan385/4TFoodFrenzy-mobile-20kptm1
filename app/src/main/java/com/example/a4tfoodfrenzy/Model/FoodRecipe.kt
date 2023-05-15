@@ -12,7 +12,7 @@ class FoodRecipe(
     private var _cookTime: String,
     private var _date: Date,
     private var _isPublic: Boolean,
-    private var _recipeDiets: ArrayList<Long>,
+    private var _recipeDiets: ArrayList<Long>?,
     private var _recipeSteps: ArrayList<RecipeCookStep>,
     private var _recipeIngres: ArrayList<RecipeIngredient>,
     private var _recipeCmts: ArrayList<Long>,
@@ -81,7 +81,7 @@ class FoodRecipe(
             _recipeCmts = value
         }
 
-    var recipeDiets: ArrayList<Long>
+    var recipeDiets: ArrayList<Long>?
         get() = _recipeDiets
         set(value) {
             _recipeDiets = value

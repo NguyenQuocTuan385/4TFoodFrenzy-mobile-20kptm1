@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
@@ -27,7 +28,7 @@ class AddRecipeActivity2 : AppCompatActivity() {
     private lateinit var list_checkbox:RecyclerView
     private lateinit var continueBtn: Button
     private lateinit var toolbarAddRecipe: MaterialToolbar
-    private lateinit var dietList:ArrayList<Long>
+    private var dietList:ArrayList<Long>?=null
     private lateinit var ration:EditText
     private lateinit var foodRecipe:FoodRecipe
     private lateinit var adapter: CheckboxAdapter
@@ -158,8 +159,8 @@ class AddRecipeActivity2 : AppCompatActivity() {
             val list: ArrayList<Long>? = Gson().fromJson(diet, object : TypeToken<ArrayList<Long>>() {}.type)
 
             if (list != null) {
-               dietList.clear()
-                dietList.addAll(list)
+                dietList?.clear()
+                dietList?.addAll(list)
                 adapter.notifyDataSetChanged()
             }
 
@@ -180,6 +181,7 @@ class AddRecipeActivity2 : AppCompatActivity() {
         foodRecipe.ration=ration.text.toString().toInt()
         foodRecipe.recipeDiets=dietList
         foodRecipe.cookTime=timedropdown.text.toString()
+        Log.d("HEHE", foodRecipe.recipeDiets.toString())
 
 
         //gửi loại món ăn sang màn hình 3
@@ -206,8 +208,8 @@ class AddRecipeActivity2 : AppCompatActivity() {
 
         if(!foodRecipe.recipeDiets.isNullOrEmpty())
         {
-            dietList.clear()
-            dietList.addAll(foodRecipe.recipeDiets)
+            dietList!!.clear()
+            foodRecipe.recipeDiets?.let { dietList!!.addAll(it) }
             adapter.notifyDataSetChanged()
         }
        if(!category.equals("null"))

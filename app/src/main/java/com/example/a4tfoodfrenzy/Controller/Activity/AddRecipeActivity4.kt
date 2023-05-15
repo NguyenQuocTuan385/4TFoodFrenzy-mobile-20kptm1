@@ -327,40 +327,66 @@ class AddRecipeActivity4 : AppCompatActivity() {
         onFailure: (Exception?) -> Unit // Thêm tham số Exception để báo lỗi
     ) {
         val db = Firebase.firestore
-        db.collection("RecipeDiets")
-            .whereIn("id", foodRecipe.recipeDiets)
-            .get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    document.reference.update("foodRecipes", FieldValue.arrayUnion(foodRecipeId))
-                        .addOnSuccessListener {
-                            onSuccess()
-                        }
-                        .addOnFailureListener { exception ->
-                            onFailure(exception) // Truyền mã lỗi đến phương thức onFailure
-                        }
-                }
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception) // Truyền mã lỗi đến phương thức onFailure
-            }
-        db.collection("RecipeDiets")
-            .whereNotIn("id", foodRecipe.recipeDiets)
-            .get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    val foodRecipes = document.get("foodRecipes") as? MutableList<Long>
-                    if (foodRecipes != null) {
-                        if(foodRecipes.remove(foodRecipeId)) {
-                            document.reference.update("foodRecipes", foodRecipes)
+        val recipeDiets = foodRecipe.recipeDiets ?: emptyList()
+        if(recipeDiets.isEmpty())
+        {
+            db.collection("RecipeDiets")
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        val foodRecipes = document.get("foodRecipes") as? MutableList<Long>
+                        if (foodRecipes != null) {
+                            if (foodRecipes.remove(foodRecipeId)) {
+                                document.reference.update("foodRecipes", foodRecipes)
+                            }
                         }
                     }
+                    onSuccess()
                 }
-                onSuccess()
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception) // Truyền mã lỗi đến phương thức onFailure
-            }
+                .addOnFailureListener { exception ->
+                    onFailure(exception) // Truyền mã lỗi đến phương thức onFailure
+                }
+        }
+        else {
+
+            db.collection("RecipeDiets")
+                .whereIn("id", recipeDiets)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        document.reference.update(
+                            "foodRecipes",
+                            FieldValue.arrayUnion(foodRecipeId)
+                        )
+                            .addOnSuccessListener {
+                                onSuccess()
+                            }
+                            .addOnFailureListener { exception ->
+                                onFailure(exception) // Truyền mã lỗi đến phương thức onFailure
+                            }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    onFailure(exception) // Truyền mã lỗi đến phương thức onFailure
+                }
+            db.collection("RecipeDiets")
+                .whereNotIn("id", recipeDiets)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        val foodRecipes = document.get("foodRecipes") as? MutableList<Long>
+                        if (foodRecipes != null) {
+                            if (foodRecipes.remove(foodRecipeId)) {
+                                document.reference.update("foodRecipes", foodRecipes)
+                            }
+                        }
+                    }
+                    onSuccess()
+                }
+                .addOnFailureListener { exception ->
+                    onFailure(exception) // Truyền mã lỗi đến phương thức onFailure
+                }
+        }
     }
 
     private fun addFoodRecipeToCategory(foodRecipeId: Long, onSuccess: () -> Unit, onFailure: () ->Unit) {

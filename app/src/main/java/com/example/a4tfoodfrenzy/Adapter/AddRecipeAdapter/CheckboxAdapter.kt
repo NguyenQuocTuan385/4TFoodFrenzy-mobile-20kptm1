@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.a4tfoodfrenzy.Model.RecipeDiet
 import com.example.a4tfoodfrenzy.R
 
-class CheckboxAdapter(private var context: Context, private var list:ArrayList<RecipeDiet>)
+class CheckboxAdapter(private var context: Context, private var list:ArrayList<RecipeDiet>?)
     :RecyclerView.Adapter<CheckboxAdapter.ViewHolder>() {
     private var dietList = ArrayList<Long>()
     // Phương thức khởi tạo
@@ -29,32 +29,42 @@ class CheckboxAdapter(private var context: Context, private var list:ArrayList<R
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = list[position]
-        holder.checkbox.text=item.dietName
-        holder.checkbox.isChecked = dietList.contains(item.id)
+        val item = list?.get(position)
+        if (item != null) {
+            holder.checkbox.text=item.dietName
+        }
+        if (item != null) {
+            holder.checkbox.isChecked = dietList.contains(item.id)
+        }
         holder.checkbox.setOnClickListener {
             if(holder.checkbox.isChecked)
             {
-                dietList.add(item.id)
+                if (item != null) {
+                    dietList.add(item.id)
+                }
             }
             else
             {
-                dietList.remove(item.id)
+                if (item != null) {
+                    dietList.remove(item.id)
+                }
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return list?.size ?: 0
 
     }
     fun getDietList():ArrayList<Long>
     {
         return dietList
     }
-    fun setDietList(dietList:ArrayList<Long>)
+    fun setDietList(dietList:ArrayList<Long>?)
     {
-        this.dietList=dietList
+        if (dietList != null) {
+            this.dietList=dietList
+        }
         notifyDataSetChanged()
     }
 }
