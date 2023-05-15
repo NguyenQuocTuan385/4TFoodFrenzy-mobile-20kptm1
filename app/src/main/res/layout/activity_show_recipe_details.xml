@@ -416,10 +416,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:paddingLeft="5dp"
+                android:paddingLeft="8dp"
                 android:text="Nguyên liệu / Thành phần"
                 android:textColor="@color/black"
-                android:textSize="30sp"
+                android:textSize="25sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -427,7 +427,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:paddingLeft="5dp"
+                android:paddingLeft="8dp"
                 android:paddingRight="5dp"
                 android:text="1. Xốt me 100g\n2. Hành tây, cà chua, xà lách Lolo xanh 180g\n3. Tỏi tép lột sẵn 10g\n4. Bắp bò cắt mỏng 200g"
                 android:textColor="@color/black"
@@ -438,10 +438,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:paddingLeft="5dp"
+                android:paddingLeft="8dp"
                 android:text="Hướng dẫn chế biến"
                 android:textColor="@color/black"
-                android:textSize="30sp"
+                android:textSize="25sp"
                 android:textStyle="bold"
 
                 />
@@ -451,7 +451,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:paddingLeft="5dp"
+                android:paddingLeft="8dp"
                 android:paddingRight="5dp"
                 android:text="Bước 1: Bắp bò rửa sơ để ráo. Hành tây, xà lách, cà chua rửa sạch, để ráo nước.
                 \n\nBước 2: Cho 1 muỗng canh dầu ăn vào làm nóng, chỉnh lửa vừa, phi thơm hành tỏi và cho bò vào xào trong 2 phút cho săn . Cho gói sốt me vào đảo đều trong 3 phút. Nêm nếm lại cho vừa ăn. Thêm hành tây vào xào sơ khoảng 1 phút rồi tắt bếp.
@@ -469,6 +469,7 @@
                 app:cardElevation="0dp"
                 app:cardUseCompatPadding="true"
                 app:strokeColor="@color/SecondaryColor"
+                android:layout_marginHorizontal="5dp"
                 app:strokeWidth="2dp">
 
 
@@ -494,10 +495,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="8dp"
                     android:text="Bình luận"
                     android:textColor="@color/black"
-                    android:textSize="30sp"
+                    android:textSize="25sp"
                     android:textStyle="bold"
 
                     />
@@ -510,7 +511,7 @@
                     android:paddingLeft="5dp"
                     android:text="(3)"
                     android:textColor="@color/black"
-                    android:textSize="30sp" />
+                    android:textSize="25sp" />
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -592,12 +593,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Xem thêm bình luận"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     android:foreground="?attr/selectableItemBackground"
                     android:textColor="@color/secondary_light_orange" />
 
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="18dp"
+                    android:layout_gravity="center"
                     android:src="@drawable/right_arrow_secondary_icon" />
             </LinearLayout>
 
@@ -609,6 +613,7 @@
                 app:cardElevation="0dp"
                 app:cardUseCompatPadding="true"
                 app:strokeColor="@color/SecondaryColor"
+                android:layout_marginHorizontal="5dp"
                 app:strokeWidth="2dp">
 
                 <Button

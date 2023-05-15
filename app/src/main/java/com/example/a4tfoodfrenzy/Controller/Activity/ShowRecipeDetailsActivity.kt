@@ -1,6 +1,7 @@
 package com.example.a4tfoodfrenzy.Controller.Activity
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
@@ -173,8 +174,11 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         // set new size for cook time string
-        cookTimeString.setSpan(RelativeSizeSpan(1.5f), 0, cookTimeString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
+        cookTimeString.setSpan(RelativeSizeSpan(1.2f), 0, 13, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        cookTimeString.setSpan(RelativeSizeSpan(1f),
+            13 + currentFoodRecipe.cookTime.length,
+            cookTimeString.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         ingredientString = TextUtils.concat(ingredientString, "\n", cookTimeString, "\n")
 
         // generate step string

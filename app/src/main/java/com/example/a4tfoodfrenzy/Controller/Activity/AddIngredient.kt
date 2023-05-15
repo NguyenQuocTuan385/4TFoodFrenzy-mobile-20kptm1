@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.a4tfoodfrenzy.Model.RecipeIngredient
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.appbar.MaterialToolbar
+import kotlin.math.roundToInt
 
 class AddIngredient : AppCompatActivity() {
     private lateinit var toolbarAddIngredient: MaterialToolbar
@@ -27,7 +28,7 @@ class AddIngredient : AppCompatActivity() {
             val ingredient: RecipeIngredient? = intent.getParcelableExtra("ingredient")
             index=intent.getIntExtra("index",-1)
             ingredientName.setText(ingredient?.ingreName)
-            amount.setText(ingredient?.ingreQuantity.toString())
+            amount.setText(ingredient?.ingreQuantity?.roundToInt().toString())
             unitIngredientEdit.setText(ingredient?.ingreUnit)
         }
 
@@ -42,8 +43,7 @@ class AddIngredient : AppCompatActivity() {
 
     private fun initListeners() {
         setBackToolbar()
-        setCloseToolbar()
-        //setUnitPickerListener()
+        setSaveToolbar()
     }
 
     private fun setBackToolbar() {
@@ -52,7 +52,7 @@ class AddIngredient : AppCompatActivity() {
         }
     }
 
-    private fun setCloseToolbar() {
+    private fun setSaveToolbar() {
         toolbarAddIngredient.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_save -> {
