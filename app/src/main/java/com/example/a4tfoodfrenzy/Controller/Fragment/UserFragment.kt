@@ -94,6 +94,13 @@ class UserFragment(private var isAdmin:Boolean) : Fragment() {
                         true
                     }
                     R.id.delete-> {
+                        // nếu là current hiện tại thì thông báo không được xóa
+                        if(user.id == DBManagement.user_current?.id)
+                        {
+                            Toast.makeText(requireContext(), "Không thể xóa tài khoản hiện tại", Toast.LENGTH_SHORT).show()
+                            return@setOnMenuItemClickListener true
+                        }
+
                         val db = FirebaseFirestore.getInstance()
                         var helperFunctionDB= HelperFunctionDB(requireContext())
                         helperFunctionDB.showWarningAlert("Xóa người dùng",
