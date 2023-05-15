@@ -661,14 +661,31 @@ class AddRecipeActivity4 : AppCompatActivity() {
         anim.playAnimation()
         shareRecipeBtn.setOnClickListener {
             shareRecipe { share ->
-                val intent = Intent(this, ProfileActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                intent.putExtra("selectedTab", 1) // chọn tab thứ hai
-                val intent1 = Intent(ConstantAction.UPDATE_MY_RECIPE_ACTION)
-                sendBroadcast(intent1)
-                finishAffinity()
-                popupWindow.dismiss()
-                startActivity(intent)
+                if(share) {
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    intent.putExtra("selectedTab", 1) // chọn tab thứ hai
+                    val intent1 = Intent(ConstantAction.UPDATE_MY_RECIPE_ACTION)
+                    sendBroadcast(intent1)
+                    finishAffinity()
+                    popupWindow.dismiss()
+                    startActivity(intent)
+                }
+                else{
+                    helperFunctionDB.showErrorAlert("Chia sẻ thất bại","Vui lòng chia sẻ lại"){confirm ->
+                        if(confirm)
+                        {
+                            val intent = Intent(this, ProfileActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            intent.putExtra("selectedTab", 1) // chọn tab thứ hai
+                            val intent1 = Intent(ConstantAction.UPDATE_MY_RECIPE_ACTION)
+                            sendBroadcast(intent1)
+                            finishAffinity()
+                            popupWindow.dismiss()
+                            startActivity(intent)
+                        }
+                    }
+                }
             }
         }
         laterBtn.setOnClickListener {
