@@ -604,6 +604,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
                     callBack(foodRecipe)
                 } else {
                     println("Gọi api không thành công")
+                    callBack(foodRecipe)
                 }
 
             }
