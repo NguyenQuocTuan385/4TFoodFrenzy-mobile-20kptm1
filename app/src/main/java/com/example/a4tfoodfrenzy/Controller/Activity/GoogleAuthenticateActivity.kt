@@ -1,17 +1,12 @@
 package com.example.a4tfoodfrenzy.Controller.Activity
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import cn.pedant.SweetAlert.SweetAlertDialog
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.User
@@ -22,12 +17,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.*
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
-import java.io.ByteArrayOutputStream
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 class GoogleAuthenticateActivity : AppCompatActivity() {
@@ -102,135 +102,82 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
                                                     firebaseAuth.currentUser?.displayName
                                                 val helperFunctionDB = HelperFunctionDB(this)
 
-                                                // lấy avatar của user từ google
-                                                val userAvatar =
+                                                // get avatar url from google
+                                                val userAvatarUrl =
                                                     firebaseAuth.currentUser?.photoUrl.toString()
-                                                Log.d("userAvatar", userAvatar)
 
                                                 // upload avatar to firebase storage
                                                 val storageRef = Firebase.storage.reference
                                                 val user_id = firebaseAuth.currentUser?.uid
-                                                val avatarRef =
-                                                    storageRef.child("users/$user_id")
-//                                                val options = RequestOptions()
-//                                                    .override(300, 300)
-//                                                    .centerCrop()
-                                                Glide.with(this)
-                                                    .asBitmap()
-                                                    .load(userAvatar)
-                                                    .apply(RequestOptions.circleCropTransform())
-                                                    .into(object : SimpleTarget<Bitmap>() {
-                                                        override fun onResourceReady(
-                                                            resource: Bitmap,
-                                                            transition: Transition<in Bitmap>?
-                                                        ) {
-                                                            val baos = ByteArrayOutputStream()
-                                                            resource.compress(
-                                                                Bitmap.CompressFormat.PNG,
-                                                                100,
-                                                                baos
-                                                            )
-                                                            val data = baos.toByteArray()
-                                                            avatarRef.putBytes(data)
-                                                                .addOnSuccessListener {
-                                                                    Log.d(
-                                                                        "uploadAvatar",
-                                                                        "Upload avatar success"
-                                                                    )
-                                                                    helperFunctionDB.findSlotIdEmptyInCollection(
-                                                                        "users"
-                                                                    ) { idSlot ->
-                                                                        val profile = User(
-                                                                            idSlot, userEmail!!,
-                                                                            userFullName!!,
-                                                                            null,
-                                                                            "",
-                                                                            "users/$user_id",
-                                                                            arrayListOf(),
-                                                                            arrayListOf(),
-                                                                            arrayListOf(), false
-                                                                        )
+                                                val avatarRef = "$user_id"
 
-                                                                        if (user_id != null) {
-                                                                            db.collection("users")
-                                                                                .document(user_id)
-                                                                                .set(profile)
-                                                                                .addOnSuccessListener {
-                                                                                    Log.d(
-                                                                                        "addUser",
-                                                                                        "Add user success"
-                                                                                    )
-                                                                                }
-                                                                                .addOnFailureListener {
-                                                                                    Log.d(
-                                                                                        "addUser",
-                                                                                        "Add user failed"
-                                                                                    )
-                                                                                }
-                                                                        }
+                                                helperFunctionDB.findSlotIdEmptyInCollection(
+                                                    "users"
+                                                ) { idSlot ->
+                                                    val profile = User(
+                                                        idSlot, userEmail!!,
+                                                        userFullName!!,
+                                                        null,
+                                                        "",
+                                                        "users/$user_id",
+                                                        arrayListOf(),
+                                                        arrayListOf(),
+                                                        arrayListOf(), false
+                                                    )
 
-                                                                    }
-                                                                }
-                                                                .addOnFailureListener {
-                                                                    Log.d(
-                                                                        "uploadAvatar",
-                                                                        "Upload avatar failed"
-                                                                    )
-                                                                    helperFunctionDB.findSlotIdEmptyInCollection(
-                                                                        "users"
-                                                                    ) { idSlot ->
-                                                                        val profile = User(
-                                                                            idSlot, userEmail!!,
-                                                                            userFullName!!,
-                                                                            null,
-                                                                            "",
-                                                                            "users/defaultavt.png",
-                                                                            arrayListOf(),
-                                                                            arrayListOf(),
-                                                                            arrayListOf(), false
-                                                                        )
-
-                                                                        // add new user to db
-                                                                        if (user_id != null) {
-                                                                            db.collection("users")
-                                                                                .document(user_id)
-                                                                                .set(profile)
-                                                                                .addOnSuccessListener {
-                                                                                    Log.d(
-                                                                                        "addUser",
-                                                                                        "Add user success"
-                                                                                    )
-                                                                                }
-                                                                                .addOnFailureListener {
-                                                                                    Log.d(
-                                                                                        "addUser",
-                                                                                        "Add user failed"
-                                                                                    )
-                                                                                }
-                                                                        }
-                                                                    }
-                                                                }
+                                                    // async --> run on another thread except main thread
+                                                    Thread {
+                                                        // upload facebook avatar to storage on first time login
+                                                        uploadAvatarImageToStorage(
+                                                            userAvatarUrl,
+                                                            avatarRef
+                                                        )
+                                                        runOnUiThread {
                                                         }
-                                                    })
+                                                    }.start()
+
+                                                    if (user_id != null) {
+                                                        db.collection("users")
+                                                            .document(user_id)
+                                                            .set(profile)
+                                                            .addOnSuccessListener {
+                                                                Log.d(
+                                                                    "addUser",
+                                                                    "Add user success"
+                                                                )
+                                                            }
+                                                            .addOnFailureListener {
+                                                                Log.d(
+                                                                    "addUser",
+                                                                    "Add user failed"
+                                                                )
+                                                            }
+                                                    }
+
+                                                    DBManagement.user_current =
+                                                        DBManagement.userList.find { user -> user.id == idSlot }
+                                                }
+                                            } else { // user exist in DB
+                                                DBManagement.user_current =
+                                                    DBManagement.userList.find { user ->
+                                                        user.id == it.documents[0].get("id")
+                                                    }
+
+                                                if (DBManagement.user_current!!.isAdmin) {
+                                                    // Display Toast
+                                                    Toast.makeText(
+                                                        this,
+                                                        "Đăng nhập bằng Google thành công",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+
+                                                    val intent =
+                                                        Intent(this, AdminDashboard::class.java)
+                                                    startActivity(intent)
+                                                    finish()
+                                                }
                                             }
-                                            // user exist in DB --> do nothing
-                                        }
-                                        .addOnFailureListener {
-                                        }
 
-                                    DBManagement.addListenerChangeDataUserCurrent { user ->
-                                        if (user.isAdmin) {
-                                            // Display Toast
-                                            Toast.makeText(
-                                                this,
-                                                "Đăng nhập bằng Google thành công",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-
-                                            val intent = Intent(this, AdminDashboard::class.java)
-                                            startActivity(intent)
-                                            finish()
-                                        } else {
                                             // When task is successful redirect to profile activity
                                             // Display Toast
                                             Toast.makeText(
@@ -248,8 +195,6 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
                                                 Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                                             startActivity(toHomeIntent)
                                         }
-                                    }
-
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Toast.makeText(
@@ -291,7 +236,42 @@ class GoogleAuthenticateActivity : AppCompatActivity() {
         pDialog!!.show()
     }
 
-    private fun endLoadingAlert(){
+    private fun endLoadingAlert() {
         pDialog!!.dismiss()
+    }
+
+    private fun uploadAvatarImageToStorage(path: String?, avtName: String) {
+        var inStream: InputStream? = null
+        var responseCode = -1
+
+        // download image from url provided by access token of Facebook
+        try {
+            val url = URL(path)
+            val con: HttpURLConnection = url.openConnection() as HttpURLConnection
+
+            con.doInput = true
+            con.connect()
+            responseCode = con.responseCode
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // download
+                inStream = con.inputStream
+
+                // upload downloaded image to firebase storage
+                val imageRef = storageRef.reference.child("users/${avtName}")
+                val uploadTask = imageRef.putStream(inStream)
+
+                uploadTask
+                    .addOnSuccessListener {
+                        inStream.close()
+                    }
+                    .addOnFailureListener {
+                        inStream.close()
+                    }
+
+            }
+        } catch (ex: Exception) {
+            Log.e("Exception", ex.toString())
+        }
     }
 }

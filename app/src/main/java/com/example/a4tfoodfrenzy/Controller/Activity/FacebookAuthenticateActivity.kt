@@ -151,6 +151,20 @@ class FacebookAuthenticateActivity : AppCompatActivity() {
                                 else{
                                     // user exist => find user in userlist and assign to current user
                                     DBManagement.user_current = DBManagement.userList.find { user -> user.id == it.documents[0].get("id") }
+
+                                    if (DBManagement.user_current!!.isAdmin) {
+                                        // Display Toast
+                                        Toast.makeText(
+                                            this,
+                                            "Đăng nhập bằng Facebook thành công",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+
+                                        val intent =
+                                            Intent(this, AdminDashboard::class.java)
+                                        startActivity(intent)
+                                        finish()
+                                    }
                                 }
                             }
                             .addOnFailureListener { exception -> }
