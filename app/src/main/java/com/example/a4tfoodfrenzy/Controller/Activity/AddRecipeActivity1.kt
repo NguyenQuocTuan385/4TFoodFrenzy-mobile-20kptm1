@@ -127,6 +127,7 @@ class AddRecipeActivity1 : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.action_close -> {
                     deleteAllSharePreference()
+                    startActivity(Intent(this,AddNewRecipe::class.java))
                     finish()
                     true
                 }
