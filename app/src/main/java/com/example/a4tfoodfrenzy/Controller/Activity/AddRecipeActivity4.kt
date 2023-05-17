@@ -455,6 +455,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
 
             HelperFunctionDB(this).findSlotIdEmptyInCollection("RecipeFoods") { idSlot ->
                 if (fullName != null) {
+                    Log.d("HEHE",idSlot.toString())
                     foodRecipe.id = idSlot
                     foodRecipe.isPublic = false
                     foodRecipe.date = Date()
@@ -493,6 +494,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
                             val intent = Intent(this, ProfileActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             val intent1 = Intent(ConstantAction.UPDATE_MY_RECIPE_ACTION)
+                            intent.putExtra("selectedTab", 1)
                             sendBroadcast(intent1)
                             finishAffinity()
                             startActivity(intent)
@@ -506,6 +508,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
                         if (confirm) {
                             val intent = Intent(this, ProfileActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            intent.putExtra("selectedTab", 1)
                             finishAffinity()
                             startActivity(intent)
                         }
@@ -563,7 +566,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
     {
         var l = ""
         for (k in foodRecipe.recipeIngres) {
-            l += "${k.ingreQuantity.roundToInt()}${k.ingreUnit} ${k.ingreName} "
+            l += "${k.ingreName},"
         }
         return l
     }
@@ -580,9 +583,21 @@ class AddRecipeActivity4 : AppCompatActivity() {
 
     private fun getNutritionData(translatedText:String,callBack: (FoodRecipe)->Unit)
     {
+        val map= mutableMapOf<String,String>()
+        val temp=translatedText.split(",") // lấy từng tên tiếng Anh gán vào mảng temp
+        var string=""
+        for((index,ingres) in foodRecipe.recipeIngres.withIndex())
+        {
+            val ingresNameEng=temp[index].trim().toLowerCase(Locale.ROOT) // bỏ cách khoảng trắng dư thừa và chuyển thành chữ thường
+            map[ingres.ingreName]=ingresNameEng // map giữa tên tiếng việt và tiếng anh
+            val amount=ingres.ingreQuantity.roundToInt().toString() //làm tròn double thành int và chuyển thành chuỗi
+            val unit=ingres.ingreUnit
+            string+="$amount$unit $ingresNameEng " //chuỗi 200g chicken 250g beef ....
+        }
+        Log.d("CC",string)
         val appKey = "gY+35sz1wCbF8TvCgO0oOA==UomLBEqmDOPJ2vlE"
         val call =
-            NinjasApiService.create().getNutritionData(appKey, translatedText)
+            NinjasApiService.create().getNutritionData(appKey, string)
         call.enqueue(object : Callback<List<Food>> {
             override fun onResponse(
                 call: Call<List<Food>>,
@@ -591,13 +606,21 @@ class AddRecipeActivity4 : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val foods = response.body()
                     if (foods != null) {
-                        for (i in 0 until foods.size) {
-                            if(translatedText.contains(foods[i].name))
-                            {
-                                foodRecipe.recipeIngres[i].ingreCalo=foods[i].calories
-                                Log.d("HEHE",foodRecipe.recipeIngres[i].ingreCalo.toString())
+                        for (ingres in foodRecipe.recipeIngres) {
+                            val ingresName = map[ingres.ingreName] // lấy ra tên tiếng Anh
+                            Log.d("HEHE",ingresName.toString())
+                            if (ingresName != null) {
+                                for (food in foods) {
+                                    Log.d("HIHI",food.name)
+                                    if (food.name == ingresName) {
+                                        ingres.ingreCalo = food.calories
+                                        Log.d("HEHE",food.calories.toString())
+                                        break
+                                    }
+                                }
                             }
                         }
+
                     }
                     callBack(foodRecipe)
                 } else {
