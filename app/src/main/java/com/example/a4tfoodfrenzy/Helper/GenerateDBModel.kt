@@ -1559,7 +1559,7 @@ class GenerateDBModel(private var context: Context) {
             )
         )
 
-        var mon_an_32 = FoodRecipe(32,"Bánh nếp mía","foods/foodrecipe32_4.png", 2, "Dưới 2 tiếng",
+        var mon_an_32 = FoodRecipe(32,"Bánh nếp mía","foods/foodrecipe32_4.png", 2, "Trên 1 tiếng",
             Date(),true,arrayListOf(3,5),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),0)
@@ -1585,7 +1585,7 @@ class GenerateDBModel(private var context: Context) {
             )
         )
 
-        var mon_an_33 = FoodRecipe(33,"Bánh bò bông","foods/foodrecipe33_2.png", 2, "Dưới 2 tiếng",
+        var mon_an_33 = FoodRecipe(33,"Bánh bò bông","foods/foodrecipe33_2.png", 2, "Trên 1 tiếng",
             Date(),true,arrayListOf(3,5),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),0)
@@ -1634,7 +1634,7 @@ class GenerateDBModel(private var context: Context) {
             )
         )
 
-        var mon_an_34 = FoodRecipe(34,"Mứt chùm ruột","foods/foodrecipe34_6.png", 2, "Dưới 3 tiếng",
+        var mon_an_34 = FoodRecipe(34,"Mứt chùm ruột","foods/foodrecipe34_6.png", 2, "Dưới 1 tiếng",
             Date(),true,arrayListOf(3,5),listStep,listIngredient,
             arrayListOf(),
             arrayListOf(),0)

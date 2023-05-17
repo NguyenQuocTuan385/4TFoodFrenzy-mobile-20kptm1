@@ -30,7 +30,6 @@ class AddRecipeActivity1 : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var foodRecipe:FoodRecipe
     private var category:String=""
-    private var check=-1
 
 
     companion object{
@@ -56,6 +55,10 @@ class AddRecipeActivity1 : AppCompatActivity() {
     private fun setBackToolbar() {
         toolbarAddRecipe.setNavigationOnClickListener {
             deleteAllSharePreference()
+            val intent = Intent(this, AddNewRecipe::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finishAffinity()
             finish() }
     }
 
@@ -106,7 +109,6 @@ class AddRecipeActivity1 : AppCompatActivity() {
                     .into(imageRecipe)
             }
             nameRecipeEdit.setText(foodRecipe.recipeName)
-            check=1
         }
         else
         {
@@ -119,16 +121,16 @@ class AddRecipeActivity1 : AppCompatActivity() {
         foodRecipe.recipeMainImage=imagePath.toString()
         intent.putExtra("foodRecipe",foodRecipe)
         intent.putExtra("cate",category)
-        intent.putExtra("check",check)
-
     }
     private fun setupCloseToolbar() {
         toolbarAddRecipe.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_close -> {
                     deleteAllSharePreference()
-                    startActivity(Intent(this,AddNewRecipe::class.java))
-                    finish()
+                    val intent = Intent(this, AddNewRecipe::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finishAffinity()
                     true
                 }
                 else -> false

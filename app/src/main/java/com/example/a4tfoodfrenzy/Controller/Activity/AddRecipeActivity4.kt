@@ -49,7 +49,6 @@ class AddRecipeActivity4 : AppCompatActivity() {
     private lateinit var sharedPreferences:SharedPreferences
     private lateinit var helperFunctionDB: HelperFunctionDB
     private lateinit var mainImage:String
-    private var check=-1
 
 
     private val ADD_REQUEST_CODE=1
@@ -129,11 +128,9 @@ class AddRecipeActivity4 : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.action_close -> {
                     deleteAllSharePreference()
-                    val intent = Intent(this,if(check==1) ProfileActivity::class.java else AddNewRecipe::class.java)
+                    val intent = Intent(this, AddNewRecipe::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    intent.putExtra("selectedTab", 1) // chọn tab thứ hai
                     startActivity(intent)
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
                     finishAffinity()
                     true
                 }
@@ -200,7 +197,6 @@ class AddRecipeActivity4 : AppCompatActivity() {
             listStep.addAll(foodRecipe.recipeSteps)
             stepsAdapter.notifyDataSetChanged()
         }
-        check=intent.getIntExtra("check",-1)
 
     }
 
@@ -229,50 +225,65 @@ class AddRecipeActivity4 : AppCompatActivity() {
             startActivityForResult(intent,ADD_REQUEST_CODE)
         }
     }
-    private fun checkFoodRecipeExistence(
-        foodRecipe: FoodRecipe,
-        onSuccess: (String?) -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        val db = Firebase.firestore
-        val collection = db.collection("RecipeFoods")
-        val query = collection.whereEqualTo("id", foodRecipe.id)
-
-        query.get().addOnSuccessListener { querySnapshot ->
-            if (!querySnapshot.isEmpty) {
-                val documentSnapshot = querySnapshot.documents[0]
-                val documentId = documentSnapshot.id
-                onSuccess(documentId)
-            } else {
-                onSuccess(null)
+    private fun checkUpdateFoodRecipe(onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) {
+        if (foodRecipe.id != 0L) {
+            val db = Firebase.firestore
+            val collection = db.collection("RecipeFoods")
+            val query = collection.whereEqualTo("id", foodRecipe.id)
+            query.get().addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val documentSnapshot = querySnapshot.documents[0]
+                    val documentReference = documentSnapshot.reference
+                    val documentId = documentReference.id
+                    onSuccess(documentId)
+                } else {
+                    onSuccess("")
+                }
+            }.addOnFailureListener { exception ->
+                onFailure(exception)
             }
-        }.addOnFailureListener { exception ->
-            onFailure(exception)
+        } else {
+            onSuccess("")
         }
     }
 
-    private fun addFoodRecipeToCollection(
-        foodRecipe: FoodRecipe,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        checkFoodRecipeExistence(foodRecipe,
+    private fun addFoodRecipeToCollection(foodRecipe: FoodRecipe, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) {
+        checkUpdateFoodRecipe(
             onSuccess = { documentId ->
                 val db = Firebase.firestore
-                val docRef = if (documentId != null) {
-                    db.collection("RecipeFoods").document(documentId)
-                } else {
-                    db.collection("RecipeFoods").document()
-                }
-
-                docRef.set(foodRecipe, SetOptions.merge())
-                    .addOnSuccessListener {
-                        Log.d("MOT", "checkid")
-                        onSuccess()
-                    }
-                    .addOnFailureListener { exception ->
+                if (documentId.isNotEmpty()) {
+                    val docRef = db.collection("RecipeFoods").document(documentId)
+                    docRef.get().addOnSuccessListener { document ->
+                        if (document.exists()) {
+                            docRef.set(foodRecipe, SetOptions.merge())
+                                .addOnSuccessListener {
+                                    onSuccess("Thành công")
+                                }
+                                .addOnFailureListener { exception ->
+                                    onFailure(exception)
+                                }
+                        } else {
+                            docRef.set(foodRecipe)
+                                .addOnSuccessListener {
+                                    onSuccess("Thành công")
+                                }
+                                .addOnFailureListener { exception ->
+                                    onFailure(exception)
+                                }
+                        }
+                    }.addOnFailureListener { exception ->
                         onFailure(exception)
                     }
+                } else {
+                    db.collection("RecipeFoods")
+                        .add(foodRecipe)
+                        .addOnSuccessListener { documentReference ->
+                            onSuccess("Thành công")
+                        }
+                        .addOnFailureListener { exception ->
+                            onFailure(exception)
+                        }
+                }
             },
             onFailure = { exception ->
                 onFailure(exception)
@@ -280,143 +291,155 @@ class AddRecipeActivity4 : AppCompatActivity() {
         )
     }
 
-    private fun addFoodRecipeToUser(
-        foodRecipeId: Long,
-        userId: Long,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
+
+    private fun addFoodRecipeToUser(foodRecipeId: Long, userId: Long, onSuccess: () -> Unit, onFailure: ()-> Unit) {
         val db = Firebase.firestore
         db.collection("users")
-            .whereEqualTo("id", userId)
+            .whereEqualTo("id",userId)
             .limit(1)
             .get()
-            .addOnSuccessListener { documents ->
-                if (documents.size() > 0) {
-                    val document = documents.first()
-                    Log.d("MOT", foodRecipeId.toString())
-                    document.reference.update("myFoodRecipes", FieldValue.arrayUnion(foodRecipeId))
+            .addOnSuccessListener {documents ->
+                if(documents.size()>0)
+                {
+                    val document=documents.first()
+                    db.collection("users")
+                        .document(document.id)
+                        .update("myFoodRecipes",FieldValue.arrayUnion(foodRecipeId))
+                        .addOnSuccessListener {
+                            onSuccess()
+                        }
+                        .addOnFailureListener {
+                            onFailure()
+                        }
                 }
-                Log.d("MOT", "Them Thanh cong nguoi dung")
-                onSuccess()
             }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
+            .addOnFailureListener {
+                onFailure()
             }
     }
-
     private fun addFoodRecipeToDiet(
         foodRecipeId: Long,
         onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
+        onFailure: (Exception?) -> Unit // Thêm tham số Exception để báo lỗi
     ) {
         val db = Firebase.firestore
         val recipeDiets = foodRecipe.recipeDiets ?: emptyList()
-
-        db.collection("RecipeDiets")
-            .whereIn("id", recipeDiets)
-            .get()
-            .addOnSuccessListener { documents ->
-                val batch = db.batch()
-
-                for (document in documents) {
-                    val foodRecipes = document.get("foodRecipes") as? MutableList<Long>
-                    if (foodRecipes != null) {
-                        if (foodRecipes.remove(foodRecipeId)) {
-                            batch.update(document.reference, "foodRecipes", foodRecipes)
-                        }
-                    }
-                }
-
-                batch.update(db.collection("RecipeDiets").document(), "foodRecipes", FieldValue.arrayUnion(foodRecipeId))
-
-                db.collection("RecipeDiets")
-                    .whereNotIn("id", recipeDiets)
-                    .get()
-                    .addOnSuccessListener { documents ->
-                        val batch = db.batch()
-
-                        for (document in documents) {
-                            val foodRecipes = document.get("foodRecipes") as? MutableList<Long>
-                            if (foodRecipes != null) {
-                                if (foodRecipes.remove(foodRecipeId)) {
-                                    batch.update(document.reference, "foodRecipes", foodRecipes)
-                                }
+        if(recipeDiets.isEmpty())
+        {
+            db.collection("RecipeDiets")
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        val foodRecipes = document.get("foodRecipes") as? MutableList<Long>
+                        if (foodRecipes != null) {
+                            if (foodRecipes.remove(foodRecipeId)) {
+                                document.reference.update("foodRecipes", foodRecipes)
                             }
                         }
+                    }
+                    onSuccess()
+                }
+                .addOnFailureListener { exception ->
+                    onFailure(exception) // Truyền mã lỗi đến phương thức onFailure
+                }
+        }
+        else {
 
-                        batch.commit()
+            db.collection("RecipeDiets")
+                .whereIn("id", recipeDiets)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        document.reference.update(
+                            "foodRecipes",
+                            FieldValue.arrayUnion(foodRecipeId)
+                        )
                             .addOnSuccessListener {
                                 onSuccess()
                             }
                             .addOnFailureListener { exception ->
-                                onFailure(exception)
+                                onFailure(exception) // Truyền mã lỗi đến phương thức onFailure
                             }
                     }
-                    .addOnFailureListener { exception ->
-                        onFailure(exception)
+                }
+                .addOnFailureListener { exception ->
+                    onFailure(exception) // Truyền mã lỗi đến phương thức onFailure
+                }
+            db.collection("RecipeDiets")
+                .whereNotIn("id", recipeDiets)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        val foodRecipes = document.get("foodRecipes") as? MutableList<Long>
+                        if (foodRecipes != null) {
+                            if (foodRecipes.remove(foodRecipeId)) {
+                                document.reference.update("foodRecipes", foodRecipes)
+                            }
+                        }
                     }
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
+                    onSuccess()
+                }
+                .addOnFailureListener { exception ->
+                    onFailure(exception) // Truyền mã lỗi đến phương thức onFailure
+                }
+        }
     }
 
-
-    private fun addFoodRecipeToCategory(foodRecipeId: Long, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    private fun addFoodRecipeToCategory(foodRecipeId: Long, onSuccess: () -> Unit, onFailure: () ->Unit) {
         val db = Firebase.firestore
         db.collection("RecipeCates")
             .get()
             .addOnSuccessListener { documents ->
-                for (document in documents) {
+                for(document in documents)
+                {
                     val foodRecipes = document.get("foodRecipes") as? MutableList<Long>
                     if (foodRecipes != null) {
-                        if (!document.get("recipeCateName")!!.equals(cate)) {
-                            if (foodRecipes.remove(foodRecipeId)) {
+                        if(!document.get("recipeCateName")!!.equals(cate))
+                        {
+                            if(foodRecipes.remove(foodRecipeId)) {
                                 document.reference.update("foodRecipes", foodRecipes)
                             }
-                        } else {
-                            document.reference.update("foodRecipes", FieldValue.arrayUnion(foodRecipeId))
+                        }
+                        else
+                        {
+                            document.reference.update("foodRecipes",FieldValue.arrayUnion(foodRecipeId))
                         }
                     }
 
                 }
-                Log.d("MOT", "Them thanh cong loai mon an")
                 onSuccess()
 
             }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
+            .addOnFailureListener {
+                onFailure()
             }
     }
 
-    private fun addFoodRecipe(
-        foodRecipe: FoodRecipe,
-        userId: Long,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
+    private fun addFoodRecipe(foodRecipe: FoodRecipe,userId: Long, onSuccess: (Boolean) -> Unit, onFailure: () -> Unit) {
         addFoodRecipeToCollection(foodRecipe,
-            onSuccess = {
-                addFoodRecipeToCategory(foodRecipe.id,
-                    onSuccess = {
-                        addFoodRecipeToDiet(foodRecipe.id,
-                            onSuccess = {
-                                Log.d("MOT","THEM THANH CONG")
-                                addFoodRecipeToUser(foodRecipe.id, userId, onSuccess, onFailure)
-                                helperFunctionDB.stopLoadingAlert()
-                            },
-                            onFailure = onFailure
+            { documentId ->
+                addFoodRecipeToCategory(foodRecipe.id,{
+                    addFoodRecipeToDiet(foodRecipe.id,{
+                        addFoodRecipeToUser(foodRecipe.id,userId,{
+                            helperFunctionDB.stopLoadingAlert()
+                            onSuccess(true)
+                        },
+                            {
+                                onFailure()
+                            }
                         )
-                    },
-                    onFailure = onFailure
-                )
+                    },{
+                        onFailure()
+                    })
+                },{
+                    onFailure()
+                })
             },
-            onFailure = onFailure
+            {
+                onFailure()
+            }
         )
     }
-
-
 
 
     private fun uploadToFirebase()
@@ -432,13 +455,15 @@ class AddRecipeActivity4 : AppCompatActivity() {
 
             HelperFunctionDB(this).findSlotIdEmptyInCollection("RecipeFoods") { idSlot ->
                 if (fullName != null) {
-                    Log.d("MOT",idSlot.toString())
                     foodRecipe.id = idSlot
                     foodRecipe.isPublic = false
                     foodRecipe.date = Date()
                     foodRecipe.recipeSteps = listStep
-                    addFoodRecipe(foodRecipe, user.id, {
-                        showPopup()
+                    addFoodRecipe(foodRecipe, user.id, {confirm ->
+                        if(confirm)
+                        {
+                            showPopup()
+                        }
                     }, {
                         helperFunctionDB.showErrorAlert(
                             "Thất bại",
@@ -448,7 +473,6 @@ class AddRecipeActivity4 : AppCompatActivity() {
                                 val intent = Intent(this, ProfileActivity::class.java)
                                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 finishAffinity()
-                                intent.putExtra("selectedTab", 1) // chọn tab thứ hai
                                 startActivity(intent)
                             }
                         }
@@ -471,7 +495,6 @@ class AddRecipeActivity4 : AppCompatActivity() {
                             val intent1 = Intent(ConstantAction.UPDATE_MY_RECIPE_ACTION)
                             sendBroadcast(intent1)
                             finishAffinity()
-                            intent.putExtra("selectedTab", 1) // chọn tab thứ hai
                             startActivity(intent)
                         }
                     }
@@ -484,7 +507,6 @@ class AddRecipeActivity4 : AppCompatActivity() {
                             val intent = Intent(this, ProfileActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             finishAffinity()
-                            intent.putExtra("selectedTab", 1) // chọn tab thứ hai
                             startActivity(intent)
                         }
                     }
@@ -541,7 +563,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
     {
         var l = ""
         for (k in foodRecipe.recipeIngres) {
-            l += k.ingreName+","
+            l += "${k.ingreQuantity.roundToInt()}${k.ingreUnit} ${k.ingreName} "
         }
         return l
     }
@@ -558,19 +580,9 @@ class AddRecipeActivity4 : AppCompatActivity() {
 
     private fun getNutritionData(translatedText:String,callBack: (FoodRecipe)->Unit)
     {
-
-        var temp=translatedText.trim().replace(" ", "").split(",")
-        var hashMap= hashMapOf<String,String>()
-        var string=""
-        for(i in foodRecipe.recipeIngres.indices)
-        {
-            string+="${foodRecipe.recipeIngres[i].ingreQuantity.roundToInt()}${foodRecipe.recipeIngres[i].ingreUnit} ${temp[i]} "
-            hashMap.put(temp[i].toLowerCase(Locale.ROOT),foodRecipe.recipeIngres[i].ingreName)
-            Log.d("KK",temp[i].toLowerCase(Locale.ROOT))
-        }
         val appKey = "gY+35sz1wCbF8TvCgO0oOA==UomLBEqmDOPJ2vlE"
         val call =
-            NinjasApiService.create().getNutritionData(appKey, string)
+            NinjasApiService.create().getNutritionData(appKey, translatedText)
         call.enqueue(object : Callback<List<Food>> {
             override fun onResponse(
                 call: Call<List<Food>>,
@@ -579,23 +591,11 @@ class AddRecipeActivity4 : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val foods = response.body()
                     if (foods != null) {
-                        if(foodRecipe.recipeIngres.size==foods.size)
-                            callBack(foodRecipe)
-                        for ((index,food) in foods.withIndex())
-                        {
-                            Log.d("HEHE",food.name+" "+food.calories)
-                            if(food.name in hashMap)
+                        for (i in 0 until foods.size) {
+                            if(translatedText.contains(foods[i].name))
                             {
-                                val ingreName=hashMap[food.name]
-                                for(k in foodRecipe.recipeIngres.indices)
-                                {
-                                    if(foodRecipe.recipeIngres[k].ingreName.equals(ingreName))
-                                    {
-                                        foodRecipe.recipeIngres[k].ingreCalo=food.calories
-                                        break
-                                    }
-                                }
-
+                                foodRecipe.recipeIngres[i].ingreCalo=foods[i].calories
+                                Log.d("HEHE",foodRecipe.recipeIngres[i].ingreCalo.toString())
                             }
                         }
                     }
@@ -616,30 +616,25 @@ class AddRecipeActivity4 : AppCompatActivity() {
         })
 
     }
-    private fun shareRecipe(onSuccess: () -> Unit,onFailure: (Exception) -> Unit) {
-        val db = Firebase.firestore
+    private fun shareRecipe(share:(Boolean)->Unit)
+    {
+        val db=Firebase.firestore
         db.collection("RecipeFoods")
-            .whereEqualTo("id", foodRecipe.id)
+            .whereEqualTo("id",foodRecipe.id)
             .limit(1)
             .get()
-            .addOnSuccessListener { documents ->
-                if (documents.size() > 0) {
-                    val document = documents.first()
-                    document.reference.update("public", true)
-                        .addOnSuccessListener {
-                            // Update thành công, sau đó mới chuyển activity
-                            onSuccess()
-                        }
-                        .addOnFailureListener { exception ->
-                            onFailure(exception)
-                        }
+            .addOnSuccessListener {documents->
+                if(documents.size()>0)
+                {
+                    val document=documents.first()
+                    document.reference.update("public",true)
                 }
+                share(true)
             }
-            .addOnFailureListener {exception ->
-                onFailure(exception)
+            .addOnFailureListener {
+                share(false)
             }
     }
-
     private fun showPopup()
     {
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -663,7 +658,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
         imagePopup.setImageURI(uri)
         anim.playAnimation()
         shareRecipeBtn.setOnClickListener {
-            shareRecipe (onSuccess = {
+            shareRecipe { share ->
                 val intent = Intent(this, ProfileActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 intent.putExtra("selectedTab", 1) // chọn tab thứ hai
@@ -672,18 +667,7 @@ class AddRecipeActivity4 : AppCompatActivity() {
                 finishAffinity()
                 popupWindow.dismiss()
                 startActivity(intent)
-            }, onFailure = {
-                helperFunctionDB.showErrorAlert("Chia sẻ thất bại","Vui lòng chia sẻ lại"){
-                    val intent = Intent(this, ProfileActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    intent.putExtra("selectedTab", 1) // chọn tab thứ hai
-                    val intent1 = Intent(ConstantAction.UPDATE_MY_RECIPE_ACTION)
-                    sendBroadcast(intent1)
-                    finishAffinity()
-                    popupWindow.dismiss()
-                    startActivity(intent)
-                }
-            })
+            }
         }
         laterBtn.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
