@@ -2,27 +2,33 @@ package com.example.a4tfoodfrenzy.Controller.Activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.a4tfoodfrenzy.Adapter.FoodRecipeAdapter.RecipeListAdapter
 import com.example.a4tfoodfrenzy.Adapter.GridSpacingItemDecoration
 import com.example.a4tfoodfrenzy.Adapter.RecipeCateAdapter.RecipeCateListAdapter
-import com.example.a4tfoodfrenzy.Adapter.FoodRecipeAdapter.RecipeListAdapter
+import com.example.a4tfoodfrenzy.BroadcastReceiver.InternetConnectionBroadcast
 import com.example.a4tfoodfrenzy.Helper.GenerateDBModel
+import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,6 +42,34 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recipeMostLikesRV: RecyclerView
     private lateinit var recipeTodayEatRV: RecyclerView
     private lateinit var cateRecipeRV: RecyclerView
+
+    // override fun of InternetConnectionBroadcast class specific for this case
+    private val myBroadcastReceiver = object : InternetConnectionBroadcast() {
+        override fun onReceive(context : Context?, intent : Intent?) {
+            if (HelperFunctionDB.isConnectedToInternet(context!!)) {
+                findViewById<BottomNavigationView>(R.id.botNavbar).visibility = View.VISIBLE
+                findViewById<ScrollView>(R.id.scrollView2).visibility = View.VISIBLE
+                findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar).visibility = View.VISIBLE
+                findViewById<ConstraintLayout>(R.id.noInternetLayout).visibility = View.GONE
+
+                GlobalScope.launch {
+                    fetchDatabaseFirebase()
+                }
+            } else {
+                findViewById<BottomNavigationView>(R.id.botNavbar).visibility = View.GONE
+                findViewById<ScrollView>(R.id.scrollView2).visibility = View.GONE
+                findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar).visibility = View.GONE
+                findViewById<ConstraintLayout>(R.id.noInternetLayout).visibility = View.VISIBLE
+
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        myBroadcastReceiver.registerInternetConnBroadcast(this@MainActivity)
+    }
+
     @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +82,9 @@ class MainActivity : AppCompatActivity() {
         btnViewMoreTodayEat = findViewById(R.id.btnViewMoreTodayEat)
         btnViewMoreMostLikes = findViewById(R.id.btnViewMoreMostLikes)
 
-        fetchDatabaseFirebase()
+//        if(HelperFunctionDB.isConnectedToInternet(this))
+//            fetchDatabaseFirebase()
+
         val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
         recipeTodayEatRV.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
         recipeMostLikesRV.addItemDecoration(GridSpacingItemDecoration(spacingInPixels))
@@ -144,6 +180,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+
+        myBroadcastReceiver.unregisterInternetConnBroadcast(this@MainActivity)
         // Hủy đăng ký listener
         DBManagement.destroyListener()
     }
@@ -160,8 +198,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("keySearch", "Thức uống")
                 intent.putExtra("pageSearch", "home")
                 intent.putExtra("typeSearch", "recipeCategory")
-            }
-            else if (recipeCate.recipeCateName.equals("Ăn vặt")) {
+            } else if (recipeCate.recipeCateName.equals("Ăn vặt")) {
                 intent.putExtra("keySearch", "Ăn vặt")
                 intent.putExtra("pageSearch", "home")
                 intent.putExtra("typeSearch", "recipeCategory")
@@ -177,8 +214,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("keySearch", "Khai vị")
                 intent.putExtra("pageSearch", "home")
                 intent.putExtra("typeSearch", "recipeCategory")
-            }
-            else if (recipeCate.recipeCateName.equals("Món tráng miệng")) {
+            } else if (recipeCate.recipeCateName.equals("Món tráng miệng")) {
                 intent.putExtra("keySearch", "Món tráng miệng")
                 intent.putExtra("pageSearch", "home")
                 intent.putExtra("typeSearch", "recipeCategory")
@@ -186,6 +222,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
     fun fetchDatabaseFirebase() {
         DBManagement.addListenerChangeDataFoodRecipe { foodRecipes ->
             if (foodRecipes.isEmpty()) {
@@ -223,19 +260,19 @@ class MainActivity : AppCompatActivity() {
                 }
             } else {
                 DBManagement.addListenerChangeDataUser { users ->
-                        if (FirebaseAuth.getInstance().currentUser != null) {
-                            DBManagement.addListenerChangeDataUserCurrent { user ->
-                                if (DBManagement.isInitialized == false) {
-                                    if (user.email.equals("")) {
-                                        DBManagement.fetchDataUserCurrent { }
-                                    } else if (user.isAdmin) {
-                                        val intent = Intent(this, AdminDashboard::class.java)
-                                        startActivity(intent)
-                                    }
-                                    DBManagement.isInitialized = true
+                    if (FirebaseAuth.getInstance().currentUser != null) {
+                        DBManagement.addListenerChangeDataUserCurrent { user ->
+                            if (DBManagement.isInitialized == false) {
+                                if (user.email.equals("")) {
+                                    DBManagement.fetchDataUserCurrent { }
+                                } else if (user.isAdmin) {
+                                    val intent = Intent(this, AdminDashboard::class.java)
+                                    startActivity(intent)
                                 }
+                                DBManagement.isInitialized = true
                             }
                         }
+                    }
                     setRecipeListAdapter(
                         RecipeListAdapter(
                             this,
@@ -341,3 +378,5 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
+
+

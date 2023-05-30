@@ -1,6 +1,7 @@
 package com.example.a4tfoodfrenzy.Controller.Activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,7 +14,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.a4tfoodfrenzy.BroadcastReceiver.ConstantAction
+import com.example.a4tfoodfrenzy.BroadcastReceiver.InternetConnectionBroadcast
+import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.User
 import com.example.a4tfoodfrenzy.R
@@ -21,6 +25,7 @@ import com.example.a4tfoodfrenzy.R.layout
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.*
 import java.util.*
 
 class WriteCommentActivity : AppCompatActivity() {
@@ -32,18 +37,35 @@ class WriteCommentActivity : AppCompatActivity() {
     private var haveChosenImage = false
     private var submitCommentButton: TextView? = null
     val db = Firebase.firestore
-    private var commentEditText : TextView? = null
+    private var commentEditText: TextView? = null
     val storageRef = Firebase.storage
-    private lateinit var toShowDetailIntent : Intent
-    private var currentRecipe : FoodRecipe? = null
-    private var currentAuthor : User? = null
+    private lateinit var toShowDetailIntent: Intent
+    private var currentRecipe: FoodRecipe? = null
+    private var currentAuthor: User? = null
+    private var loadingDialog : SweetAlertDialog? = null
+
+    private val internetBroadcast = InternetConnectionBroadcast()
+
+    override fun onStart() {
+        super.onStart()
+        internetBroadcast.registerInternetConnBroadcast(this@WriteCommentActivity)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        if(loadingDialog != null && loadingDialog!!.isShowing)
+            loadingDialog!!.dismiss()
+
+        internetBroadcast.unregisterInternetConnBroadcast(this@WriteCommentActivity)
+    }
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_write_comment)
 
-        val numberID : Long = intent?.extras?.getLong("commentID") as Long
+        val numberID: Long = intent?.extras?.getLong("commentID") as Long
         val cancelButton: TextView = findViewById(R.id.cancelTextViewBtn)
 
         currentRecipe = intent?.extras?.getParcelable("foodRecipe") as FoodRecipe?
@@ -59,8 +81,17 @@ class WriteCommentActivity : AppCompatActivity() {
         submitCommentButton = findViewById(R.id.submitTextViewBtn)
         commentEditText = findViewById(R.id.commentEditText)
 
+        loadingDialog = SweetAlertDialog(this@WriteCommentActivity, SweetAlertDialog.PROGRESS_TYPE)
+        loadingDialog!!.titleText = "Xin vui lòng chờ ít giây"
+
         // handle submit comment (update on database)
         submitCommentButton?.setOnClickListener {
+            if (!HelperFunctionDB.isConnectedToInternet(this@WriteCommentActivity)) {
+                showDisconnDialog(this@WriteCommentActivity)
+
+                return@setOnClickListener
+            }
+
             val description = commentEditText?.text.toString()
 
             // check if content is null
@@ -114,11 +145,12 @@ class WriteCommentActivity : AppCompatActivity() {
 
     // update comment on firestore
     private fun updateCommentOnDB(numberID: Long, description: String) {
+        loadingDialog!!.show()
         // find document ID by using numberID
         db.collection("RecipeCmts").whereEqualTo("id", numberID)
             .get()
-            .addOnSuccessListener {document ->
-                if(!document.isEmpty){
+            .addOnSuccessListener { document ->
+                if (!document.isEmpty) {
                     // get doc ID
                     val documentID = document.elementAt(0).id
 
@@ -133,6 +165,7 @@ class WriteCommentActivity : AppCompatActivity() {
                             if(imageURL != null)
                                 uploadImage(numberID)
                             else{
+                                loadingDialog!!.dismiss()
                                 toShowDetailIntent.putExtra("foodRecipe", currentRecipe)
                                 toShowDetailIntent.putExtra("user", currentAuthor)
 
@@ -152,6 +185,7 @@ class WriteCommentActivity : AppCompatActivity() {
         val uploadTask = imageRef.putFile(imageUri.toString().toUri())
 
         uploadTask.addOnSuccessListener {
+            loadingDialog!!.dismiss()
             toShowDetailIntent.putExtra("foodRecipe", currentRecipe)
             toShowDetailIntent.putExtra("user", currentAuthor)
 
@@ -161,5 +195,28 @@ class WriteCommentActivity : AppCompatActivity() {
             finish()
         }
             .addOnFailureListener{}
+    }
+
+    private fun showDisconnDialog(context: Context) {
+        val mainScope = CoroutineScope(Job() + Dispatchers.Main)
+
+        // disconnected alert dialog for user
+        mainScope.launch {
+            val disconnDialog = SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+
+            disconnDialog.titleText = "Vui lòng kiểm tra lại đường truyền mạng của bạn"
+            disconnDialog.setCancelable(false) // hide cancel button
+
+            disconnDialog.show()
+
+            disconnDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).visibility =
+                View.GONE // hide confirm button
+
+            // dialog show for 1.2s then disappear
+            delay(1200)
+
+            disconnDialog.dismiss()
+        }
+
     }
 }

@@ -1,7 +1,6 @@
 package com.example.a4tfoodfrenzy.Controller.Activity
 
 import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
@@ -23,9 +22,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
 import com.example.a4tfoodfrenzy.Adapter.FoodRecipeAdapter.FoodImageAdapter
 import com.example.a4tfoodfrenzy.BroadcastReceiver.ConstantAction
+import com.example.a4tfoodfrenzy.BroadcastReceiver.InternetConnectionBroadcast
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.*
 import com.example.a4tfoodfrenzy.R
@@ -35,6 +36,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,15 +49,29 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
     private var _commentID: Long = -1
     private lateinit var currentFoodRecipe: FoodRecipe
     private var recipeAuthor: User? = null
-    private var cmtContent : String? = null
-    private var cmtDate : Date? = null
+    private var cmtContent: String? = null
+    private var cmtDate: Date? = null
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+    private val handleStringScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    private val disconnBroadcast = InternetConnectionBroadcast()
+
+    override fun onStart() {
+        super.onStart()
+        disconnBroadcast.registerInternetConnBroadcast(this@ShowRecipeDetailsActivity)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disconnBroadcast.unregisterInternetConnBroadcast(this@ShowRecipeDetailsActivity)
+    }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_recipe_details)
+
+        Toast.makeText(this, "Create new activity", Toast.LENGTH_SHORT).show()
 
         // layout view
         val rv = findViewById<RecyclerView>(R.id.foodImageRecyclerView)
@@ -71,7 +87,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         val ingredientDetailsTextView: TextView = findViewById(R.id.ingredientDetailsTextView)
         val stepsInstructionTextView: TextView = findViewById(R.id.stepsInstructionTextView)
         val likePercent: TextView = findViewById(R.id.percentRecookTextView)
-        val totalCalo : TextView = findViewById(R.id.totalCaloTextView)
+        val totalCalo: TextView = findViewById(R.id.totalCaloTextView)
         val totalCommentTextView: TextView = findViewById(R.id.totalCommentTextView)
         val commentSection: ConstraintLayout = findViewById(R.id.commentSectionConstraintLayout)
         val rationTextView: TextView = findViewById(R.id.foodRationTextView)
@@ -80,10 +96,10 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         val mainScrollView: ScrollView =
             findViewById(R.id.showRecipeDetailsActivityScrollViewContainer)
         val saveRecipeButton: ImageButton = findViewById(R.id.saveRecipeButtonImageView)
-        val topCommentTextView : TextView = findViewById(R.id.bestCommentCommentTextView)
-        val topCommentFullNameTextView : TextView = findViewById(R.id.bestCommentFullname)
-        val topCommentDateTextView : TextView = findViewById(R.id.bestCommentDateTextView)
-        val topCommentAvt : ImageView = findViewById(R.id.bestCommentAvatarImageView)
+        val topCommentTextView: TextView = findViewById(R.id.bestCommentCommentTextView)
+        val topCommentFullNameTextView: TextView = findViewById(R.id.bestCommentFullname)
+        val topCommentDateTextView: TextView = findViewById(R.id.bestCommentDateTextView)
+        val topCommentAvt: ImageView = findViewById(R.id.bestCommentAvatarImageView)
 
 
         // other variables
@@ -108,7 +124,8 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         }
 
         // get recipe author from DBmanagement list
-        recipeAuthor = DBManagement.userList.filter { user -> user.myFoodRecipes.contains(currentFoodRecipe.id) }[0]
+        recipeAuthor =
+            DBManagement.userList.filter { user -> user.myFoodRecipes.contains(currentFoodRecipe.id) }[0]
 
         isNotCurrentUser = recipeAuthor?.id != DBManagement.user_current?.id
 
@@ -122,81 +139,103 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                 totalLike++
         }
 
-        // generate diet string list from DB
-        for (diet in DBManagement.recipeDietList) {
-            if (diet.foodRecipes.contains(currentFoodRecipe.id))
-                dietString += "${diet.dietName}, "
-        }
-        if (dietString.length >= 2)
-            dietString = dietString.substring(0, dietString.length - 2)
-
-        // generate category string list from DB
-        for (category in DBManagement.recipeCateList) {
-            if (category.foodRecipes.contains(currentFoodRecipe.id)) {
-                cateString += "${category.recipeCateName}, "
+        handleStringScope.launch {
+            // generate diet string list from DB
+            for (diet in DBManagement.recipeDietList) {
+                if (diet.foodRecipes.contains(currentFoodRecipe.id))
+                    dietString += "${diet.dietName}, "
             }
-        }
-        if (cateString.length >= 2)
-            cateString = cateString.substring(0, cateString.length - 2)
+            if (dietString.length >= 2)
+                dietString = dietString.substring(0, dietString.length - 2)
 
-        // generate ingredient text
-        var ingreIndex = 0
-        for (ingredient in currentFoodRecipe.recipeIngres) {
-            if(ingredient.ingreQuantity == 0.0 || ingredient.ingreUnit == "")
-                continue
+            // generate category string list from DB
+            for (category in DBManagement.recipeCateList) {
+                if (category.foodRecipes.contains(currentFoodRecipe.id)) {
+                    cateString += "${category.recipeCateName}, "
+                }
+            }
+            if (cateString.length >= 2)
+                cateString = cateString.substring(0, cateString.length - 2)
 
-            val ingredientQuantityAndUnitString =
-                SpannableString("${ingredient.ingreQuantity.toInt()} ${ingredient.ingreUnit} (${if(ingredient.ingreCalo?.rem(1) == 0.0) ingredient.ingreCalo?.toInt() else ingredient.ingreCalo} calo)")
+            // generate ingredient text
+            var ingreIndex = 0
+            for (ingredient in currentFoodRecipe.recipeIngres) {
+                if (ingredient.ingreQuantity == 0.0 || ingredient.ingreUnit == "")
+                    continue
 
-            ingredientQuantityAndUnitString.setSpan(
-                StyleSpan(Typeface.BOLD),
-                0,
-                ingredientQuantityAndUnitString.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
+                val ingredientQuantityAndUnitString =
+                    SpannableString(
+                        "${ingredient.ingreQuantity.toInt()} ${ingredient.ingreUnit} (${
+                            if (ingredient.ingreCalo?.rem(
+                                    1
+                                ) == 0.0
+                            ) ingredient.ingreCalo?.toInt() else ingredient.ingreCalo
+                        } calo)"
+                    )
 
-            ingredientString = TextUtils.concat(
-                ingredientString,
-                "${ingreIndex + 1}. ${ingredient.ingreName} | ",
-                ingredientQuantityAndUnitString,
-                "\n\n"
-            )
+                ingredientQuantityAndUnitString.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    0,
+                    ingredientQuantityAndUnitString.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
 
-            ++ingreIndex
+                ingredientString = TextUtils.concat(
+                    ingredientString,
+                    "${ingreIndex + 1}. ${ingredient.ingreName} | ",
+                    ingredientQuantityAndUnitString,
+                    "\n\n"
+                )
+
+                ++ingreIndex
+            }
+
+            // generate step string
+            for ((i, step) in currentFoodRecipe.recipeSteps.withIndex()) {
+                // sub text is step title number
+                val subtext = SpannableString("Bước ${i + 1}:")
+
+                // setSpan to make step title number bold from 0 (start) to length(end)
+                subtext.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    0,
+                    subtext.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+
+                // concat step title number with step description then concat those with the main step string
+                stepString = TextUtils.concat(stepString, subtext, "\n${step.description}\n\n")
+            }
+
+            // update UI with new info after finished
+            withContext(Dispatchers.Main) {
+                ingredientDetailsTextView.text = ingredientString
+                stepsInstructionTextView.text = stepString
+                dietTextView.text = dietString
+                categoryTextView.text = cateString
+            }
         }
 
         val cookTimeString = SpannableString("Thời gian nấu: ${currentFoodRecipe.cookTime}")
 
         // set bold for cook time title
-        cookTimeString.setSpan(StyleSpan(Typeface.BOLD),
+        cookTimeString.setSpan(
+            StyleSpan(Typeface.BOLD),
             0,
             13,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
 
         // set new size for cook time string
         cookTimeString.setSpan(RelativeSizeSpan(1.2f), 0, 13, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        cookTimeString.setSpan(RelativeSizeSpan(1f),
+        cookTimeString.setSpan(
+            RelativeSizeSpan(1f),
             13 + currentFoodRecipe.cookTime.length,
             cookTimeString.length,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         ingredientString = TextUtils.concat(ingredientString, "\n", cookTimeString, "\n")
 
-        // generate step string
-        for ((i, step) in currentFoodRecipe.recipeSteps.withIndex()) {
-            // sub text is step title number
-            val subtext = SpannableString("Bước ${i + 1}:")
-
-            // setSpan to make step title number bold from 0 (start) to length(end)
-            subtext.setSpan(
-                StyleSpan(Typeface.BOLD),
-                0,
-                subtext.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-
-            // concat step title number with step description then concat those with the main step string
-            stepString = TextUtils.concat(stepString, subtext, "\n${step.description}\n\n")
-        }
 
         // add img url to list for recycler view
         for (step in currentFoodRecipe.recipeSteps) {
@@ -208,7 +247,9 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         // assign user avatar image
         val authorImgRef = recipeAuthor?.avatar?.let { storageRef.getReference(it) }
 
-        loadImageFromStorageToImageView(authorImgRef, authorAvatarImageView)
+        GlobalScope.launch {
+            loadImageFromStorageToImageView(authorImgRef, authorAvatarImageView)
+        }
 
         // hide comments of users if there is no comment
         if (totalComment == 0)
@@ -224,65 +265,75 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
             topCommentDateTextView.text = cmtDate?.let { dateFormat.format(it) }
 
             // load top cmt's author's avatar
-            val cmtAuthorAvtRef = DBManagement.user_current?.avatar?.let { storageRef.getReference(it) }
+            val cmtAuthorAvtRef =
+                DBManagement.user_current?.avatar?.let { storageRef.getReference(it) }
 
-            loadImageFromStorageToImageView(cmtAuthorAvtRef, topCommentAvt)
-        }
-        else{ // haven't comment --> show latest comment of this recipe
-            if(totalComment != 0){
-                val latestComment = DBManagement.recipeCommentList.sortedByDescending { comment -> comment.date}.filter { comment -> currentFoodRecipe.recipeCmts.contains(comment.id) && comment.description != ""}[0]
+            GlobalScope.launch {
+                loadImageFromStorageToImageView(cmtAuthorAvtRef, topCommentAvt)
+            }
+        } else { // haven't comment --> show latest comment of this recipe
+            if (totalComment != 0) {
+                val latestComment =
+                    DBManagement.recipeCommentList.sortedByDescending { comment -> comment.date }
+                        .filter { comment -> currentFoodRecipe.recipeCmts.contains(comment.id) && comment.description != "" }[0]
 
                 // find user with the latest comment
-                val userOfLatestComment = DBManagement.userList.find { user -> user.recipeCmts.contains(latestComment.id) }
+                val userOfLatestComment =
+                    DBManagement.userList.find { user -> user.recipeCmts.contains(latestComment.id) }
 
                 topCommentTextView.text = latestComment.description
                 topCommentFullNameTextView.text = userOfLatestComment?.fullname
                 topCommentDateTextView.text = dateFormat.format(latestComment.date)
 
                 // load top cmt's author's avatar
-                val cmtAuthorAvtRef = userOfLatestComment?.avatar?.let { storageRef.getReference(it) }
+                val cmtAuthorAvtRef =
+                    userOfLatestComment?.avatar?.let { storageRef.getReference(it) }
 
-                loadImageFromStorageToImageView(cmtAuthorAvtRef, topCommentAvt)
+                GlobalScope.launch {
+                    loadImageFromStorageToImageView(cmtAuthorAvtRef, topCommentAvt)
+                }
             }
         }
 
-        if(!isNotCurrentUser){ // currenst user is current recipe's author --> hide save button
+        if (!isNotCurrentUser) { // currenst user is current recipe's author --> hide save button
             saveRecipeButton.visibility = View.INVISIBLE
         }
 
         // check if user have already saved this recipe to change button state
         // user saved recipe
-        if(isNotCurrentUser){
-            isSavedFood = if (currentFoodRecipe.userSavedRecipes.contains(DBManagement.user_current?.id)) {
-                saveRecipeButton.setImageResource(R.drawable.saved_recipe_button)
+        if (isNotCurrentUser) {
+            isSavedFood =
+                if (currentFoodRecipe.userSavedRecipes.contains(DBManagement.user_current?.id)) {
+                    saveRecipeButton.setImageResource(R.drawable.saved_recipe_button)
 
-                true
-            } else {
-                saveRecipeButton.setImageResource(R.drawable.unsave_recipe_button)
-                false
-            }
+                    true
+                } else {
+                    saveRecipeButton.setImageResource(R.drawable.unsave_recipe_button)
+                    false
+                }
         }
 
         // set data for view
         foodNameTextView.text = currentFoodRecipe.recipeName
-        authorBioTextView.text = if (recipeAuthor?.bio == null) "Không có bio" else recipeAuthor!!.bio
+        authorBioTextView.text =
+            if (recipeAuthor?.bio == null) "Không có bio" else recipeAuthor!!.bio
         authorNameTextView.text = recipeAuthor?.fullname
         authorTotalRecipeTextView.text =
             if (recipeAuthor?.myFoodRecipes == null) "0" else recipeAuthor!!.myFoodRecipes.size.toString()
-        ingredientDetailsTextView.text = ingredientString
-        stepsInstructionTextView.text = stepString
+
         rationTextView.text = currentFoodRecipe.ration.toString() + " người"
         totalCommentTextView.text = "(${totalComment})"
-        dietTextView.text = dietString
-        categoryTextView.text = cateString
+
         likePercent.text =
             if (currentFoodRecipe.recipeCmts.isNotEmpty()) "${((totalLike.toDouble() / currentFoodRecipe.recipeCmts.size.toDouble()) * 100).toInt()}% người dùng sẽ nấu lại món này" else "Chưa có người dùng nào thả like cho món ăn này"
 
         // calculate total calo by sum of all calo of ingredients
-        val totalCaloNum = currentFoodRecipe.recipeIngres.sumOf { ingredient -> ingredient.ingreCalo!! }
+        val totalCaloNum =
+            currentFoodRecipe.recipeIngres.sumOf { ingredient -> ingredient.ingreCalo!! }
 
         //
-        totalCalo.text = if(totalCaloNum.rem(1) == 0.0) totalCaloNum.toInt().toString() else totalCaloNum.toString()
+        totalCalo.text = if (totalCaloNum.rem(1) == 0.0) totalCaloNum.toInt()
+            .toString() else totalCaloNum.toString()
 
         // food image horizontal recycler view
         val adapter = FoodImageAdapter(imagePathList, this)
@@ -294,8 +345,9 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         // set first main image
         val mainImgRef = currentFoodRecipe.recipeMainImage?.let { storageRef.getReference(it) }
 
-        loadImageFromStorageToImageView(mainImgRef, mainIMG)
-
+        GlobalScope.launch {
+            loadImageFromStorageToImageView(mainImgRef, mainIMG)
+        }
 
         // set on image recycler view item click listener
         adapter.onImageClick = { imgView, _ ->
@@ -304,6 +356,12 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         // carousel showing step detail activity
         showStepDetailsButton.setOnClickListener {
+            if (!HelperFunctionDB.isConnectedToInternet(this@ShowRecipeDetailsActivity)) {
+                showDisconnDialog(this@ShowRecipeDetailsActivity)
+
+                return@setOnClickListener
+            }
+
             val myIntent = Intent(this, ShowRecipeDetailsDescriptionActivity::class.java)
             mainScrollView.scrollTo(0, 0)
 
@@ -313,8 +371,15 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         }
 
         // save button listener
-        if(isNotCurrentUser){
+        if (isNotCurrentUser) {
             saveRecipeButton.setOnClickListener {
+                // show no wifi dialog
+                if(!HelperFunctionDB.isConnectedToInternet(this@ShowRecipeDetailsActivity)){
+                    showDisconnDialog(this@ShowRecipeDetailsActivity)
+
+                    return@setOnClickListener
+                }
+
                 if (!isLoggedIn()) {
                     launchLoginActivity()
                     return@setOnClickListener
@@ -326,7 +391,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                     saveRecipeButton.setImageResource(R.drawable.unsave_recipe_button)
 
                     // remove save info from db
-                    unsaveRecipeFromDB() {boolean ->
+                    unsaveRecipeFromDB() { boolean ->
                         isSavedFood = false
                         val intent1 = Intent(ConstantAction.ADD_SAVED_RECIPE_ACTION)
                         sendBroadcast(intent1)
@@ -337,7 +402,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                     saveRecipeButton.setImageResource(R.drawable.saved_recipe_button)
 
                     // save food into DB
-                    saveRecipeIntoDB() {boolean ->
+                    saveRecipeIntoDB() { boolean ->
                         val intent1 = Intent(ConstantAction.ADD_SAVED_RECIPE_ACTION)
                         sendBroadcast(intent1)
                         isSavedFood = true
@@ -348,6 +413,11 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         // write comment listener
         writeCommentButton.setOnClickListener {
+            if(!HelperFunctionDB.isConnectedToInternet(this@ShowRecipeDetailsActivity)){
+                showDisconnDialog(this@ShowRecipeDetailsActivity)
+
+                return@setOnClickListener
+            }
             if (!isLoggedIn()) {
                 launchLoginActivity()
                 return@setOnClickListener
@@ -381,24 +451,28 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         val toListComment = findViewById<LinearLayout>(R.id.list_commentLinearLayout)
 
         toListComment.setOnClickListener {
+            if(!HelperFunctionDB.isConnectedToInternet(this@ShowRecipeDetailsActivity)){
+                showDisconnDialog(this@ShowRecipeDetailsActivity)
+
+                return@setOnClickListener
+            }
+
             val myIntent = Intent(this, CommentListActivity::class.java)
             myIntent.putExtra("foodComment", currentFoodRecipe)
             startActivity(myIntent)
         }
         showProfile()
     }
-    private fun showProfile()
-    {
-        val authorInfoCardView:ConstraintLayout=findViewById(R.id.authorInfoCardView)
+
+    private fun showProfile() {
+        val authorInfoCardView: ConstraintLayout = findViewById(R.id.authorInfoCardView)
 
         authorInfoCardView.setOnClickListener {
-            if(recipeAuthor?.id==DBManagement.user_current?.id)
-            {
+            if (recipeAuthor?.id == DBManagement.user_current?.id) {
                 val intent = Intent(this, ProfileActivity::class.java)
                 intent.putExtra("selectedTab", 1) // chọn tab thứ hai
                 startActivity(intent)
-            }
-            else {
+            } else {
                 val intent = Intent(this, ShowProfileActivity::class.java)
                 intent.putExtra("profile", recipeAuthor)
                 startActivityForResult(intent, 1)
@@ -452,7 +526,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                 if (cmt.description == "")
                     return false
 
-                if(cmtContent == null){
+                if (cmtContent == null) {
                     cmtContent = cmt.description
                     cmtDate = cmt.date
                 }
@@ -488,11 +562,11 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         // set listener for button inside popup window
         // dislike button clicked --> pop dislike popup
         dislikeButton.setOnClickListener {
-            addCommentToDB(false) {boolean ->
+            addCommentToDB(false) { boolean ->
                 if (boolean) {
                     val intent = Intent(ConstantAction.ADD_CMT_RECIPE_ACTION)
                     sendBroadcast(intent)
-                    DBManagement.fetchDataUserCurrent {  }
+                    DBManagement.fetchDataUserCurrent { }
                 }
             }
             showNextPopup(false)
@@ -501,11 +575,11 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         // like button clicked --> pop like popup
         likeButton.setOnClickListener {
-            addCommentToDB(true) {boolean ->
+            addCommentToDB(true) { boolean ->
                 if (boolean) {
                     val intent = Intent(ConstantAction.ADD_CMT_RECIPE_ACTION)
                     sendBroadcast(intent)
-                    DBManagement.fetchDataUserCurrent {  }
+                    DBManagement.fetchDataUserCurrent { }
                 }
             }
             showNextPopup(true)
@@ -591,20 +665,26 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
                                 // increment total like if isLike = true
                                 db.collection("RecipeFoods")
                                     .document(document.elementAt(0).id)
-                                    .update("recipeCmts", FieldValue.arrayUnion(newID),
-                                        "numOfLikes", if(isLike) FieldValue.increment(1)
-                                        else FieldValue.increment(0))
+                                    .update(
+                                        "recipeCmts", FieldValue.arrayUnion(newID),
+                                        "numOfLikes", if (isLike) FieldValue.increment(1)
+                                        else FieldValue.increment(0)
+                                    )
                                     .addOnSuccessListener {
                                         // find user by ID then add new cmt to that user
                                         db.collection("users")
                                             .whereEqualTo(
-                                                "id", (DBManagement.user_current?.id)).get()
+                                                "id", (DBManagement.user_current?.id)
+                                            ).get()
                                             .addOnSuccessListener { document ->
                                                 if (!document.isEmpty) {
                                                     // add new cmt ID into food recipe
                                                     db.collection("users")
                                                         .document(document.elementAt(0).id)
-                                                        .update("recipeCmts", FieldValue.arrayUnion(newID))
+                                                        .update(
+                                                            "recipeCmts",
+                                                            FieldValue.arrayUnion(newID)
+                                                        )
                                                         .addOnSuccessListener {
                                                             callback(true)
                                                         }
@@ -692,9 +772,9 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
     // remove (unsave) all info from firestore by calling functions
     private fun unsaveRecipeFromDB(callback: (Boolean) -> Unit) {
-        handleUserToRecipeFoodsCollection(false) {boolean ->
+        handleUserToRecipeFoodsCollection(false) { boolean ->
             if (boolean) {
-                handleRecipeToUserCollection(false) {booleann ->
+                handleRecipeToUserCollection(false) { booleann ->
                     if (boolean) {
                         callback(true)
                     } else {
@@ -707,9 +787,9 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
     // save all needed info into firestore by calling functions
     private fun saveRecipeIntoDB(callback: (Boolean) -> Unit) {
-        handleUserToRecipeFoodsCollection(true) {boolean ->
+        handleUserToRecipeFoodsCollection(true) { boolean ->
             if (boolean) {
-                handleRecipeToUserCollection(true) {booleann ->
+                handleRecipeToUserCollection(true) { booleann ->
                     if (boolean) {
                         callback(true)
                     } else {
@@ -730,14 +810,37 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
     }
 
     // load image from storage into imageview
-    private fun loadImageFromStorageToImageView(ref : StorageReference?, imgView : ImageView){
+    private suspend fun loadImageFromStorageToImageView(
+        ref: StorageReference?,
+        imgView: ImageView
+    ) {
         // set first main image
         ref?.downloadUrl?.addOnSuccessListener { uri ->
             Glide.with(this)
                 .load(uri)
                 .into(imgView)
-        }?.addOnFailureListener {
-            // Xử lý lỗi
         }
+    }
+
+    private fun showDisconnDialog(context: Context) {
+        val mainScope = CoroutineScope(Job() + Dispatchers.Main)
+
+        // disconnected alert dialog for user
+        mainScope.launch {
+            val disconnDialog = SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+
+            disconnDialog.titleText = "Vui lòng kiểm tra lại đường truyền mạng của bạn"
+            disconnDialog.setCancelable(false) // hide cancel button
+
+            disconnDialog.show()
+
+            disconnDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).visibility = View.GONE // hide confirm button
+
+            // dialog show for 1.2s then disappear
+            delay(1200)
+
+            disconnDialog.dismiss()
+        }
+
     }
 }

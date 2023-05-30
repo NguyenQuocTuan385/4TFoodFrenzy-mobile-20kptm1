@@ -7,6 +7,60 @@
     android:background="@color/white"
     tools:context=".Controller.Activity.MainActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/white"
+        android:id="@+id/noInternetLayout"
+        android:visibility="gone"
+        >
+
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+
+            android:src="@drawable/disconnected_image"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/disconnectedImageView"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Không có kết nối mạng !"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/disconnectedImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/noInternetTitleTextView"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vui lòng chờ, ứng dụng sẽ hoạt động trở lại ngay khi có kết nối mạng"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/noInternetTitleTextView"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textColor="#aaaaaa"
+            android:textStyle="bold"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"

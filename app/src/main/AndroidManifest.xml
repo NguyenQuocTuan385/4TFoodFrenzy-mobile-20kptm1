@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <uses-permission
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         android:maxSdkVersion="30"
@@ -124,6 +126,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <receiver android:name=".BroadcastReceiver.InternetConnectionBroadcast"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_ACTION"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
