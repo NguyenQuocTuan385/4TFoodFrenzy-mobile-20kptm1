@@ -184,6 +184,9 @@ class RegisterActivity : AppCompatActivity() {
             .set(profile)
             .addOnSuccessListener {
                 stopLoadingAlert()
+                val user=FirebaseAuth.getInstance()
+                user.signOut()
+                DBManagement.user_current=null
                 showSuccessAlert()
                 Log.d("hihi", "DocumentSnapshot successfully written!")
             }
