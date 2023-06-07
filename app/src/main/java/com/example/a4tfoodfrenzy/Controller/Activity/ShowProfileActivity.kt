@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.example.a4tfoodfrenzy.Adapter.FoodRecipeAdapter.RecipeListAdapter
 import com.example.a4tfoodfrenzy.Adapter.FoodRecipeAdapter.RecipeListInProfileAdapter
 import com.example.a4tfoodfrenzy.BroadcastReceiver.ConstantAction
+import com.example.a4tfoodfrenzy.BroadcastReceiver.InternetConnectionBroadcast
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.Model.FoodRecipe
 import com.example.a4tfoodfrenzy.Model.RecipeCookStep
@@ -47,6 +48,8 @@ class ShowProfileActivity : AppCompatActivity() {
             }
         }
     }
+    private val internetBroadcast = InternetConnectionBroadcast()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_profile)
@@ -64,13 +67,18 @@ class ShowProfileActivity : AppCompatActivity() {
         super.onStart()
         var intentFilter2 = IntentFilter(ConstantAction.ADD_SAVED_RECIPE_ACTION)
         var intentFilter3 = IntentFilter(ConstantAction.ADD_CMT_RECIPE_ACTION)
+
         registerReceiver(myBroadcastReceiverProfile, intentFilter2)
         registerReceiver(myBroadcastReceiverProfile, intentFilter3)
+
+        internetBroadcast.registerInternetConnBroadcast(this@ShowProfileActivity)
     }
     override fun onDestroy() {
         super.onDestroy()
         // Hủy đăng ký listener
         unregisterReceiver(myBroadcastReceiverProfile)
+
+        internetBroadcast.unregisterInternetConnBroadcast(this@ShowProfileActivity)
     }
     private fun initView()
     {

@@ -36,6 +36,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import com.google.rpc.Help
+import io.grpc.LoadBalancer.Helper
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -353,7 +355,6 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         adapter.onImageClick = { imgView, _ ->
             mainIMG.setImageDrawable(imgView)
         }
-
         // carousel showing step detail activity
         showStepDetailsButton.setOnClickListener {
             if (!HelperFunctionDB.isConnectedToInternet(this@ShowRecipeDetailsActivity)) {
@@ -374,7 +375,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         if (isNotCurrentUser) {
             saveRecipeButton.setOnClickListener {
                 // show no wifi dialog
-                if(!HelperFunctionDB.isConnectedToInternet(this@ShowRecipeDetailsActivity)){
+                if (!HelperFunctionDB.isConnectedToInternet(this@ShowRecipeDetailsActivity)) {
                     showDisconnDialog(this@ShowRecipeDetailsActivity)
 
                     return@setOnClickListener
@@ -413,7 +414,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
         // write comment listener
         writeCommentButton.setOnClickListener {
-            if(!HelperFunctionDB.isConnectedToInternet(this@ShowRecipeDetailsActivity)){
+            if (!HelperFunctionDB.isConnectedToInternet(this@ShowRecipeDetailsActivity)) {
                 showDisconnDialog(this@ShowRecipeDetailsActivity)
 
                 return@setOnClickListener
@@ -451,7 +452,7 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
         val toListComment = findViewById<LinearLayout>(R.id.list_commentLinearLayout)
 
         toListComment.setOnClickListener {
-            if(!HelperFunctionDB.isConnectedToInternet(this@ShowRecipeDetailsActivity)){
+            if (!HelperFunctionDB.isConnectedToInternet(this@ShowRecipeDetailsActivity)) {
                 showDisconnDialog(this@ShowRecipeDetailsActivity)
 
                 return@setOnClickListener
@@ -810,16 +811,20 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
     }
 
     // load image from storage into imageview
-    private suspend fun loadImageFromStorageToImageView(
+    private fun loadImageFromStorageToImageView(
         ref: StorageReference?,
         imgView: ImageView
     ) {
         // set first main image
-        ref?.downloadUrl?.addOnSuccessListener { uri ->
-            Glide.with(this)
-                .load(uri)
-                .into(imgView)
-        }
+        if (!this@ShowRecipeDetailsActivity.isDestroyed && HelperFunctionDB.isConnectedToInternet(
+                this@ShowRecipeDetailsActivity
+            )
+        )
+            ref?.downloadUrl?.addOnSuccessListener { uri ->
+                Glide.with(this)
+                    .load(uri)
+                    .into(imgView)
+            }
     }
 
     private fun showDisconnDialog(context: Context) {
@@ -834,7 +839,8 @@ class ShowRecipeDetailsActivity : AppCompatActivity() {
 
             disconnDialog.show()
 
-            disconnDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).visibility = View.GONE // hide confirm button
+            disconnDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).visibility =
+                View.GONE // hide confirm button
 
             // dialog show for 1.2s then disappear
             delay(1200)

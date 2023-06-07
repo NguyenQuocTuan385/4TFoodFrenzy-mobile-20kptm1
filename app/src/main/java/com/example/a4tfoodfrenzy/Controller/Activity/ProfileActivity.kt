@@ -16,6 +16,7 @@ import com.example.a4tfoodfrenzy.Adapter.UserAdapter.TabFoodRecipeSaved
 import com.example.a4tfoodfrenzy.Adapter.UserAdapter.TabMyFoodRecipe
 import com.example.a4tfoodfrenzy.Adapter.UserAdapter.TabProfileAdapter
 import com.example.a4tfoodfrenzy.BroadcastReceiver.ConstantAction
+import com.example.a4tfoodfrenzy.BroadcastReceiver.InternetConnectionBroadcast
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
 import com.example.a4tfoodfrenzy.Model.DBManagement
 import com.example.a4tfoodfrenzy.R
@@ -55,6 +56,9 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
     }
+    private val internetBroadcast = InternetConnectionBroadcast()
+
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,15 +109,21 @@ class ProfileActivity : AppCompatActivity() {
         var intentFilter1 = IntentFilter(ConstantAction.DELETE_MY_RECIPE_ACTION)
         var intentFilter2 = IntentFilter(ConstantAction.ADD_SAVED_RECIPE_ACTION)
         var intentFilter3 = IntentFilter(ConstantAction.ADD_CMT_RECIPE_ACTION)
+
         registerReceiver(myBroadcastReceiverProfile, intentFilter1)
         registerReceiver(myBroadcastReceiverProfile, intentFilter2)
         registerReceiver(myBroadcastReceiverProfile, intentFilter3)
+
+        internetBroadcast.registerInternetConnBroadcast(this@ProfileActivity)
     }
     override fun onDestroy() {
         super.onDestroy()
         // Hủy đăng ký listener
         unregisterReceiver(myBroadcastReceiverProfile)
+
+        internetBroadcast.unregisterInternetConnBroadcast(this@ProfileActivity)
     }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         val menu = bottomNavigationView.menu

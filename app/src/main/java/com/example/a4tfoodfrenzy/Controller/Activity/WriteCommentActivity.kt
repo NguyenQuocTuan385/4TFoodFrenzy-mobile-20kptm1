@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -15,6 +16,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.example.a4tfoodfrenzy.Api.Food
+import com.example.a4tfoodfrenzy.Api.NinjasApiService
+import com.example.a4tfoodfrenzy.Api.TranslateUtil
 import com.example.a4tfoodfrenzy.BroadcastReceiver.ConstantAction
 import com.example.a4tfoodfrenzy.BroadcastReceiver.InternetConnectionBroadcast
 import com.example.a4tfoodfrenzy.Helper.HelperFunctionDB
@@ -25,8 +29,19 @@ import com.example.a4tfoodfrenzy.R.layout
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonParser
 import kotlinx.coroutines.*
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
+import org.json.JSONObject
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 import java.util.*
+import kotlin.reflect.KType
 
 class WriteCommentActivity : AppCompatActivity() {
 
@@ -42,8 +57,9 @@ class WriteCommentActivity : AppCompatActivity() {
     private lateinit var toShowDetailIntent: Intent
     private var currentRecipe: FoodRecipe? = null
     private var currentAuthor: User? = null
-    private var loadingDialog : SweetAlertDialog? = null
+    private var loadingDialog: SweetAlertDialog? = null
 
+    private val translateContent = TranslateUtil()
     private val internetBroadcast = InternetConnectionBroadcast()
 
     override fun onStart() {
@@ -54,8 +70,7 @@ class WriteCommentActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        if(loadingDialog != null && loadingDialog!!.isShowing)
-            loadingDialog!!.dismiss()
+        closeLoadingDialog()
 
         internetBroadcast.unregisterInternetConnBroadcast(this@WriteCommentActivity)
     }
@@ -91,16 +106,57 @@ class WriteCommentActivity : AppCompatActivity() {
 
                 return@setOnClickListener
             }
-
             val description = commentEditText?.text.toString()
 
-            // check if content is null
-            if(description == ""){
-                Toast.makeText(this, "Nội dung không được để trống", Toast.LENGTH_LONG).show()
-                return@setOnClickListener
+            GlobalScope.launch {
+                withContext(Dispatchers.Main){
+                    loadingDialog!!.show()
+                }
+
+                // check if content is null
+                if (description == "") {
+                    MainScope().launch {
+                        Toast.makeText(
+                            this@WriteCommentActivity,
+                            "Nội dung không được để trống",
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                        closeLoadingDialog()
+                    }
+                } else {
+                    val response = translateComment(description)
+
+                    if (response.body != null) {
+                        val responseString = response.body?.string()
+                        val json = JSONArray(responseString!!)
+
+                        // checkProfanity return false --> no profanity
+                        if (!checkProfanity(getTranslatedText(json))){
+                            Log.i("writeComment", "success")
+                            updateCommentOnDB(numberID, description)
+                        }
+                        else{
+                            Log.i("writeComment", "failed")
+
+                            withContext(Dispatchers.Main){
+                                closeLoadingDialog()
+
+                                val profanityAlertDialog = SweetAlertDialog(this@WriteCommentActivity, SweetAlertDialog.WARNING_TYPE)
+
+                                profanityAlertDialog.titleText = "Nội dung bình luận chứa từ ngữ không phù hợp, vui lòng kiểm tra lại"
+                                profanityAlertDialog.setCancelable(false)
+                                profanityAlertDialog.show()
+
+                                profanityAlertDialog.setConfirmClickListener {
+                                    profanityAlertDialog.dismiss()
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            else
-                updateCommentOnDB(numberID, description)
+
         }
 
         // handle click on add image section, get image from local phone storage
@@ -145,7 +201,6 @@ class WriteCommentActivity : AppCompatActivity() {
 
     // update comment on firestore
     private fun updateCommentOnDB(numberID: Long, description: String) {
-        loadingDialog!!.show()
         // find document ID by using numberID
         db.collection("RecipeCmts").whereEqualTo("id", numberID)
             .get()
@@ -154,7 +209,7 @@ class WriteCommentActivity : AppCompatActivity() {
                     // get doc ID
                     val documentID = document.elementAt(0).id
 
-                    val imageURL = if(imageUri == null) null else "comments/${numberID}"
+                    val imageURL = if (imageUri == null) null else "comments/${numberID}"
 
                     currentRecipe?.recipeCmts?.add(numberID)
 
@@ -162,9 +217,9 @@ class WriteCommentActivity : AppCompatActivity() {
                     db.collection("RecipeCmts").document(documentID)
                         .update("description", description, "date", Date(), "image", imageURL)
                         .addOnSuccessListener {
-                            if(imageURL != null)
+                            if (imageURL != null)
                                 uploadImage(numberID)
-                            else{
+                            else {
                                 loadingDialog!!.dismiss()
                                 toShowDetailIntent.putExtra("foodRecipe", currentRecipe)
                                 toShowDetailIntent.putExtra("user", currentAuthor)
@@ -177,8 +232,8 @@ class WriteCommentActivity : AppCompatActivity() {
             }
     }
 
-    private fun uploadImage(commentNumberID : Long){
-        if(imageUri == null)
+    private fun uploadImage(commentNumberID: Long) {
+        if (imageUri == null)
             return
 
         val imageRef = storageRef.reference.child("comments/${commentNumberID}")
@@ -194,7 +249,18 @@ class WriteCommentActivity : AppCompatActivity() {
             sendBroadcast(intent1)
             finish()
         }
-            .addOnFailureListener{}
+            .addOnFailureListener {}
+    }
+
+    private fun closeLoadingDialog(){
+        if (loadingDialog != null && loadingDialog!!.isShowing)
+            loadingDialog!!.dismiss()
+    }
+    private fun translateComment(commentText: String): okhttp3.Response {
+        val request = NinjasApiService.createTranslateRequest(commentText)
+        val client = OkHttpClient()
+
+        return client.newCall(request).execute()
     }
 
     private fun showDisconnDialog(context: Context) {
@@ -218,5 +284,29 @@ class WriteCommentActivity : AppCompatActivity() {
             disconnDialog.dismiss()
         }
 
+    }
+
+    private fun getTranslatedText(jArray: JSONArray): String {
+        return jArray.getJSONObject(0)
+            .getJSONArray("translations")
+            .getJSONObject(0)
+            .getString("text")
+    }
+
+    private suspend fun checkProfanity(content: String): Boolean {
+        val checkProfanityScope = CoroutineScope(Job() + Dispatchers.IO)
+
+        val job = checkProfanityScope.async {
+            val response = NinjasApiService.createProfanityCheck().getProfanityResult(content)
+
+            if (response.body() != null) {
+                val result = response.body()
+
+                Log.i("ResultProfanity", result.toString())
+                result
+            } else
+                throw Exception("Failed to get Profanity API")
+        }
+        return job.await() as Boolean
     }
 }
